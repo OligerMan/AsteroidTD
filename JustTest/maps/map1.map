@@ -1,0 +1,257 @@
+settings_start
+    layers_amount 1
+settings_end
+object_start
+    object null0
+        layer 0
+        position -182 130
+        origin_mode auto
+        origin 50 130
+        object_type null
+        collision_type unit
+        sprite_type null
+        animation_type move
+        frame_duration 100
+        faction agressive
+
+    object stone1
+        layer 0
+        position -473.408 -134.4
+        origin_mode auto
+        origin 100 -134.4
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+        faction null
+
+    object stone2
+        layer 0
+        position -595.408 50.6
+        origin_mode auto
+        origin 100 50.6
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+        faction null
+
+    object stone3
+        layer 0
+        position -479.408 221.6
+        origin_mode auto
+        origin 100 221.6
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+        faction null
+
+    object stone4
+        layer 0
+        position -272.408 291.102
+        origin_mode auto
+        origin 100 291.102
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+        faction null
+
+    object stone5
+        layer 0
+        position -57.4081 276.102
+        origin_mode auto
+        origin 100 276.102
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+        faction null
+
+    object stone6
+        layer 0
+        position 77.5919 109.102
+        origin_mode auto
+        origin 100 109.102
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+        faction null
+
+    object stone7
+        layer 0
+        position -268.1 -212.1
+        origin_mode auto
+        origin 100 -212.1
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+        faction null
+
+    object stone8
+        layer 0
+        position -55.1001 -238.1
+        origin_mode auto
+        origin 100 -238.1
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+        faction null
+
+    object stone9
+        layer 0
+        position 157.9 -255.1
+        origin_mode auto
+        origin 100 -255.1
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+        faction null
+
+    object stone10
+        layer 0
+        position 367.511 -208.1
+        origin_mode auto
+        origin 100 -208.1
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+        faction null
+
+    object stone11
+        layer 0
+        position 533.511 -85.0998
+        origin_mode auto
+        origin 100 -85.0998
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+        faction null
+
+    object stone12
+        layer 0
+        position 615.511 102.9
+        origin_mode auto
+        origin 100 102.9
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+        faction null
+
+    object stone13
+        layer 0
+        position 178.511 584.31
+        origin_mode auto
+        origin 100 584.31
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+        faction null
+
+    object stone14
+        layer 0
+        position 524.699 298.016
+        origin_mode auto
+        origin 100 298.016
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+        faction null
+
+    object stone15
+        layer 0
+        position 373.699 465.016
+        origin_mode auto
+        origin 100 465.016
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+        faction null
+
+    object stone16
+        layer 0
+        position -34.3012 643.016
+        origin_mode auto
+        origin 100 643.016
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+        faction null
+
+    object stone17
+        layer 0
+        position -259.301 673.016
+        origin_mode auto
+        origin 100 673.016
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+        faction null
+
+    object stone18
+        layer 0
+        position -482.301 648.016
+        origin_mode auto
+        origin 100 648.016
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+        faction null
+
+    object hero19
+        layer 0
+        position -594 -281
+        origin_mode auto
+        origin 31 -281
+        object_type hero
+        collision_type unit
+        sprite_type hero
+        animation_type hold
+        frame_duration 100
+        faction hero
+
+    object asteroid20
+        layer 0
+        position -429.8 -574.199
+        origin_mode auto
+        origin 50 -574.199
+        object_type asteroid
+        collision_type asteroid
+        sprite_type asteroid
+        animation_type hold
+        frame_duration 1
+        faction null
+
+object_end

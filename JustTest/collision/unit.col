@@ -1,0 +1,26 @@
+settings_start
+    is_static 0
+settings_end
+collision_start
+
+element body
+    position 20 0
+    radius 25
+
+element left_hand
+    position 20 -35
+    radius 15
+
+element left_hand
+    position 20 35
+    radius 15
+
+element knife_right
+    position -10 -47
+    radius 3
+
+element knife_left
+    position 46 52
+    radius 3
+
+collision_end

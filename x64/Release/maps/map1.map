@@ -1,0 +1,104 @@
+settings_start
+    layers_amount 1
+settings_end
+object_start
+    object stone0
+        layer 0
+        position -111 -163
+        origin_mode auto
+        origin 100 -163
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+
+    object stone1
+        layer 0
+        position 323 81
+        origin_mode auto
+        origin 100 81
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+
+    object stone2
+        layer 0
+        position -480 59
+        origin_mode auto
+        origin 100 59
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+
+    object stone3
+        layer 0
+        position -508 248.303
+        origin_mode auto
+        origin 100 248.303
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+
+    object stone4
+        layer 0
+        position 323 320.416
+        origin_mode auto
+        origin 100 320.416
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+
+    object stone5
+        layer 0
+        position 148 548.416
+        origin_mode auto
+        origin 100 548.416
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+
+    object stone6
+        layer 0
+        position 118 -58
+        origin_mode auto
+        origin 100 -58
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+
+    object hero7
+        layer 0
+        position -182 30
+        origin_mode auto
+        origin 31 30
+        object_type hero
+        collision_type unit
+        sprite_type hero
+        animation_type hold
+        frame_duration 100
+
+    object stone8
+        layer 0
+        position -320.1 -115.7
+        origin_mode auto
+        origin 100 -115.7
+        object_type stone
+        collision_type stone
+        sprite_type stone
+        animation_type hold
+        frame_duration 1
+
+object_end

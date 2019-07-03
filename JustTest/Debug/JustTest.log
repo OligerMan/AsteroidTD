@@ -1,0 +1,46 @@
+﻿  Source.cpp
+e:\projects\justtest\justtestengine\justtest\settings.h(41): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\justtest\justtestengine\justtest\settings.h(44): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\justtest\justtestengine\justtest\collision.h(39): warning C4018: '>': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\collision.h(70): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\collision.h(130): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\collision.h(131): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\collision.h(156): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\collision.h(157): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\map.h(67): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\map.h(68): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\map.h(69): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\map.h(114): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\map.h(140): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\map.h(141): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\map.h(150): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\map.h(151): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\visualcontroller.h(30): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\visualcontroller.h(40): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\visualcontroller.h(50): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\visualcontroller.h(67): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\visualcontroller.h(69): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\visualcontroller.h(98): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\visualcontroller.h(99): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\visualcontroller.h(113): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\visualcontroller.h(114): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\visualcontroller.h(115): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\guivisualcontroller.h(23): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\guivisualcontroller.h(32): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\guivisualcontroller.h(41): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\guivisualcontroller.h(57): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\guivisualcontroller.h(59): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\guivisualcontroller.h(87): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\guivisualcontroller.h(88): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\guivisualcontroller.h(100): warning C4018: '>': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\guivisualcontroller.h(106): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\guivisualcontroller.h(107): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\guiparser.h(85): warning C4800: 'std::vector<std::vector<Object *,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>> **': forcing value to bool 'true' or 'false' (performance warning)
+          with
+          [
+              _Ty=Object *
+          ]
+e:\projects\justtest\justtestengine\justtest\source.cpp(20): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  LINK : E:\Projects\JustTest\JustTestEngine\Debug\JustTest.exe not found or not built by the last incremental link; performing full link
+  JustTest.vcxproj -> E:\Projects\JustTest\JustTestEngine\Debug\JustTest.exe
+  JustTest.vcxproj -> E:\Projects\JustTest\JustTestEngine\Debug\JustTest.pdb (Partial PDB)

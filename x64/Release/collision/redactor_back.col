@@ -1,0 +1,10 @@
+settings_start
+    is_static 0
+settings_end
+collision_start
+
+element test_circle
+    position 10000000 0
+    radius 10000000
+
+collision_end

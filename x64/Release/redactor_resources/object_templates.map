@@ -1,0 +1,31 @@
+settings_start
+
+layers_amount 1
+
+settings_end
+object_start
+
+object yoba_hero
+    layer 0
+    position 200 200
+    origin_mode auto
+    origin 0 0
+    object_type hero
+    collision_type unit
+    sprite_type hero
+    animation_type hold
+    frame_duration 100
+
+object circle_stone
+    layer 0
+    position -200 -200
+    origin_mode auto
+    origin 0 0
+    object_type stone
+    collision_type stone
+    sprite_type stone
+    animation_type hold
+    frame_duration 1
+
+
+object_end

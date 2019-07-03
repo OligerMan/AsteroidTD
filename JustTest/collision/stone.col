@@ -1,0 +1,10 @@
+settings_start
+    is_static 1
+settings_end
+collision_start
+
+element static_obj_circle
+    position 0 0
+    radius 100
+
+collision_end
