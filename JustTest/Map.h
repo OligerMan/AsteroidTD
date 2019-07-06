@@ -6,6 +6,7 @@
 #include "GameConstants.h"
 #include "Timer.h"
 #include "AStarAlgorithm.h"
+#include "StructureSetGeneration.h"
 
 void fixCollision(Object * obj1, Object * obj2) { 
 	bool force_move = obj1->getCollisionModel()->isStatic() && obj2->getCollisionModel()->isStatic();
@@ -98,7 +99,7 @@ class Map {
 	Object * last_clicked_object = nullptr;
 
 	Point gen_basis;
-	float gen_radius = 5000, cam_radius = 2500, min_range = 1500, max_range = 2700, asteroid_speed = 0;
+	float gen_radius = 6000, cam_radius = 2500, min_range = 1500, max_range = 2700, asteroid_speed = 0;
 	int asteroid_amount = 20, max_try_count = 100;
 	bool save_out_range = false, fixed_asteroids = true;
 
@@ -398,7 +399,7 @@ class Map {
 			object->setAutoOrigin();
 			addObject(object, landscape_layer);
 
-			object = new Object
+			/*object = new Object
 			(
 				new_pos,
 				Point(),
@@ -417,7 +418,16 @@ class Map {
 			range = asteroid_speed;
 			x = cos(angle)*range, y = sin(angle)*range;
 			object->setSpeed(Point(x, y));
-			addObject(object, main_layer);
+			addObject(object, main_layer);*/
+
+			std::vector<Object *> struct_arr = getRandomStructureSet(new_pos, object->getCollisionModel()->getModelElem(0)->collision_radius, struct_set);
+			for (int i = 0; i < struct_arr.size(); i++) {
+				angle = rand() / 16384.0 * PI * 2;
+				range = asteroid_speed;
+				x = cos(angle)*range, y = sin(angle)*range;
+				object->setSpeed(Point(x, y));
+				addObject(struct_arr[i], main_layer);
+			}
 		}
 		
 		while (cnt > 0) {
@@ -475,7 +485,7 @@ class Map {
 			addObject(object, landscape_layer);
 			
 
-			object = new Object
+			/*object = new Object
 			(
 				new_pos,
 				Point(),
@@ -494,7 +504,16 @@ class Map {
 			range = asteroid_speed;
 			x = cos(angle)*range, y = sin(angle)*range;
 			object->setSpeed(Point(x, y));
-			addObject(object, main_layer);
+			addObject(object, main_layer);*/
+
+			std::vector<Object *> struct_arr = getRandomStructureSet(new_pos, object->getCollisionModel()->getModelElem(0)->collision_radius, struct_set);
+			for (int i = 0; i < struct_arr.size(); i++) {
+				angle = rand() / 16384.0 * PI * 2;
+				range = asteroid_speed;
+				x = cos(angle)*range, y = sin(angle)*range;
+				object->setSpeed(Point(x, y));
+				addObject(struct_arr[i], main_layer);
+			}
 		}
 	}
 

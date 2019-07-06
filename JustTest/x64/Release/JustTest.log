@@ -1,2 +1,1 @@
-﻿  JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\JustTest.exe
-  JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\JustTest.pdb (Full PDB)
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppCommon.targets(356,5): error MSB6003: The specified task executable "CL.exe" could not be run. The process cannot access the file 'E:\PROJECTS\ASTEROIDTD\JUSTTEST\X64\RELEASE\SOURCE.OBJ' because it is being used by another process.
