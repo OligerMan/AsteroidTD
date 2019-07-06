@@ -98,8 +98,8 @@ class Map {
 	Object * last_clicked_object = nullptr;
 
 	Point gen_basis;
-	float gen_radius = 3500, cam_radius = 2500, min_range = 550, max_range = 1000, asteroid_speed = 0;
-	int asteroid_amount = 40, max_try_count = 100;
+	float gen_radius = 5000, cam_radius = 2500, min_range = 1500, max_range = 2700, asteroid_speed = 0;
+	int asteroid_amount = 20, max_try_count = 100;
 	bool save_out_range = false, fixed_asteroids = true;
 
 	//////////////////////////////////////////////

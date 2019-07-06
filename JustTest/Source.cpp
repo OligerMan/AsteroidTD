@@ -18,6 +18,8 @@ void gameCycle(std::string map_name) {
 	animation_type_init();
 	faction_type_init();
 
+	srand(time(NULL));   // setting a magic number to random generation
+
 	if (!settings.isLoaded()) {
 		std::cout << "Settings file error, enabling default settings" << std::endl;
 		settings.setDefaults();
@@ -44,7 +46,6 @@ void gameCycle(std::string map_name) {
 
 	while (window.isOpen())
 	{
-		//frame_start = std::chrono::system_clock::now();
 		frame_num++;
 
 		sf::Event event;
@@ -110,8 +111,8 @@ void gameCycle(std::string map_name) {
 					for (int i = 1; i < navigation_paths[path_num].size(); i++) {
 						sf::Vertex line[] =
 						{
-							sf::Vertex(sf::Vector2f(navigation_paths[path_num][i - 1].x/* + viewport_pos.x - settings.getWindowWidth() / 2*/, navigation_paths[path_num][i - 1].y/* + viewport_pos.y - settings.getWindowHeight() / 2*/)),
-							sf::Vertex(sf::Vector2f(navigation_paths[path_num][i].x/* + viewport_pos.x - settings.getWindowWidth() / 2*/, navigation_paths[path_num][i].y/* + viewport_pos.y - settings.getWindowHeight() / 2*/))
+							sf::Vertex(sf::Vector2f(navigation_paths[path_num][i - 1].x, navigation_paths[path_num][i - 1].y)),
+							sf::Vertex(sf::Vector2f(navigation_paths[path_num][i].x, navigation_paths[path_num][i].y))
 						};
 						line->color = sf::Color::Blue;
 
@@ -242,8 +243,9 @@ int main() {
 
 	std::string input = "kek";
 
-	std::cout << "Enter map name" << std::endl;
-	std::cin >> input; // path to game map
+	//std::cout << "Enter map name" << std::endl;
+	//std::cin >> input; // path to game map
+	input = "map2";    // for tests
 	gameCycle(input);
 
 	return 0;

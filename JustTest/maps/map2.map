@@ -5,7 +5,7 @@ object_start
 
     object hero19
         layer 0
-        position 0 -300
+        position 0 -350
         origin_mode auto
         origin 31 -281
         object_type hero

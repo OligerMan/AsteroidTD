@@ -1,0 +1,7 @@
+
+*.log
+*.tlog
+*.lastbuildstate
+*.pdb
+*.opendb
+*.db
