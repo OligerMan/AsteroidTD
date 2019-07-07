@@ -6,12 +6,12 @@
 #include "Object.h"
 
 struct structureSetSettings {
-	int turret_min = 1;
+	int turret_min = 2;
 	int gold_min = 0;
 	int dome_min = 1;
 	int factory_min = 0;
 	int struct_sum_min = 4;
-	int struct_sum_max = 6;
+	int struct_sum_max = 7;
 }struct_set;
 
 
@@ -33,7 +33,7 @@ std::vector<Object *> getRandomStructureSet(Point center, float radius, structur
 
 	float base_angle = (float)(rand() % 1024) / 512 * PI;
 	for (int i = 0; i < turret; i++) {
-		float cur_angle = i / turret * 2 * PI + base_angle;
+		float cur_angle = (float)i / turret * 2 * PI + base_angle;
 		Point cur_pos = Point(sin(cur_angle), cos(cur_angle)) * (radius - 70) + center;
 
 		Object * object = new Object
@@ -55,104 +55,96 @@ std::vector<Object *> getRandomStructureSet(Point center, float radius, structur
 
 		output[i] = object;
 	}
-	for (int i = 0; i < gold; i++) {
-		while (true) {
-			float cur_angle = (float)(rand() % 1024) / 512 * PI;
-			Point cur_pos = Point(sin(cur_angle), cos(cur_angle)) * (radius - 35) * (float)(rand() % 1024) / 1024 + center;
-			bool place_ok = true;
-			for (int j = 0; j < turret + i; j++) {
-				if ((cur_pos - output[j]->getPosition()).getLength() < 100) {
-					place_ok = false;
-				}
-			}
-			if (place_ok) {
-				Object * object = new Object
-				(
-					cur_pos,
-					Point(),
-					ObjectType::turret,
-					CollisionType::turret_col,
-					VisualInfo
-					(
-						SpriteType::turret_sprite,
-						AnimationType::hold_anim,
-						1
-					)
-				);
-				object->getUnitInfo()->setFaction(FactionList::agressive_faction);
-				object->setAutoOrigin();
-				object->setAngle(cur_angle);
 
-				output[turret + i] = object;
-				break;
-			}
-		}
+	base_angle = (float)(rand() % 1024) / 512 * PI;
+	if (gold + dome + factory == 1) {
+		Object * object = new Object
+		(
+			center,
+			Point(),
+			ObjectType::dome,
+			CollisionType::dome_col,
+			VisualInfo
+			(
+				SpriteType::dome_sprite,
+				AnimationType::hold_anim,
+				1
+			)
+		);
+		object->getUnitInfo()->setFaction(FactionList::agressive_faction);
+		object->setAutoOrigin();
+
+		output[output.size() - 1] = object;
+		return output;
+	}
+	for (int i = 0; i < gold; i++) {
+		float cur_angle = (float)i / (gold + dome + factory) * 2 * PI + base_angle;
+		Point cur_pos = Point(sin(cur_angle), cos(cur_angle)) * (radius - 210) + center;
+
+		Object * object = new Object
+		(
+			cur_pos,
+			Point(),
+			ObjectType::turret,
+			CollisionType::turret_col,
+			VisualInfo
+			(
+				SpriteType::turret_sprite,
+				AnimationType::hold_anim,
+				1
+			)
+		);
+		object->getUnitInfo()->setFaction(FactionList::agressive_faction);
+		object->setAutoOrigin();
+		object->setAngle(cur_angle);
+
+		output[turret + i] = object;
 	}
 	for (int i = 0; i < dome; i++) {
-		while (true) {
-			float cur_angle = (float)(rand() % 1024) / 512 * PI;
-			Point cur_pos = Point(sin(cur_angle), cos(cur_angle)) * (radius - 35) * (float)(rand() % 1024) / 1024 + center;
-			bool place_ok = true;
-			for (int j = 0; j < turret + gold + i; j++) {
-				if ((cur_pos - output[j]->getPosition()).getLength() < 100) {
-					place_ok = false;
-				}
-			}
-			if (place_ok) {
-				Object * object = new Object
-				(
-					cur_pos,
-					Point(),
-					ObjectType::turret,
-					CollisionType::turret_col,
-					VisualInfo
-					(
-						SpriteType::turret_sprite,
-						AnimationType::hold_anim,
-						1
-					)
-				);
-				object->getUnitInfo()->setFaction(FactionList::agressive_faction);
-				object->setAutoOrigin();
-				object->setAngle(cur_angle);
+		float cur_angle = (float)(gold + i) / (gold + dome + factory) * 2 * PI + base_angle;
+		Point cur_pos = Point(sin(cur_angle), cos(cur_angle)) * (radius - 210) + center;
 
-				output[turret + gold + i] = object;
-				break;
-			}
-		}
+		Object * object = new Object
+		(
+			cur_pos,
+			Point(),
+			ObjectType::dome,
+			CollisionType::dome_col,
+			VisualInfo
+			(
+				SpriteType::dome_sprite,
+				AnimationType::hold_anim,
+				1
+			)
+		);
+		object->getUnitInfo()->setFaction(FactionList::agressive_faction);
+		object->setAutoOrigin();
+		object->setAngle(cur_angle);
+
+		output[turret + gold + i] = object;
 	}
 	for (int i = 0; i < factory; i++) {
-		while (true) {
-			float cur_angle = (float)(rand() % 1024) / 512 * PI;
-			Point cur_pos = Point(sin(cur_angle), cos(cur_angle)) * (radius - 35) * (float)(rand() % 1024) / 1024 + center;
-			bool place_ok = true;
-			for (int j = 0; j < turret + gold + dome + i; j++) {
-				if ((cur_pos - output[j]->getPosition()).getLength() < 100) {
-					place_ok = false;
-				}
-			}
-			if (place_ok) {
-				Object * object = new Object
-				(
-					cur_pos,
-					Point(),
-					ObjectType::turret,
-					CollisionType::turret_col,
-					VisualInfo
-					(
-						SpriteType::turret_sprite,
-						AnimationType::hold_anim,
-						1
-					)
-				);
-				object->getUnitInfo()->setFaction(FactionList::agressive_faction);
-				object->setAutoOrigin();
-				object->setAngle(cur_angle);
+		float cur_angle = (float)(gold + dome + i) / (gold + dome + factory) * 2 * PI + base_angle;
+		Point cur_pos = Point(sin(cur_angle), cos(cur_angle)) * (radius - 210) + center;
 
-				output[turret + gold + dome + i] = object;
-				break;
-			}
-		}
+		Object * object = new Object
+		(
+			cur_pos,
+			Point(),
+			ObjectType::turret,
+			CollisionType::turret_col,
+			VisualInfo
+			(
+				SpriteType::turret_sprite,
+				AnimationType::hold_anim,
+				1
+			)
+		);
+		object->getUnitInfo()->setFaction(FactionList::agressive_faction);
+		object->setAutoOrigin();
+		object->setAngle(cur_angle);
+
+		output[turret + gold + dome + i] = object;
 	}
 
 	return output;

@@ -31,6 +31,9 @@
     <Filter Include="Resource Files\objects\turret">
       <UniqueIdentifier>{178db6e0-8c77-45b4-aeb6-f5ba44bea1b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\objects\dome">
+      <UniqueIdentifier>{33dc499f-b7e3-4102-a7ca-e06d353ffc17}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeometryComponents.h">
@@ -137,6 +140,12 @@
     </None>
     <None Include="unit_info\turret.unit">
       <Filter>Resource Files\objects\turret</Filter>
+    </None>
+    <None Include="collision\dome.col">
+      <Filter>Resource Files\objects\dome</Filter>
+    </None>
+    <None Include="unit_info\dome.unit">
+      <Filter>Resource Files\objects\dome</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -72,19 +72,19 @@ class UnitInfo {
 	float endur = 0;     // endurance
 	bool inf_endur = true;
 
-	float attack1_range = 150;
+	float attack1_range = 0;
 	float attack2_range = 0;
 	float attack3_range = 0;
 
-	float attack1_damage = 10;
+	float attack1_damage = 0;
 	float attack2_damage = 0;
 	float attack3_damage = 0;
 
-	float attack1_delay = 100;
+	float attack1_delay = 0;
 	float attack2_delay = 0;
 	float attack3_delay = 0;
 
-	float attack1_cooldown = 300;
+	float attack1_cooldown = 0;
 	float attack2_cooldown = 0;
 	float attack3_cooldown = 0;
 

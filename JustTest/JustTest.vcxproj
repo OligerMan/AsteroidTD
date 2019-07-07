@@ -135,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="collision\asteroid.col" />
+    <None Include="collision\dome.col" />
     <None Include="collision\null.col" />
     <None Include="collision\stone.col" />
     <None Include="collision\turret.col" />
@@ -143,6 +144,7 @@
     <None Include="packages.config" />
     <None Include="redactor_resources\object_templates.map" />
     <None Include="unit_info\asteroid.unit" />
+    <None Include="unit_info\dome.unit" />
     <None Include="unit_info\hero.unit" />
     <None Include="unit_info\null.unit" />
     <None Include="unit_info\stone.unit" />

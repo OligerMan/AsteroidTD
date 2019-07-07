@@ -48,9 +48,10 @@ e:\projects\asteroidtd\justtest\structuresetgeneration.h(28): warning C4244: 'in
 e:\projects\asteroidtd\justtest\structuresetgeneration.h(29): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
 e:\projects\asteroidtd\justtest\structuresetgeneration.h(34): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\structuresetgeneration.h(36): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\structuresetgeneration.h(60): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\structuresetgeneration.h(93): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\structuresetgeneration.h(126): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\structuresetgeneration.h(59): warning C4305: '+=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\structuresetgeneration.h(61): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\structuresetgeneration.h(84): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\structuresetgeneration.h(107): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\map.h(14): warning C4305: 'initializing': truncation from 'double' to 'float'
 e:\projects\asteroidtd\justtest\map.h(134): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data
 e:\projects\asteroidtd\justtest\map.h(137): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data

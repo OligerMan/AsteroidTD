@@ -224,7 +224,7 @@ class Map {
 								int faction2 = object2->getUnitInfo()->getFaction();
 
 								if (areEnemies((FactionList)faction1, (FactionList)faction2)) {
-									if (!(faction1 == hero_faction)) {
+									if (!(faction1 == hero_faction) && object1->canObjectAttack()) {
 										Point vect = (object2->getPosition() - object1->getPosition()).getNormal();
 										Object * prev_enemy = (Object *)object1->getUnitInfo()->getEnemy();
 										if (prev_enemy != nullptr) {

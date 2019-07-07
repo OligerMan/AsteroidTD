@@ -223,6 +223,17 @@ public:
 	Point getSquareBorder() {
 		return col_model->getSquareBorder();
 	}
+
+	bool canObjectAttack() {
+		if (getUnitInfo() == nullptr) {
+			return false;
+		}
+		UnitInfo * unit = getUnitInfo();
+		if (unit->getAttackRange1() == 0 && unit->getAttackRange2() == 0 && unit->getAttackRange3() == 0) {
+			return false;
+		}
+		return true;
+	}
 };
 
 bool checkObjectCollision(Object * obj1, Object * obj2) {
