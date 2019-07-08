@@ -128,7 +128,6 @@
     <ClInclude Include="ObjectTypes.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="StructureSetGeneration.h" />
-    <ClInclude Include="Timer.h" />
     <ClInclude Include="UnitInfo.h" />
     <ClInclude Include="VisualController.h" />
     <ClInclude Include="VisualInfo.h" />

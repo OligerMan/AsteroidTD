@@ -4,7 +4,6 @@
 #include "EventBuffer.h"
 #include "MapParser.h"
 #include "GameConstants.h"
-#include "Timer.h"
 #include "AStarAlgorithm.h"
 #include "StructureSetGeneration.h"
 
@@ -211,6 +210,7 @@ class Map {
 
 				int faction1 = object1->getUnitInfo()->getFaction();
 
+				// turn to closest enemy
 				if (faction1 != FactionList::null_faction) {
 					for (int layer2 = 0; layer2 < objects.size(); layer2++) {
 
@@ -257,6 +257,16 @@ class Map {
 								}
 							}
 						}
+					}
+				}
+
+				// shoot if enemy is on your way and in enough range
+				// TODO
+				if (object1->getUnitInfo()->getEnemy() != nullptr) {
+					Object * enemy = (Object *)object1->getUnitInfo()->getEnemy();
+					Point vect = object1->getPosition() - enemy->getPosition();
+					if (abs(object1->getAngle() / 180 * PI - atan2(vect.x, vect.y)) < 0.01) {
+
 					}
 				}
 			}
@@ -389,7 +399,7 @@ class Map {
 				(
 					SpriteType::asteroid_sprite,
 					AnimationType::hold_anim,
-					1
+					1000000000
 				)
 			);
 			float angle = rand() / 16384.0 * PI * 2;
@@ -420,7 +430,7 @@ class Map {
 			object->setSpeed(Point(x, y));
 			addObject(object, main_layer);*/
 
-			std::vector<Object *> struct_arr = getRandomStructureSet(new_pos, object->getCollisionModel()->getModelElem(0)->collision_radius, struct_set);
+			std::vector<Object *> struct_arr = getRandomStructureSet(new_pos, object->getCollisionModel()->getModelElem(0)->collision_radius, struct_set, FactionList::agressive_faction);
 			for (int i = 0; i < struct_arr.size(); i++) {
 				angle = rand() / 16384.0 * PI * 2;
 				range = asteroid_speed;
@@ -474,7 +484,7 @@ class Map {
 				(
 					SpriteType::asteroid_sprite, 
 					AnimationType::hold_anim, 
-					1
+					1000000000
 				)
 			);
 			object->setAutoOrigin();
@@ -506,7 +516,7 @@ class Map {
 			object->setSpeed(Point(x, y));
 			addObject(object, main_layer);*/
 
-			std::vector<Object *> struct_arr = getRandomStructureSet(new_pos, object->getCollisionModel()->getModelElem(0)->collision_radius, struct_set);
+			std::vector<Object *> struct_arr = getRandomStructureSet(new_pos, object->getCollisionModel()->getModelElem(0)->collision_radius, struct_set, FactionList::agressive_faction);
 			for (int i = 0; i < struct_arr.size(); i++) {
 				angle = rand() / 16384.0 * PI * 2;
 				range = asteroid_speed;

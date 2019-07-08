@@ -11,6 +11,9 @@ enum CollisionType {
 	redactor_back_col,
 	turret_col,
 	dome_col,
+	science_col,
+	gold_col,
+	bullet_col,
 
 	COUNT_COLLISION
 };
@@ -28,6 +31,9 @@ void collision_type_init() {
 	collision_type[redactor_back_col] = "redactor_back";
 	collision_type[turret_col] = "turret";
 	collision_type[dome_col] = "dome";
+	collision_type[science_col] = "science";
+	collision_type[gold_col] = "gold";
+	collision_type[bullet_col] = "bullet";
 }
 
 int is_collision_type_exists(std::string example) {
@@ -47,6 +53,9 @@ enum ObjectType {
 	redactor_back,
 	turret,
 	dome,
+	science,
+	gold,
+	bullet,
 
 	COUNT_OBJECT
 };
@@ -63,6 +72,9 @@ void object_type_init() {
 	object_type[redactor_back] = "redactor_back";
 	object_type[turret] = "turret";
 	object_type[dome] = "dome";
+	object_type[science] = "science";
+	object_type[gold] = "gold";
+	object_type[bullet] = "bullet";
 
 }
 

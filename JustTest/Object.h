@@ -4,7 +4,6 @@
 #include "ObjectTypes.h"
 #include "VisualInfo.h"
 #include "UnitInfo.h"
-#include "Timer.h"
 
 class Object {
 

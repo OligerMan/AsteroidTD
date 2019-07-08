@@ -1,7 +1,6 @@
 #include "VisualController.h"
 #include "GUIVisualController.h"
 #include "GUIManager.h"
-#include "Timer.h"
 
 #include <chrono>
 #include <Windows.h>
@@ -54,8 +53,6 @@ void gameCycle(std::string map_name) {
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
-
-		timer.processTime();
 
 		Point viewport_pos = Point(view1.getCenter().x, view1.getCenter().y);
 

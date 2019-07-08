@@ -93,9 +93,6 @@
     <ClInclude Include="UnitInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AStarAlgorithm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
