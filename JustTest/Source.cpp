@@ -62,7 +62,7 @@ void gameCycle(std::string map_name) {
 			window.clear(sf::Color::Black);
 			is_game_cycle = visual_ctrl.processFrame(&window, game_map1.getObjectsBuffer());
 			is_game_cycle = gui_visual_ctrl.processFrame(&window, gui_manager.getObjectsBuffer(), viewport_pos) && is_game_cycle;
-			
+
 			if (settings.isCollisionDebugMode()) {
 
 				for (int x = 0; x < window.getSize().x; x+=3) {
@@ -231,6 +231,7 @@ void gameCycle(std::string map_name) {
 		
 
 		window.setView(view1);
+
 
 		window.display();
 	}

@@ -10,29 +10,29 @@ e:\projects\asteroidtd\justtest\Collision.h(37): warning C4267: 'return': conver
 e:\projects\asteroidtd\justtest\Collision.h(147): warning C4018: '<': signed/unsigned mismatch
 e:\projects\asteroidtd\justtest\Collision.h(148): warning C4018: '<': signed/unsigned mismatch
 e:\projects\asteroidtd\justtest\UnitInfo.h(63): warning C4305: 'initializing': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\UnitInfo.h(91): warning C4305: 'initializing': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\UnitInfo.h(138): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\UnitInfo.h(145): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\asteroidtd\justtest\UnitInfo.h(151): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\UnitInfo.h(158): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\asteroidtd\justtest\UnitInfo.h(164): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\UnitInfo.h(171): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\asteroidtd\justtest\UnitInfo.h(177): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\UnitInfo.h(183): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\UnitInfo.h(189): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\UnitInfo.h(195): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\UnitInfo.h(201): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\UnitInfo.h(207): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\UnitInfo.h(213): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\UnitInfo.h(219): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\UnitInfo.h(225): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\UnitInfo.h(231): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\UnitInfo.h(237): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\UnitInfo.h(243): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\UnitInfo.h(249): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\UnitInfo.h(255): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\UnitInfo.h(261): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\UnitInfo.h(267): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\asteroidtd\justtest\UnitInfo.h(92): warning C4305: 'initializing': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\UnitInfo.h(139): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\UnitInfo.h(146): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\asteroidtd\justtest\UnitInfo.h(152): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\UnitInfo.h(159): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\asteroidtd\justtest\UnitInfo.h(165): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\UnitInfo.h(172): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\asteroidtd\justtest\UnitInfo.h(178): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\UnitInfo.h(184): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\UnitInfo.h(190): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\UnitInfo.h(196): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\UnitInfo.h(202): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\UnitInfo.h(208): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\UnitInfo.h(214): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\UnitInfo.h(220): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\UnitInfo.h(226): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\UnitInfo.h(232): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\UnitInfo.h(238): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\UnitInfo.h(244): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\UnitInfo.h(250): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\UnitInfo.h(256): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\UnitInfo.h(262): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\UnitInfo.h(268): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
 e:\projects\asteroidtd\justtest\AStarAlgorithm.h(27): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data
 e:\projects\asteroidtd\justtest\AStarAlgorithm.h(46): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data
 e:\projects\asteroidtd\justtest\AStarAlgorithm.h(47): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data
@@ -57,20 +57,20 @@ e:\projects\asteroidtd\justtest\Map.h(136): warning C4244: 'argument': conversio
 e:\projects\asteroidtd\justtest\Map.h(140): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data
 e:\projects\asteroidtd\justtest\Map.h(164): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data
 e:\projects\asteroidtd\justtest\Map.h(165): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(298): warning C4244: 'argument': conversion from 'const double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(299): warning C4244: 'argument': conversion from 'const double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(318): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(394): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(422): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(424): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(438): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(439): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(440): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(443): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(480): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(508): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(510): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(538): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(329): warning C4244: 'argument': conversion from 'const double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(330): warning C4244: 'argument': conversion from 'const double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(349): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(425): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(453): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(455): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(469): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(470): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(471): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(474): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(511): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(539): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(541): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(569): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 e:\projects\asteroidtd\justtest\VisualController.h(111): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\VisualController.h(112): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\VisualController.h(113): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
@@ -96,6 +96,8 @@ Source.cpp(96): warning C4244: 'argument': conversion from 'double' to 'float', 
 Source.cpp(111): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 Source.cpp(112): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 Source.cpp(229): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(241): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(249): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   e:\projects\asteroidtd\justtest\AStarAlgorithm.h(49): note: see reference to function template instantiation 'std::pair<Point,int>::pair<Point,double&,void,0>(_Other1 &&,_Other2) noexcept' being compiled
           with
@@ -110,9 +112,9 @@ C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): war
               _Other2=double &
           ]
   Generating code
-  44 of 1448 functions ( 3.0%) were compiled, the rest were copied from previous compilation.
+  14 of 1448 functions ( 1.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    12 functions had inline decision re-evaluated but remain unchanged
+    9 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\JustTest.exe
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\JustTest.pdb (Full PDB)

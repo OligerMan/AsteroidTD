@@ -265,8 +265,28 @@ class Map {
 				if (object1->getUnitInfo()->getEnemy() != nullptr) {
 					Object * enemy = (Object *)object1->getUnitInfo()->getEnemy();
 					Point vect = object1->getPosition() - enemy->getPosition();
-					if (abs(object1->getAngle() / 180 * PI - atan2(vect.x, vect.y)) < 0.01) {
+					if (abs((object1->getAngle() + 90) / 180 * PI - (-atan2(vect.x, vect.y) + PI / 2)) < 0.01) {
 
+						Point bullet_pos = object1->getPosition() + Point(cos((object1->getAngle() - 90) / 180 * PI), sin((object1->getAngle() - 90) / 180 * PI)) * 400;
+						Object * object = new Object
+						(
+							bullet_pos,
+							Point(),
+							ObjectType::bullet,
+							CollisionType::bullet_col,
+							VisualInfo
+							(
+								SpriteType::bullet_sprite,
+								AnimationType::hold_anim,
+								1000000000
+							)
+						);
+						object->getUnitInfo()->setFaction(FactionList::null_faction);
+						object->setAutoOrigin();
+						object->setAngle(object1->getAngle());
+						object->setSpeed(Point(cos((object1->getAngle() - 90) / 180 * PI), sin((object1->getAngle() - 90) / 180 * PI)));
+
+						addObject(object, main_layer);
 					}
 				}
 			}

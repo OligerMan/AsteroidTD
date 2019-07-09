@@ -88,6 +88,7 @@ class UnitInfo {
 	float attack2_cooldown = 0;
 	float attack3_cooldown = 0;
 
+
 	float default_speed = 0.07;
 	float speed_coef = 1;
 	float turn_speed = 2;
