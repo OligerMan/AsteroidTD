@@ -10,7 +10,7 @@ enum EventType{
 	released,
 	create_new,
 	trolling,
-	attack,
+	attack,       // 1st object is who attack, 2nd is who receive damage
 
 	COUNT_EVENT
 };

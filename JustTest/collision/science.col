@@ -1,5 +1,5 @@
 settings_start
-    is_static 0
+    is_static 1
 settings_end
 collision_start
 

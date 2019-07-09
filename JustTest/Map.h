@@ -175,10 +175,15 @@ class Map {
 	void processCollisionFrame(){
 		for (int cnt = 0; cnt < objects.size(); cnt++) {
 			for (int i = 0; i < objects[cnt].size(); i++) {
+				if (objects[cnt][i] != hero) {
+					if (checkObjectCollision(hero, objects[cnt][i])) {
+						event_buffer.addEvent(EventType::default_collision, objects[cnt][i], hero);
+					}
+				}
 				for (int j = 0; j < objects[cnt].size(); j++) {
 					if (i != j) {
 						if (checkObjectCollision(objects[cnt][i], objects[cnt][j])) {
-							event_buffer.addEvent(objects[cnt][i], objects[cnt][j]);
+							event_buffer.addEvent(EventType::default_collision, objects[cnt][i], objects[cnt][j]);
 							fixCollision(objects[cnt][i], objects[cnt][j]);
 						}
 					}
@@ -206,6 +211,10 @@ class Map {
 				Object * object1 = objects[layer1][i];
 				if (object1->getUnitInfo() == nullptr) {
 					continue;
+				}
+
+				if (object1->getUnitInfo() != nullptr) {
+					object1->getUnitInfo()->processCooldown();
 				}
 
 				int faction1 = object1->getUnitInfo()->getFaction();
@@ -265,28 +274,31 @@ class Map {
 				if (object1->getUnitInfo()->getEnemy() != nullptr) {
 					Object * enemy = (Object *)object1->getUnitInfo()->getEnemy();
 					Point vect = object1->getPosition() - enemy->getPosition();
-					if (abs((object1->getAngle() + 90) / 180 * PI - (-atan2(vect.x, vect.y) + PI / 2)) < 0.01) {
-
-						Point bullet_pos = object1->getPosition() + Point(cos((object1->getAngle() - 90) / 180 * PI), sin((object1->getAngle() - 90) / 180 * PI)) * 400;
-						Object * object = new Object
-						(
-							bullet_pos,
-							Point(),
-							ObjectType::bullet,
-							CollisionType::bullet_col,
-							VisualInfo
+					if (abs((object1->getAngle() + 90) / 180 * PI - (-atan2(vect.x, vect.y) + PI / 2)) < 0.02) {
+						if (object1->getUnitInfo()->attack1Ready()) {
+							Point bullet_pos = object1->getPosition() + Point(cos((object1->getAngle() - 90) / 180 * PI), sin((object1->getAngle() - 90) / 180 * PI)) * 65;
+							Object * object = new Object
 							(
-								SpriteType::bullet_sprite,
-								AnimationType::hold_anim,
-								1000000000
-							)
-						);
-						object->getUnitInfo()->setFaction(FactionList::null_faction);
-						object->setAutoOrigin();
-						object->setAngle(object1->getAngle());
-						object->setSpeed(Point(cos((object1->getAngle() - 90) / 180 * PI), sin((object1->getAngle() - 90) / 180 * PI)));
+								bullet_pos,
+								Point(),
+								ObjectType::bullet,
+								CollisionType::bullet_col,
+								VisualInfo
+								(
+									SpriteType::bullet_sprite,
+									AnimationType::hold_anim,
+									1000000000
+								)
+							);
+							object->getUnitInfo()->setFaction(FactionList::null_faction);
+							object->getUnitInfo()->setEnemy(object1);     // to remember who is shooting
+							object->setAutoOrigin();
+							object->setAngle(object1->getAngle());
+							object->setSpeed(Point(cos((object1->getAngle() - 90) / 180 * PI), sin((object1->getAngle() - 90) / 180 * PI)) * 5);
 
-						addObject(object, main_layer);
+							addObject(object, main_layer);
+						}
+						
 					}
 				}
 			}
@@ -323,20 +335,22 @@ class Map {
 			switch (buffer_elem.getEventType()) {
 			case null:
 				break;
+			case default_collision:
+				if (obj1->getObjectType() == ObjectType::bullet) {
+					obj1->deleteObject();
+					event_buffer.addEvent(EventType::attack, (Object *)obj1->getUnitInfo()->getEnemy(), obj2);
+					
+				}
+				if (obj2->getObjectType() == ObjectType::bullet) {
+					obj2->deleteObject();
+					event_buffer.addEvent(EventType::attack, (Object *)obj2->getUnitInfo()->getEnemy(), obj1);
+				}
+				break;
 			case attack:
 
 				if (unit1 != nullptr && unit2 != nullptr) {
-					obj1->getUnitInfo()->dealDamage(std::max(0.0, (obj1->getSpeed().getLength() - thresh) * coef));
-					obj2->getUnitInfo()->dealDamage(std::max(0.0, (obj2->getSpeed().getLength() - thresh) * coef));
-
-					if (obj1->getObjectAnimationType() == attack1_anim) {
-						obj2->getUnitInfo()->dealDamage(obj1->getUnitInfo()->getAttackDamage1());
-						obj2->changeSpeed((obj2->getPosition() - obj1->getPosition()).getNormal() * consts.getKnockbackSpeed());
-					}
-					if (obj2->getObjectAnimationType() == attack1_anim) {
-						obj1->getUnitInfo()->dealDamage(obj2->getUnitInfo()->getAttackDamage1());
-						obj1->changeSpeed((obj1->getPosition() - obj2->getPosition()).getNormal() * consts.getKnockbackSpeed());
-					}
+					obj2->getUnitInfo()->dealDamage(obj1->getUnitInfo()->getAttackDamage1());
+					obj2->changeSpeed((obj2->getPosition() - obj1->getPosition()).getNormal() * consts.getKnockbackSpeed());
 				}
 				break;
 			};
@@ -598,6 +612,10 @@ public:
 		processUnitAI();
 		processEventBuffer();
 		garbageCollector();
+
+		if (hero == nullptr) {
+			return;
+		}
 
 		rebuildMap(hero->getPosition(), gen_radius, cam_radius, save_out_range, 1, asteroid_amount, min_range, max_range);
 	}

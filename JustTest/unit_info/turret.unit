@@ -5,7 +5,7 @@ default_speed 0
 attack1_range 1000
 attack1_damage 25
 attack1_delay 1000
-attack1_cooldown 1000
+attack1_cooldown 60
 
 is_effects_allowed 1
 turn_speed 1

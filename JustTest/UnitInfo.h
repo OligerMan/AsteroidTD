@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <string>
 #include <fstream>
+#include <algorithm>
 
 enum FactionList {
 	null_faction,
@@ -88,6 +89,9 @@ class UnitInfo {
 	float attack2_cooldown = 0;
 	float attack3_cooldown = 0;
 
+	float attack1_cur_cooldown = 0;
+	float attack2_cur_cooldown = 0;
+	float attack3_cur_cooldown = 0;
 
 	float default_speed = 0.07;
 	float speed_coef = 1;
@@ -444,4 +448,33 @@ public:
 		return attack3_cooldown;
 	}
 
+	bool attack1Ready() {
+		bool ans = attack1_cur_cooldown < 0.1;
+		if (ans) {
+			attack1_cur_cooldown = attack1_cooldown;
+		}
+		return ans;
+	}
+
+	bool attack2Ready() {
+		bool ans = attack1_cur_cooldown < 0.1;
+		if (ans) {
+			attack2_cur_cooldown = attack2_cooldown;
+		}
+		return ans;
+	}
+
+	bool attack3Ready() {
+		bool ans = attack1_cur_cooldown < 0.1;
+		if (ans) {
+			attack3_cur_cooldown = attack3_cooldown;
+		}
+		return ans;
+	}
+
+	void processCooldown() {
+		attack1_cur_cooldown = std::max(0.0f, attack1_cur_cooldown - 1);
+		attack2_cur_cooldown = std::max(0.0f, attack2_cur_cooldown - 1);
+		attack3_cur_cooldown = std::max(0.0f, attack3_cur_cooldown - 1);
+	}
 };
