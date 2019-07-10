@@ -308,10 +308,16 @@ class Map {
 	void garbageCollector() {
 		for (int layer = 0; layer < objects.size(); layer++) {
 			for (int i = 0; i < objects[layer].size(); i++) {
+				objects[layer][i]->garbageCollector();
+			}
+		}
+		for (int layer = 0; layer < objects.size(); layer++) {
+			for (int i = 0; i < objects[layer].size(); i++) {
 				if (objects[layer][i]->isDeleted() || !(objects[layer][i]->getUnitInfo() != nullptr && !objects[layer][i]->getUnitInfo()->isDead())) {
 					if (objects[layer][i] == hero) {
 						hero = nullptr;
 					}
+					delete objects[layer][i];
 					objects[layer].erase(objects[layer].begin() + i);
 				}
 			}
@@ -397,19 +403,17 @@ class Map {
 
 	void rebuildMap(Point gen_basis, float gen_radius, float cam_radius, bool save_out_range, bool fixed_asteroids, int asteroid_amount, float min_range, float max_range) {   // map is rebuilding around point gen_basis 
 		int obj_count = 0, total_obj_count = 0;
-		for (int layer = 0; layer < objects.size(); layer++) {
-			for (int i = 0; i < objects[layer].size(); i++) {
-				if ((gen_basis - objects[layer][i]->getPosition()).getLength() > gen_radius) {
-					if (!save_out_range) {
-						objects[layer][i]->deleteObject();
-					}
+		for (int i = 0; i < objects[landscape_layer].size(); i++) {
+			if ((gen_basis - objects[landscape_layer][i]->getPosition()).getLength() > gen_radius) {
+				if (!save_out_range) {
+					objects[landscape_layer][i]->deleteObject();
 				}
-				else {
-					if (objects[layer][i]->getObjectType() == ObjectType::asteroid) {
-						obj_count++;
-					}
-					total_obj_count++;
+			}
+			else {
+				if (objects[landscape_layer][i]->getObjectType() == ObjectType::asteroid) {
+					obj_count++;
 				}
+				total_obj_count++;
 			}
 		}
 
@@ -443,34 +447,14 @@ class Map {
 			object->setAutoOrigin();
 			addObject(object, landscape_layer);
 
-			/*object = new Object
-			(
-				new_pos,
-				Point(),
-				ObjectType::turret,
-				CollisionType::turret_col,
-				VisualInfo
-				(
-					SpriteType::turret_sprite,
-					AnimationType::hold_anim,
-					1
-				)
-			);
-			object->getUnitInfo()->setFaction(FactionList::agressive_faction);
-			object->setAutoOrigin();
-			angle = rand() / 16384.0 * PI * 2;
-			range = asteroid_speed;
-			x = cos(angle)*range, y = sin(angle)*range;
-			object->setSpeed(Point(x, y));
-			addObject(object, main_layer);*/
-
 			std::vector<Object *> struct_arr = getRandomStructureSet(new_pos, object->getCollisionModel()->getModelElem(0)->collision_radius, struct_set, FactionList::agressive_faction);
 			for (int i = 0; i < struct_arr.size(); i++) {
 				angle = rand() / 16384.0 * PI * 2;
 				range = asteroid_speed;
 				x = cos(angle)*range, y = sin(angle)*range;
-				object->setSpeed(Point(x, y));
+				struct_arr[i]->setSpeed(Point(x, y));
 				addObject(struct_arr[i], main_layer);
+				object->attachObject(struct_arr[i]);
 			}
 		}
 		
@@ -483,15 +467,13 @@ class Map {
 				angle = rand() / 16384.0 * PI * 2;
 				range = cam_radius + rand() / 16384.0 * (gen_radius - cam_radius);
 				x = cos(angle)*range + gen_basis.x, y = sin(angle)*range + gen_basis.y;
-				for (int layer = 0; layer < objects.size(); layer++) {
-					for (int j = 0; j < objects[layer].size(); j++) {
-						int cur_dist = (objects[layer][j]->getPosition() - Point(x,y)).getLength();
-						if (cur_dist <= min_range) {
-							in_min = true;
-						}
-						if (cur_dist <= max_range) {
-							in_max = true;
-						}
+				for (int j = 0; j < objects[landscape_layer].size(); j++) {
+					int cur_dist = (objects[landscape_layer][j]->getPosition() - Point(x, y)).getLength();
+					if (cur_dist <= min_range) {
+						in_min = true;
+					}
+					if (cur_dist <= max_range) {
+						in_max = true;
 					}
 				}
 				if (!fixed_asteroids) {
@@ -529,34 +511,14 @@ class Map {
 			addObject(object, landscape_layer);
 			
 
-			/*object = new Object
-			(
-				new_pos,
-				Point(),
-				ObjectType::turret,
-				CollisionType::turret_col,
-				VisualInfo
-				(
-					SpriteType::turret_sprite,
-					AnimationType::hold_anim,
-					1
-				)
-			);
-			object->getUnitInfo()->setFaction(FactionList::agressive_faction);
-			object->setAutoOrigin();
-			angle = rand() / 16384.0 * PI * 2;
-			range = asteroid_speed;
-			x = cos(angle)*range, y = sin(angle)*range;
-			object->setSpeed(Point(x, y));
-			addObject(object, main_layer);*/
-
 			std::vector<Object *> struct_arr = getRandomStructureSet(new_pos, object->getCollisionModel()->getModelElem(0)->collision_radius, struct_set, FactionList::agressive_faction);
 			for (int i = 0; i < struct_arr.size(); i++) {
 				angle = rand() / 16384.0 * PI * 2;
 				range = asteroid_speed;
 				x = cos(angle)*range, y = sin(angle)*range;
-				object->setSpeed(Point(x, y));
+				struct_arr[i]->setSpeed(Point(x, y));
 				addObject(struct_arr[i], main_layer);
+				object->attachObject(struct_arr[i]);
 			}
 		}
 	}

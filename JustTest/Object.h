@@ -15,12 +15,16 @@ class Object {
 	ObjectType object_type_info;
 
 	bool deleted = false;
+	std::vector<Object *> attached_objects;
 
 public:
 
 	~Object() {
 		delete col_model;
 		delete unit_info;
+		for (int i = 0; i < attached_objects.size(); i++) {
+			attached_objects[i]->deleteObject();
+		}
 	}
 
 	Object() {}
@@ -232,6 +236,19 @@ public:
 			return false;
 		}
 		return true;
+	}
+
+	void attachObject(Object * object) {
+		attached_objects.push_back(object);
+	}
+
+	void garbageCollector() {
+		for (int i = 0; i < attached_objects.size(); i++) {
+			if (attached_objects[i]->isDeleted() || !(attached_objects[i]->getUnitInfo() != nullptr && !attached_objects[i]->getUnitInfo()->isDead())) {
+				attached_objects[i]->deleteObject();
+				attached_objects.erase(attached_objects.begin() + i);
+			}
+		}
 	}
 };
 

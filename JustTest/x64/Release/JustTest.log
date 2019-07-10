@@ -57,18 +57,18 @@ e:\projects\asteroidtd\justtest\Map.h(136): warning C4244: 'argument': conversio
 e:\projects\asteroidtd\justtest\Map.h(140): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data
 e:\projects\asteroidtd\justtest\Map.h(164): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data
 e:\projects\asteroidtd\justtest\Map.h(165): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(363): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(439): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(467): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(369): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(443): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(450): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(452): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(467): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(468): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\Map.h(469): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(483): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(484): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(485): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(488): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(525): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(553): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(555): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(583): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(471): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(507): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(514): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(516): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(545): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 e:\projects\asteroidtd\justtest\VisualController.h(111): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\VisualController.h(112): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\VisualController.h(113): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
@@ -82,18 +82,19 @@ e:\projects\asteroidtd\justtest\GUIParser.h(85): warning C4800: 'std::vector<std
           ]
 Source.cpp(20): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 Source.cpp(28): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-Source.cpp(68): warning C4018: '<': signed/unsigned mismatch
+Source.cpp(49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 Source.cpp(69): warning C4018: '<': signed/unsigned mismatch
-Source.cpp(73): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(70): warning C4018: '<': signed/unsigned mismatch
 Source.cpp(74): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(89): warning C4018: '<': signed/unsigned mismatch
+Source.cpp(75): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 Source.cpp(90): warning C4018: '<': signed/unsigned mismatch
-Source.cpp(92): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-Source.cpp(95): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(91): warning C4018: '<': signed/unsigned mismatch
+Source.cpp(93): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 Source.cpp(96): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(111): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(97): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 Source.cpp(112): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(234): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(113): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(235): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   e:\projects\asteroidtd\justtest\AStarAlgorithm.h(49): note: see reference to function template instantiation 'std::pair<Point,int>::pair<Point,double&,void,0>(_Other1 &&,_Other2) noexcept' being compiled
           with
@@ -108,9 +109,9 @@ C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): war
               _Other2=double &
           ]
   Generating code
-  51 of 1444 functions ( 3.5%) were compiled, the rest were copied from previous compilation.
+  50 of 1462 functions ( 3.4%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    8 functions had inline decision re-evaluated but remain unchanged
+    11 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\JustTest.exe
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\JustTest.pdb (Full PDB)

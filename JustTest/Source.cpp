@@ -139,7 +139,7 @@ void gameCycle(std::string map_name) {
 
 		if (game_map1.getHero() == nullptr) {
 			// end game code
-			return;
+			break;
 		}
 
 		Event gui_event = gui_manager.getEvent();
