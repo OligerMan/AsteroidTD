@@ -169,6 +169,9 @@ void gameCycle(std::string map_name) {
 				case null_faction:
 					gui_manager.setTopSign("Empty", 0.01);
 					break;
+				case hero_faction:
+					gui_manager.setTopSign("Your", 0.01);
+					break;
 				case friendly_faction:
 					gui_manager.setTopSign("Friendly", 0.01);
 					break;

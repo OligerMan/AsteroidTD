@@ -244,7 +244,7 @@ class Map {
 											else {
 												vect = (prev_enemy->getPosition() - object1->getPosition()).getNormal();
 											}
-											if ((object1->getPosition() - object2->getPosition()).getLength() > object1->getUnitInfo()->getAngerRange()) {
+											if ((object1->getPosition() - prev_enemy->getPosition()).getLength() > object1->getUnitInfo()->getAngerRange()) {
 												object1->getUnitInfo()->setEnemy(nullptr);
 											}
 											else {
@@ -275,7 +275,16 @@ class Map {
 				if (object1->getUnitInfo()->getEnemy() != nullptr) {
 					Object * enemy = (Object *)object1->getUnitInfo()->getEnemy();
 					Point vect = object1->getPosition() - enemy->getPosition();
-					if (abs((object1->getAngle() + 90) / 180 * PI - (-atan2(vect.x, vect.y) + PI / 2)) < 0.02) {
+					float angle_diff = abs((object1->getAngle() + 90) / 180 * PI - (-atan2(vect.x, vect.y) + PI / 2));
+					if (angle_diff > 0.001) {
+						if (abs(angle_diff) > abs(angle_diff + PI * 2)) {
+							angle_diff += PI * 2;
+						}
+						if (abs(angle_diff) > abs(angle_diff - PI * 2)) {
+							angle_diff -= PI * 2;
+						}
+					}
+					if (abs(angle_diff) < 0.05) {
 						if (object1->getUnitInfo()->attack1Ready()) {
 							Point bullet_pos = object1->getPosition() + Point(cos((object1->getAngle() - 90) / 180 * PI), sin((object1->getAngle() - 90) / 180 * PI)) * 65;
 							Object * object = new Object
