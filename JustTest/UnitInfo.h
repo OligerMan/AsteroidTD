@@ -9,7 +9,7 @@ enum FactionList {
 	hero_faction,
 	friendly_faction,
 	neutral_faction,
-	agressive_faction,
+	aggressive_faction,
 
 	FACTION_COUNT
 };
@@ -25,7 +25,7 @@ void faction_type_init() {
 	faction_type[hero_faction] = "hero";
 	faction_type[friendly_faction] = "friendly";
 	faction_type[neutral_faction] = "neutral";
-	faction_type[agressive_faction] = "agressive";
+	faction_type[aggressive_faction] = "aggressive";
 }
 
 int is_faction_type_exists(std::string example) {
@@ -44,7 +44,7 @@ bool areEnemies(FactionList fact1, FactionList fact2) {
 		fact2 = tmp;
 	}
 
-	if (fact1 == FactionList::agressive_faction) {
+	if (fact1 == FactionList::aggressive_faction) {
 		return 0;
 	}
 
@@ -52,7 +52,7 @@ bool areEnemies(FactionList fact1, FactionList fact2) {
 		return 0;
 	}
 
-	if (fact2 == FactionList::agressive_faction) {
+	if (fact2 == FactionList::aggressive_faction) {
 		return 1;
 	}
 

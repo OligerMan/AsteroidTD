@@ -9,7 +9,6 @@ enum EventType{
 	pressed,
 	released,
 	create_new,
-	trolling,
 	attack,       // 1st object is who attack, 2nd is who receive damage
 
 	COUNT_EVENT
@@ -26,7 +25,6 @@ void event_type_init() {
 	event_type[pressed] = "pressed";
 	event_type[released] = "released";
 	event_type[create_new] = "create";
-	event_type[trolling] = "trolling";
 	event_type[attack] = "attack";
 }
 

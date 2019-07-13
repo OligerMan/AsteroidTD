@@ -25,8 +25,12 @@ void gameCycle(std::string map_name) {
 	}
 
 	sf::RenderWindow window(sf::VideoMode(settings.getWindowWidth(), settings.getWindowHeight()), "JustTest", sf::Style::None);
-	sf::View view1(sf::Vector2f(0.0, 0.0), sf::Vector2f(settings.getWindowWidth(), settings.getWindowHeight()));
-	window.setFramerateLimit(240);
+	sf::View view1(sf::Vector2f(0.0, 0.0), sf::Vector2f(settings.getWindowWidth() * 1.2, settings.getWindowHeight() * 1.2));
+	sf::View view2(sf::Vector2f(0.0, 0.0), sf::Vector2f(settings.getWindowWidth() * 5, settings.getWindowHeight() * 5));
+	bool strategic_view = false;
+	int last_view_change = 0;    // number of frame where you changed view last time
+
+	window.setFramerateLimit(consts.getFPSLock());
 
 	VisualController visual_ctrl;
 	GUIVisualController gui_visual_ctrl;
@@ -61,7 +65,7 @@ void gameCycle(std::string map_name) {
 		if (is_game_cycle) {
 			window.clear(sf::Color::Black);
 			is_game_cycle = visual_ctrl.processFrame(&window, game_map1.getObjectsBuffer());
-			is_game_cycle = gui_visual_ctrl.processFrame(&window, gui_manager.getObjectsBuffer(), viewport_pos) && is_game_cycle;
+			is_game_cycle = gui_visual_ctrl.processFrame(&window, gui_manager.getObjectsBuffer(), gui_manager.getGUIText(), viewport_pos) && is_game_cycle;
 
 			if (settings.isCollisionDebugMode()) {
 
@@ -147,6 +151,7 @@ void gameCycle(std::string map_name) {
 			switch (gui_event.getEventType()) {
 			case create_new:
 				game_map1.addObject(gui_event.getFirstObject(), 0);
+				break;
 			default:
 				break;
 			}
@@ -157,8 +162,27 @@ void gameCycle(std::string map_name) {
 		
 		Point new_speed;
 
+		if (!strategic_view) {
+			Object * closest_asteroid = game_map1.getClosestAsteroid();
+			if (closest_asteroid != nullptr && frame_num > 1500) {
+				switch (closest_asteroid->getUnitInfo()->getFaction()) {
+				case null_faction:
+					gui_manager.setTopSign("Empty", 0.01);
+					break;
+				case friendly_faction:
+					gui_manager.setTopSign("Friendly", 0.01);
+					break;
+				case neutral_faction:
+					gui_manager.setTopSign("Neutral", 0.01);
+					break;
+				case aggressive_faction:
+					gui_manager.setTopSign("Aggressive", 0.01);
+					break;
+				}
+			}
+		}
 		
-		if (hero_object != nullptr) {
+		if (hero_object != nullptr) {           // input
 			if (sf::Joystick::isConnected(0)) {         // gamepad input
 
 				new_speed = Point(
@@ -181,21 +205,42 @@ void gameCycle(std::string map_name) {
 					}
 				}
 			}
+			// keyboard input
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
 				new_speed += Point(0, -1);
-				hero_object->setAnimationType(move_anim);
+				if (!strategic_view) {
+					hero_object->setAnimationType(move_anim);
+				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
 				new_speed += Point(-1, 0);
-				hero_object->setAnimationType(move_anim);
+				if (!strategic_view) {
+					hero_object->setAnimationType(move_anim);
+				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
 				new_speed += Point(0, 1);
-				hero_object->setAnimationType(move_anim);
+				if (!strategic_view) {
+					hero_object->setAnimationType(move_anim);
+				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
 				new_speed += Point(1, 0);
-				hero_object->setAnimationType(move_anim);
+				if (!strategic_view) {
+					hero_object->setAnimationType(move_anim);
+				}
+			}
+			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Joystick::isButtonPressed(0, LB)) && (frame_num - last_view_change) > consts.getFPSLock() / 3 /* 0.5 sec delay for changing view again */) {
+				if (!strategic_view) {
+					strategic_view = true;
+					last_view_change = frame_num;
+					window.setView(view2);
+				}
+				else{
+					strategic_view = false;
+					last_view_change = frame_num;
+					window.setView(view1);
+				}
 			}
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
@@ -204,47 +249,57 @@ void gameCycle(std::string map_name) {
 			}
 
 		}
-		
 
-		new_speed = new_speed.getNormal() * hero_speed;
-		if (hero_object != nullptr) {
-			Point old_pos = hero_object->getSpeed();
-			old_pos -= previous_speed;
-			hero_object->setSpeed(old_pos * (1 - consts.getFrictionCoef()));
+		if (!strategic_view) {
+			new_speed = new_speed.getNormal() * hero_speed;
+			if (hero_object != nullptr) {
+				Point old_pos = hero_object->getSpeed();
+				old_pos -= previous_speed;
+				hero_object->setSpeed(old_pos * (1 - consts.getFrictionCoef()));
 
-			hero_object->changeSpeed(new_speed);
-			previous_speed = new_speed;
+				hero_object->changeSpeed(new_speed);
+				previous_speed = new_speed;
 
-			if (hero_object->getSpeed().getLength() != 0) {
-				hero_object->setAngle(atan2(hero_object->getSpeed().y, hero_object->getSpeed().x) / PI * 180);
-			}
-			else {
-				previous_speed = Point();
-			}
-			if (hero_object->getSpeed() == Point()) {
-				hero_object->setAnimationType(hold_anim);
+				if (hero_object->getSpeed().getLength() != 0) {
+					hero_object->setAngle(atan2(hero_object->getSpeed().y, hero_object->getSpeed().x) / PI * 180);
+				}
+				else {
+					previous_speed = Point();
+				}
+				if (hero_object->getSpeed() == Point()) {
+					hero_object->setAnimationType(hold_anim);
+				}
 			}
 		}
-
+		else {
+			hero_object->setSpeed(Point());
+			hero_object->setAnimationType(hold_anim);
+			new_speed = new_speed.getNormal() * consts.getStrategicCameraSpeed();
+			view2.setCenter(view2.getCenter() + sf::Vector2f(new_speed.x, new_speed.y));
+		}
 		
+
 		if (hero_object != nullptr) {
-			const double view_speed_coef = 0.015;    // must be from 0 to 1, where 0 for static camera and 1 for camera istantly over hero
+			const double view_speed_coef = 0.012;    // must be from 0 to 1, where 0 for static camera and 1 for camera istantly over hero
 			Point hero_position = hero_object->getPosition();
 			Point diff = (hero_position - Point(view1.getCenter())) * view_speed_coef;
 			view1.setCenter(view1.getCenter() + sf::Vector2f(diff.x, diff.y));
 		}
 		
-
-		window.setView(view1);
-
-
+		if (!strategic_view) {
+			window.setView(view1);
+		}
+		else {
+			window.setView(view2);
+		}
+		
 		window.display();
 	}
 }
 
 int main() {
 
-	std::string input = "kek";
+	std::string input;
 
 	//std::cout << "Enter map name" << std::endl;
 	//std::cin >> input; // path to game map

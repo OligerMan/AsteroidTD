@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 
 #include "Object.h"
 #include "EventBuffer.h"
@@ -9,6 +10,11 @@
 
 class GUIManager {
 
+	std::vector<std::string> start_game_signs{
+		std::string("TRY NOT TO DIE"),
+		std::string("Happy game! And may the odds be ever in your favor")
+	};
+
 	std::vector<std::vector<Object *>> gui_elements;
 
 	EventBuffer gui_event_buffer;
@@ -16,6 +22,9 @@ class GUIManager {
 
 	Object * last_clicked_object = nullptr;
 	Object * selected_object = nullptr;
+
+	sf::Font base_font;
+	std::vector<std::pair<sf::Text, int>> text;
 
 	bool checkClick(Point click) {
 		Object * cursor = new Object(click);
@@ -72,6 +81,17 @@ public:
 	GUIManager() {}
 
 	GUIManager(std::vector<std::vector<Object*>> * redactor_mode_objects) {
+		base_font.loadFromFile("a_Alterna.ttf");
+		srand(time(NULL));
+		text.resize(1);
+		text[0].first.setString(start_game_signs[rand() % (start_game_signs.size())]);
+		text[0].first.setPosition(sf::Vector2f(0, -settings.getWindowHeight() / 2));
+		text[0].first.setFillColor(sf::Color::White);
+		text[0].first.setOutlineColor(sf::Color::Black);
+		text[0].first.setOutlineThickness(1);
+		text[0].first.setCharacterSize(50);
+		text[0].first.setFont(base_font);
+		text[0].second = consts.getFPSLock() * 5;
 	}
 
 
@@ -96,5 +116,19 @@ public:
 
 	Object * getSelectedObject() {
 		return selected_object;
+	}
+
+	std::vector<std::pair<sf::Text, int>> * getGUIText() {
+		return &text;
+	}
+
+	void setTopSign(std::string string, float time /*in seconds*/) {
+		text[0].first.setString(string);
+		text[0].second = consts.getFPSLock() * time;
+	}
+
+	void setTopSign(char * string, float time /*in seconds*/) {
+		text[0].first.setString(string);
+		text[0].second = consts.getFPSLock() * time;
 	}
 };

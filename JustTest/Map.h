@@ -92,6 +92,7 @@ class Map {
 	Point grid_offset;
 
 	Object * hero = nullptr;
+	Object * closest_asteroid = nullptr;
 
 	EventBuffer event_buffer;
 
@@ -100,7 +101,7 @@ class Map {
 	Point gen_basis;
 	float gen_radius = 6000, cam_radius = 2500, min_range = 1500, max_range = 2700, asteroid_speed = 0;
 	int asteroid_amount = 20, max_try_count = 100;
-	bool save_out_range = false, fixed_asteroids = true;
+	bool save_out_range = true, fixed_asteroids = true;
 
 	//////////////////////////////////////////////
 
@@ -426,6 +427,8 @@ class Map {
 		}
 
 		if (!obj_count) {
+			FactionList faction = null_faction;
+
 			Point new_pos = Point(0, 0);
 			Object * object = new Object
 			(
@@ -445,9 +448,10 @@ class Map {
 			float x = cos(angle)*range, y = sin(angle)*range;
 			object->setSpeed(Point(x, y));
 			object->setAutoOrigin();
+			object->getUnitInfo()->setFaction(faction);
 			addObject(object, landscape_layer);
 
-			std::vector<Object *> struct_arr = getRandomStructureSet(new_pos, object->getCollisionModel()->getModelElem(0)->collision_radius, struct_set, FactionList::agressive_faction);
+			std::vector<Object *> struct_arr = getRandomStructureSet(new_pos, object->getCollisionModel()->getModelElem(0)->collision_radius, struct_set, faction);
 			for (int i = 0; i < struct_arr.size(); i++) {
 				angle = rand() / 16384.0 * PI * 2;
 				range = asteroid_speed;
@@ -489,6 +493,18 @@ class Map {
 			if (fixed_asteroids) {
 				cnt--;
 			}
+
+			FactionList faction = null_faction;
+			int faction_score = rand() % 1000;
+			if (faction_score > 900) {
+				faction = friendly_faction;
+			}
+			if (faction_score > 933) {
+				faction = neutral_faction;
+			}
+			if (faction_score > 966) {
+				faction = aggressive_faction;
+			}
 			Point new_pos = Point(x,y);
 			Object * object = new Object
 			(
@@ -508,10 +524,11 @@ class Map {
 			range = asteroid_speed;
 			x = cos(angle)*range, y = sin(angle)*range;
 			object->setSpeed(Point(x,y));
+			object->getUnitInfo()->setFaction(faction);
 			addObject(object, landscape_layer);
 			
 
-			std::vector<Object *> struct_arr = getRandomStructureSet(new_pos, object->getCollisionModel()->getModelElem(0)->collision_radius, struct_set, FactionList::agressive_faction);
+			std::vector<Object *> struct_arr = getRandomStructureSet(new_pos, object->getCollisionModel()->getModelElem(0)->collision_radius, struct_set, faction);
 			for (int i = 0; i < struct_arr.size(); i++) {
 				angle = rand() / 16384.0 * PI * 2;
 				range = asteroid_speed;
@@ -537,6 +554,14 @@ public:
 		}
 		createNavigationGrid();
 		rebuildMap(hero->getPosition(), gen_radius, 0, save_out_range, 1, asteroid_amount, min_range, max_range);
+	}
+
+	~Map() {
+		for (int i = 0; i < objects.size(); i++) {
+			for (int j = 0; j < objects[i].size(); j++) {
+				delete objects[i][j];
+			}
+		}
 	}
 
 	bool isClickable(Point click) {
@@ -571,6 +596,7 @@ public:
 		processClick(click);
 		processObjectSpeed();
 		processCollisionFrame();
+		updateClosestAsteroid();
 		processUnitAI();
 		processEventBuffer();
 		garbageCollector();
@@ -605,5 +631,23 @@ public:
 
 	double getNavigationGridSize() {
 		return grid_size;
+	}
+
+	void updateClosestAsteroid() {
+		if ((closest_asteroid && ((hero->getPosition() - closest_asteroid->getPosition()).getLength() > consts.getInteractionDistance())) || !closest_asteroid) {
+			for (int i = 0; i < objects[landscape_layer].size(); i++) {
+				if (objects[0][i]->getObjectType() == ObjectType::asteroid) {
+					if (((hero->getPosition() - objects[landscape_layer][i]->getPosition()).getLength() < consts.getInteractionDistance())) {
+						closest_asteroid = objects[landscape_layer][i];
+						return;
+					}
+				}
+			}
+			closest_asteroid = nullptr;
+		}
+	}
+
+	Object * getClosestAsteroid() {
+		return closest_asteroid;
 	}
 };

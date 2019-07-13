@@ -93,7 +93,7 @@ public:
 		return is_active;
 	}
 
-	bool processFrame(sf::RenderWindow * window, std::vector<std::vector<Object *>> * objects, Point viewport_pos) {  // render for GUI elements
+	bool processFrame(sf::RenderWindow * window, std::vector<std::vector<Object *>> * objects, std::vector<std::pair<sf::Text, int>> * text, Point viewport_pos) {  // render for GUI elements
 
 		for (int layer = 0; layer < objects->size(); layer++) {
 			for (int i = 0; i < (*objects)[layer].size(); i++) {
@@ -119,6 +119,16 @@ public:
 				sprite->setRotation(angle);
 				
 				window->draw(*sprite);
+			}
+		}
+
+		for (int i = 0; i < text->size(); i++) {
+			if (!i) {
+				(*text)[0].first.setOrigin(-viewport_pos.x + (*text)[i].first.getLocalBounds().width / 2, -viewport_pos.y + (*text)[i].first.getLocalBounds().height / 2);
+			}
+			if ((*text)[i].second > 0) {
+				window->draw((*text)[i].first);
+				(*text)[i].second--;
 			}
 		}
 		
