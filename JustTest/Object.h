@@ -250,6 +250,17 @@ public:
 			}
 		}
 	}
+
+	std::vector<Object *> * getAttached() {
+		return &attached_objects;
+	}
+
+	void setFaction(int new_faction) {
+		unit_info->setFaction(new_faction);
+		for (int i = 0; i < attached_objects.size(); i++) {
+			attached_objects[i]->setFaction(new_faction);
+		}
+	}
 };
 
 bool checkObjectCollision(Object * obj1, Object * obj2) {

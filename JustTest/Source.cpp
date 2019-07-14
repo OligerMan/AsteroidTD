@@ -27,8 +27,11 @@ void gameCycle(std::string map_name) {
 	sf::RenderWindow window(sf::VideoMode(settings.getWindowWidth(), settings.getWindowHeight()), "JustTest", sf::Style::None);
 	sf::View view1(sf::Vector2f(0.0, 0.0), sf::Vector2f(settings.getWindowWidth() * 1.2, settings.getWindowHeight() * 1.2));
 	sf::View view2(sf::Vector2f(0.0, 0.0), sf::Vector2f(settings.getWindowWidth() * 5, settings.getWindowHeight() * 5));
-	bool strategic_view = false;
+	bool strategic_view = false;    // choice from strategic camera(big vision, hero don't move) and hero camera(default camera)
+	bool fight_mode = false;       // choice from build/peaceful mode(default) and fight mode
 	int last_view_change = 0;    // number of frame where you changed view last time
+	int last_mode_change = 0;    // number of frame where you changed mode last time
+	int last_build = 0;    // number of frame where you changed mode last time
 
 	window.setFramerateLimit(consts.getFPSLock());
 
@@ -233,7 +236,7 @@ void gameCycle(std::string map_name) {
 					hero_object->setAnimationType(move_anim);
 				}
 			}
-			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Joystick::isButtonPressed(0, LB)) && (frame_num - last_view_change) > consts.getFPSLock() / 3 /* 0.5 sec delay for changing view again */) {
+			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Joystick::isButtonPressed(0, LB)) && (frame_num - last_view_change) > consts.getFPSLock() / 3 /* 0.33 sec delay for changing view again */) {
 				if (!strategic_view) {
 					strategic_view = true;
 					last_view_change = frame_num;
@@ -245,12 +248,79 @@ void gameCycle(std::string map_name) {
 					window.setView(view1);
 				}
 			}
-
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
-				settings.switchNavigationGridMode();
-				Sleep(100);
+			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::E) || sf::Joystick::isButtonPressed(0, RB)) && (frame_num - last_mode_change) > consts.getFPSLock() / 3 /* 0.33 sec delay for changing view again */) {
+				if (!fight_mode) {
+					fight_mode = true;
+				}
+				else {
+					fight_mode = true;
+				}
+				last_mode_change = frame_num;
 			}
-
+			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) || sf::Joystick::isButtonPressed(0, Y)) && (frame_num - last_build) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
+				if (fight_mode) {
+					// hero attack 1 (mb rocket launch)
+				}
+				else {
+					// build dome(on your or empty asteroid), or start conversation with others
+					int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
+					switch (faction) {
+					case null_faction:
+					case hero_faction:
+						game_map1.addStructure(game_map1.getClosestAsteroid(), dome);
+						game_map1.getClosestAsteroid()->setFaction(hero_faction);
+						break;
+					case friendly_faction:
+					case neutral_faction:
+					case aggressive_faction:
+						// start conversation
+						break;
+					}
+				}
+				last_build = frame_num;
+			}
+			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) || sf::Joystick::isButtonPressed(0, X)) && (frame_num - last_build) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
+				if (fight_mode) {
+					// hero attack 2 
+				}
+				else {
+					int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
+					switch (faction) {
+					case hero_faction:
+						game_map1.addStructure(game_map1.getClosestAsteroid(), turret);
+						break;
+					}
+				}
+				last_build = frame_num;
+			}
+			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) || sf::Joystick::isButtonPressed(0, B)) && (frame_num - last_build) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
+				if (fight_mode) {
+					// hero attack 2 
+				}
+				else {
+					int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
+					switch (faction) {
+					case hero_faction:
+						game_map1.addStructure(game_map1.getClosestAsteroid(), gold);
+						break;
+					}
+				}
+				last_build = frame_num;
+			}
+			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) || sf::Joystick::isButtonPressed(0, A)) && (frame_num - last_build) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
+				if (fight_mode) {
+					// hero attack 2 
+				}
+				else {
+					int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
+					switch (faction) {
+					case hero_faction:
+						game_map1.addStructure(game_map1.getClosestAsteroid(), science);
+						break;
+					}
+				}
+				last_build = frame_num;
+			}
 		}
 
 		if (!strategic_view) {

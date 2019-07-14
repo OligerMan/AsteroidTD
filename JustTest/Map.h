@@ -659,4 +659,132 @@ public:
 	Object * getClosestAsteroid() {
 		return closest_asteroid;
 	}
+
+	void addStructure(Object * base, ObjectType type) {
+		if (base->getObjectType() != asteroid) {
+			return;
+		}
+
+		std::vector<Object *> outer_ring;
+		std::vector<Object *> inner_ring;
+		for (int i = 0; i < base->getAttached()->size(); i++) {
+			if ((*base->getAttached())[i]->getObjectType() == turret) {
+				outer_ring.push_back((*base->getAttached())[i]);
+			}
+			else {
+				inner_ring.push_back((*base->getAttached())[i]);
+			}
+		}
+		if (inner_ring.size() == 7 && type != turret) {
+			return;
+		}
+		if (outer_ring.size() == 10 && type == turret) {
+			return;
+		}
+		Object * object = nullptr;
+		switch (type) {
+		case turret:
+			object = new Object
+			(
+				base->getPosition(),
+				Point(),
+				ObjectType::turret,
+				CollisionType::turret_col,
+				VisualInfo
+				(
+					SpriteType::turret_sprite,
+					AnimationType::hold_anim,
+					1000000000
+				)
+			);
+			object->setAutoOrigin();
+			object->setSpeed(base->getSpeed());
+			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
+			outer_ring.push_back(object);
+			break;
+		case dome:
+			object = new Object
+			(
+				base->getPosition(),
+				Point(),
+				ObjectType::dome,
+				CollisionType::dome_col,
+				VisualInfo
+				(
+					SpriteType::dome_sprite,
+					AnimationType::hold_anim,
+					1000000000
+				)
+			);
+			object->setAutoOrigin();
+			object->setSpeed(base->getSpeed());
+			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
+			inner_ring.push_back(object);
+			break;
+		case science:
+			object = new Object
+			(
+				base->getPosition(),
+				Point(),
+				ObjectType::science,
+				CollisionType::science_col,
+				VisualInfo
+				(
+					SpriteType::science_sprite,
+					AnimationType::hold_anim,
+					1000000000
+				)
+			);
+			object->setAutoOrigin();
+			object->setSpeed(base->getSpeed());
+			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
+			inner_ring.push_back(object);
+			break;
+		case gold:
+			object = new Object
+			(
+				base->getPosition(),
+				Point(),
+				ObjectType::gold,
+				CollisionType::gold_col,
+				VisualInfo
+				(
+					SpriteType::gold_sprite,
+					AnimationType::hold_anim,
+					1000000000
+				)
+			);
+			object->setAutoOrigin();
+			object->setSpeed(base->getSpeed());
+			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
+			inner_ring.push_back(object);
+			break;
+		}
+		if (object == nullptr) {
+			return;
+		}
+		base->attachObject(object);
+		// rebuild structures list
+		float base_angle = 0;
+		if (type == turret) {
+
+			base_angle = (float)(rand() % 1024) / 512 * PI;
+			for (int i = 0; i < outer_ring.size(); i++) {
+				float cur_angle = (float)i / outer_ring.size() * 2 * PI + base_angle;
+				outer_ring[i]->setPosition(base->getPosition() + Point(sin(cur_angle), cos(cur_angle)) * (base->getCollisionModel()->getModelElem(0)->collision_radius - 60));
+			}
+		}
+		else {
+			base_angle = (float)(rand() % 1024) / 512 * PI;
+			for (int i = 0; i < inner_ring.size(); i++) {
+				float cur_angle = (float)i / std::min(6, (int)inner_ring.size()) * 2 * PI + base_angle;
+				inner_ring[i]->setPosition(base->getPosition() + Point(sin(cur_angle), cos(cur_angle)) * (base->getCollisionModel()->getModelElem(0)->collision_radius - 180));
+			}
+		}
+
+		if (inner_ring.size() % 6 == 1) {
+			inner_ring[inner_ring.size()-1]->setPosition(base->getPosition());
+		}
+		addObject(object, main_layer);
+	}
 };
