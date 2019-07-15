@@ -126,6 +126,7 @@
     <ClInclude Include="MapParser.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectTypes.h" />
+    <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="StructureSetGeneration.h" />
     <ClInclude Include="UnitInfo.h" />

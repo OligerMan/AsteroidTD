@@ -660,9 +660,9 @@ public:
 		return closest_asteroid;
 	}
 
-	void addStructure(Object * base, ObjectType type) {
+	bool addStructure(Object * base, ObjectType type) {
 		if (base->getObjectType() != asteroid) {
-			return;
+			return false;
 		}
 
 		std::vector<Object *> outer_ring;
@@ -676,10 +676,10 @@ public:
 			}
 		}
 		if (inner_ring.size() == 7 && type != turret) {
-			return;
+			return false;
 		}
 		if (outer_ring.size() == 10 && type == turret) {
-			return;
+			return false;
 		}
 		Object * object = nullptr;
 		switch (type) {
@@ -761,7 +761,7 @@ public:
 			break;
 		}
 		if (object == nullptr) {
-			return;
+			return false;
 		}
 		base->attachObject(object);
 		// rebuild structures list
@@ -786,5 +786,7 @@ public:
 			inner_ring[inner_ring.size()-1]->setPosition(base->getPosition());
 		}
 		addObject(object, main_layer);
+
+		return true;
 	}
 };

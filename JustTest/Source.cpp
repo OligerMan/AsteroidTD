@@ -1,6 +1,7 @@
 #include "VisualController.h"
 #include "GUIVisualController.h"
 #include "GUIManager.h"
+#include "ResourceManager.h"
 
 #include <chrono>
 #include <Windows.h>
@@ -38,6 +39,7 @@ void gameCycle(std::string map_name) {
 	VisualController visual_ctrl;
 	GUIVisualController gui_visual_ctrl;
 	Map game_map1("maps/" + map_name + ".map");
+	ResourceManager res_manager(1000, 5);
 
 	Map object_presets("redactor_resources/object_templates.map");
 	GUIManager gui_manager(object_presets.getObjectsBuffer());
@@ -64,6 +66,12 @@ void gameCycle(std::string map_name) {
 		Point viewport_pos = Point(view1.getCenter().x, view1.getCenter().y);
 
 		// game cycle
+
+		// resource manager control
+		res_manager.processFrame();
+		gui_manager.setText(std::to_string((int)res_manager.getGold()), 1000000, gold_sign, Point(-settings.getWindowWidth() / 2 + 100, -settings.getWindowHeight() / 2 + 50), 30);
+		gui_manager.setText(std::to_string((int)res_manager.getResearch()), 1000000, research_sign, Point(-settings.getWindowWidth() / 2 + 100, -settings.getWindowHeight() / 2 + 100), 30);
+
 
 		if (is_game_cycle) {
 			window.clear(sf::Color::Black);
@@ -263,63 +271,99 @@ void gameCycle(std::string map_name) {
 				}
 				else {
 					// build dome(on your or empty asteroid), or start conversation with others
-					int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
-					switch (faction) {
-					case null_faction:
-					case hero_faction:
-						game_map1.addStructure(game_map1.getClosestAsteroid(), dome);
-						game_map1.getClosestAsteroid()->setFaction(hero_faction);
-						break;
-					case friendly_faction:
-					case neutral_faction:
-					case aggressive_faction:
-						// start conversation
-						break;
+					if (game_map1.getClosestAsteroid()) {
+						int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
+						switch (faction) {
+						case null_faction:
+						case hero_faction:
+							if (res_manager.spendGold(consts.getBaseDomePrice())) {
+								if (!game_map1.addStructure(game_map1.getClosestAsteroid(), dome)) {
+									res_manager.addGold(consts.getBaseDomePrice());
+								}
+								game_map1.getClosestAsteroid()->setFaction(hero_faction);
+							}
+
+							break;
+						case friendly_faction:
+						case neutral_faction:
+						case aggressive_faction:
+							// start conversation
+							break;
+						}
+						last_build = frame_num;
 					}
+					
 				}
-				last_build = frame_num;
+				
 			}
 			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) || sf::Joystick::isButtonPressed(0, X)) && (frame_num - last_build) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
 				if (fight_mode) {
 					// hero attack 2 
 				}
 				else {
-					int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
-					switch (faction) {
-					case hero_faction:
-						game_map1.addStructure(game_map1.getClosestAsteroid(), turret);
-						break;
+					if (game_map1.getClosestAsteroid()) {
+						int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
+						switch (faction) {
+						case hero_faction:
+							if (res_manager.spendGold(consts.getBaseTurretPrice())) {
+								if (!game_map1.addStructure(game_map1.getClosestAsteroid(), turret)) {
+									res_manager.addGold(consts.getBaseTurretPrice());
+								}
+								game_map1.getClosestAsteroid()->setFaction(hero_faction);
+							}
+							break;
+						}
+						last_build = frame_num;
 					}
 				}
-				last_build = frame_num;
 			}
 			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) || sf::Joystick::isButtonPressed(0, B)) && (frame_num - last_build) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
 				if (fight_mode) {
 					// hero attack 2 
 				}
 				else {
-					int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
-					switch (faction) {
-					case hero_faction:
-						game_map1.addStructure(game_map1.getClosestAsteroid(), gold);
-						break;
+					if (game_map1.getClosestAsteroid()) {
+						int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
+						switch (faction) {
+						case hero_faction:
+							if (res_manager.spendGold(consts.getBaseGoldPrice())) {
+								if (!game_map1.addStructure(game_map1.getClosestAsteroid(), gold)) {
+									res_manager.addGold(consts.getBaseGoldPrice());
+								}
+								else {
+									res_manager.changeGoldIncome(consts.getBaseGoldIncome());
+								}
+								game_map1.getClosestAsteroid()->setFaction(hero_faction);
+							}
+							break;
+						}
+						last_build = frame_num;
 					}
 				}
-				last_build = frame_num;
 			}
 			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) || sf::Joystick::isButtonPressed(0, A)) && (frame_num - last_build) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
 				if (fight_mode) {
 					// hero attack 2 
 				}
 				else {
-					int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
-					switch (faction) {
-					case hero_faction:
-						game_map1.addStructure(game_map1.getClosestAsteroid(), science);
-						break;
+					if (game_map1.getClosestAsteroid()) {
+						int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
+						switch (faction) {
+						case hero_faction:
+							if (res_manager.spendGold(consts.getBaseSciencePrice())) {
+								if (!game_map1.addStructure(game_map1.getClosestAsteroid(), science)) {
+									res_manager.addGold(consts.getBaseSciencePrice());
+								}
+								else {
+									res_manager.changeResearchIncome(consts.getBaseResearchIncome());
+								}
+								game_map1.getClosestAsteroid()->setFaction(hero_faction);
+							}
+							break;
+						}
+						last_build = frame_num;
 					}
 				}
-				last_build = frame_num;
 			}
 		}
 

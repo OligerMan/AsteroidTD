@@ -11,6 +11,13 @@ class Constants {
 	const int fps_lock = 240;
 	const double interaction_distance = 600;
 
+	const float base_gold_income = 0.003;
+	const float base_research_income = 0.0001;
+	const float base_turret_price = 100;
+	const float base_science_price = 100;
+	const float base_gold_price = 100;
+	const float base_dome_price = 100;
+
 public:
 
 	const double getSpeedDamageThreshold() {
@@ -43,5 +50,29 @@ public:
 
 	const float getStrategicCameraSpeed() {
 		return strategic_camera_speed;
+	}
+
+	const float getBaseGoldIncome() {
+		return base_gold_income;
+	}
+
+	const float getBaseResearchIncome() {
+		return base_research_income;
+	}
+
+	const float getBaseTurretPrice() {
+		return base_turret_price;
+	}
+
+	const float getBaseDomePrice() {
+		return base_dome_price;
+	}
+
+	const float getBaseSciencePrice() {
+		return base_science_price;
+	}
+
+	const float getBaseGoldPrice() {
+		return base_gold_price;
 	}
 } consts;

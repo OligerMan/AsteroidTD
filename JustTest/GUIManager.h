@@ -8,6 +8,14 @@
 #include "GUIParser.h"
 
 
+enum textboxList {
+	top_sign,
+	gold_sign,
+	research_sign,
+
+	LIST_NUM
+};
+
 class GUIManager {
 
 	std::vector<std::string> start_game_signs{
@@ -130,5 +138,22 @@ public:
 	void setTopSign(char * string, float time /*in seconds*/) {
 		text[0].first.setString(string);
 		text[0].second = consts.getFPSLock() * time;
+	}
+
+	void setText(std::string string, float time, int number, Point pos, int character_size) {
+		if (number < 0 || time < 0 || character_size < 0) {
+			return;
+		}
+		if (text.size() <= number) {
+			text.resize(number + 1);
+		}
+		text[number].first.setString(string);
+		text[number].first.setPosition(sf::Vector2f(pos.x, pos.y));
+		text[number].first.setFillColor(sf::Color::White);
+		text[number].first.setOutlineColor(sf::Color::Black);
+		text[number].first.setOutlineThickness(1);
+		text[number].first.setCharacterSize(character_size);
+		text[number].first.setFont(base_font);
+		text[number].second = consts.getFPSLock() * time;
 	}
 };
