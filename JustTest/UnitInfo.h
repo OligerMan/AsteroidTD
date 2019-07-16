@@ -93,7 +93,7 @@ class UnitInfo {
 	float attack2_cur_cooldown = 0;
 	float attack3_cur_cooldown = 0;
 
-	float default_speed = 0.07;
+	float default_speed = 0;
 	float speed_coef = 1;
 	float turn_speed = 2;
 
@@ -278,6 +278,12 @@ class UnitInfo {
 				faction = std::stoi(value);
 				if (settings.isUnitInfoDebugEnabled()) {
 					std::cout << "Faction is set to " << faction << std::endl;
+				}
+			}
+			if (setting == "anger_range") {
+				anger_range = std::stoi(value);
+				if (settings.isUnitInfoDebugEnabled()) {
+					std::cout << "Anger range is set to " << anger_range << std::endl;
 				}
 			}
 			if (setting == "unit_info_end") {
@@ -476,5 +482,9 @@ public:
 		attack1_cur_cooldown = std::max(0.0f, attack1_cur_cooldown - 1);
 		attack2_cur_cooldown = std::max(0.0f, attack2_cur_cooldown - 1);
 		attack3_cur_cooldown = std::max(0.0f, attack3_cur_cooldown - 1);
+	}
+
+	float getDefaultSpeed() {
+		return default_speed;
 	}
 };

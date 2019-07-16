@@ -152,10 +152,16 @@ public:
 	}
 
 	void setSpeed(Point speed) {
+		for (int i = 0; i < attached_objects.size(); i++) {
+			attached_objects[i]->setPosition(speed + (getSpeed() - attached_objects[i]->getSpeed()));
+		}
 		col_model->setSpeed(speed);
 	}
 
 	void changeSpeed(Point difference) {
+		for (int i = 0; i < attached_objects.size(); i++) {
+			attached_objects[i]->changeSpeed(difference);
+		}
 		col_model->changeSpeed(difference);
 	}
 
@@ -164,14 +170,23 @@ public:
 	}
 
 	void setPosition(Point origin) {
+		for (int i = 0; i < attached_objects.size(); i++) {
+			attached_objects[i]->setPosition(origin + (getPosition() - attached_objects[i]->getPosition()));
+		}
 		col_model->setPosition(origin);
 	}
 
 	void changePosition(Point difference) {
+		for (int i = 0; i < attached_objects.size(); i++) {
+			attached_objects[i]->changePosition(difference);
+		}
 		col_model->changePosition(difference);
 	}
 
 	void forceChangePosition(Point difference) {
+		for (int i = 0; i < attached_objects.size(); i++) {
+			attached_objects[i]->forceChangePosition(difference);
+		}
 		col_model->forceChangePosition(difference);
 	}
 

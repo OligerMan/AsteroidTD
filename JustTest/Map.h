@@ -6,6 +6,7 @@
 #include "GameConstants.h"
 #include "AStarAlgorithm.h"
 #include "StructureSetGeneration.h"
+#include "ConvexHull.h"
 
 void fixCollision(Object * obj1, Object * obj2) { 
 	bool force_move = obj1->getCollisionModel()->isStatic() && obj2->getCollisionModel()->isStatic();
@@ -234,7 +235,7 @@ class Map {
 								int faction2 = object2->getUnitInfo()->getFaction();
 
 								if (areEnemies((FactionList)faction1, (FactionList)faction2)) {
-									if (!(faction1 == hero_faction) && object1->canObjectAttack()) {
+									if (!(faction1 == hero_faction) && (object1->canObjectAttack() || object1->getUnitInfo()->getDefaultSpeed() > 0.0001)) {
 										Point vect = (object2->getPosition() - object1->getPosition()).getNormal();
 										Object * prev_enemy = (Object *)object1->getUnitInfo()->getEnemy();
 										if (prev_enemy != nullptr) {
@@ -258,6 +259,13 @@ class Map {
 													}
 													object1->changeAngle(angle_diff / 10.0);
 												}
+												if (!object1->getCollisionModel()->isStatic() && (((Object *)object1->getUnitInfo()->getEnemy())->getPosition() - object1->getPosition()).getLength() > consts.getMinimalFlightRange()) {
+													Point speed(-cos(object1->getAngle() / 180 * PI + PI / 2), -sin(object1->getAngle() / 180 * PI + PI / 2));
+													object1->setSpeed(speed.getNormal()*object1->getUnitInfo()->getDefaultSpeed());
+												}
+												else if((((Object *)object1->getUnitInfo()->getEnemy())->getPosition() - object1->getPosition()).getLength() < consts.getMinimalFlightRange()){
+													object1->setSpeed(Point());
+												}
 											}
 										}
 										else if((object1->getPosition() - object2->getPosition()).getLength() <= object1->getUnitInfo()->getAngerRange()){
@@ -272,7 +280,7 @@ class Map {
 
 				// shoot if enemy is on your way and in enough range
 				// TODO
-				if (object1->getUnitInfo()->getEnemy() != nullptr) {
+				if (object1->getUnitInfo()->getEnemy() != nullptr && object1->canObjectAttack()) {
 					Object * enemy = (Object *)object1->getUnitInfo()->getEnemy();
 					Point vect = object1->getPosition() - enemy->getPosition();
 					float angle_diff = abs((object1->getAngle() + 90) / 180 * PI - (-atan2(vect.x, vect.y) + PI / 2));
@@ -788,5 +796,70 @@ public:
 		addObject(object, main_layer);
 
 		return true;
+	}
+
+	void spawnEnemyGroup(int enemy_lvl, Point pos) {
+		int enemy_amount = sqrt(enemy_lvl);
+		
+		for (int i = 0; i < enemy_amount; i++) {
+			float angle = ((float)i / enemy_amount) * 2 * PI;
+			Point new_pos = pos + Point(cos(angle), sin(angle)) * (50 + enemy_amount * 10);
+
+			Object * object = new Object
+			(
+				new_pos,
+				Point(),
+				ObjectType::alien_fighter,
+				CollisionType::alien_fighter_col,
+				VisualInfo
+				(
+					SpriteType::alien_fighter_sprite,
+					AnimationType::hold_anim,
+					1000000000
+				)
+			);
+			object->setAutoOrigin();
+			object->getUnitInfo()->setFaction(aggressive_faction);
+			addObject(object, landscape_layer);
+		}
+	}
+
+	void spawnEnemy(int enemy_lvl, Point camera_pos) {
+		std::vector<Point> convex;   // building convex hull on players asteroids and player position
+		if ((camera_pos - hero->getPosition()).getLength() > 10) {
+			convex.push_back(hero->getPosition());
+		}
+		for (int i = 0; i < objects[landscape_layer].size(); i++) {
+			if (objects[landscape_layer][i]->getUnitInfo()->getFaction() == hero_faction) {
+				convex.push_back(objects[landscape_layer][i]->getPosition());
+			}
+		}
+		if (convex.size() > 1) {
+			convex_hull(convex);
+		}
+
+		while (enemy_lvl > 0) {
+			int nearest_point = rand() % convex.size();
+			float angle = (float)(rand() % 1024) / 512 * PI;
+			Point new_spawn_point = convex[nearest_point] + Point(cos(angle), sin(angle)) * (consts.getEnemySpawnRange() + 0.1);
+			bool outofrange = true;
+			for (int i = 0; i < convex.size(); i++) {
+				if ((convex[i] - new_spawn_point).getLength() < consts.getEnemySpawnRange()) {
+					outofrange = false;
+					break;
+				}
+			}
+			if (!outofrange) {
+				continue;
+			}
+			if (ConvexHull::in_convex(convex, new_spawn_point)) {
+				continue;
+			}
+
+			spawnEnemyGroup(enemy_lvl, new_spawn_point);
+			enemy_lvl--;
+		}
+		
+
 	}
 };

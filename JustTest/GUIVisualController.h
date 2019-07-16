@@ -124,6 +124,9 @@ public:
 
 		for (int i = 0; i < text->size(); i++) {
 			if (i <= 2) {
+				(*text)[i].first.setOrigin(-viewport_pos.x, -viewport_pos.y);
+			}
+			if (i <= 0) {
 				(*text)[i].first.setOrigin(-viewport_pos.x + (*text)[i].first.getLocalBounds().width / 2, -viewport_pos.y + (*text)[i].first.getLocalBounds().height / 2);
 			}
 			if ((*text)[i].second > 0) {

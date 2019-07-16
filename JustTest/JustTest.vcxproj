@@ -113,6 +113,7 @@
     <ClInclude Include="AStarAlgorithm.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionParser.h" />
+    <ClInclude Include="ConvexHull.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="EventBuffer.h" />
     <ClInclude Include="EventTypes.h" />

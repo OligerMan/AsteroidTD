@@ -18,6 +18,9 @@ class Constants {
 	const float base_gold_price = 100;
 	const float base_dome_price = 100;
 
+	const float enemy_spawn_range = 10000;
+	const float minimal_flight_range = 500;
+
 public:
 
 	const double getSpeedDamageThreshold() {
@@ -74,5 +77,13 @@ public:
 
 	const float getBaseGoldPrice() {
 		return base_gold_price;
+	}
+
+	const float getEnemySpawnRange() {
+		return enemy_spawn_range;
+	}
+
+	const float getMinimalFlightRange() {
+		return minimal_flight_range;
 	}
 } consts;

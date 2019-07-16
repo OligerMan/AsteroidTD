@@ -11,6 +11,7 @@ enum SpriteType {
 	science_sprite,
 	gold_sprite,
 	bullet_sprite,
+	alien_fighter_sprite,
 
 	COUNT_SPRITE
 };
@@ -28,8 +29,9 @@ void sprite_type_init() {
 	sprite_type[turret_sprite] = "turret";
 	sprite_type[dome_sprite] = "dome";
 	sprite_type[science_sprite] = "science";
-	sprite_type[gold_sprite] = "gold";
+	sprite_type[gold_sprite] = "gold"; 
 	sprite_type[bullet_sprite] = "bullet";
+	sprite_type[alien_fighter_sprite] = "alien_fighter";
 }
 
 int is_sprite_type_exists(std::string example) {

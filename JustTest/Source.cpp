@@ -69,9 +69,19 @@ void gameCycle(std::string map_name) {
 
 		// resource manager control
 		res_manager.processFrame();
-		gui_manager.setText(std::to_string((int)res_manager.getGold()), 1000000, gold_sign, Point(-settings.getWindowWidth() / 2 + 100, -settings.getWindowHeight() / 2 + 50), 30);
-		gui_manager.setText(std::to_string((int)res_manager.getResearch()), 1000000, research_sign, Point(-settings.getWindowWidth() / 2 + 100, -settings.getWindowHeight() / 2 + 100), 30);
+		if (!strategic_view) {
+			gui_manager.setText(std::to_string((int)res_manager.getGold()), 0.01, gold_sign, Point(-settings.getWindowWidth() / 2, -settings.getWindowHeight() / 2), 30);
+			gui_manager.setText(std::to_string((int)res_manager.getResearch()), 0.01, research_sign, Point(-settings.getWindowWidth() / 2, -settings.getWindowHeight() / 2 + 50), 30);
+		}
 
+		if (frame_num % 10000 == 0) {
+			if (!strategic_view) {
+				game_map1.spawnEnemy(frame_num / 10000, Point(view1.getCenter().x, view1.getCenter().y));
+			}
+			else {
+				game_map1.spawnEnemy(frame_num / 10000, Point(view2.getCenter().x, view2.getCenter().y));
+			}
+		}
 
 		if (is_game_cycle) {
 			window.clear(sf::Color::Black);
@@ -168,7 +178,7 @@ void gameCycle(std::string map_name) {
 			}
 		}
 
-		double hero_speed = consts.getDefaultHeroSpeed();
+		double hero_speed = game_map1.getHero()->getUnitInfo()->getDefaultSpeed();
 		Object * hero_object = game_map1.getHero();
 		
 		Point new_speed;
@@ -261,7 +271,7 @@ void gameCycle(std::string map_name) {
 					fight_mode = true;
 				}
 				else {
-					fight_mode = true;
+					fight_mode = false;
 				}
 				last_mode_change = frame_num;
 			}
