@@ -136,6 +136,13 @@ public:
 	}
 
 	void setTopSign(char * string, float time /*in seconds*/) {
+		if (text[0].second <= 0) {
+			text[0].first.setString(string);
+			text[0].second = consts.getFPSLock() * time;
+		}
+	}
+
+	void forseSetTopSign(char * string, float time /*in seconds*/) {
 		text[0].first.setString(string);
 		text[0].second = consts.getFPSLock() * time;
 	}

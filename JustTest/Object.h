@@ -153,7 +153,7 @@ public:
 
 	void setSpeed(Point speed) {
 		for (int i = 0; i < attached_objects.size(); i++) {
-			attached_objects[i]->setPosition(speed + (getSpeed() - attached_objects[i]->getSpeed()));
+			//attached_objects[i]->setSpeed(speed + (getSpeed() - attached_objects[i]->getSpeed()));
 		}
 		col_model->setSpeed(speed);
 	}
@@ -178,7 +178,7 @@ public:
 
 	void changePosition(Point difference) {
 		for (int i = 0; i < attached_objects.size(); i++) {
-			attached_objects[i]->changePosition(difference);
+			attached_objects[i]->forceChangePosition(difference);
 		}
 		col_model->changePosition(difference);
 	}

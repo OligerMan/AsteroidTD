@@ -19,7 +19,7 @@ class Constants {
 	const float base_dome_price = 100;
 
 	const float enemy_spawn_range = 10000;
-	const float minimal_flight_range = 500;
+	const float minimal_flight_range = 440;
 
 public:
 

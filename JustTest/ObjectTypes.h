@@ -15,6 +15,7 @@ enum CollisionType {
 	gold_col,
 	bullet_col,
 	alien_fighter_col,
+	alien_turret1_col,
 
 	COUNT_COLLISION
 };
@@ -36,6 +37,7 @@ void collision_type_init() {
 	collision_type[gold_col] = "gold"; 
 	collision_type[bullet_col] = "bullet";
 	collision_type[alien_fighter_col] = "alien_fighter";
+	collision_type[alien_turret1_col] = "alien_turret1";
 }
 
 int is_collision_type_exists(std::string example) {
@@ -59,6 +61,7 @@ enum ObjectType {
 	gold,
 	bullet,
 	alien_fighter,
+	alien_turret1,
 
 	COUNT_OBJECT
 };
@@ -79,6 +82,7 @@ void object_type_init() {
 	object_type[gold] = "gold"; 
 	object_type[bullet] = "bullet";
 	object_type[alien_fighter] = "alien_fighter";
+	object_type[alien_turret1] = "alien_turret1";
 
 }
 

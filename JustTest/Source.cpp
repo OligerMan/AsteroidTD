@@ -81,6 +81,7 @@ void gameCycle(std::string map_name) {
 			else {
 				game_map1.spawnEnemy(frame_num / 10000, Point(view2.getCenter().x, view2.getCenter().y));
 			}
+			gui_manager.forseSetTopSign("New Wave", 5);
 		}
 
 		if (is_game_cycle) {

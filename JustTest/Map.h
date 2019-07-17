@@ -557,6 +557,56 @@ class Map {
 		}
 	}
 
+	void spawnEnemyGroup(int enemy_lvl, Point pos) {
+		int enemy_amount = sqrt(enemy_lvl);
+
+		for (int i = 0; i < enemy_amount; i++) {
+			float angle = ((float)i / enemy_amount) * 2 * PI;
+			Point new_pos = pos + Point(cos(angle), sin(angle)) * (50 + enemy_amount * 10);
+
+			Object * object = new Object
+			(
+				new_pos,
+				Point(),
+				ObjectType::alien_fighter,
+				CollisionType::alien_fighter_col,
+				VisualInfo
+				(
+					SpriteType::alien_fighter_sprite,
+					AnimationType::hold_anim,
+					1000000000
+				)
+			);
+			object->setAutoOrigin();
+			object->getUnitInfo()->setFaction(aggressive_faction);
+			addObject(object, landscape_layer);
+			setTurretArray(object);
+		}
+	}
+
+	void setTurretArray(Object * base) {
+		switch (base->getObjectType()) {
+		case alien_fighter:
+			Object * object = new Object
+			(
+				base->getPosition(),
+				Point(),
+				ObjectType::alien_turret1,
+				CollisionType::alien_turret1_col,
+				VisualInfo
+				(
+					SpriteType::alien_turret1_sprite,
+					AnimationType::hold_anim,
+					1000000000
+				)
+			);
+			object->setAutoOrigin();
+			object->getUnitInfo()->setFaction(aggressive_faction);
+			addObject(object, main_layer);
+			base->attachObject(object);
+		}
+	}
+
 public:
 
 	Map() {}
@@ -796,32 +846,6 @@ public:
 		addObject(object, main_layer);
 
 		return true;
-	}
-
-	void spawnEnemyGroup(int enemy_lvl, Point pos) {
-		int enemy_amount = sqrt(enemy_lvl);
-		
-		for (int i = 0; i < enemy_amount; i++) {
-			float angle = ((float)i / enemy_amount) * 2 * PI;
-			Point new_pos = pos + Point(cos(angle), sin(angle)) * (50 + enemy_amount * 10);
-
-			Object * object = new Object
-			(
-				new_pos,
-				Point(),
-				ObjectType::alien_fighter,
-				CollisionType::alien_fighter_col,
-				VisualInfo
-				(
-					SpriteType::alien_fighter_sprite,
-					AnimationType::hold_anim,
-					1000000000
-				)
-			);
-			object->setAutoOrigin();
-			object->getUnitInfo()->setFaction(aggressive_faction);
-			addObject(object, landscape_layer);
-		}
 	}
 
 	void spawnEnemy(int enemy_lvl, Point camera_pos) {
