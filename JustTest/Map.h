@@ -8,7 +8,10 @@
 #include "StructureSetGeneration.h"
 #include "ConvexHull.h"
 
-void fixCollision(Object * obj1, Object * obj2) { 
+void fixCollision(Object * obj1, Object * obj2) {
+	if (obj1->getObjectType() == ObjectType::bullet || obj2->getObjectType() == ObjectType::bullet) {
+		return;
+	}
 	bool force_move = obj1->getCollisionModel()->isStatic() && obj2->getCollisionModel()->isStatic();
 	const double min_speed = 0.001;
 	float eps_speed = 0.1;
@@ -16,66 +19,66 @@ void fixCollision(Object * obj1, Object * obj2) {
 	CollisionModel * col1 = obj1->getCollisionModel();
 	CollisionModel * col2 = obj2->getCollisionModel();
 
-	Point tmp_speed1 = col1->getSpeed();
-	Point tmp_speed2 = col2->getSpeed();
+	Point tmp_speed1 = obj1->getSpeed();
+	Point tmp_speed2 = obj2->getSpeed();
 
 	Point speed1 = tmp_speed1, speed2 = tmp_speed2;
-	Point origin1 = col1->getOrigin(), origin2 = col2->getOrigin();
+	Point origin1 = obj1->getOrigin(), origin2 = obj2->getOrigin();
 
 
 	// set previous position and add to it half of speed
 
 	tmp_speed1 /= 2;
 	tmp_speed2 /= 2;
-	col1->changePosition(Point() - tmp_speed1);
-	col2->changePosition(Point() - tmp_speed2);
+	obj1->changePosition(Point() - tmp_speed1);
+	obj2->changePosition(Point() - tmp_speed2);
 	if (force_move) {
-		col1->forceChangePosition(Point() - tmp_speed1);
-		col2->forceChangePosition(Point() - tmp_speed2);
+		obj1->forceChangePosition(Point() - tmp_speed1);
+		obj2->forceChangePosition(Point() - tmp_speed2);
 	}
 	
 	while (tmp_speed1.getLength() > min_speed || tmp_speed2.getLength() > min_speed) {
 		tmp_speed1 /= 2;
 		tmp_speed2 /= 2;
 		if (checkModelCollision(col1, col2)) {
-			col1->changePosition(Point() - tmp_speed1);
-			col2->changePosition(Point() - tmp_speed2);
+			obj1->changePosition(Point() - tmp_speed1);
+			obj2->changePosition(Point() - tmp_speed2);
 			if (force_move) {
-				col1->forceChangePosition(Point() - tmp_speed1);
-				col2->forceChangePosition(Point() - tmp_speed2);
+				obj1->forceChangePosition(Point() - tmp_speed1);
+				obj2->forceChangePosition(Point() - tmp_speed2);
 			}
 		}
 		else {
-			col1->changePosition(Point() + tmp_speed1);
-			col2->changePosition(Point() + tmp_speed2);
+			obj1->changePosition(Point() + tmp_speed1);
+			obj2->changePosition(Point() + tmp_speed2);
 			if (force_move) {
-				col1->forceChangePosition(Point() + tmp_speed1);
-				col2->forceChangePosition(Point() + tmp_speed2);
+				obj1->forceChangePosition(Point() + tmp_speed1);
+				obj2->forceChangePosition(Point() + tmp_speed2);
 			}
 		}
 	}
 
-	Point pos1 = col1->getPosition();
-	Point pos2 = col2->getPosition();
+	Point pos1 = obj1->getPosition();
+	Point pos2 = obj2->getPosition();
 
 	Point normal_vect = (pos1 - pos2).getNormal();
 	normal_vect = Point(normal_vect.y, -normal_vect.x);
 
 	Point normal_speed1 = (normal_vect * (normal_vect.x * (speed1 - tmp_speed1).x + normal_vect.y * (speed1 - tmp_speed1).y));
-	col1->changePosition(normal_speed1);
+	obj1->changePosition(normal_speed1);
 	Point normal_speed2 = (normal_vect * (normal_vect.x * (speed2 - tmp_speed2).x + normal_vect.y * (speed2 - tmp_speed2).y));
-	col2->changePosition(normal_speed2);
+	obj2->changePosition(normal_speed2);
 	if (force_move) {
-		col1->forceChangePosition(normal_speed1);
-		col2->forceChangePosition(normal_speed2);
+		obj1->forceChangePosition(normal_speed1);
+		obj2->forceChangePosition(normal_speed2);
 	}
 
 	if (checkModelCollision(col1, col2)) {
-		col1->changePosition((col1->getPosition() - col2->getPosition()).getNormal() * eps_speed);
-		col2->changePosition((col2->getPosition() - col1->getPosition()).getNormal() * eps_speed);
+		obj1->changePosition((obj1->getPosition() - obj2->getPosition()).getNormal() * eps_speed);
+		obj2->changePosition((obj2->getPosition() - obj1->getPosition()).getNormal() * eps_speed);
 		if (force_move) {
-			col1->forceChangePosition((col1->getPosition() - col2->getPosition()).getNormal() * eps_speed);
-			col2->forceChangePosition((col2->getPosition() - col1->getPosition()).getNormal() * eps_speed);
+			obj1->forceChangePosition((obj1->getPosition() - obj2->getPosition()).getNormal() * eps_speed);
+			obj2->forceChangePosition((obj2->getPosition() - obj1->getPosition()).getNormal() * eps_speed);
 		}
 	}
 }
@@ -182,11 +185,23 @@ class Map {
 						event_buffer.addEvent(EventType::default_collision, objects[cnt][i], hero);
 					}
 				}
-				for (int j = 0; j < objects[cnt].size(); j++) {
-					if (i != j) {
-						if (checkObjectCollision(objects[cnt][i], objects[cnt][j])) {
-							event_buffer.addEvent(EventType::default_collision, objects[cnt][i], objects[cnt][j]);
-							fixCollision(objects[cnt][i], objects[cnt][j]);
+				if (objects[cnt][i]->getObjectType() != ObjectType::bullet) {
+					for (int j = 0; j < objects[cnt].size(); j++) {
+						if (i != j) {
+							if (checkObjectCollision(objects[cnt][i], objects[cnt][j])) {
+								event_buffer.addEvent(EventType::default_collision, objects[cnt][i], objects[cnt][j]);
+								fixCollision(objects[cnt][i], objects[cnt][j]);
+							}
+						}
+					}
+				}
+				else {
+					for (int j = 0; j < objects[landscape_layer].size(); j++) {
+						if (i != j) {
+							if (checkObjectCollision(objects[cnt][i], objects[landscape_layer][j])) {
+								event_buffer.addEvent(EventType::default_collision, objects[cnt][i], objects[landscape_layer][j]);
+								fixCollision(objects[cnt][i], objects[landscape_layer][j]);
+							}
 						}
 					}
 				}
@@ -221,10 +236,10 @@ class Map {
 
 				int faction1 = object1->getUnitInfo()->getFaction();
 
+
 				// turn to closest enemy
 				if (faction1 != FactionList::null_faction) {
 					for (int layer2 = 0; layer2 < objects.size(); layer2++) {
-
 						for (int j = 0; j < objects[layer2].size(); j++) {
 							if (i != j || layer1 != layer2) {
 								Object * object2 = objects[layer2][j];
@@ -235,7 +250,13 @@ class Map {
 								int faction2 = object2->getUnitInfo()->getFaction();
 
 								if (areEnemies((FactionList)faction1, (FactionList)faction2)) {
-									if (!(faction1 == hero_faction) && (object1->canObjectAttack() || object1->getUnitInfo()->getDefaultSpeed() > 0.0001)) {
+
+									
+									if (!(object1->getObjectType() == ObjectType::hero) && (object1->canObjectAttack() || object1->getUnitInfo()->getDefaultSpeed() > 0.0001)) {
+										
+										if (object2->getObjectType() == asteroid) {
+											continue;
+										}
 										Point vect = (object2->getPosition() - object1->getPosition()).getNormal();
 										Object * prev_enemy = (Object *)object1->getUnitInfo()->getEnemy();
 										if (prev_enemy != nullptr) {
@@ -327,6 +348,9 @@ class Map {
 		for (int layer = 0; layer < objects.size(); layer++) {
 			for (int i = 0; i < objects[layer].size(); i++) {
 				objects[layer][i]->garbageCollector();
+				if (objects[layer][i]->getUnitInfo()->getEnemy() != nullptr && ((Object *)objects[layer][i]->getUnitInfo()->getEnemy())->isDeleted()) {
+					objects[layer][i]->getUnitInfo()->setEnemy(nullptr);
+				}
 			}
 		}
 		for (int layer = 0; layer < objects.size(); layer++) {
@@ -360,12 +384,15 @@ class Map {
 			case null:
 				break;
 			case default_collision:
-				if (obj1->getObjectType() == ObjectType::bullet) {
+				if (obj1->getObjectType() == ObjectType::bullet && obj2->getObjectType() == ObjectType::bullet) {
+					break;
+				}
+				if (obj1->getObjectType() == ObjectType::bullet && obj2->getObjectType() != ObjectType::asteroid) {
 					obj1->deleteObject();
 					event_buffer.addEvent(EventType::attack, (Object *)obj1->getUnitInfo()->getEnemy(), obj2);
 					
 				}
-				if (obj2->getObjectType() == ObjectType::bullet) {
+				if (obj2->getObjectType() == ObjectType::bullet && obj1->getObjectType() != ObjectType::asteroid) {
 					obj2->deleteObject();
 					event_buffer.addEvent(EventType::attack, (Object *)obj2->getUnitInfo()->getEnemy(), obj1);
 				}
@@ -514,13 +541,13 @@ class Map {
 			FactionList faction = null_faction;
 			int faction_score = rand() % 1000;
 			if (faction_score > 900) {
-				faction = friendly_faction;
+				//faction = friendly_faction;
 			}
 			if (faction_score > 933) {
-				faction = neutral_faction;
+				//faction = neutral_faction;
 			}
 			if (faction_score > 966) {
-				faction = aggressive_faction;
+				//faction = aggressive_faction;
 			}
 			Point new_pos = Point(x,y);
 			Object * object = new Object

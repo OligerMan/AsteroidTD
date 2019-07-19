@@ -94,3 +94,18 @@ int is_object_type_exists(std::string example) {
 	}
 	return -1;
 }
+
+std::vector<int> lifetime{
+	-1, // null
+	-1, // stone
+	-1, // hero
+	-1, // asteroid
+	-1, // redactor_back
+	-1, // turret
+	-1, // dome
+	-1, // science
+	-1, // gold
+	480, // bullet
+	-1, // alien_fighter
+	-1, // alien_turret1
+};

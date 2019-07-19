@@ -16,6 +16,7 @@ class Object {
 
 	bool deleted = false;
 	std::vector<Object *> attached_objects;
+	int time_left = -1;
 
 public:
 
@@ -34,6 +35,7 @@ public:
 	) {
 		col_model->setPosition(point);
 		col_model->addCircle(Point(), 0);
+		time_left = lifetime[object_type_info];
 	}
 
 	Object(
@@ -43,6 +45,7 @@ public:
 		point
 	) {
 		col_model->setOrigin(origin);
+		time_left = lifetime[object_type_info];
 	}
 
 	Object(
@@ -54,6 +57,7 @@ public:
 	) {
 		object_col_type = obj_col_type;
 		vis_info = visual_info;
+		time_left = lifetime[object_type_info];
 	}
 
 	Object(
@@ -67,6 +71,7 @@ public:
 	) {
 		object_col_type = obj_col_type;
 		vis_info = visual_info;
+		time_left = lifetime[object_type_info];
 	}
 
 	Object(
@@ -96,6 +101,7 @@ public:
 			delete unit_info;
 			unit_info = nullptr;
 		}
+		time_left = lifetime[object_type_info];
 	}
 
 	Object(
@@ -117,6 +123,7 @@ public:
 		unit_info->setHealth(hp);
 		unit_info->setMana(mana);
 		unit_info->setEndurance(endurance);
+		time_left = lifetime[object_type_info];
 	}
 
 	CollisionModel * getCollisionModel() {
@@ -152,16 +159,10 @@ public:
 	}
 
 	void setSpeed(Point speed) {
-		for (int i = 0; i < attached_objects.size(); i++) {
-			//attached_objects[i]->setSpeed(speed + (getSpeed() - attached_objects[i]->getSpeed()));
-		}
 		col_model->setSpeed(speed);
 	}
 
 	void changeSpeed(Point difference) {
-		for (int i = 0; i < attached_objects.size(); i++) {
-			attached_objects[i]->changeSpeed(difference);
-		}
 		col_model->changeSpeed(difference);
 	}
 
@@ -178,7 +179,7 @@ public:
 
 	void changePosition(Point difference) {
 		for (int i = 0; i < attached_objects.size(); i++) {
-			attached_objects[i]->forceChangePosition(difference);
+			attached_objects[i]->changePosition(difference);
 		}
 		col_model->changePosition(difference);
 	}
@@ -235,7 +236,7 @@ public:
 	}
 
 	bool isDeleted() {
-		return deleted;
+		return (deleted || (time_left == 0));
 	}
 
 	Point getSquareBorder() {
@@ -258,6 +259,7 @@ public:
 	}
 
 	void garbageCollector() {
+		time_left--;
 		for (int i = 0; i < attached_objects.size(); i++) {
 			if (attached_objects[i]->isDeleted() || !(attached_objects[i]->getUnitInfo() != nullptr && !attached_objects[i]->getUnitInfo()->isDead())) {
 				attached_objects[i]->deleteObject();
