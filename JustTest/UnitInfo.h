@@ -98,7 +98,7 @@ class UnitInfo {
 	float turn_speed = 2;
 
 	// AI info
-	float anger_range = 450;
+	float anger_range = 550;
 	int faction = 0;              // faction index: 0 for non-unit objects, 1 for hero and his allies, from 2 to infinity(2^31) for other factions
 	void * enemy_object_ptr = nullptr;
 

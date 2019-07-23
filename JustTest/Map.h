@@ -95,7 +95,7 @@ class Map {
 	double grid_size = 10;
 	Point grid_offset;
 
-	Object * hero = nullptr;
+	Object * hero_object = nullptr;
 	Object * closest_asteroid = nullptr;
 
 	EventBuffer event_buffer;
@@ -180,9 +180,9 @@ class Map {
 	void processCollisionFrame(){
 		for (int cnt = 0; cnt < objects.size(); cnt++) {
 			for (int i = 0; i < objects[cnt].size(); i++) {
-				if (objects[cnt][i] != hero) {
-					if (checkObjectCollision(hero, objects[cnt][i])) {
-						event_buffer.addEvent(EventType::default_collision, objects[cnt][i], hero);
+				if (objects[cnt][i] != hero_object) {
+					if (checkObjectCollision(hero_object, objects[cnt][i])) {
+						event_buffer.addEvent(EventType::default_collision, objects[cnt][i], hero_object);
 					}
 				}
 				if (objects[cnt][i]->getObjectType() != ObjectType::bullet) {
@@ -300,7 +300,6 @@ class Map {
 				}
 
 				// shoot if enemy is on your way and in enough range
-				// TODO
 				if (object1->getUnitInfo()->getEnemy() != nullptr && object1->canObjectAttack()) {
 					Object * enemy = (Object *)object1->getUnitInfo()->getEnemy();
 					Point vect = object1->getPosition() - enemy->getPosition();
@@ -315,7 +314,7 @@ class Map {
 					}
 					if (abs(angle_diff) < 0.05) {
 						if (object1->getUnitInfo()->attack1Ready()) {
-							Point bullet_pos = object1->getPosition() + Point(cos((object1->getAngle() - 90) / 180 * PI), sin((object1->getAngle() - 90) / 180 * PI)) * 65;
+							Point bullet_pos = object1->getPosition() + Point(cos((object1->getAngle() - 90) / 180 * PI), sin((object1->getAngle() - 90) / 180 * PI)) * 95;
 							Object * object = new Object
 							(
 								bullet_pos,
@@ -356,8 +355,8 @@ class Map {
 		for (int layer = 0; layer < objects.size(); layer++) {
 			for (int i = 0; i < objects[layer].size(); i++) {
 				if (objects[layer][i]->isDeleted() || !(objects[layer][i]->getUnitInfo() != nullptr && !objects[layer][i]->getUnitInfo()->isDead())) {
-					if (objects[layer][i] == hero) {
-						hero = nullptr;
+					if (objects[layer][i] == hero_object) {
+						hero_object = nullptr;
 					}
 					delete objects[layer][i];
 					objects[layer].erase(objects[layer].begin() + i);
@@ -634,6 +633,26 @@ class Map {
 		}
 	}
 
+	void processRegen() {
+		hero_object->getUnitInfo()->grantHeal(consts.getHeroHeal());
+		// regeneration of structures for amount of domes on asteroid
+		for (int i = 0; i < objects[landscape_layer].size(); i++) {
+			if (objects[landscape_layer][i]->getObjectType() != asteroid) {
+				continue;
+			}
+			int cnt = 0;
+			std::vector<Object *> * attach = objects[landscape_layer][i]->getAttached();
+			for (int j = 0; j < attach->size(); j++) {
+				if ((*attach)[j]->getObjectType() == dome) {
+					cnt++;
+				}
+			}
+			for (int j = 0; j < attach->size(); j++) {
+				(*attach)[j]->getUnitInfo()->grantHeal(cnt * consts.getDomeHeal());
+			}
+		}
+	}
+
 public:
 
 	Map() {}
@@ -642,12 +661,12 @@ public:
 		for (int layer = 0; layer < objects.size(); layer++) {
 			for (int i = 0; i < objects[layer].size(); i++) {
 				if (objects[layer][i]->getObjectType() == ObjectType::hero) {
-					hero = objects[layer][i];
+					hero_object = objects[layer][i];
 				}
 			}
 		}
 		createNavigationGrid();
-		rebuildMap(hero->getPosition(), gen_radius, 0, save_out_range, 1, asteroid_amount, min_range, max_range);
+		rebuildMap(hero_object->getPosition(), gen_radius, 0, save_out_range, 1, asteroid_amount, min_range, max_range);
 	}
 
 	~Map() {
@@ -691,19 +710,20 @@ public:
 		processObjectSpeed();
 		processCollisionFrame();
 		updateClosestAsteroid();
+		processRegen();
 		processUnitAI();
 		processEventBuffer();
 		garbageCollector();
 
-		if (hero == nullptr) {
+		if (hero_object == nullptr) {
 			return;
 		}
 
-		rebuildMap(hero->getPosition(), gen_radius, cam_radius, save_out_range, 1, asteroid_amount, min_range, max_range);
+		rebuildMap(hero_object->getPosition(), gen_radius, cam_radius, save_out_range, 1, asteroid_amount, min_range, max_range);
 	}
 
 	Object * getHero() {
-		return hero;
+		return hero_object;
 	}
 
 	Point getNavigationGridOffset() {
@@ -728,10 +748,10 @@ public:
 	}
 
 	void updateClosestAsteroid() {
-		if ((closest_asteroid && ((hero->getPosition() - closest_asteroid->getPosition()).getLength() > consts.getInteractionDistance())) || !closest_asteroid) {
+		if ((closest_asteroid && ((hero_object->getPosition() - closest_asteroid->getPosition()).getLength() > consts.getInteractionDistance())) || !closest_asteroid) {
 			for (int i = 0; i < objects[landscape_layer].size(); i++) {
 				if (objects[0][i]->getObjectType() == ObjectType::asteroid) {
-					if (((hero->getPosition() - objects[landscape_layer][i]->getPosition()).getLength() < consts.getInteractionDistance())) {
+					if (((hero_object->getPosition() - objects[landscape_layer][i]->getPosition()).getLength() < consts.getInteractionDistance())) {
 						closest_asteroid = objects[landscape_layer][i];
 						return;
 					}
@@ -877,8 +897,8 @@ public:
 
 	void spawnEnemy(int enemy_lvl, Point camera_pos) {
 		std::vector<Point> convex;   // building convex hull on players asteroids and player position
-		if ((camera_pos - hero->getPosition()).getLength() > 10) {
-			convex.push_back(hero->getPosition());
+		if ((camera_pos - hero_object->getPosition()).getLength() > 10) {
+			convex.push_back(hero_object->getPosition());
 		}
 		for (int i = 0; i < objects[landscape_layer].size(); i++) {
 			if (objects[landscape_layer][i]->getUnitInfo()->getFaction() == hero_faction) {

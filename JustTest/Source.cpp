@@ -64,6 +64,7 @@ void gameCycle(std::string map_name) {
 		}
 
 		Point viewport_pos = Point(view1.getCenter().x, view1.getCenter().y);
+		Object * hero_object = game_map1.getHero();
 
 		// game cycle
 
@@ -87,7 +88,11 @@ void gameCycle(std::string map_name) {
 		if (is_game_cycle) {
 			window.clear(sf::Color::Black);
 			is_game_cycle = visual_ctrl.processFrame(&window, game_map1.getObjectsBuffer());
-			is_game_cycle = gui_visual_ctrl.processFrame(&window, gui_manager.getObjectsBuffer(), gui_manager.getGUIText(), viewport_pos) && is_game_cycle;
+			float hero_hp = hero_object->getUnitInfo()->getHealth() / hero_object->getUnitInfo()->getMaxHealth();
+			if (strategic_view) {
+				hero_hp = 0;
+			}
+			is_game_cycle = gui_visual_ctrl.processFrame(&window, gui_manager.getObjectsBuffer(), gui_manager.getGUIText(), viewport_pos, hero_hp) && is_game_cycle;
 
 			if (settings.isCollisionDebugMode()) {
 
@@ -179,8 +184,7 @@ void gameCycle(std::string map_name) {
 			}
 		}
 
-		double hero_speed = game_map1.getHero()->getUnitInfo()->getDefaultSpeed();
-		Object * hero_object = game_map1.getHero();
+		double hero_speed = hero_object->getUnitInfo()->getDefaultSpeed();
 		
 		Point new_speed;
 

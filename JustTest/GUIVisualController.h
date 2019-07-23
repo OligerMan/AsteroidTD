@@ -93,7 +93,8 @@ public:
 		return is_active;
 	}
 
-	bool processFrame(sf::RenderWindow * window, std::vector<std::vector<Object *>> * objects, std::vector<std::pair<sf::Text, int>> * text, Point viewport_pos) {  // render for GUI elements
+	bool processFrame(sf::RenderWindow * window, std::vector<std::vector<Object *>> * objects, std::vector<std::pair<sf::Text, int>> * text, Point viewport_pos, float hero_hp_percent) {  // render for GUI elements
+
 
 		for (int layer = 0; layer < objects->size(); layer++) {
 			for (int i = 0; i < (*objects)[layer].size(); i++) {
@@ -134,6 +135,13 @@ public:
 				(*text)[i].second--;
 			}
 		}
+
+		// hero HP draw
+		sf::RectangleShape hp_rectangle(sf::Vector2f(window->getSize().x * hero_hp_percent * 1.2, window->getSize().y * 1.2 / 40));
+		hp_rectangle.setPosition(sf::Vector2f(-(int)window->getSize().x * 0.6, window->getSize().y * 19 / 40 * 1.2));
+		hp_rectangle.setOrigin(-viewport_pos.x, -viewport_pos.y);
+		hp_rectangle.setFillColor(sf::Color(0,122,204));
+		window->draw(hp_rectangle);
 		
 		return is_active;
 	}

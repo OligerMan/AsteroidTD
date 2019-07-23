@@ -19,7 +19,10 @@ class Constants {
 	const float base_dome_price = 100;
 
 	const float enemy_spawn_range = 10000;
-	const float minimal_flight_range = 440;
+	const float minimal_flight_range = 540;
+
+	const float dome_heal = 0.03;
+	const float hero_heal = 0.03;
 
 public:
 
@@ -85,5 +88,13 @@ public:
 
 	const float getMinimalFlightRange() {
 		return minimal_flight_range;
+	}
+
+	const float getDomeHeal() {
+		return dome_heal;
+	}
+
+	const float getHeroHeal() {
+		return hero_heal;
 	}
 } consts;
