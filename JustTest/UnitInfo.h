@@ -4,6 +4,9 @@
 #include <fstream>
 #include <algorithm>
 
+#include "Effect.h"
+#include "GameConstants.h"
+
 enum FactionList {
 	null_faction,
 	hero_faction,
@@ -60,8 +63,20 @@ bool areEnemies(FactionList fact1, FactionList fact2) {
 	return 0;
 }
 
+struct AttackInfo {
+	float
+		range = 0,
+		damage = 0,
+		delay = 0,
+		cooldown = 0,
+		cur_cooldown = 0;
+};
+
 class UnitInfo {
+
 	float EPS = 0.00001;
+
+	std::vector<Effect> effects;
 
 	float max_hp = 0;
 	float hp = 0;        // health points
@@ -73,25 +88,7 @@ class UnitInfo {
 	float endur = 0;     // endurance
 	bool inf_endur = true;
 
-	float attack1_range = 0;
-	float attack2_range = 0;
-	float attack3_range = 0;
-
-	float attack1_damage = 0;
-	float attack2_damage = 0;
-	float attack3_damage = 0;
-
-	float attack1_delay = 0;
-	float attack2_delay = 0;
-	float attack3_delay = 0;
-
-	float attack1_cooldown = 0;
-	float attack2_cooldown = 0;
-	float attack3_cooldown = 0;
-
-	float attack1_cur_cooldown = 0;
-	float attack2_cur_cooldown = 0;
-	float attack3_cur_cooldown = 0;
+	std::vector<AttackInfo> attack;
 
 	float default_speed = 0;
 	float speed_coef = 1;
@@ -178,78 +175,39 @@ class UnitInfo {
 					std::cout << "Infinite endurance is set to " << inf_endur << std::endl;
 				}
 			}
-			if (setting == "attack1_range") {
-				attack1_range = std::stoi(value);
-				if (settings.isUnitInfoDebugEnabled()) {
-					std::cout << "Attack range 1 is set to " << attack1_range << std::endl;
+			if (setting.substr(0,6) == "attack") {
+				float f_value = std::stof(value);
+				int n = setting.find("_");
+				int num = std::stoi(setting.substr(6, n - 6));
+				if (attack.size() <= num) {
+					attack.resize(num + 1);
+				}
+				if (setting.substr(n + 1) == "range") {
+					attack[num].range = f_value;
+					if (settings.isUnitInfoDebugEnabled()) {
+						std::cout << "Attack range 1 is set to " << attack[num].range << std::endl;
+					}
+				}
+				if (setting.substr(n + 1) == "damage") {
+					attack[num].damage = f_value;
+					if (settings.isUnitInfoDebugEnabled()) {
+						std::cout << "Attack damage 1 is set to " << attack[num].damage << std::endl;
+					}
+				}
+				if (setting.substr(n + 1) == "delay") {
+					attack[num].delay = f_value;
+					if (settings.isUnitInfoDebugEnabled()) {
+						std::cout << "Attack delay 1 is set to " << attack[num].delay << std::endl;
+					}
+				}
+				if (setting.substr(n + 1) == "cooldown") {
+					attack[num].cooldown = f_value;
+					if (settings.isUnitInfoDebugEnabled()) {
+						std::cout << "Attack cooldown 1 is set to " << attack[num].cooldown << std::endl;
+					}
 				}
 			}
-			if (setting == "attack2_range") {
-				attack2_range = std::stoi(value);
-				if (settings.isUnitInfoDebugEnabled()) {
-					std::cout << "Attack range 2 is set to " << attack2_range << std::endl;
-				}
-			}
-			if (setting == "attack3_range") {
-				attack3_range = std::stoi(value);
-				if (settings.isUnitInfoDebugEnabled()) {
-					std::cout << "Attack range 3 is set to " << attack3_range << std::endl;
-				}
-			}
-			if (setting == "attack1_damage") {
-				attack1_damage = std::stoi(value);
-				if (settings.isUnitInfoDebugEnabled()) {
-					std::cout << "Attack damage 1 is set to " << attack1_damage << std::endl;
-				}
-			}
-			if (setting == "attack2_damage") {
-				attack2_damage = std::stoi(value);
-				if (settings.isUnitInfoDebugEnabled()) {
-					std::cout << "Attack damage 2 is set to " << attack2_damage << std::endl;
-				}
-			}
-			if (setting == "attack3_damage") {
-				attack3_damage = std::stoi(value);
-				if (settings.isUnitInfoDebugEnabled()) {
-					std::cout << "Attack damage 3 is set to " << attack3_damage << std::endl;
-				}
-			}
-			if (setting == "attack1_delay") {
-				attack1_delay = std::stoi(value);
-				if (settings.isUnitInfoDebugEnabled()) {
-					std::cout << "Attack delay 1 is set to " << attack1_damage << std::endl;
-				}
-			}
-			if (setting == "attack2_delay") {
-				attack2_delay = std::stoi(value);
-				if (settings.isUnitInfoDebugEnabled()) {
-					std::cout << "Attack delay 2 is set to " << attack2_damage << std::endl;
-				}
-			}
-			if (setting == "attack3_delay") {
-				attack3_delay = std::stoi(value);
-				if (settings.isUnitInfoDebugEnabled()) {
-					std::cout << "Attack delay 3 is set to " << attack3_damage << std::endl;
-				}
-			}
-			if (setting == "attack1_cooldown") {
-				attack1_cooldown = std::stoi(value);
-				if (settings.isUnitInfoDebugEnabled()) {
-					std::cout << "Attack cooldown 1 is set to " << attack1_damage << std::endl;
-				}
-			}
-			if (setting == "attack2_cooldown") {
-				attack2_delay = std::stoi(value);
-				if (settings.isUnitInfoDebugEnabled()) {
-					std::cout << "Attack cooldown 2 is set to " << attack2_damage << std::endl;
-				}
-			}
-			if (setting == "attack3_cooldown") {
-				attack3_cooldown = std::stoi(value);
-				if (settings.isUnitInfoDebugEnabled()) {
-					std::cout << "Attack cooldown 3 is set to " << attack3_damage << std::endl;
-				}
-			}
+			
 			if (setting == "default_speed") {
 				default_speed = std::stoi(value); 
 				if (settings.isUnitInfoDebugEnabled()) {
@@ -406,85 +364,93 @@ public:
 		anger_range = new_anger_range;
 	}
 
-	float getAttackRange1() {
-		return attack1_range;
-	}
-
-	float getAttackRange2() {
-		return attack2_range;
-	}
-
-	float getAttackRange3() {
-		return attack3_range;
-	}
-
-	float getAttackDamage1() {
-		return attack1_damage;
-	}
-
-	float getAttackDamage2() {
-		return attack2_damage;
-	}
-
-	float getAttackDamage3() {
-		return attack3_damage;
-	}
-
-	float getAttackDelay1() {
-		return attack1_delay;
-	}
-
-	float getAttackDelay2() {
-		return attack2_delay;
-	}
-
-	float getAttackDelay3() {
-		return attack3_delay;
-	}
-
-	float getAttackCooldown1() {
-		return attack1_cooldown;
-	}
-
-	float getAttackCooldown2() {
-		return attack2_cooldown;
-	}
-
-	float getAttackCooldown3() {
-		return attack3_cooldown;
-	}
-
-	bool attack1Ready() {
-		bool ans = attack1_cur_cooldown < 0.1;
-		if (ans) {
-			attack1_cur_cooldown = attack1_cooldown;
+	float getAttackRange(int num) {
+		if (attack.size() <= num) {
+			return 0.0;
 		}
-		return ans;
+		return attack[num].range;
 	}
 
-	bool attack2Ready() {
-		bool ans = attack1_cur_cooldown < 0.1;
-		if (ans) {
-			attack2_cur_cooldown = attack2_cooldown;
+	float getAttackDamage(int num) {
+		if (attack.size() <= num) {
+			return 0.0;
 		}
-		return ans;
+		return attack[num].damage;
 	}
 
-	bool attack3Ready() {
-		bool ans = attack1_cur_cooldown < 0.1;
+	float getAttackDelay(int num) {
+		if (attack.size() <= num) {
+			return 0.0;
+		}
+		return attack[num].delay;
+	}
+
+	float getAttackCooldown(int num) {
+		if (attack.size() <= num) {
+			return 0.0;
+		}
+		return attack[num].cooldown;
+	}
+
+	bool attackReady(int num) {
+		bool ans = attack[num].cur_cooldown < 0.1;
 		if (ans) {
-			attack3_cur_cooldown = attack3_cooldown;
+			attack[num].cur_cooldown = attack[num].cooldown;
 		}
 		return ans;
 	}
 
 	void processCooldown() {
-		attack1_cur_cooldown = std::max(0.0f, attack1_cur_cooldown - 1);
-		attack2_cur_cooldown = std::max(0.0f, attack2_cur_cooldown - 1);
-		attack3_cur_cooldown = std::max(0.0f, attack3_cur_cooldown - 1);
+		for (int i = 0; i < attack.size(); i++) {
+			attack[i].cur_cooldown = std::max(0.0f, attack[i].cur_cooldown - 1);
+			if (isAffected(EffectList::attack_speed_buff)) {
+				attack[i].cur_cooldown = std::max(0.0f, attack[i].cur_cooldown - 1);
+			}
+		}
+	}
+
+	void processEffects() {
+		for (int i = 0; i < effects.size(); i++) {
+			effects[i].time--;
+			if (effects[i].time < 0) {
+				effects.erase(effects.begin() + i);
+				continue;
+			}
+			if (effects[i].effect == fire_debuff) {
+				dealDamage(consts.getFireDamage());
+			}
+			if (effects[i].effect == regen_buff) {
+				grantHeal(consts.getRegenBuff());
+			}
+			if (effects[i].effect == const_heal) {
+				grantHeal(consts.getConstHeal());
+			}
+		}
 	}
 
 	float getDefaultSpeed() {
 		return default_speed;
+	}
+
+	bool canObjectAttack() {
+		for (int i = 0; i < attack.size(); i++) {
+			if (attack[i].range > 0.000001) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	bool isAffected(EffectList effect) {
+		for (int i = 0; i < effects.size(); i++) {
+			if (effects[i].effect == effect) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	void setEffect(Effect effect) {
+		effects.push_back(effect);
 	}
 };

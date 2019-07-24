@@ -18,11 +18,22 @@ class Constants {
 	const float base_gold_price = 100;
 	const float base_dome_price = 100;
 
+	const float attack_abil_price = 10;
+	const float speed_buff_price = 30;
+	const float damage_buff_price = 50;
+	const float heal_buff_price = 100;
+
 	const float enemy_spawn_range = 10000;
 	const float minimal_flight_range = 540;
 
 	const float dome_heal = 0.03;
 	const float hero_heal = 0.03;
+
+	const float fire_damage = 0.25;
+	const float regen_buff = 0.06;
+	const float const_heal = 250;
+	const float move_speed_buff_mult = 5;
+
 
 public:
 
@@ -96,5 +107,37 @@ public:
 
 	const float getHeroHeal() {
 		return hero_heal;
+	}
+
+	const float getFireDamage() {
+		return fire_damage;
+	}
+
+	const float getRegenBuff() {
+		return regen_buff;
+	}
+
+	const float getConstHeal() {
+		return const_heal;
+	}
+
+	const float getAttackAbilityPrice() {
+		return attack_abil_price;
+	}
+
+	const float getSpeedBuffPrice() {
+		return speed_buff_price;
+	}
+
+	const float getDamageBuffPrice() {
+		return damage_buff_price;
+	}
+
+	const float getHealBuffPrice() {
+		return heal_buff_price;
+	}
+
+	const float getMoveSpeedBuffMultiplier() {
+		return move_speed_buff_mult;
 	}
 } consts;

@@ -247,11 +247,8 @@ public:
 		if (getUnitInfo() == nullptr) {
 			return false;
 		}
-		UnitInfo * unit = getUnitInfo();
-		if (unit->getAttackRange1() == 0 && unit->getAttackRange2() == 0 && unit->getAttackRange3() == 0) {
-			return false;
-		}
-		return true;
+		
+		return getUnitInfo()->canObjectAttack();
 	}
 
 	void attachObject(Object * object) {
@@ -276,6 +273,12 @@ public:
 		unit_info->setFaction(new_faction);
 		for (int i = 0; i < attached_objects.size(); i++) {
 			attached_objects[i]->setFaction(new_faction);
+		}
+	}
+
+	void setEffect(Effect effect) {
+		if (unit_info != nullptr) {
+			unit_info->setEffect(effect);
 		}
 	}
 };

@@ -279,6 +279,7 @@ void gameCycle(std::string map_name) {
 					fight_mode = false;
 				}
 				last_mode_change = frame_num;
+				last_build = frame_num - consts.getFPSLock();
 			}
 			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) || sf::Joystick::isButtonPressed(0, Y)) && (frame_num - last_build) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
 				if (fight_mode) {
@@ -313,7 +314,11 @@ void gameCycle(std::string map_name) {
 			}
 			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) || sf::Joystick::isButtonPressed(0, X)) && (frame_num - last_build) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
 				if (fight_mode) {
-					// hero attack 2 
+					// hero speed increase
+					if (res_manager.spendGold(consts.getSpeedBuffPrice())) {
+						hero_object->setEffect(Effect(1200, move_speed_buff));
+						last_build = frame_num + consts.getFPSLock();
+					}
 				}
 				else {
 					if (game_map1.getClosestAsteroid()) {
@@ -334,7 +339,14 @@ void gameCycle(std::string map_name) {
 			}
 			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) || sf::Joystick::isButtonPressed(0, B)) && (frame_num - last_build) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
 				if (fight_mode) {
-					// hero attack 2 
+					// attack buff for asteroid
+					if (game_map1.getClosestAsteroid() != nullptr) {
+						if (res_manager.spendGold(consts.getDamageBuffPrice())) {
+							game_map1.setAsteroidBuff(Effect(1200, EffectList::attack_speed_buff), game_map1.getClosestAsteroid());
+							game_map1.setAsteroidBuff(Effect(1200, EffectList::damage_buff), game_map1.getClosestAsteroid());
+							last_build = frame_num + consts.getFPSLock();
+						}
+					}
 				}
 				else {
 					if (game_map1.getClosestAsteroid()) {
@@ -358,7 +370,16 @@ void gameCycle(std::string map_name) {
 			}
 			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) || sf::Joystick::isButtonPressed(0, A)) && (frame_num - last_build) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
 				if (fight_mode) {
-					// hero attack 2 
+					// heal for asteroid and self
+					if (game_map1.getClosestAsteroid() != nullptr) {
+						if (res_manager.spendGold(consts.getHealBuffPrice())) {
+							game_map1.setAsteroidBuff(Effect(1, const_heal), game_map1.getClosestAsteroid());
+							game_map1.setAsteroidBuff(Effect(1200, regen_buff), game_map1.getClosestAsteroid());
+						}
+					}
+					hero_object->setEffect(Effect(1, const_heal));
+					hero_object->setEffect(Effect(1200, regen_buff));
+					last_build = frame_num + consts.getFPSLock();
 				}
 				else {
 					if (game_map1.getClosestAsteroid()) {
@@ -383,6 +404,9 @@ void gameCycle(std::string map_name) {
 		}
 
 		if (!strategic_view) {
+			if (hero_object->getUnitInfo()->isAffected(move_speed_buff)) {
+				hero_speed *= consts.getMoveSpeedBuffMultiplier();
+			}
 			new_speed = new_speed.getNormal() * hero_speed;
 			if (hero_object != nullptr) {
 				Point old_pos = hero_object->getSpeed();

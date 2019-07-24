@@ -232,6 +232,7 @@ class Map {
 
 				if (object1->getUnitInfo() != nullptr) {
 					object1->getUnitInfo()->processCooldown();
+					object1->getUnitInfo()->processEffects();
 				}
 
 				int faction1 = object1->getUnitInfo()->getFaction();
@@ -313,7 +314,7 @@ class Map {
 						}
 					}
 					if (abs(angle_diff) < 0.05) {
-						if (object1->getUnitInfo()->attack1Ready()) {
+						if (object1->getUnitInfo()->attackReady(1)) {
 							Point bullet_pos = object1->getPosition() + Point(cos((object1->getAngle() - 90) / 180 * PI), sin((object1->getAngle() - 90) / 180 * PI)) * 95;
 							Object * object = new Object
 							(
@@ -347,7 +348,8 @@ class Map {
 		for (int layer = 0; layer < objects.size(); layer++) {
 			for (int i = 0; i < objects[layer].size(); i++) {
 				objects[layer][i]->garbageCollector();
-				if (objects[layer][i]->getUnitInfo()->getEnemy() != nullptr && ((Object *)objects[layer][i]->getUnitInfo()->getEnemy())->isDeleted()) {
+				Object * enemy = (Object *)objects[layer][i]->getUnitInfo()->getEnemy();
+				if (enemy != nullptr && (enemy->isDeleted() || !(enemy->getUnitInfo() != nullptr && !enemy->getUnitInfo()->isDead()))) {
 					objects[layer][i]->getUnitInfo()->setEnemy(nullptr);
 				}
 			}
@@ -399,8 +401,10 @@ class Map {
 			case attack:
 
 				if (unit1 != nullptr && unit2 != nullptr) {
-					obj2->getUnitInfo()->dealDamage(obj1->getUnitInfo()->getAttackDamage1());
-					obj2->changeSpeed((obj2->getPosition() - obj1->getPosition()).getNormal() * consts.getKnockbackSpeed());
+					unit2->dealDamage(unit1->getAttackDamage(1));
+					if (unit1->isAffected(damage_buff)) {
+						unit2->dealDamage(unit1->getAttackDamage(1));
+					}
 				}
 				break;
 			};
@@ -932,5 +936,16 @@ public:
 		}
 		
 
+	}
+
+	void setAsteroidBuff(Effect effect, Object * asteroid) {
+		if (asteroid->getObjectType() != ObjectType::asteroid) {
+			return;
+		}
+		std::vector<Object *> * attached = asteroid->getAttached();
+
+		for (int i = 0; i < attached->size(); i++) {
+			(*attached)[i]->setEffect(effect);
+		}
 	}
 };
