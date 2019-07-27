@@ -7,6 +7,7 @@
 #include "AStarAlgorithm.h"
 #include "StructureSetGeneration.h"
 #include "ConvexHull.h"
+#include "FPS.h"
 
 void fixCollision(Object * obj1, Object * obj2) {
 	if (obj1->getObjectType() == ObjectType::bullet || obj2->getObjectType() == ObjectType::bullet) {
@@ -30,30 +31,30 @@ void fixCollision(Object * obj1, Object * obj2) {
 
 	tmp_speed1 /= 2;
 	tmp_speed2 /= 2;
-	obj1->changePosition(Point() - tmp_speed1);
-	obj2->changePosition(Point() - tmp_speed2);
+	obj1->changePosition(Point() - tmp_speed1 * consts.getFPSLock() / fps.getFPS());
+	obj2->changePosition(Point() - tmp_speed2 * consts.getFPSLock() / fps.getFPS());
 	if (force_move) {
-		obj1->forceChangePosition(Point() - tmp_speed1);
-		obj2->forceChangePosition(Point() - tmp_speed2);
+		obj1->forceChangePosition(Point() - tmp_speed1 * consts.getFPSLock() / fps.getFPS());
+		obj2->forceChangePosition(Point() - tmp_speed2 * consts.getFPSLock() / fps.getFPS());
 	}
 	
 	while (tmp_speed1.getLength() > min_speed || tmp_speed2.getLength() > min_speed) {
 		tmp_speed1 /= 2;
 		tmp_speed2 /= 2;
 		if (checkModelCollision(col1, col2)) {
-			obj1->changePosition(Point() - tmp_speed1);
-			obj2->changePosition(Point() - tmp_speed2);
+			obj1->changePosition(Point() - tmp_speed1 * consts.getFPSLock() / fps.getFPS());
+			obj2->changePosition(Point() - tmp_speed2 * consts.getFPSLock() / fps.getFPS());
 			if (force_move) {
-				obj1->forceChangePosition(Point() - tmp_speed1);
-				obj2->forceChangePosition(Point() - tmp_speed2);
+				obj1->forceChangePosition(Point() - tmp_speed1 * consts.getFPSLock() / fps.getFPS());
+				obj2->forceChangePosition(Point() - tmp_speed2 * consts.getFPSLock() / fps.getFPS());
 			}
 		}
 		else {
-			obj1->changePosition(Point() + tmp_speed1);
-			obj2->changePosition(Point() + tmp_speed2);
+			obj1->changePosition(Point() + tmp_speed1 * consts.getFPSLock() / fps.getFPS());
+			obj2->changePosition(Point() + tmp_speed2 * consts.getFPSLock() / fps.getFPS());
 			if (force_move) {
-				obj1->forceChangePosition(Point() + tmp_speed1);
-				obj2->forceChangePosition(Point() + tmp_speed2);
+				obj1->forceChangePosition(Point() + tmp_speed1 * consts.getFPSLock() / fps.getFPS());
+				obj2->forceChangePosition(Point() + tmp_speed2 * consts.getFPSLock() / fps.getFPS());
 			}
 		}
 	}
@@ -65,20 +66,20 @@ void fixCollision(Object * obj1, Object * obj2) {
 	normal_vect = Point(normal_vect.y, -normal_vect.x);
 
 	Point normal_speed1 = (normal_vect * (normal_vect.x * (speed1 - tmp_speed1).x + normal_vect.y * (speed1 - tmp_speed1).y));
-	obj1->changePosition(normal_speed1);
+	obj1->changePosition(normal_speed1 * consts.getFPSLock() / fps.getFPS());
 	Point normal_speed2 = (normal_vect * (normal_vect.x * (speed2 - tmp_speed2).x + normal_vect.y * (speed2 - tmp_speed2).y));
-	obj2->changePosition(normal_speed2);
+	obj2->changePosition(normal_speed2 * consts.getFPSLock() / fps.getFPS());
 	if (force_move) {
-		obj1->forceChangePosition(normal_speed1);
-		obj2->forceChangePosition(normal_speed2);
+		obj1->forceChangePosition(normal_speed1 * consts.getFPSLock() / fps.getFPS());
+		obj2->forceChangePosition(normal_speed2 * consts.getFPSLock() / fps.getFPS());
 	}
 
 	if (checkModelCollision(col1, col2)) {
-		obj1->changePosition((obj1->getPosition() - obj2->getPosition()).getNormal() * eps_speed);
-		obj2->changePosition((obj2->getPosition() - obj1->getPosition()).getNormal() * eps_speed);
+		obj1->changePosition((obj1->getPosition() - obj2->getPosition()).getNormal() * eps_speed * consts.getFPSLock() / fps.getFPS());
+		obj2->changePosition((obj2->getPosition() - obj1->getPosition()).getNormal() * eps_speed * consts.getFPSLock() / fps.getFPS());
 		if (force_move) {
-			obj1->forceChangePosition((obj1->getPosition() - obj2->getPosition()).getNormal() * eps_speed);
-			obj2->forceChangePosition((obj2->getPosition() - obj1->getPosition()).getNormal() * eps_speed);
+			obj1->forceChangePosition((obj1->getPosition() - obj2->getPosition()).getNormal() * eps_speed * consts.getFPSLock() / fps.getFPS());
+			obj2->forceChangePosition((obj2->getPosition() - obj1->getPosition()).getNormal() * eps_speed * consts.getFPSLock() / fps.getFPS());
 		}
 	}
 }
@@ -180,6 +181,9 @@ class Map {
 	void processCollisionFrame(){
 		for (int cnt = 0; cnt < objects.size(); cnt++) {
 			for (int i = 0; i < objects[cnt].size(); i++) {
+				if (objects[cnt][i]->getCollisionModel()->isStatic()) {
+					continue;
+				}
 				if (objects[cnt][i] != hero_object) {
 					if (checkObjectCollision(hero_object, objects[cnt][i])) {
 						event_buffer.addEvent(EventType::default_collision, objects[cnt][i], hero_object);
@@ -197,10 +201,9 @@ class Map {
 				}
 				else {
 					for (int j = 0; j < objects[landscape_layer].size(); j++) {
-						if (i != j) {
+						if (objects[landscape_layer][j]->getObjectType() != asteroid) {
 							if (checkObjectCollision(objects[cnt][i], objects[landscape_layer][j])) {
 								event_buffer.addEvent(EventType::default_collision, objects[cnt][i], objects[landscape_layer][j]);
-								fixCollision(objects[cnt][i], objects[landscape_layer][j]);
 							}
 						}
 					}
@@ -279,7 +282,7 @@ class Map {
 													if (abs(angle_diff) > abs(angle_diff - 360.0)) {
 														angle_diff -= 360.0;
 													}
-													object1->changeAngle(angle_diff / 10.0);
+													object1->changeAngle(angle_diff / 10.0 * consts.getFPSLock() / fps.getFPS());
 												}
 												if (!object1->getCollisionModel()->isStatic() && (((Object *)object1->getUnitInfo()->getEnemy())->getPosition() - object1->getPosition()).getLength() > consts.getMinimalFlightRange()) {
 													Point speed(-cos(object1->getAngle() / 180 * PI + PI / 2), -sin(object1->getAngle() / 180 * PI + PI / 2));
@@ -444,7 +447,7 @@ class Map {
 	void processObjectSpeed() {
 		for (int layer = 0; layer < objects.size(); layer++) {
 			for (int i = 0; i < objects[layer].size(); i++) {
-				objects[layer][i]->forceChangePosition(objects[layer][i]->getSpeed()/* * timer.getTimeDelay() / 1000*/);
+				objects[layer][i]->forceChangePosition(objects[layer][i]->getSpeed() * consts.getFPSLock() / fps.getFPS());
 			}
 		}
 	}
@@ -504,7 +507,7 @@ class Map {
 				range = asteroid_speed;
 				x = cos(angle)*range, y = sin(angle)*range;
 				struct_arr[i]->setSpeed(Point(x, y));
-				addObject(struct_arr[i], main_layer);
+				addObject(struct_arr[i], landscape_layer);
 				object->attachObject(struct_arr[i]);
 			}
 		}
@@ -581,7 +584,7 @@ class Map {
 				range = asteroid_speed;
 				x = cos(angle)*range, y = sin(angle)*range;
 				struct_arr[i]->setSpeed(Point(x, y));
-				addObject(struct_arr[i], main_layer);
+				addObject(struct_arr[i], landscape_layer);
 				object->attachObject(struct_arr[i]);
 			}
 		}
@@ -894,7 +897,7 @@ public:
 		if (inner_ring.size() % 6 == 1) {
 			inner_ring[inner_ring.size()-1]->setPosition(base->getPosition());
 		}
-		addObject(object, main_layer);
+		addObject(object, landscape_layer);
 
 		return true;
 	}

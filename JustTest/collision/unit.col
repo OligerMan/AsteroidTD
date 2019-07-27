@@ -4,23 +4,24 @@ settings_end
 collision_start
 
 element body
-    position 20 0
-    radius 25
+    position 12 0
+    radius 43
 
-element left_hand
-    position 20 -35
-    radius 15
+element body
+    position 72 0
+    radius 10
 
-element left_hand
-    position 20 35
-    radius 15
+element fire
+    position -72 0
+    radius 10
 
-element knife_right
-    position -10 -47
-    radius 3
+element wing1
+    position 30 -65
+    radius 10
 
-element knife_left
-    position 46 52
-    radius 3
+element wing1
+    position 30 65
+    radius 10
+
 
 collision_end

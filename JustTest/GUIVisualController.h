@@ -124,7 +124,7 @@ public:
 		}
 
 		for (int i = 0; i < text->size(); i++) {
-			if (i <= 2) {
+			if (i <= text->size()) {
 				(*text)[i].first.setOrigin(-viewport_pos.x, -viewport_pos.y);
 			}
 			if (i <= 0) {

@@ -8,7 +8,7 @@ class Constants {
 	const double strategic_camera_speed = 10;
 	const double knockback_speed = 0;
 	const double friction_coef = 0.01;
-	const int fps_lock = 240;
+	const float fps_lock = 240;
 	const double interaction_distance = 600;
 
 	const float base_gold_income = 0.003;
@@ -24,7 +24,7 @@ class Constants {
 	const float heal_buff_price = 100;
 
 	const float enemy_spawn_range = 10000;
-	const float minimal_flight_range = 540;
+	const float minimal_flight_range = 450;
 
 	const float dome_heal = 0.03;
 	const float hero_heal = 0.03;
@@ -57,7 +57,7 @@ public:
 		return friction_coef;
 	}
 
-	const int getFPSLock() {
+	const float getFPSLock() {
 		return fps_lock;
 	}
 

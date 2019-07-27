@@ -51,8 +51,8 @@ public:
 	}
 
 	void processFrame() {
-		gold += gold_income;
-		research += research_income;
+		gold += gold_income * consts.getFPSLock() / fps.getFPS();
+		research += research_income * consts.getFPSLock() / fps.getFPS();
 	}
 
 	float getGold() {

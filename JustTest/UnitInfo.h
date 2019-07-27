@@ -6,6 +6,7 @@
 
 #include "Effect.h"
 #include "GameConstants.h"
+#include "FPS.h"
 
 enum FactionList {
 	null_faction,
@@ -95,7 +96,7 @@ class UnitInfo {
 	float turn_speed = 2;
 
 	// AI info
-	float anger_range = 550;
+	float anger_range = 600;
 	int faction = 0;              // faction index: 0 for non-unit objects, 1 for hero and his allies, from 2 to infinity(2^31) for other factions
 	void * enemy_object_ptr = nullptr;
 
@@ -402,16 +403,16 @@ public:
 
 	void processCooldown() {
 		for (int i = 0; i < attack.size(); i++) {
-			attack[i].cur_cooldown = std::max(0.0f, attack[i].cur_cooldown - 1);
+			attack[i].cur_cooldown = std::max(0.0f, attack[i].cur_cooldown - consts.getFPSLock() / fps.getFPS());
 			if (isAffected(EffectList::attack_speed_buff)) {
-				attack[i].cur_cooldown = std::max(0.0f, attack[i].cur_cooldown - 1);
+				attack[i].cur_cooldown = std::max(0.0f, attack[i].cur_cooldown - consts.getFPSLock() / fps.getFPS());
 			}
 		}
 	}
 
 	void processEffects() {
 		for (int i = 0; i < effects.size(); i++) {
-			effects[i].time--;
+			effects[i].time -= consts.getFPSLock() / fps.getFPS();
 			if (effects[i].time < 0) {
 				effects.erase(effects.begin() + i);
 				continue;

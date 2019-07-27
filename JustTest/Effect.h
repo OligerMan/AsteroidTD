@@ -13,7 +13,7 @@ enum EffectList {
 };
 
 struct Effect {
-	int time = 0;
+	float time = 0;
 	EffectList effect;
 
 	Effect(int time, EffectList effect) : time(time), effect(effect) {}

@@ -5,11 +5,11 @@ object_start
 
     object hero19
         layer 0
-        position 0 -350
+        position 0 -450
         origin_mode auto
         origin 31 -281
         object_type hero
-        collision_type unit
+        collision_type hero
         sprite_type hero
         animation_type hold
         frame_duration 30

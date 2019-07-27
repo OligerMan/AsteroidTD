@@ -2,9 +2,11 @@
 #include "GUIVisualController.h"
 #include "GUIManager.h"
 #include "ResourceManager.h"
+#include "FPS.h"
 
 #include <chrono>
 #include <Windows.h>
+#include <Xinput.h>
 
 enum XBOXGamepadButtons {
 	A,B,X,Y,LB,RB,BACK,START,LSTICK,RSTICK
@@ -39,7 +41,7 @@ void gameCycle(std::string map_name) {
 	VisualController visual_ctrl;
 	GUIVisualController gui_visual_ctrl;
 	Map game_map1("maps/" + map_name + ".map");
-	ResourceManager res_manager(1000, 5);
+	ResourceManager res_manager(settings.getStartGold(), 5);
 
 	Map object_presets("redactor_resources/object_templates.map");
 	GUIManager gui_manager(object_presets.getObjectsBuffer());
@@ -52,9 +54,21 @@ void gameCycle(std::string map_name) {
 
 	Point previous_speed;
 
+	int wave_delay = 10000;
+	int next_wave = 12000;
+
+	// for defining vibration on damage
+	float hero_hp = 0;
+	int vibration_time = 0;
+	int vibr_on_dmg_time = 30;
+
 	while (window.isOpen())
 	{
 		frame_num++;
+
+		// FPS 
+		fps.processFrame(frame_num);
+
 
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -66,6 +80,25 @@ void gameCycle(std::string map_name) {
 		Point viewport_pos = Point(view1.getCenter().x, view1.getCenter().y);
 		Object * hero_object = game_map1.getHero();
 
+		if (hero_object->getUnitInfo()->getHealth() - hero_hp < -0.01) {
+			vibration_time = vibr_on_dmg_time;
+		}
+		if (vibration_time > 0) {
+			XINPUT_VIBRATION vibration;
+			ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+			vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
+			vibration.wRightMotorSpeed = 64000; // use any value between 0-65535 here
+			XInputSetState(0, &vibration);
+		}else{
+			XINPUT_VIBRATION vibration;
+			ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+			vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
+			vibration.wRightMotorSpeed = 0; // use any value between 0-65535 here
+			XInputSetState(0, &vibration);
+		}
+		hero_hp = hero_object->getUnitInfo()->getHealth();
+		vibration_time--;
+
 		// game cycle
 
 		// resource manager control
@@ -75,14 +108,23 @@ void gameCycle(std::string map_name) {
 			gui_manager.setText(std::to_string((int)res_manager.getResearch()), 0.01, research_sign, Point(-settings.getWindowWidth() / 2, -settings.getWindowHeight() / 2 + 50), 30);
 		}
 
-		if (frame_num % 10000 == 0) {
+		if (fight_mode) {
+			gui_manager.setText("Ability Mode", 0.01, skill_status_sign, Point(settings.getWindowWidth() / 2 - 150, -settings.getWindowHeight() / 2), 50);
+		}
+		else {
+			gui_manager.setText("Build Mode", 0.01, skill_status_sign, Point(settings.getWindowWidth() / 2 - 150, -settings.getWindowHeight() / 2), 50);
+		}
+
+		if (frame_num == next_wave) {
 			if (!strategic_view) {
 				game_map1.spawnEnemy(frame_num / 10000, Point(view1.getCenter().x, view1.getCenter().y));
 			}
 			else {
 				game_map1.spawnEnemy(frame_num / 10000, Point(view2.getCenter().x, view2.getCenter().y));
 			}
-			gui_manager.forseSetTopSign("New Wave", 5);
+			gui_manager.forceSetTopSign("New Wave", 5);
+			next_wave += wave_delay;
+			wave_delay += 200;
 		}
 
 		if (is_game_cycle) {
@@ -184,7 +226,7 @@ void gameCycle(std::string map_name) {
 			}
 		}
 
-		double hero_speed = hero_object->getUnitInfo()->getDefaultSpeed();
+		double hero_speed = hero_object->getUnitInfo()->getDefaultSpeed() * consts.getFPSLock() / fps.getFPS();
 		
 		Point new_speed;
 
@@ -218,7 +260,7 @@ void gameCycle(std::string map_name) {
 					sf::Joystick::getAxisPosition(0, sf::Joystick::X),
 					sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
 
-				if (abs(new_speed.x) < 1 && abs(new_speed.y) < 1) {
+				if (abs(new_speed.x) < 5 && abs(new_speed.y) < 5) {
 					new_speed = Point();
 				}
 				else {
@@ -430,7 +472,7 @@ void gameCycle(std::string map_name) {
 		else {
 			hero_object->setSpeed(Point());
 			hero_object->setAnimationType(hold_anim);
-			new_speed = new_speed.getNormal() * consts.getStrategicCameraSpeed();
+			new_speed = new_speed.getNormal() * consts.getStrategicCameraSpeed() * consts.getFPSLock() / fps.getFPS();
 			view2.setCenter(view2.getCenter() + sf::Vector2f(new_speed.x, new_speed.y));
 		}
 		
@@ -438,7 +480,7 @@ void gameCycle(std::string map_name) {
 		if (hero_object != nullptr) {
 			const double view_speed_coef = 0.012;    // must be from 0 to 1, where 0 for static camera and 1 for camera istantly over hero
 			Point hero_position = hero_object->getPosition();
-			Point diff = (hero_position - Point(view1.getCenter())) * view_speed_coef;
+			Point diff = (hero_position - Point(view1.getCenter())) * view_speed_coef * consts.getFPSLock() / fps.getFPS();
 			view1.setCenter(view1.getCenter() + sf::Vector2f(diff.x, diff.y));
 		}
 		

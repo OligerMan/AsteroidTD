@@ -12,8 +12,9 @@ enum textboxList {
 	top_sign,
 	gold_sign,
 	research_sign,
+	skill_status_sign,
 
-	LIST_NUM
+	SIGN_NUM
 };
 
 class GUIManager {
@@ -142,7 +143,7 @@ public:
 		}
 	}
 
-	void forseSetTopSign(char * string, float time /*in seconds*/) {
+	void forceSetTopSign(char * string, float time /*in seconds*/) {
 		text[0].first.setString(string);
 		text[0].second = consts.getFPSLock() * time;
 	}

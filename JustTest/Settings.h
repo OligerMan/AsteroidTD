@@ -10,11 +10,11 @@ class Settings {
 	int window_width;
 
 	// runtime mode settings
-	bool sprite_loader_debug_output_enabled = true;
-	bool console_enabled = true;
+	bool sprite_loader_debug_output_enabled = false;
+	bool console_enabled = false;
 	bool error_output_enabled = false;
-	bool gamepad_debug_output = true;
-	bool collision_debug_mode = false;
+	bool gamepad_debug_output = false;
+	bool collision_debug_mode = true;
 	bool navigation_debug_mode = false;
 	bool unit_info_debug = false;
 
@@ -28,6 +28,9 @@ class Settings {
 	
 	// service variable
 	bool is_settings_loaded = false;
+
+	// balance settings
+	int start_gold = 1500;
 
 public:
 
@@ -91,6 +94,9 @@ public:
 				if (setting == "infinite_map_radius") {
 					infinite_map_radius = std::stoi(value);
 				}
+				if (setting == "start_gold") {
+					start_gold = std::stoi(value);
+				}
 				if (setting == "config_end") {
 					is_settings_loaded = true;
 					break;
@@ -142,6 +148,10 @@ public:
 
 	bool isUnitInfoDebugEnabled() {
 		return unit_info_debug;
+	}
+
+	int getStartGold() {
+		return start_gold;
 	}
 };
 
