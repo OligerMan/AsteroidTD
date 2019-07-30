@@ -20,8 +20,7 @@ enum textboxList {
 class GUIManager {
 
 	std::vector<std::string> start_game_signs{
-		std::string("TRY NOT TO DIE"),
-		std::string("Happy game! And may the odds be ever in your favor")
+		std::string("Let's start")
 	};
 
 	std::vector<std::vector<Object *>> gui_elements;
@@ -89,12 +88,12 @@ public:
 
 	GUIManager() {}
 
-	GUIManager(std::vector<std::vector<Object*>> * redactor_mode_objects) {
+	GUIManager(std::vector<std::vector<Object*>> * redactor_mode_objects, int window_height) {
 		base_font.loadFromFile("a_Alterna.ttf");
 		srand(time(NULL));
 		text.resize(1);
 		text[0].first.setString(start_game_signs[rand() % (start_game_signs.size())]);
-		text[0].first.setPosition(sf::Vector2f(0, -settings.getWindowHeight() / 2));
+		text[0].first.setPosition(sf::Vector2f(0, -window_height / 2));
 		text[0].first.setFillColor(sf::Color::White);
 		text[0].first.setOutlineColor(sf::Color::Black);
 		text[0].first.setOutlineThickness(1);

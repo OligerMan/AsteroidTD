@@ -27,9 +27,15 @@ void gameCycle(std::string map_name) {
 		settings.setDefaults();
 	}
 
-	sf::RenderWindow window(sf::VideoMode(settings.getWindowWidth(), settings.getWindowHeight()), "JustTest", sf::Style::None);
-	sf::View view1(sf::Vector2f(0.0, 0.0), sf::Vector2f(settings.getWindowWidth() * 1.2, settings.getWindowHeight() * 1.2));
-	sf::View view2(sf::Vector2f(0.0, 0.0), sf::Vector2f(settings.getWindowWidth() * 5, settings.getWindowHeight() * 5));
+	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+	sf::RenderWindow window(sf::VideoMode(settings.getWindowWidth(), settings.getWindowHeight()), "AsteroidTD", sf::Style::None);
+	int screenW = GetSystemMetrics(SM_CXSCREEN);
+	int screenH = GetSystemMetrics(SM_CYSCREEN);
+	window.setSize(sf::Vector2u(screenW, screenH));
+	window.setPosition(sf::Vector2i(0, 0));
+
+	sf::View view1(sf::Vector2f(0.0, 0.0), sf::Vector2f(window.getSize().x * 1.2, window.getSize().y * 1.2));
+	sf::View view2(sf::Vector2f(0.0, 0.0), sf::Vector2f(window.getSize().x * 5, window.getSize().y * 5));
 	bool strategic_view = false;    // choice from strategic camera(big vision, hero don't move) and hero camera(default camera)
 	bool fight_mode = false;       // choice from build/peaceful mode(default) and fight mode
 	int last_view_change = 0;    // number of frame where you changed view last time
@@ -44,7 +50,14 @@ void gameCycle(std::string map_name) {
 	ResourceManager res_manager(settings.getStartGold(), 5);
 
 	Map object_presets("redactor_resources/object_templates.map");
-	GUIManager gui_manager(object_presets.getObjectsBuffer());
+	GUIManager gui_manager(object_presets.getObjectsBuffer(), window.getSize().y);
+
+	sf::Texture background_texture;
+	background_texture.loadFromFile("background/main_background.png");
+	sf::Sprite background_sprite;
+	background_sprite.setTexture(background_texture);
+	background_sprite.setOrigin(sf::Vector2f((int)background_texture.getSize().x / 2, (int)background_texture.getSize().y / 2));
+	sf::Vector2f strategic_back_pos, main_back_pos;
 
 
 	window.setView(view1);
@@ -55,7 +68,7 @@ void gameCycle(std::string map_name) {
 	Point previous_speed;
 
 	int wave_delay = 10000;
-	int next_wave = 12000;
+	int next_wave = 10000;
 
 	// for defining vibration on damage
 	float hero_hp = 0;
@@ -75,6 +88,15 @@ void gameCycle(std::string map_name) {
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
+		}
+
+		if (!strategic_view) {
+			background_sprite.setPosition(main_back_pos);
+			background_sprite.setScale(sf::Vector2f(3, 3));
+		}
+		else {
+			background_sprite.setPosition(strategic_back_pos);
+			background_sprite.setScale(sf::Vector2f(8, 8));
 		}
 
 		Point viewport_pos = Point(view1.getCenter().x, view1.getCenter().y);
@@ -104,23 +126,23 @@ void gameCycle(std::string map_name) {
 		// resource manager control
 		res_manager.processFrame();
 		if (!strategic_view) {
-			gui_manager.setText(std::to_string((int)res_manager.getGold()), 0.01, gold_sign, Point(-settings.getWindowWidth() / 2, -settings.getWindowHeight() / 2), 30);
-			gui_manager.setText(std::to_string((int)res_manager.getResearch()), 0.01, research_sign, Point(-settings.getWindowWidth() / 2, -settings.getWindowHeight() / 2 + 50), 30);
+			gui_manager.setText(std::to_string((int)res_manager.getGold()), 0.01, gold_sign, Point(-(int)window.getSize().x / 2, -(int)window.getSize().y / 2), 30);
+			gui_manager.setText(std::to_string((int)res_manager.getResearch()), 0.01, research_sign, Point(-(int)window.getSize().x / 2, -(int)window.getSize().y / 2 + 50), 30);
 		}
 
 		if (fight_mode) {
-			gui_manager.setText("Ability Mode", 0.01, skill_status_sign, Point(settings.getWindowWidth() / 2 - 150, -settings.getWindowHeight() / 2), 50);
+			gui_manager.setText("Ability Mode", 0.01, skill_status_sign, Point(window.getSize().x / 2 - 150, -(int)window.getSize().y / 2), 50);
 		}
 		else {
-			gui_manager.setText("Build Mode", 0.01, skill_status_sign, Point(settings.getWindowWidth() / 2 - 150, -settings.getWindowHeight() / 2), 50);
+			gui_manager.setText("Build Mode", 0.01, skill_status_sign, Point(window.getSize().x / 2 - 150, -(int)window.getSize().y / 2), 50);
 		}
 
 		if (frame_num == next_wave) {
 			if (!strategic_view) {
-				game_map1.spawnEnemy(frame_num / 10000, Point(view1.getCenter().x, view1.getCenter().y));
+				game_map1.spawnEnemy(frame_num / 8000, Point(view1.getCenter().x, view1.getCenter().y));
 			}
 			else {
-				game_map1.spawnEnemy(frame_num / 10000, Point(view2.getCenter().x, view2.getCenter().y));
+				game_map1.spawnEnemy(frame_num / 8000, Point(view2.getCenter().x, view2.getCenter().y));
 			}
 			gui_manager.forceSetTopSign("New Wave", 5);
 			next_wave += wave_delay;
@@ -128,7 +150,10 @@ void gameCycle(std::string map_name) {
 		}
 
 		if (is_game_cycle) {
-			window.clear(sf::Color::Black);
+			// set background
+			window.draw(background_sprite);
+
+
 			is_game_cycle = visual_ctrl.processFrame(&window, game_map1.getObjectsBuffer());
 			float hero_hp = hero_object->getUnitInfo()->getHealth() / hero_object->getUnitInfo()->getMaxHealth();
 			if (strategic_view) {
@@ -140,11 +165,11 @@ void gameCycle(std::string map_name) {
 
 				for (int x = 0; x < window.getSize().x; x+=3) {
 					for (int y = 0; y < window.getSize().y; y+=3) {
-						if (game_map1.isClickable(Point(x, y) + viewport_pos - Point(settings.getWindowWidth() / 2, settings.getWindowHeight() / 2))) {
+						if (game_map1.isClickable(Point(x, y) + viewport_pos - Point(window.getSize().x / 2, window.getSize().y / 2))) {
 							sf::Vertex line[] =
 							{
-								sf::Vertex(sf::Vector2f(x + viewport_pos.x - settings.getWindowWidth() / 2, y + viewport_pos.y - settings.getWindowHeight() / 2)),
-								sf::Vertex(sf::Vector2f(x + viewport_pos.x - settings.getWindowWidth() / 2, y + viewport_pos.y + 1 - settings.getWindowHeight() / 2))
+								sf::Vertex(sf::Vector2f(x + viewport_pos.x - window.getSize().x / 2, y + viewport_pos.y - window.getSize().y / 2)),
+								sf::Vertex(sf::Vector2f(x + viewport_pos.x - window.getSize().x / 2, y + viewport_pos.y + 1 - window.getSize().y / 2))
 							};
 							line->color = sf::Color::Red;
 
@@ -161,7 +186,7 @@ void gameCycle(std::string map_name) {
 
 				for (int x = 0; x < window.getSize().x; x += 3) {
 					for (int y = 0; y < window.getSize().y; y += 3) {
-						Point grid_point = (Point(x, y) + viewport_pos - Point(settings.getWindowWidth() / 2, settings.getWindowHeight() / 2));
+						Point grid_point = (Point(x, y) + viewport_pos - Point(window.getSize().x / 2, window.getSize().y / 2));
 						if (game_map1.getNavigationGridElem((grid_point.x - grid_offset.x) / grid_size, (grid_point.y - grid_offset.y) / grid_size)) {
 							sf::Vertex line[] =
 							{
@@ -197,7 +222,7 @@ void gameCycle(std::string map_name) {
 		Point cursor_pos;
 		sf::Vector2i mouse_pos = sf::Mouse::getPosition();
 		sf::Vector2i window_pos = window.getPosition();
-		cursor_pos = Point(mouse_pos.x - settings.getWindowWidth() / 2 - window.getPosition().x, mouse_pos.y - settings.getWindowHeight() / 2 - window.getPosition().y);
+		cursor_pos = Point(mouse_pos.x - window.getSize().x / 2 - window.getPosition().x, mouse_pos.y - window.getSize().y / 2 - window.getPosition().y);
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
 			if (!gui_manager.processFrame(cursor_pos, viewport_pos)) {
@@ -474,6 +499,7 @@ void gameCycle(std::string map_name) {
 			hero_object->setAnimationType(hold_anim);
 			new_speed = new_speed.getNormal() * consts.getStrategicCameraSpeed() * consts.getFPSLock() / fps.getFPS();
 			view2.setCenter(view2.getCenter() + sf::Vector2f(new_speed.x, new_speed.y));
+			strategic_back_pos = strategic_back_pos + sf::Vector2f(new_speed.x * 0.95, new_speed.y * 0.95);
 		}
 		
 
@@ -482,6 +508,7 @@ void gameCycle(std::string map_name) {
 			Point hero_position = hero_object->getPosition();
 			Point diff = (hero_position - Point(view1.getCenter())) * view_speed_coef * consts.getFPSLock() / fps.getFPS();
 			view1.setCenter(view1.getCenter() + sf::Vector2f(diff.x, diff.y));
+			main_back_pos = main_back_pos + sf::Vector2f(diff.x * 0.95, diff.y * 0.95);
 		}
 		
 		if (!strategic_view) {

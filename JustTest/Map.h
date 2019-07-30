@@ -595,7 +595,7 @@ class Map {
 
 		for (int i = 0; i < enemy_amount; i++) {
 			float angle = ((float)i / enemy_amount) * 2 * PI;
-			Point new_pos = pos + Point(cos(angle), sin(angle)) * (50 + enemy_amount * 10);
+			Point new_pos = pos + Point(cos(angle), sin(angle)) * (350 + enemy_amount * 10);
 
 			Object * object = new Object
 			(
@@ -916,7 +916,9 @@ public:
 			convex_hull(convex);
 		}
 
-		while (enemy_lvl > 0) {
+		int group_amount = enemy_lvl * 1.5;
+
+		while (group_amount > 0) {
 			int nearest_point = rand() % convex.size();
 			float angle = (float)(rand() % 1024) / 512 * PI;
 			Point new_spawn_point = convex[nearest_point] + Point(cos(angle), sin(angle)) * (consts.getEnemySpawnRange() + 0.1);
@@ -935,7 +937,7 @@ public:
 			}
 
 			spawnEnemyGroup(enemy_lvl, new_spawn_point);
-			enemy_lvl--;
+			group_amount--;
 		}
 		
 
