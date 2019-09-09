@@ -5,18 +5,46 @@
 #include <SFML\Graphics.hpp>
 
 #include "FileSearch.h"
+#include "GameStatus.h"
+#include "ResourceManager.h"
 
 
 class GUIVisualController{
 	std::vector<std::vector<std::vector<sf::Texture>>> texture_buffer;
 	std::vector<std::vector<sf::Sprite>> sprite_buffer;
 
+	std::vector<std::vector<sf::Texture>> skills_texture;
+	std::vector<std::vector<sf::Sprite>> skills_sprite;
+
 	bool is_active = true;
+
+	enum {
+		ready,
+		not_enough_money,
+
+		SKILL_STATE_AMOUNT
+	};
+
+	enum {
+		dome_struct,
+		gold_struct,
+		science_struct,
+		turret_struct,
+		rocket_skill,
+		attack_buff_skill,
+		heal_skill,
+		speed_boost_skill,
+
+		SKILL_AMOUNT
+	};
 
 	void uploadTextures(std::string path) {
 		if (settings.isSpriteDebugOutputEnabled()) {
 			std::cout << " -- GUI sprites loading start -- " << std::endl;
 		}
+
+		// main sprites loading
+
 
 		std::vector<std::string> * object_names = getFileList(path);
 
@@ -57,10 +85,65 @@ class GUIVisualController{
 		}
 		delete object_names;
 
+		// skills sprites loading
+
+
+		skills_texture.resize(SKILL_AMOUNT);
+		skills_sprite.resize(SKILL_AMOUNT);
+		for (int i = 0; i < SKILL_AMOUNT; i++) {
+			skills_texture[i].resize(SKILL_STATE_AMOUNT);
+			skills_sprite[i].resize(SKILL_STATE_AMOUNT);
+		}
+
+		skills_texture[dome_struct][ready].loadFromFile("skill_sprite\\dome\\ready.png");
+		skills_texture[dome_struct][not_enough_money].loadFromFile("skill_sprite\\dome\\notready.png");
+		skills_texture[turret_struct][ready].loadFromFile("skill_sprite\\turret\\ready.png");
+		skills_texture[turret_struct][not_enough_money].loadFromFile("skill_sprite\\turret\\notready.png");
+		skills_texture[gold_struct][ready].loadFromFile("skill_sprite\\gold\\ready.png");
+		skills_texture[gold_struct][not_enough_money].loadFromFile("skill_sprite\\gold\\notready.png");
+		skills_texture[science_struct][ready].loadFromFile("skill_sprite\\science\\ready.png");
+		skills_texture[science_struct][not_enough_money].loadFromFile("skill_sprite\\science\\notready.png");
+		skills_texture[rocket_skill][ready].loadFromFile("skill_sprite\\rocket\\ready.png");
+		skills_texture[rocket_skill][not_enough_money].loadFromFile("skill_sprite\\rocket\\notready.png");
+		skills_texture[speed_boost_skill][ready].loadFromFile("skill_sprite\\speed\\ready.png");
+		skills_texture[speed_boost_skill][not_enough_money].loadFromFile("skill_sprite\\speed\\notready.png");
+		skills_texture[attack_buff_skill][ready].loadFromFile("skill_sprite\\attack\\ready.png");
+		skills_texture[attack_buff_skill][not_enough_money].loadFromFile("skill_sprite\\attack\\notready.png");
+		skills_texture[heal_skill][ready].loadFromFile("skill_sprite\\heal\\ready.png");
+		skills_texture[heal_skill][not_enough_money].loadFromFile("skill_sprite\\heal\\notready.png");
+
+		for (int i = 0; i < SKILL_AMOUNT; i++) {
+			for (int j = 0; j < SKILL_STATE_AMOUNT; j++) {
+				skills_sprite[i][j].setTexture(skills_texture[i][j]);
+				sf::Vector2u v = skills_texture[i][j].getSize();
+				float coef = consts.getSkillsIconSize();
+				if (v.x != 0 && v.y != 0) {
+					skills_sprite[i][j].setScale(coef / v.x, coef / v.y);
+				}
+			}
+		}
+
 		if (settings.isSpriteDebugOutputEnabled()) {
 			std::cout << " -- GUI sprites loading completed -- " << std::endl << std::endl;
 		}
+
 		return;
+	}
+
+	void setSkillsIconPosition(sf::RenderWindow * window) {
+		for (int i = 0; i < skills_texture.size(); i++) {
+			Point center = Point(window->getSize().x / 2 - consts.getSkillsIconBorder() - consts.getSkillsIconShiftRadius() - consts.getSkillsIconSize() / 2, window->getSize().y / 2 - consts.getSkillsIconBorder() - consts.getSkillsIconShiftRadius() - consts.getSkillsIconSize() / 2);
+			for (int j = 0; j < skills_texture[0].size(); j++) {
+				skills_sprite[i][j].setTexture(skills_texture[i][j]);
+				sf::Vector2u v = skills_texture[i][j].getSize();
+				float coef = consts.getSkillsIconSize();
+				if (v.x != 0 && v.y != 0) {
+					skills_sprite[i][j].setScale(coef / v.x, coef / v.y);
+				}
+				Point pos = center + Point(cos((float)(i % 4) / 4.0 * PI * 2 - PI / 2), sin((float)(i % 4) / 4.0 * PI * 2 - PI / 2)) * consts.getSkillsIconShiftRadius();
+				skills_sprite[i][j].setPosition(sf::Vector2f(pos.x, pos.y));
+			}
+		}
 	}
 
 	void initSprites() {
@@ -78,10 +161,11 @@ class GUIVisualController{
 
 public:
 
-	GUIVisualController() {
+	GUIVisualController(sf::RenderWindow * window) {
 		const std::string texture_path = "GUI";
 
 		uploadTextures(texture_path);
+		setSkillsIconPosition(window);
 		initSprites();
 	}
 
@@ -95,7 +179,12 @@ public:
 
 	bool processFrame(sf::RenderWindow * window, std::vector<std::vector<Object *>> * objects, std::vector<std::pair<sf::Text, int>> * text, Point viewport_pos, float hero_hp_percent) {  // render for GUI elements
 
+		if (game_status == pause || game_status == game_strategic_mode) {
+			hero_hp_percent = 0;
+		}
 
+
+		// main gui elements render
 		for (int layer = 0; layer < objects->size(); layer++) {
 			for (int i = 0; i < (*objects)[layer].size(); i++) {
 				Object * object = (*objects)[layer][i];
@@ -123,7 +212,16 @@ public:
 			}
 		}
 
+		// gui text render
 		for (int i = 0; i < text->size(); i++) {
+			sf::Vector2f prev_pos = (*text)[i].first.getPosition();
+			int prev_font_size = (*text)[i].first.getCharacterSize();
+			if (game_status == game_strategic_mode || game_status == pause) {
+				sf::Vector2f v = (*text)[i].first.getPosition();
+				(*text)[i].first.setPosition(sf::Vector2f(v.x * 4.15, v.y * 4.15));
+				(*text)[i].first.setCharacterSize((*text)[i].first.getCharacterSize() * 4.15);
+			}
+
 			if (i <= text->size()) {
 				(*text)[i].first.setOrigin(-viewport_pos.x, -viewport_pos.y);
 			}
@@ -134,6 +232,69 @@ public:
 				window->draw((*text)[i].first);
 				(*text)[i].second--;
 			}
+			(*text)[i].first.setPosition(prev_pos);
+			(*text)[i].first.setCharacterSize(prev_font_size);
+		}
+
+		// skills icons render
+
+		for (int i = 0; i < SKILL_AMOUNT; i++) {
+			for (int j = 0; j < SKILL_STATE_AMOUNT; j++) {
+				skills_sprite[i][j].setOrigin(-viewport_pos.x*8, -viewport_pos.y*8);
+			}
+		}
+
+		if (skills_mode == SkillsMode::set1) {
+			if (res_manager.isEnoughGold(consts.getDamageBuffPrice())) {
+				window->draw(skills_sprite[attack_buff_skill][ready]);
+			}
+			else {
+				window->draw(skills_sprite[attack_buff_skill][not_enough_money]);
+			}
+			if (res_manager.isEnoughGold(consts.getSpeedBuffPrice())) {
+				window->draw(skills_sprite[speed_boost_skill][ready]);
+			}
+			else {
+				window->draw(skills_sprite[speed_boost_skill][not_enough_money]);
+			}
+			if (res_manager.isEnoughGold(consts.getAttackAbilityPrice())) {
+				window->draw(skills_sprite[rocket_skill][ready]);
+			}
+			else {
+				window->draw(skills_sprite[rocket_skill][not_enough_money]);
+			}
+			if (res_manager.isEnoughGold(consts.getHealBuffPrice())) {
+				window->draw(skills_sprite[heal_skill][ready]);
+			}
+			else {
+				window->draw(skills_sprite[heal_skill][not_enough_money]);
+			}
+		}
+		else {
+			if (res_manager.isEnoughGold(consts.getBaseDomePrice())) {
+				window->draw(skills_sprite[dome_struct][ready]);
+			}
+			else {
+				window->draw(skills_sprite[dome_struct][not_enough_money]);
+			}
+			if (res_manager.isEnoughGold(consts.getBaseSciencePrice())) {
+				window->draw(skills_sprite[science_struct][ready]);
+			}
+			else {
+				window->draw(skills_sprite[science_struct][not_enough_money]);
+			}
+			if (res_manager.isEnoughGold(consts.getBaseGoldPrice())) {
+				window->draw(skills_sprite[gold_struct][ready]);
+			}
+			else {
+				window->draw(skills_sprite[gold_struct][not_enough_money]);
+			}
+			if (res_manager.isEnoughGold(consts.getBaseTurretPrice())) {
+				window->draw(skills_sprite[turret_struct][ready]);
+			}
+			else {
+				window->draw(skills_sprite[turret_struct][not_enough_money]);
+			}
 		}
 
 		// hero HP draw
@@ -142,6 +303,8 @@ public:
 		hp_rectangle.setOrigin(-viewport_pos.x, -viewport_pos.y);
 		hp_rectangle.setFillColor(sf::Color(0,122,204));
 		window->draw(hp_rectangle);
+
+		// skill icons draw
 		
 		return is_active;
 	}

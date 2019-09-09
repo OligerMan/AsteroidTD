@@ -8,6 +8,7 @@
 #include "StructureSetGeneration.h"
 #include "ConvexHull.h"
 #include "FPS.h"
+#include "ResourceManager.h"
 
 void fixCollision(Object * obj1, Object * obj2) {
 	if (obj1->getObjectType() == ObjectType::bullet || obj2->getObjectType() == ObjectType::bullet) {
@@ -362,6 +363,12 @@ class Map {
 				if (objects[layer][i]->isDeleted() || !(objects[layer][i]->getUnitInfo() != nullptr && !objects[layer][i]->getUnitInfo()->isDead())) {
 					if (objects[layer][i] == hero_object) {
 						hero_object = nullptr;
+					}
+					if (objects[layer][i]->getObjectType() == gold && objects[layer][i]->getUnitInfo()->getFaction() == hero_faction) {
+						res_manager.changeGoldIncome(-consts.getBaseGoldIncome());
+					}
+					if (objects[layer][i]->getObjectType() == science && objects[layer][i]->getUnitInfo()->getFaction() == hero_faction) {
+						res_manager.changeResearchIncome(-consts.getBaseResearchIncome());
 					}
 					delete objects[layer][i];
 					objects[layer].erase(objects[layer].begin() + i);

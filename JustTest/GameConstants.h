@@ -34,6 +34,9 @@ class Constants {
 	const float const_heal = 250;
 	const float move_speed_buff_mult = 5;
 
+	const float skills_icon_size = 120;
+	const float skills_icon_shift_radius = 100;
+	const float skills_icon_border = 20;
 
 public:
 
@@ -139,5 +142,17 @@ public:
 
 	const float getMoveSpeedBuffMultiplier() {
 		return move_speed_buff_mult;
+	}
+
+	const float getSkillsIconSize() {
+		return skills_icon_size;
+	}
+
+	const float getSkillsIconShiftRadius() {
+		return skills_icon_shift_radius;
+	}
+
+	const float getSkillsIconBorder() {
+		return skills_icon_border;
 	}
 } consts;

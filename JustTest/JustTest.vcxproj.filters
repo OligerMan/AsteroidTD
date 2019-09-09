@@ -111,6 +111,12 @@
     <ClInclude Include="FPS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Research.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStatus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

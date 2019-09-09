@@ -14,12 +14,23 @@ public:
 		research = start_research;
 	}
 
+	ResourceManager() {}
+
 	bool spendGold(float price) {
 		if ((gold - price) < 0) {
 			return false;
 		}
 		else {
 			gold -= price;
+			return true;
+		}
+	}
+
+	bool isEnoughGold(float price) {
+		if ((gold - price) < 0) {
+			return false;
+		}
+		else {
 			return true;
 		}
 	}
@@ -34,6 +45,15 @@ public:
 		}
 		else {
 			research -= price;
+			return true;
+		}
+	}
+
+	bool isEnoughResearch(float price) {
+		if ((research - price) < 0) {
+			return false;
+		}
+		else {
 			return true;
 		}
 	}
@@ -62,4 +82,18 @@ public:
 	float getResearch() {
 		return research;
 	}
-};
+
+	void clear() {
+		gold = 0;
+		research = 0;
+		gold_income = 0;
+		research_income = 0;
+	}
+
+	void clear(int start_gold, int start_research) {
+		gold = start_gold;
+		research = start_research;
+		gold_income = 0;
+		research_income = 0;
+	}
+} res_manager;
