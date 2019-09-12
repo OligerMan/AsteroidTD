@@ -240,62 +240,66 @@ public:
 
 		for (int i = 0; i < SKILL_AMOUNT; i++) {
 			for (int j = 0; j < SKILL_STATE_AMOUNT; j++) {
-				skills_sprite[i][j].setOrigin(-viewport_pos.x*8, -viewport_pos.y*8);
+                sf::Vector2f v = skills_sprite[i][j].getScale();
+				skills_sprite[i][j].setOrigin(-viewport_pos.x / v.x, -viewport_pos.y / v.y);
 			}
 		}
 
-		if (skills_mode == SkillsMode::set1) {
-			if (res_manager.isEnoughGold(consts.getDamageBuffPrice())) {
-				window->draw(skills_sprite[attack_buff_skill][ready]);
-			}
-			else {
-				window->draw(skills_sprite[attack_buff_skill][not_enough_money]);
-			}
-			if (res_manager.isEnoughGold(consts.getSpeedBuffPrice())) {
-				window->draw(skills_sprite[speed_boost_skill][ready]);
-			}
-			else {
-				window->draw(skills_sprite[speed_boost_skill][not_enough_money]);
-			}
-			if (res_manager.isEnoughGold(consts.getAttackAbilityPrice())) {
-				window->draw(skills_sprite[rocket_skill][ready]);
-			}
-			else {
-				window->draw(skills_sprite[rocket_skill][not_enough_money]);
-			}
-			if (res_manager.isEnoughGold(consts.getHealBuffPrice())) {
-				window->draw(skills_sprite[heal_skill][ready]);
-			}
-			else {
-				window->draw(skills_sprite[heal_skill][not_enough_money]);
-			}
-		}
-		else {
-			if (res_manager.isEnoughGold(consts.getBaseDomePrice())) {
-				window->draw(skills_sprite[dome_struct][ready]);
-			}
-			else {
-				window->draw(skills_sprite[dome_struct][not_enough_money]);
-			}
-			if (res_manager.isEnoughGold(consts.getBaseSciencePrice())) {
-				window->draw(skills_sprite[science_struct][ready]);
-			}
-			else {
-				window->draw(skills_sprite[science_struct][not_enough_money]);
-			}
-			if (res_manager.isEnoughGold(consts.getBaseGoldPrice())) {
-				window->draw(skills_sprite[gold_struct][ready]);
-			}
-			else {
-				window->draw(skills_sprite[gold_struct][not_enough_money]);
-			}
-			if (res_manager.isEnoughGold(consts.getBaseTurretPrice())) {
-				window->draw(skills_sprite[turret_struct][ready]);
-			}
-			else {
-				window->draw(skills_sprite[turret_struct][not_enough_money]);
-			}
-		}
+        if (game_status == GameStatus::game_hero_mode) {
+
+            if (skills_mode == SkillsMode::set1) {
+                if (res_manager.isEnoughGold(consts.getDamageBuffPrice())) {
+                    window->draw(skills_sprite[attack_buff_skill][ready]);
+                }
+                else {
+                    window->draw(skills_sprite[attack_buff_skill][not_enough_money]);
+                }
+                if (res_manager.isEnoughGold(consts.getSpeedBuffPrice())) {
+                    window->draw(skills_sprite[speed_boost_skill][ready]);
+                }
+                else {
+                    window->draw(skills_sprite[speed_boost_skill][not_enough_money]);
+                }
+                if (res_manager.isEnoughGold(consts.getAttackAbilityPrice())) {
+                    window->draw(skills_sprite[rocket_skill][ready]);
+                }
+                else {
+                    window->draw(skills_sprite[rocket_skill][not_enough_money]);
+                }
+                if (res_manager.isEnoughGold(consts.getHealBuffPrice())) {
+                    window->draw(skills_sprite[heal_skill][ready]);
+                }
+                else {
+                    window->draw(skills_sprite[heal_skill][not_enough_money]);
+                }
+            }
+            else {
+                if (res_manager.isEnoughGold(consts.getBaseDomePrice())) {
+                    window->draw(skills_sprite[dome_struct][ready]);
+                }
+                else {
+                    window->draw(skills_sprite[dome_struct][not_enough_money]);
+                }
+                if (res_manager.isEnoughGold(consts.getBaseSciencePrice())) {
+                    window->draw(skills_sprite[science_struct][ready]);
+                }
+                else {
+                    window->draw(skills_sprite[science_struct][not_enough_money]);
+                }
+                if (res_manager.isEnoughGold(consts.getBaseGoldPrice())) {
+                    window->draw(skills_sprite[gold_struct][ready]);
+                }
+                else {
+                    window->draw(skills_sprite[gold_struct][not_enough_money]);
+                }
+                if (res_manager.isEnoughGold(consts.getBaseTurretPrice())) {
+                    window->draw(skills_sprite[turret_struct][ready]);
+                }
+                else {
+                    window->draw(skills_sprite[turret_struct][not_enough_money]);
+                }
+            }
+        }
 
 		// hero HP draw
 		sf::RectangleShape hp_rectangle(sf::Vector2f(window->getSize().x * hero_hp_percent * 1.2, window->getSize().y * 1.2 / 40));

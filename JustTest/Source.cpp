@@ -41,6 +41,7 @@ void gameCycle(std::string map_name) {
 	int last_mode_change = 0;    // number of frame where you changed mode last time
 	int last_build = 0;    // number of frame where you built smth last time
 	int last_pause = 0;    // number of frame where you paused game last time
+    int last_research_open = 0; // number of frame where you opened research list last time
 
 	GameStatus prev_game_status = pause;
 
@@ -55,11 +56,16 @@ void gameCycle(std::string map_name) {
 	Map object_presets("redactor_resources/object_templates.map");
 	GUIManager gui_manager(object_presets.getObjectsBuffer(), window.getSize().y);
 
-	sf::Texture background_texture;
-	background_texture.loadFromFile("background/main_background.png");
-	sf::Sprite background_sprite;
-	background_sprite.setTexture(background_texture);
-	background_sprite.setOrigin(sf::Vector2f((int)background_texture.getSize().x / 2, (int)background_texture.getSize().y / 2));
+	sf::Texture main_background_texture, research_background_texture;
+    main_background_texture.loadFromFile("background/main_background.png");
+    research_background_texture.loadFromFile("background/research_background.png");
+
+	sf::Sprite main_background_sprite, research_background_sprite;
+    main_background_sprite.setTexture(main_background_texture);
+    main_background_sprite.setOrigin(sf::Vector2f((int)main_background_texture.getSize().x / 2, (int)main_background_texture.getSize().y / 2));
+    research_background_sprite.setTexture(research_background_texture);
+    research_background_sprite.setOrigin(sf::Vector2f((int)research_background_texture.getSize().x / 2, (int)research_background_texture.getSize().y / 2));
+
 	sf::Vector2f strategic_back_pos, main_back_pos;
 
 	game_status = game_hero_mode;
@@ -99,12 +105,12 @@ void gameCycle(std::string map_name) {
 
 			
 			if (!(game_status == game_strategic_mode || game_status == pause)) {
-				background_sprite.setPosition(main_back_pos);
-				background_sprite.setScale(sf::Vector2f(3, 3));
+				main_background_sprite.setPosition(main_back_pos);
+                main_background_sprite.setScale(sf::Vector2f(3, 3));
 			}
 			else {
-				background_sprite.setPosition(strategic_back_pos);
-				background_sprite.setScale(sf::Vector2f(8, 8));
+                main_background_sprite.setPosition(strategic_back_pos);
+                main_background_sprite.setScale(sf::Vector2f(8, 8));
 			}
 
 			if (game_status == game_hero_mode) {
@@ -122,7 +128,7 @@ void gameCycle(std::string map_name) {
 				XINPUT_VIBRATION vibration;
 				ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
 				vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
-				vibration.wRightMotorSpeed = 64000; // use any value between 0-65535 here
+				vibration.wRightMotorSpeed = 65535; // use any value between 0-65535 here
 				XInputSetState(0, &vibration);
 			}
 			else {
@@ -136,10 +142,12 @@ void gameCycle(std::string map_name) {
 			// game cycle
 
 			// resource manager control
-			if (game_status == pause) {
+			if (game_status != pause) {
 				res_manager.processFrame();
-				gui_manager.forceSetTopSign("Pause", 0.01);
-			}
+            }
+            else {
+                gui_manager.forceSetTopSign("Pause", 0.01);
+            }
 
 			gui_manager.setText(std::to_string((int)res_manager.getGold()), 0.01, gold_sign, Point(-(int)window.getSize().x / 2, -(int)window.getSize().y / 2), 30);
 			gui_manager.setText(std::to_string((int)res_manager.getResearch()), 0.01, research_sign, Point(-(int)window.getSize().x / 2, -(int)window.getSize().y / 2 + 50), 30);
@@ -167,7 +175,7 @@ void gameCycle(std::string map_name) {
 			
 			if (is_game_cycle) {
 				// set background
-				window.draw(background_sprite);
+				window.draw(main_background_sprite);
 
 
 				is_game_cycle = visual_ctrl.processFrame(&window, game_map1.getObjectsBuffer());
@@ -510,6 +518,10 @@ void gameCycle(std::string map_name) {
 						}
 					}
 				}
+                if ((sf::Keyboard::isKeyPressed(sf::Keyboard::R) || sf::Joystick::isButtonPressed(0, BACK)) && (frame_num - last_research_open) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
+                    last_research_open = frame_num;
+                    prev_game_status = game_status;
+                }
 			}
 
 			if (!(game_status == game_strategic_mode || game_status == pause)) {
@@ -562,8 +574,21 @@ void gameCycle(std::string map_name) {
 			}
 		}
 		if (game_status == game_over) {
-
+            return;
 		}
+        if (game_status == research) {
+            research_background_sprite.setScale(window.getSize().x / research_background_texture.getSize().x, window.getSize().y / research_background_texture.getSize().y);
+            research_background_sprite.setPosition(0, 0);
+
+            window.draw(research_background_sprite);
+
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::R) || sf::Joystick::isButtonPressed(0, BACK)) && (frame_num - last_research_open) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
+                last_research_open = frame_num;
+                game_status = prev_game_status;
+            }
+
+
+        }
 
 		vibration_time--;
 
