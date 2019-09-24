@@ -117,6 +117,9 @@
     <ClInclude Include="GameStatus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ParserInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
