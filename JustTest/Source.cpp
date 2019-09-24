@@ -4,6 +4,7 @@
 #include "ResourceManager.h"
 #include "FPS.h"
 #include "GameStatus.h"
+#include "Research.h"
 
 #include <chrono>
 #include <Windows.h>
@@ -51,7 +52,8 @@ void gameCycle(std::string map_name) {
 	GUIVisualController gui_visual_ctrl(&window);
 	Map game_map1("maps/" + map_name + ".map");
 
-	res_manager.clear(settings.getStartGold(), 5);
+	resource_manager.clear(settings.getStartGold(), 5);
+    research_manager.initResearch();
 
 	Map object_presets("redactor_resources/object_templates.map");
 	GUIManager gui_manager(object_presets.getObjectsBuffer(), window.getSize().y);
@@ -143,14 +145,14 @@ void gameCycle(std::string map_name) {
 
 			// resource manager control
 			if (game_status != pause) {
-				res_manager.processFrame();
+				resource_manager.processFrame();
             }
             else {
                 gui_manager.forceSetTopSign("Pause", 0.01);
             }
 
-			gui_manager.setText(std::to_string((int)res_manager.getGold()), 0.01, gold_sign, Point(-(int)window.getSize().x / 2, -(int)window.getSize().y / 2), 30);
-			gui_manager.setText(std::to_string((int)res_manager.getResearch()), 0.01, research_sign, Point(-(int)window.getSize().x / 2, -(int)window.getSize().y / 2 + 50), 30);
+			gui_manager.setText(std::to_string((int)resource_manager.getGold()), 0.01, gold_sign, Point(-(int)window.getSize().x / 2, -(int)window.getSize().y / 2), 30);
+			gui_manager.setText(std::to_string((int)resource_manager.getResearch()), 0.01, research_sign, Point(-(int)window.getSize().x / 2, -(int)window.getSize().y / 2 + 50), 30);
 
 			if (skills_mode == set1) {
 				gui_manager.setText("Ability Mode", 0.01, skill_status_sign, Point(window.getSize().x / 2 - 150, -(int)window.getSize().y / 2), 50);
@@ -389,9 +391,9 @@ void gameCycle(std::string map_name) {
 								switch (faction) {
 								case null_faction:
 								case hero_faction:
-									if (res_manager.spendGold(consts.getBaseDomePrice())) {
+									if (resource_manager.spendGold(consts.getBaseDomePrice())) {
 										if (!game_map1.addStructure(game_map1.getClosestAsteroid(), dome)) {
-											res_manager.addGold(consts.getBaseDomePrice());
+											resource_manager.addGold(consts.getBaseDomePrice());
 										}
 										game_map1.getClosestAsteroid()->setFaction(hero_faction);
 									}
@@ -412,7 +414,7 @@ void gameCycle(std::string map_name) {
 					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) || sf::Joystick::isButtonPressed(0, X)) && (frame_num - last_build) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
 						if (skills_mode == set1) {
 							// hero speed increase
-							if (res_manager.spendGold(consts.getSpeedBuffPrice())) {
+							if (resource_manager.spendGold(consts.getSpeedBuffPrice())) {
 								hero_object->setEffect(Effect(1200, move_speed_buff));
 								last_build = frame_num + consts.getFPSLock();
 							}
@@ -422,9 +424,9 @@ void gameCycle(std::string map_name) {
 								int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
 								switch (faction) {
 								case hero_faction:
-									if (res_manager.spendGold(consts.getBaseTurretPrice())) {
+									if (resource_manager.spendGold(consts.getBaseTurretPrice())) {
 										if (!game_map1.addStructure(game_map1.getClosestAsteroid(), turret)) {
-											res_manager.addGold(consts.getBaseTurretPrice());
+											resource_manager.addGold(consts.getBaseTurretPrice());
 										}
 										game_map1.getClosestAsteroid()->setFaction(hero_faction);
 									}
@@ -438,7 +440,7 @@ void gameCycle(std::string map_name) {
 						if (skills_mode == set1) {
 							// attack buff for asteroid
 							if (game_map1.getClosestAsteroid() != nullptr) {
-								if (res_manager.spendGold(consts.getDamageBuffPrice())) {
+								if (resource_manager.spendGold(consts.getDamageBuffPrice())) {
 									game_map1.setAsteroidBuff(Effect(1200, EffectList::attack_speed_buff), game_map1.getClosestAsteroid());
 									game_map1.setAsteroidBuff(Effect(1200, EffectList::damage_buff), game_map1.getClosestAsteroid());
 									last_build = frame_num + consts.getFPSLock();
@@ -450,12 +452,12 @@ void gameCycle(std::string map_name) {
 								int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
 								switch (faction) {
 								case hero_faction:
-									if (res_manager.spendGold(consts.getBaseGoldPrice())) {
+									if (resource_manager.spendGold(consts.getBaseGoldPrice())) {
 										if (!game_map1.addStructure(game_map1.getClosestAsteroid(), gold)) {
-											res_manager.addGold(consts.getBaseGoldPrice());
+											resource_manager.addGold(consts.getBaseGoldPrice());
 										}
 										else {
-											res_manager.changeGoldIncome(consts.getBaseGoldIncome());
+											resource_manager.changeGoldIncome(consts.getBaseGoldIncome());
 										}
 										game_map1.getClosestAsteroid()->setFaction(hero_faction);
 									}
@@ -469,7 +471,7 @@ void gameCycle(std::string map_name) {
 						if (skills_mode == set1) {
 							// heal for asteroid and self
 							if (game_map1.getClosestAsteroid() != nullptr) {
-								if (res_manager.spendGold(consts.getHealBuffPrice())) {
+								if (resource_manager.spendGold(consts.getHealBuffPrice())) {
 									game_map1.setAsteroidBuff(Effect(1, const_heal), game_map1.getClosestAsteroid());
 									game_map1.setAsteroidBuff(Effect(1200, regen_buff), game_map1.getClosestAsteroid());
 								}
@@ -483,12 +485,12 @@ void gameCycle(std::string map_name) {
 								int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
 								switch (faction) {
 								case hero_faction:
-									if (res_manager.spendGold(consts.getBaseSciencePrice())) {
+									if (resource_manager.spendGold(consts.getBaseSciencePrice())) {
 										if (!game_map1.addStructure(game_map1.getClosestAsteroid(), science)) {
-											res_manager.addGold(consts.getBaseSciencePrice());
+											resource_manager.addGold(consts.getBaseSciencePrice());
 										}
 										else {
-											res_manager.changeResearchIncome(consts.getBaseResearchIncome());
+											resource_manager.changeResearchIncome(consts.getBaseResearchIncome());
 										}
 										game_map1.getClosestAsteroid()->setFaction(hero_faction);
 									}
@@ -577,16 +579,18 @@ void gameCycle(std::string map_name) {
             return;
 		}
         if (game_status == research) {
-            research_background_sprite.setScale(window.getSize().x / research_background_texture.getSize().x, window.getSize().y / research_background_texture.getSize().y);
-            research_background_sprite.setPosition(0, 0);
-
-            window.draw(research_background_sprite);
 
             if ((sf::Keyboard::isKeyPressed(sf::Keyboard::R) || sf::Joystick::isButtonPressed(0, BACK)) && (frame_num - last_research_open) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
                 last_research_open = frame_num;
                 game_status = prev_game_status;
             }
 
+            research_background_sprite.setScale(window.getSize().x / research_background_texture.getSize().x, window.getSize().y / research_background_texture.getSize().y);
+            research_background_sprite.setPosition(0, 0);
+
+            window.draw(research_background_sprite);
+
+            
 
         }
 

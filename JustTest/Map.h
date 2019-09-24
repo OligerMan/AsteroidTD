@@ -365,10 +365,10 @@ class Map {
 						hero_object = nullptr;
 					}
 					if (objects[layer][i]->getObjectType() == gold && objects[layer][i]->getUnitInfo()->getFaction() == hero_faction) {
-						res_manager.changeGoldIncome(-consts.getBaseGoldIncome());
+						resource_manager.changeGoldIncome(-consts.getBaseGoldIncome());
 					}
 					if (objects[layer][i]->getObjectType() == science && objects[layer][i]->getUnitInfo()->getFaction() == hero_faction) {
-						res_manager.changeResearchIncome(-consts.getBaseResearchIncome());
+						resource_manager.changeResearchIncome(-consts.getBaseResearchIncome());
 					}
 					delete objects[layer][i];
 					objects[layer].erase(objects[layer].begin() + i);

@@ -248,25 +248,25 @@ public:
         if (game_status == GameStatus::game_hero_mode) {
 
             if (skills_mode == SkillsMode::set1) {
-                if (res_manager.isEnoughGold(consts.getDamageBuffPrice())) {
+                if (resource_manager.isEnoughGold(consts.getDamageBuffPrice())) {
                     window->draw(skills_sprite[attack_buff_skill][ready]);
                 }
                 else {
                     window->draw(skills_sprite[attack_buff_skill][not_enough_money]);
                 }
-                if (res_manager.isEnoughGold(consts.getSpeedBuffPrice())) {
+                if (resource_manager.isEnoughGold(consts.getSpeedBuffPrice())) {
                     window->draw(skills_sprite[speed_boost_skill][ready]);
                 }
                 else {
                     window->draw(skills_sprite[speed_boost_skill][not_enough_money]);
                 }
-                if (res_manager.isEnoughGold(consts.getAttackAbilityPrice())) {
+                if (resource_manager.isEnoughGold(consts.getAttackAbilityPrice())) {
                     window->draw(skills_sprite[rocket_skill][ready]);
                 }
                 else {
                     window->draw(skills_sprite[rocket_skill][not_enough_money]);
                 }
-                if (res_manager.isEnoughGold(consts.getHealBuffPrice())) {
+                if (resource_manager.isEnoughGold(consts.getHealBuffPrice())) {
                     window->draw(skills_sprite[heal_skill][ready]);
                 }
                 else {
@@ -274,25 +274,25 @@ public:
                 }
             }
             else {
-                if (res_manager.isEnoughGold(consts.getBaseDomePrice())) {
+                if (resource_manager.isEnoughGold(consts.getBaseDomePrice())) {
                     window->draw(skills_sprite[dome_struct][ready]);
                 }
                 else {
                     window->draw(skills_sprite[dome_struct][not_enough_money]);
                 }
-                if (res_manager.isEnoughGold(consts.getBaseSciencePrice())) {
+                if (resource_manager.isEnoughGold(consts.getBaseSciencePrice())) {
                     window->draw(skills_sprite[science_struct][ready]);
                 }
                 else {
                     window->draw(skills_sprite[science_struct][not_enough_money]);
                 }
-                if (res_manager.isEnoughGold(consts.getBaseGoldPrice())) {
+                if (resource_manager.isEnoughGold(consts.getBaseGoldPrice())) {
                     window->draw(skills_sprite[gold_struct][ready]);
                 }
                 else {
                     window->draw(skills_sprite[gold_struct][not_enough_money]);
                 }
-                if (res_manager.isEnoughGold(consts.getBaseTurretPrice())) {
+                if (resource_manager.isEnoughGold(consts.getBaseTurretPrice())) {
                     window->draw(skills_sprite[turret_struct][ready]);
                 }
                 else {

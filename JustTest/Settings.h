@@ -14,7 +14,7 @@ class Settings {
 	bool console_enabled = false;
 	bool error_output_enabled = false;
 	bool gamepad_debug_output = false;
-	bool collision_debug_mode = true;
+	bool collision_debug_mode = false;
 	bool navigation_debug_mode = false;
 	bool unit_info_debug = false;
 

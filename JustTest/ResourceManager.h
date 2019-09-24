@@ -96,4 +96,4 @@ public:
 		gold_income = 0;
 		research_income = 0;
 	}
-} res_manager;
+} resource_manager;
