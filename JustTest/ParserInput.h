@@ -8,8 +8,9 @@
 int getInt(std::ifstream & input_file) {
 	std::string string;
 	input_file >> string;
+	int data_i;
 	try {
-		int data_i = std::stoi(string);
+		data_i = std::stoi(string);
 	}
 	catch (std::invalid_argument err) {
 		if (settings.isErrorOutputEnabled()) {
@@ -23,13 +24,15 @@ int getInt(std::ifstream & input_file) {
 		}
 		return 0;
 	}
+	return data_i;
 }
 
 float getFloat(std::ifstream & input_file) {
 	std::string string;
 	input_file >> string;
+	float data_f;
 	try {
-		float data_f = std::stof(string);
+		data_f = std::stof(string);
 	}
 	catch (std::invalid_argument err) {
 		if (settings.isErrorOutputEnabled()) {
@@ -43,4 +46,5 @@ float getFloat(std::ifstream & input_file) {
 		}
 		return 0;
 	}
+	return data_f;
 }

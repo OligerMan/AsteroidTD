@@ -5,6 +5,7 @@
 #include "FPS.h"
 #include "GameStatus.h"
 #include "Research.h"
+#include "ResearchVisualController.h"
 
 #include <chrono>
 #include <Windows.h>
@@ -36,8 +37,9 @@ void gameCycle(std::string map_name) {
 	window.setSize(sf::Vector2u(screenW, screenH));
 	window.setPosition(sf::Vector2i(0, 0));
 
-	sf::View view1(sf::Vector2f(0.0, 0.0), sf::Vector2f(window.getSize().x * 1.2, window.getSize().y * 1.2));
-	sf::View view2(sf::Vector2f(0.0, 0.0), sf::Vector2f(window.getSize().x * 5, window.getSize().y * 5));
+	sf::View view1(sf::Vector2f(0.0, 0.0), sf::Vector2f(window.getSize().x * 1.2, window.getSize().y * 1.2));  // main game mode
+	sf::View view2(sf::Vector2f(0.0, 0.0), sf::Vector2f(window.getSize().x * 5, window.getSize().y * 5));      // strategic view
+	sf::View view3(sf::Vector2f(0.0, 0.0), sf::Vector2f(window.getSize().x, window.getSize().y));      // research view
 	int last_view_change = 0;    // number of frame where you changed view last time
 	int last_mode_change = 0;    // number of frame where you changed mode last time
 	int last_build = 0;    // number of frame where you built smth last time
@@ -50,10 +52,14 @@ void gameCycle(std::string map_name) {
 
 	VisualController visual_ctrl;
 	GUIVisualController gui_visual_ctrl(&window);
+	ResearchVisualController res_visual_ctrl;
 	Map game_map1("maps/" + map_name + ".map");
 
 	resource_manager.clear(settings.getStartGold(), 5);
-    research_manager.initResearch();
+    research_manager.initResearch("research.cfg");
+	research_manager.setGraphSize();
+	std::vector<Research *> research_list = research_manager.getResearchArray();
+	std::vector<ResearchNode *> research_graph = research_manager.getResearchGraph();
 
 	Map object_presets("redactor_resources/object_templates.map");
 	GUIManager gui_manager(object_presets.getObjectsBuffer(), window.getSize().y);
@@ -520,10 +526,11 @@ void gameCycle(std::string map_name) {
 						}
 					}
 				}
-                if ((sf::Keyboard::isKeyPressed(sf::Keyboard::R) || sf::Joystick::isButtonPressed(0, BACK)) && (frame_num - last_research_open) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
-                    last_research_open = frame_num;
-                    prev_game_status = game_status;
-                }
+				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::F) || sf::Joystick::isButtonPressed(0, BACK)) && (frame_num - last_research_open) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
+					last_research_open = frame_num;
+					prev_game_status = game_status;
+					game_status = research;
+				}
 			}
 
 			if (!(game_status == game_strategic_mode || game_status == pause)) {
@@ -580,19 +587,22 @@ void gameCycle(std::string map_name) {
 		}
         if (game_status == research) {
 
-            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::R) || sf::Joystick::isButtonPressed(0, BACK)) && (frame_num - last_research_open) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::F) || sf::Joystick::isButtonPressed(0, BACK)) && (frame_num - last_research_open) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
                 last_research_open = frame_num;
                 game_status = prev_game_status;
+				prev_game_status = research;
             }
 
             research_background_sprite.setScale(window.getSize().x / research_background_texture.getSize().x, window.getSize().y / research_background_texture.getSize().y);
             research_background_sprite.setPosition(0, 0);
 
-            window.draw(research_background_sprite);
+			view3.setCenter(0, 0);
+			window.setView(view3);
+            window.clear(sf::Color::Black);
 
-            
-
+			res_visual_ctrl.processFrame(&window);
         }
+
 
 		vibration_time--;
 
@@ -604,7 +614,7 @@ void gameCycle(std::string map_name) {
 int main() {
 
 	HWND hWnd = GetConsoleWindow();
-	ShowWindow(hWnd, SW_HIDE);
+	//ShowWindow(hWnd, SW_HIDE);
 
 	std::string input;
 

@@ -139,6 +139,7 @@
     <ClInclude Include="ObjectTypes.h" />
     <ClInclude Include="ParserInput.h" />
     <ClInclude Include="Research.h" />
+    <ClInclude Include="ResearchVisualController.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="StructureSetGeneration.h" />
@@ -156,6 +157,7 @@
     <None Include="config.cfg" />
     <None Include="packages.config" />
     <None Include="redactor_resources\object_templates.map" />
+    <None Include="research.cfg" />
     <None Include="unit_info\asteroid.unit" />
     <None Include="unit_info\dome.unit" />
     <None Include="unit_info\hero.unit" />

@@ -120,6 +120,9 @@
     <ClInclude Include="ParserInput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ResearchVisualController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -164,6 +167,9 @@
     </None>
     <None Include="unit_info\dome.unit">
       <Filter>Resource Files\objects\dome</Filter>
+    </None>
+    <None Include="research.cfg">
+      <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -38,6 +38,9 @@ class Constants {
 	const float skills_icon_shift_radius = 100;
 	const float skills_icon_border = 20;
 
+	const float research_icon_size = 120;
+	const float research_icon_border = 100;
+
 public:
 
 	const double getSpeedDamageThreshold() {
@@ -154,5 +157,9 @@ public:
 
 	const float getSkillsIconBorder() {
 		return skills_icon_border;
+	}
+
+	const float getResearchIconSize() {
+		return research_icon_size;
 	}
 } consts;
