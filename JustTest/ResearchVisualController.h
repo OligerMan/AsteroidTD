@@ -83,7 +83,7 @@ public:
 		Point graph_size = research_manager.getGraphSize();
 
 		sprite->setScale(sf::Vector2f(consts.getResearchIconSize() / sprite->getTexture()->getSize().x, consts.getResearchIconSize() / sprite->getTexture()->getSize().y));
-		sprite->setOrigin((consts.getResearchIconSize() + graph_size.x - lu_corner.x * 2) / sprite->getScale().x / 2, (consts.getResearchIconSize() + graph_size.y - lu_corner.y * 2) / sprite->getScale().y / 2);
+		sprite->setOrigin((consts.getResearchIconSize()) / sprite->getScale().x / 2, (consts.getResearchIconSize()) / sprite->getScale().y / 2);
 		
 		window->draw(*sprite);
 	}

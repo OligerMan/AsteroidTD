@@ -598,7 +598,6 @@ void gameCycle(std::string map_name) {
             research_background_sprite.setScale(window.getSize().x / research_background_texture.getSize().x, window.getSize().y / research_background_texture.getSize().y);
             research_background_sprite.setPosition(0, 0);
 
-			view3.setCenter(0, 0);
 			window.setView(view3);
             window.clear(sf::Color::Black);
 
@@ -644,11 +643,48 @@ void gameCycle(std::string map_name) {
 			}
 			move_vector.normalize();
 
-			ResearchNode * next_research = nullptr;
-			for (int i = 0; i < research_graph.size(); i++) {
-				if()
-			}
+			if (move_vector.x != 0 || move_vector.y != 0) {
 
+				int next_research_index = -1;
+				double min_distance = 1e9;
+
+				for (int i = 0; i < research_graph.size(); i++) {
+					double angle_diff =
+						(std::atan2(move_vector.x, move_vector.y) -
+							std::atan2(
+								research_graph[i]->pos.x - research_graph[cur_research_index]->pos.x,
+								research_graph[i]->pos.y - research_graph[cur_research_index]->pos.y));
+
+					if (abs(angle_diff) > 0.000001) {     // angle_diff is not close to zero
+						if (abs(angle_diff) > abs(angle_diff + 2 * PI)) {
+							angle_diff += 2 * PI;
+						}
+						if (abs(angle_diff) > abs(angle_diff - 2 * PI)) {
+							angle_diff -= 2 * PI;
+						}
+					}
+					if (abs(angle_diff) < PI / 8.0) {
+						if (min_distance > (research_graph[i]->pos - research_graph[cur_research_index]->pos).getLength() && (research_graph[i]->pos - research_graph[cur_research_index]->pos).getLength() > 0.01 /*not close to zero*/) {
+							next_research_index = i;
+							min_distance = (research_graph[i]->pos - research_graph[cur_research_index]->pos).getLength();
+						}
+					}
+					std::cout << "Angle " << angle_diff << std::endl;
+				}
+
+				std::cout << std::atan2(move_vector.x, move_vector.y) << std::endl;
+
+				if (next_research_index != -1 && ((frame_num - last_research_choice) > consts.getFPSLock() / 2)) {
+					cur_research_index = next_research_index;
+					last_research_choice = frame_num;
+				}
+			}
+			
+
+			const double view_speed_coef = 0.03;    // must be from 0 to 1, where 0 for static camera and 1 for camera istantly over hero
+			Point research_pos = research_graph[cur_research_index]->pos;
+			Point diff = (research_pos - Point(view3.getCenter())) * view_speed_coef * consts.getFPSLock() / fps.getFPS();
+			view3.setCenter(view3.getCenter() + sf::Vector2f(diff.x, diff.y));
         }
 
 
