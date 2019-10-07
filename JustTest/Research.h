@@ -232,7 +232,16 @@ public:
 	}
 
 	bool isResearchActive(int num) {
-		return (research_list[num]->cost <= resource_manager.getGold());
+		for (int i = 0; i < graph[num]->parents.size(); i++) {
+			if (!research_list[graph[num]->parents[i]]->unlocked) {
+				return false;
+			}
+		}
+		return resource_manager.isEnoughResearch(research_list[num]->cost);
+	}
+
+	bool isResearchUnlocked(int num) {
+		return research_list[num]->unlocked;
 	}
 
 	std::vector<Research *>  getResearchArray() {

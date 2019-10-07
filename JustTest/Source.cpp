@@ -663,16 +663,14 @@ void gameCycle(std::string map_name) {
 							angle_diff -= 2 * PI;
 						}
 					}
-					if (abs(angle_diff) < PI / 8.0) {
+					if (abs(angle_diff) <= PI / 8.0) {
 						if (min_distance > (research_graph[i]->pos - research_graph[cur_research_index]->pos).getLength() && (research_graph[i]->pos - research_graph[cur_research_index]->pos).getLength() > 0.01 /*not close to zero*/) {
 							next_research_index = i;
 							min_distance = (research_graph[i]->pos - research_graph[cur_research_index]->pos).getLength();
 						}
 					}
-					std::cout << "Angle " << angle_diff << std::endl;
 				}
 
-				std::cout << std::atan2(move_vector.x, move_vector.y) << std::endl;
 
 				if (next_research_index != -1 && ((frame_num - last_research_choice) > consts.getFPSLock() / 2)) {
 					cur_research_index = next_research_index;
@@ -680,6 +678,12 @@ void gameCycle(std::string map_name) {
 				}
 			}
 			
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+				if (!research_list[cur_research_index]->unlocked && research_manager.isResearchActive(cur_research_index)) {
+					resource_manager.spendResearch(research_list[cur_research_index]->cost);
+					research_list[cur_research_index]->unlocked = true;
+				}
+			}
 
 			const double view_speed_coef = 0.03;    // must be from 0 to 1, where 0 for static camera and 1 for camera istantly over hero
 			Point research_pos = research_graph[cur_research_index]->pos;

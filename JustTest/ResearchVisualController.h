@@ -32,12 +32,14 @@ class ResearchVisualController {
 				std::cout << "Research " << (*research_names)[res_cnt] << " sprite loading" << std::endl;
 			}
 
-			sf::Texture active, notactive;
+			sf::Texture active, notactive, unlocked;
 			active.loadFromFile(path + "\\" + (*research_names)[res_cnt] + "\\" + "active.png");
 			notactive.loadFromFile(path + "\\" + (*research_names)[res_cnt] + "\\" + "notactive.png");
+			unlocked.loadFromFile(path + "\\" + (*research_names)[res_cnt] + "\\" + "unlocked.png");
 
 			texture_buffer[res_cnt].push_back(notactive);
 			texture_buffer[res_cnt].push_back(active);
+			texture_buffer[res_cnt].push_back(unlocked);
 		}
 		if (settings.isSpriteDebugOutputEnabled()) {
 			std::cout << " -- Research sprites loading completed -- " << std::endl << std::endl;
@@ -90,8 +92,25 @@ public:
 
 	bool processFrame(sf::RenderWindow * window) {
 		int res_amount = research_manager.getResearchAmount();
+		for (int i = 0; i < res_amount; i++) {   // draw connections between nodes
+			ResearchNode * node = research_manager.getResearchNode(i);
+			for (int par_num = 0; par_num < node->parents.size(); par_num++) {
+				ResearchNode * par_node = research_manager.getResearchNode(node->parents[par_num]);
+				sf::Vertex line[] =
+				{
+					sf::Vertex(sf::Vector2f(node->pos.x, node->pos.y)),
+					sf::Vertex(sf::Vector2f(par_node->pos.x, par_node->pos.y))
+				};
+				line->color = sf::Color::White;
+
+				window->draw(line, 2, sf::Lines);
+			}
+		}
 		for (int i = 0; i < res_amount; i++) {
 			sprite_buffer[i].setTexture(texture_buffer[i][research_manager.isResearchActive(i)]);
+			if (research_manager.isResearchUnlocked(i)) {
+				sprite_buffer[i].setTexture(texture_buffer[i][2]);
+			}
 			drawResearch(research_manager.getResearchNode(i), window);
 		}
 
