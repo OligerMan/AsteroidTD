@@ -15,7 +15,7 @@ e:\projects\asteroidtd\justtest\GameConstants.h(15): warning C4305: 'initializin
 e:\projects\asteroidtd\justtest\GameConstants.h(29): warning C4305: 'initializing': truncation from 'double' to 'const float'
 e:\projects\asteroidtd\justtest\GameConstants.h(30): warning C4305: 'initializing': truncation from 'double' to 'const float'
 e:\projects\asteroidtd\justtest\GameConstants.h(33): warning C4305: 'initializing': truncation from 'double' to 'const float'
-e:\projects\asteroidtd\justtest\GameConstants.h(74): warning C4244: 'return': conversion from 'const double' to 'const float', possible loss of data
+e:\projects\asteroidtd\justtest\GameConstants.h(75): warning C4244: 'return': conversion from 'const double' to 'const float', possible loss of data
 e:\projects\asteroidtd\justtest\FPS.h(11): warning C4305: 'initializing': truncation from 'double' to 'const float'
 e:\projects\asteroidtd\justtest\FPS.h(21): warning C4244: 'initializing': conversion from '__int64' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\FPS.h(23): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
@@ -110,47 +110,49 @@ e:\projects\asteroidtd\justtest\GUIManager.h(141): warning C4244: '=': conversio
 e:\projects\asteroidtd\justtest\GUIManager.h(147): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 e:\projects\asteroidtd\justtest\GUIManager.h(158): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\GUIManager.h(164): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-e:\projects\asteroidtd\justtest\Research.h(134): warning C4101: 'data_f': unreferenced local variable
-e:\projects\asteroidtd\justtest\Research.h(135): warning C4101: 'data_i': unreferenced local variable
-e:\projects\asteroidtd\justtest\Research.h(238): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\Research.h(88): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Research.h(148): warning C4101: 'data_f': unreferenced local variable
+e:\projects\asteroidtd\justtest\Research.h(149): warning C4101: 'data_i': unreferenced local variable
+e:\projects\asteroidtd\justtest\Research.h(251): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
 e:\projects\asteroidtd\justtest\ResearchVisualController.h(81): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\ResearchVisualController.h(82): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\ResearchVisualController.h(86): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 Source.cpp(26): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 Source.cpp(40): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 Source.cpp(41): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(50): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-Source.cpp(71): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+Source.cpp(42): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(51): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
 Source.cpp(73): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-Source.cpp(155): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(158): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(159): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(162): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(165): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(194): warning C4018: '<': signed/unsigned mismatch
-Source.cpp(195): warning C4018: '<': signed/unsigned mismatch
-Source.cpp(199): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(200): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(215): warning C4018: '<': signed/unsigned mismatch
-Source.cpp(216): warning C4018: '<': signed/unsigned mismatch
-Source.cpp(218): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-Source.cpp(221): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(222): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(237): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(238): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(295): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(298): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(301): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(304): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(307): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(385): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-Source.cpp(423): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-Source.cpp(450): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-Source.cpp(485): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-Source.cpp(562): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(563): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(572): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(573): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(594): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(75): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+Source.cpp(157): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(160): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(161): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(164): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(167): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(196): warning C4018: '<': signed/unsigned mismatch
+Source.cpp(197): warning C4018: '<': signed/unsigned mismatch
+Source.cpp(201): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(202): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(217): warning C4018: '<': signed/unsigned mismatch
+Source.cpp(218): warning C4018: '<': signed/unsigned mismatch
+Source.cpp(220): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+Source.cpp(223): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(224): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(239): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(240): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(297): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(300): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(303): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(306): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(309): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(387): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(425): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(452): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(487): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(564): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(565): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(574): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(575): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(596): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
 C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   e:\projects\asteroidtd\justtest\AStarAlgorithm.h(49): note: see reference to function template instantiation 'std::pair<Point,int>::pair<Point,double&,void,0>(_Other1 &&,_Other2) noexcept' being compiled
           with
@@ -165,9 +167,9 @@ C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): war
               _Other2=double &
           ]
   Generating code
-  89 of 2180 functions ( 4.1%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    13 functions had inline decision re-evaluated but remain unchanged
+  89 of 2183 functions ( 4.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    12 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.exe
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.pdb (Full PDB)

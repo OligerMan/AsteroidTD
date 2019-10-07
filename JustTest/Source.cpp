@@ -40,11 +40,12 @@ void gameCycle(std::string map_name) {
 	sf::View view1(sf::Vector2f(0.0, 0.0), sf::Vector2f(window.getSize().x * 1.2, window.getSize().y * 1.2));  // main game mode
 	sf::View view2(sf::Vector2f(0.0, 0.0), sf::Vector2f(window.getSize().x * 5, window.getSize().y * 5));      // strategic view
 	sf::View view3(sf::Vector2f(0.0, 0.0), sf::Vector2f(window.getSize().x, window.getSize().y));      // research view
-	int last_view_change = 0;    // number of frame where you changed view last time
-	int last_mode_change = 0;    // number of frame where you changed mode last time
-	int last_build = 0;    // number of frame where you built smth last time
-	int last_pause = 0;    // number of frame where you paused game last time
-    int last_research_open = 0; // number of frame where you opened research list last time
+	int last_view_change = 0;    // number of frame when you changed view last time
+	int last_mode_change = 0;    // number of frame when you changed mode last time
+	int last_build = 0;    // number of frame when you built smth last time
+	int last_pause = 0;    // number of frame when you paused game last time
+    int last_research_open = 0; // number of frame when you opened research list last time
+	int last_research_choice = 0; // number of frame when you chose another research last time
 
 	GameStatus prev_game_status = pause;
 
@@ -60,6 +61,7 @@ void gameCycle(std::string map_name) {
 	research_manager.setGraphSize();
 	std::vector<Research *> research_list = research_manager.getResearchArray();
 	std::vector<ResearchNode *> research_graph = research_manager.getResearchGraph();
+	int cur_research_index = 0;
 
 	Map object_presets("redactor_resources/object_templates.map");
 	GUIManager gui_manager(object_presets.getObjectsBuffer(), window.getSize().y);
@@ -601,6 +603,52 @@ void gameCycle(std::string map_name) {
             window.clear(sf::Color::Black);
 
 			res_visual_ctrl.processFrame(&window);
+
+			Point move_vector;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || 
+				sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
+				sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
+				sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+					move_vector += Point(0, -1);
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+					move_vector += Point(-1, 0);
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+					move_vector += Point(0, 1);
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+					move_vector += Point(1, 0);
+				}
+			}
+			else if (sf::Joystick::isConnected(0)) {         // gamepad input
+
+				move_vector = Point(
+					sf::Joystick::getAxisPosition(0, sf::Joystick::X),
+					sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
+
+				if (abs(move_vector.x) < 5 && abs(move_vector.y) < 5) {
+					move_vector = Point();
+				}
+
+				int buttons_count = sf::Joystick::getButtonCount(0);
+				for (int i = 0; i < buttons_count; i++) {
+					if (sf::Joystick::isButtonPressed(0, i)) {
+						if (settings.isGamepadDebugEnabled()) {
+							std::cout << "Gamepad button number " << i << " is pressed" << std::endl;
+						}
+					}
+				}
+			}
+			move_vector.normalize();
+
+			ResearchNode * next_research = nullptr;
+			for (int i = 0; i < research_graph.size(); i++) {
+				if()
+			}
+
         }
 
 

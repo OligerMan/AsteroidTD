@@ -79,10 +79,11 @@ public:
 		sf::Sprite * sprite = &sprite_buffer[obj_type];
 
 		sprite->setPosition(position.x, position.y);
+		Point lu_corner = research_manager.getLeftUpGraphCorner();
+		Point graph_size = research_manager.getGraphSize();
 
-		//sprite->setOrigin(consts.getResearchIconSize() / 2/* + (consts.getResearchIconSize() / 2/* + graph_size.x / 2) / sprite->getScale().x*/, consts.getResearchIconSize() / 2/* + (consts.getResearchIconSize() / 2/* + graph_size.y / 2) / sprite->getScale().y*/);
 		sprite->setScale(sf::Vector2f(consts.getResearchIconSize() / sprite->getTexture()->getSize().x, consts.getResearchIconSize() / sprite->getTexture()->getSize().y));
-		sprite->setOrigin((consts.getResearchIconSize()) / sprite->getScale().x / 2, (consts.getResearchIconSize()) / sprite->getScale().y / 2);
+		sprite->setOrigin((consts.getResearchIconSize() + graph_size.x - lu_corner.x * 2) / sprite->getScale().x / 2, (consts.getResearchIconSize() + graph_size.y - lu_corner.y * 2) / sprite->getScale().y / 2);
 		
 		window->draw(*sprite);
 	}
