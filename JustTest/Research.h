@@ -58,15 +58,15 @@ enum ResearchList {
 	dome_global_gold_income_lvl3,
 	dome_ultimate,
 
-	research_initial,
-	research_income_lvl1,
-	research_income_lvl2,
-	research_income_lvl3,
-	research_max_health_lvl1,
-	research_max_health_lvl2,
-	research_max_health_lvl3,
-	research_regen_lvl1,
-	research_regen_lvl2,
+	science_initial,
+	science_income_lvl1,
+	science_income_lvl2,
+	science_income_lvl3,
+	science_max_health_lvl1,
+	science_max_health_lvl2,
+	science_max_health_lvl3,
+	science_regen_lvl1,
+	science_regen_lvl2,
 
 	gold_initial,
 	gold_income_lvl1,
@@ -149,15 +149,15 @@ class ResearchManager {
 		"dome_g_gi3",
 		"dome_ultimate",
 
-		"research_init",
-		"research_inc1",   // inc = income
-		"research_inc2",
-		"research_inc3",
-		"research_mhp1",
-		"research_mhp2",
-		"research_mhp3",
-		"research_regen1",
-		"research_regen2",
+		"science_init",
+		"science_inc1",   // inc = income
+		"science_inc2",
+		"science_inc3",
+		"science_mhp1",
+		"science_mhp2",
+		"science_mhp3",
+		"science_regen1",
+		"science_regen2",
 
 		"gold_init",
 		"gold_inc1",
@@ -397,38 +397,125 @@ public:
 
 	/// turret researches block
 
-	float getTurretMaxHealthCCoef() {
+	float getTurretMaxHealthCoef() {
 		float coef = 1;
+		if (research_list[turret_initial]->unlocked) {
+			coef = 1.1;
+		}
+		if (research_list[turret_max_health_lvl1]->unlocked) {
+			coef = 1.25;
+		}
+		if (research_list[turret_max_health_lvl2]->unlocked) {
+			coef = 1.6;
+		}
+		if (research_list[turret_max_health_lvl3]->unlocked) {
+			coef = 2;
+		}
+		if (research_list[turret_ultimate]->unlocked) {
+			coef = 11;
+		}
 		return coef;
 	}
 
 	float getTurretDamageCoef() {
 		float coef = 1;
+		if (research_list[turret_initial]->unlocked) {
+			coef = 1.1;
+		}
+		if (research_list[turret_damage_lvl1]->unlocked) {
+			coef = 1.25;
+		}
+		if (research_list[turret_damage_lvl2]->unlocked) {
+			coef = 1.6;
+		}
+		if (research_list[turret_damage_lvl3]->unlocked) {
+			coef = 2;
+		}
+		if (research_list[turret_ultimate]->unlocked) {
+			coef = 6;
+		}
 		return coef;
 	}
 
 	float getTurretAttackSpeedCoef() {
 		float coef = 1;
+		if (research_list[turret_attack_speed_lvl1]->unlocked) {
+			coef = 1.5;
+		}
+		if (research_list[turret_attack_speed_lvl2]->unlocked) {
+			coef = 1.75;
+		}
 		return coef;
 	}
 
 	float getTurretRegenerationCoef() {
 		float coef = 1;
+		if (research_list[turret_regen_lvl1]->unlocked) {
+			coef = 2;
+		}
+		if (research_list[turret_regen_lvl2]->unlocked) {
+			coef = 3;
+		}
+		if (research_list[turret_ultimate]->unlocked) {
+			coef = 11;
+		}
 		return coef;
 	}
 
 	float getTurretDamageReductionCoef() {
 		float coef = 0;
+		if (research_list[turret_damage_reduction_lvl1]->unlocked) {
+			coef = 0.1;
+		}
+		if (research_list[turret_damage_reduction_lvl2]->unlocked) {
+			coef = 0.15;
+		}
+		if (research_list[turret_damage_reduction_lvl3]->unlocked) {
+			coef = 0.2;
+		}
+		if (research_list[turret_damage_reduction_lvl4]->unlocked) {
+			coef = 0.25;
+		}
+		if (research_list[turret_ultimate]->unlocked) {
+			coef = 0.5;
+		}
 		return coef;
 	}
 
 	float getTurretAttackRangeCoef() {
 		float coef = 1;
+		if (research_list[turret_range_lvl1]->unlocked) {
+			coef = 1.1;
+		}
+		if (research_list[turret_range_lvl2]->unlocked) {
+			coef = 1.15;
+		}
+		if (research_list[turret_range_lvl3]->unlocked) {
+			coef = 1.2;
+		}
+		if (research_list[turret_range_lvl4]->unlocked) {
+			coef = 1.25;
+		}
+		if (research_list[turret_ultimate]->unlocked) {
+			coef = 1.5;
+		}
 		return coef;
 	}
 
 	float getTurretLifestealCoef() {
 		float coef = 0;
+		if (research_list[turret_lifesteal_lvl1]->unlocked) {
+			coef = 0.05;
+		}
+		if (research_list[turret_lifesteal_lvl2]->unlocked) {
+			coef = 0.1;
+		}
+		if (research_list[turret_lifesteal_lvl3]->unlocked) {
+			coef = 0.15;
+		}
+		if (research_list[turret_ultimate]->unlocked) {
+			coef = 1;
+		}
 		return coef;
 	}
 
@@ -436,36 +523,126 @@ public:
 
 	float getDomeGlobalRegenCoef() {
 		float coef = 0;
+		if (research_list[dome_initial]->unlocked) {
+			coef = 0.1;
+		}
+		if (research_list[dome_global_regen_lvl1]->unlocked) {
+			coef = 0.25;
+		}
+		if (research_list[dome_global_regen_lvl1]->unlocked) {
+			coef = 0.6;
+		}
+		if (research_list[dome_global_regen_lvl1]->unlocked) {
+			coef = 1;
+		}
+		if (research_list[dome_ultimate]->unlocked) {
+			coef = 6;
+		}
 		return coef;
 	}
 
 	float getDomeMaxHealthCoef() {
 		float coef = 1;
+		if (research_list[dome_initial]->unlocked) {
+			coef = 0.1;
+		}
+		if (research_list[dome_max_health_lvl1]->unlocked) {
+			coef = 0.25;
+		}
+		if (research_list[dome_max_health_lvl2]->unlocked) {
+			coef = 0.6;
+		}
+		if (research_list[dome_max_health_lvl3]->unlocked) {
+			coef = 1;
+		}
+		if (research_list[dome_ultimate]->unlocked) {
+			coef = 6;
+		}
 		return coef;
 	}
 
 	float getDomeGlobalMaxHealthCoef() {
 		float coef = 0;
+		if (research_list[dome_global_health_lvl1]->unlocked) {
+			coef = 0.25;
+		}
+		if (research_list[dome_global_health_lvl2]->unlocked) {
+			coef = 0.65;
+		}
+		if (research_list[dome_global_health_lvl3]->unlocked) {
+			coef = 1.5;
+		}
+		if (research_list[dome_ultimate]->unlocked) {
+			coef = 4;
+		}
 		return coef;
 	}
 
 	float getDomeGlobalDamageReductionCoef() {
 		float coef = 0;
+		if (research_list[dome_global_damage_reduction_lvl1]->unlocked) {
+			coef = 0.02;
+		}
+		if (research_list[dome_global_damage_reduction_lvl2]->unlocked) {
+			coef = 0.03;
+		}
+		if (research_list[dome_global_damage_reduction_lvl3]->unlocked) {
+			coef = 0.04;
+		}
+		if (research_list[dome_ultimate]->unlocked) {
+			coef = 0.05;
+		}
 		return coef;
 	}
 
 	float getDomeGlobalDamageBonusCoef() {
-		float coef = 0;
+		float coef = 1;
+		if (research_list[dome_global_damage_lvl1]->unlocked) {
+			coef = 1.05;
+		}
+		if (research_list[dome_global_damage_lvl1]->unlocked) {
+			coef = 1.1;
+		}
+		if (research_list[dome_global_damage_lvl1]->unlocked) {
+			coef = 1.15;
+		}
+		if (research_list[dome_ultimate]->unlocked) {
+			coef = 1.5;
+		}
 		return coef;
 	}
 
 	float getDomeGlobalGoldIncomeCoef() {
 		float coef = 0;
+		if (research_list[dome_global_gold_income_lvl1]->unlocked) {
+			coef = 1.05;
+		}
+		if (research_list[dome_global_gold_income_lvl1]->unlocked) {
+			coef = 1.1;
+		}
+		if (research_list[dome_global_gold_income_lvl1]->unlocked) {
+			coef = 1.15;
+		}
+		if (research_list[dome_ultimate]->unlocked) {
+			coef = 1.5;
+		}
 		return coef;
 	}
 
 	float getDomeGlobalResearchIncomeCoef() {
 		float coef = 0;
+		if (research_list[dome_global_research_income_lvl1]->unlocked) {
+			coef = 1.05;
+		}
+		if (research_list[dome_global_research_income_lvl1]->unlocked) {
+			coef = 1.1;
+		}
+		if (research_list[dome_global_research_income_lvl1]->unlocked) {
+			coef = 1.15;
+		}
+		if (research_list[dome_ultimate]->unlocked) {
+			coef = 1.5;
+		}
 		return coef;
 	}
 
@@ -473,16 +650,46 @@ public:
 
 	float getScienceIncomeCoef() {
 		float coef = 1;
+		if (research_list[science_initial]->unlocked) {
+			coef = 1.1;
+		}
+		if (research_list[science_income_lvl1]->unlocked) {
+			coef = 1.25;
+		}
+		if (research_list[science_income_lvl2]->unlocked) {
+			coef = 1.6;
+		}
+		if (research_list[science_income_lvl3]->unlocked) {
+			coef = 2;
+		}
 		return coef;
 	}
 
 	float getScienceMaxHealthCoef() {
 		float coef = 1;
+		if (research_list[science_initial]->unlocked) {
+			coef = 1.1;
+		}
+		if (research_list[science_max_health_lvl1]->unlocked) {
+			coef = 1.25;
+		}
+		if (research_list[science_max_health_lvl1]->unlocked) {
+			coef = 1.6;
+		}
+		if (research_list[science_max_health_lvl1]->unlocked) {
+			coef = 2;
+		}
 		return coef;
 	}
 
 	float getScienceRegenCoef() {
 		float coef = 1;
+		if (research_list[science_regen_lvl1]->unlocked) {
+			coef = 2;
+		}
+		if (research_list[science_regen_lvl1]->unlocked) {
+			coef = 3;
+		}
 		return coef;
 	}
 
@@ -490,16 +697,46 @@ public:
 
 	float getGoldIncomeCoef() {
 		float coef = 1;
+		if (research_list[gold_initial]->unlocked) {
+			coef = 1.1;
+		}
+		if (research_list[gold_income_lvl1]->unlocked) {
+			coef = 1.25;
+		}
+		if (research_list[gold_income_lvl2]->unlocked) {
+			coef = 1.6;
+		}
+		if (research_list[gold_income_lvl3]->unlocked) {
+			coef = 2;
+		}
 		return coef;
 	}
 
 	float getGoldMaxHealthCoef() {
 		float coef = 1;
+		if (research_list[gold_initial]->unlocked) {
+			coef = 1.1;
+		}
+		if (research_list[gold_max_health_lvl1]->unlocked) {
+			coef = 1.25;
+		}
+		if (research_list[gold_max_health_lvl1]->unlocked) {
+			coef = 1.6;
+		}
+		if (research_list[gold_max_health_lvl1]->unlocked) {
+			coef = 2;
+		}
 		return coef;
 	}
 
 	float getGoldRegenCoef() {
 		float coef = 1;
+		if (research_list[gold_regen_lvl1]->unlocked) {
+			coef = 2;
+		}
+		if (research_list[gold_regen_lvl1]->unlocked) {
+			coef = 3;
+		}
 		return coef;
 	}
 

@@ -7,6 +7,7 @@
 #include "Effect.h"
 #include "GameConstants.h"
 #include "FPS.h"
+#include "Research.h"
 
 enum FactionList {
 	null_faction,
@@ -453,5 +454,18 @@ public:
 
 	void setEffect(Effect effect) {
 		effects.push_back(effect);
+	}
+
+	void researchApply(ObjectType type, int dome_count) {
+		switch (type) {
+		case turret:
+			max_hp *= research_manager.getDomeGlobalMaxHealthCoef() * std::pow(research_manager.getTurretMaxHealthCoef(), dome_count);
+			hp *= research_manager.getDomeGlobalMaxHealthCoef() * research_manager.getTurretMaxHealthCoef();
+			for (int i = 0; i < attack.size(); i++) {
+				attack[i].damage *= research_manager.getTurretDamageCoef() * std::pow(research_manager.getDomeGlobalDamageBonusCoef(), dome_count);
+				attack[i].cooldown /= research_manager.getTurretAttackSpeedCoef();
+			}
+			break;
+		}
 	}
 };

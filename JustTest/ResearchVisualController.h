@@ -37,9 +37,11 @@ class ResearchVisualController {
 			notactive.loadFromFile(path + "\\" + (*research_names)[res_cnt] + "\\" + "notactive.png");
 			unlocked.loadFromFile(path + "\\" + (*research_names)[res_cnt] + "\\" + "unlocked.png");
 
-			texture_buffer[res_cnt].push_back(notactive);
-			texture_buffer[res_cnt].push_back(active);
-			texture_buffer[res_cnt].push_back(unlocked);
+			int res_id = research_manager.stringToResearch((*research_names)[res_cnt]);
+
+			texture_buffer[res_id].push_back(notactive);
+			texture_buffer[res_id].push_back(active);
+			texture_buffer[res_id].push_back(unlocked);
 		}
 		if (settings.isSpriteDebugOutputEnabled()) {
 			std::cout << " -- Research sprites loading completed -- " << std::endl << std::endl;

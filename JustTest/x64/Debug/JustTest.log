@@ -100,13 +100,13 @@ e:\projects\asteroidtd\justtest\guimanager.h(141): warning C4244: '=': conversio
 e:\projects\asteroidtd\justtest\guimanager.h(147): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 e:\projects\asteroidtd\justtest\guimanager.h(158): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\guimanager.h(164): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-e:\projects\asteroidtd\justtest\research.h(88): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\research.h(148): warning C4101: 'data_f': unreferenced local variable
-e:\projects\asteroidtd\justtest\research.h(149): warning C4101: 'data_i': unreferenced local variable
-e:\projects\asteroidtd\justtest\research.h(260): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-e:\projects\asteroidtd\justtest\researchvisualcontroller.h(83): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\researchvisualcontroller.h(101): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\researchvisualcontroller.h(102): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\research.h(214): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\research.h(274): warning C4101: 'data_f': unreferenced local variable
+e:\projects\asteroidtd\justtest\research.h(275): warning C4101: 'data_i': unreferenced local variable
+e:\projects\asteroidtd\justtest\research.h(385): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\researchvisualcontroller.h(85): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\researchvisualcontroller.h(103): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\researchvisualcontroller.h(104): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\source.cpp(26): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 e:\projects\asteroidtd\justtest\source.cpp(40): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\source.cpp(41): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data

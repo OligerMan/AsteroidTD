@@ -281,6 +281,12 @@ public:
 			unit_info->setEffect(effect);
 		}
 	}
+
+	void researchApply(int dome_count) {
+		if (unit_info) {
+			unit_info->researchApply(object_type_info, dome_count);
+		}
+	}
 };
 
 bool checkObjectCollision(Object * obj1, Object * obj2) {
