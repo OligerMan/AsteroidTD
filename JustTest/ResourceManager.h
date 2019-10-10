@@ -62,19 +62,6 @@ public:
 		research += additional_research;
 	}
 
-	void changeGoldIncome(float income_diff) {
-		gold_income += income_diff;
-	}
-
-	void changeResearchIncome(float income_diff) {
-		research_income = income_diff;
-	}
-
-	void processFrame() {
-		gold += gold_income * consts.getFPSLock() / fps.getFPS();
-		research += research_income * consts.getFPSLock() / fps.getFPS();
-	}
-
 	float getGold() {
 		return gold;
 	}

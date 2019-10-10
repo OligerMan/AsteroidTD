@@ -90,6 +90,8 @@ class UnitInfo {
 	float endur = 0;     // endurance
 	bool inf_endur = true;
 
+	int dome_cnt = 0;   // for applying researches
+
 	std::vector<AttackInfo> attack;
 
 	float default_speed = 0;
@@ -285,7 +287,7 @@ public:
 
 	bool dealDamage(float damage) {
 		if (!inf_hp && damage > 0) {
-			hp = std::max(-EPS, hp - damage);
+			hp = std::max(-EPS, hp - damage * (1 - research_manager.getTurretDamageReductionCoef() - research_manager.getDomeGlobalDamageReductionCoef() * dome_cnt));
 		}
 		return (hp > 0);
 	}
@@ -457,15 +459,32 @@ public:
 	}
 
 	void researchApply(ObjectType type, int dome_count) {
+		dome_cnt = dome_count;
 		switch (type) {
 		case turret:
-			max_hp *= research_manager.getDomeGlobalMaxHealthCoef() * std::pow(research_manager.getTurretMaxHealthCoef(), dome_count);
-			hp *= research_manager.getDomeGlobalMaxHealthCoef() * research_manager.getTurretMaxHealthCoef();
+			max_hp *= (research_manager.getDomeGlobalMaxHealthCoef() * dome_count + research_manager.getTurretMaxHealthCoef());
+			hp *= (research_manager.getDomeGlobalMaxHealthCoef() * dome_count + research_manager.getTurretMaxHealthCoef());
 			for (int i = 0; i < attack.size(); i++) {
-				attack[i].damage *= research_manager.getTurretDamageCoef() * std::pow(research_manager.getDomeGlobalDamageBonusCoef(), dome_count);
+				attack[i].damage *= (research_manager.getTurretDamageCoef() + research_manager.getDomeGlobalDamageBonusCoef() * dome_count);
 				attack[i].cooldown /= research_manager.getTurretAttackSpeedCoef();
 			}
 			break;
+		case dome:
+			max_hp *= (research_manager.getDomeGlobalMaxHealthCoef() * dome_count + research_manager.getDomeMaxHealthCoef());
+			hp *= (research_manager.getDomeGlobalMaxHealthCoef() * dome_count + research_manager.getDomeMaxHealthCoef());
+			break;
+		case science:
+			max_hp *= (research_manager.getDomeGlobalMaxHealthCoef() * dome_count + research_manager.getScienceMaxHealthCoef());
+			hp *= (research_manager.getDomeGlobalMaxHealthCoef() * dome_count + research_manager.getScienceMaxHealthCoef());
+			break;
+		case gold:
+			max_hp *= (research_manager.getDomeGlobalMaxHealthCoef() * dome_count + research_manager.getGoldMaxHealthCoef());
+			hp *= (research_manager.getDomeGlobalMaxHealthCoef() * dome_count + research_manager.getGoldMaxHealthCoef());
+			break;
 		}
+	}
+
+	int getDomeCount() {
+		return dome_cnt;
 	}
 };

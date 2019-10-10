@@ -152,11 +152,8 @@ void gameCycle(std::string map_name) {
 			// game cycle
 
 			// resource manager control
-			if (game_status != pause) {
-				resource_manager.processFrame();
-            }
-            else {
-                gui_manager.forceSetTopSign("Pause", 0.01);
+			if (game_status == pause) {
+				gui_manager.forceSetTopSign("Pause", 0.01);
             }
 
 			gui_manager.setText(std::to_string((int)resource_manager.getGold()), 0.01, gold_sign, Point(-(int)window.getSize().x / 2, -(int)window.getSize().y / 2), 30);
@@ -464,9 +461,6 @@ void gameCycle(std::string map_name) {
 										if (!game_map1.addStructure(game_map1.getClosestAsteroid(), gold)) {
 											resource_manager.addGold(consts.getBaseGoldPrice());
 										}
-										else {
-											resource_manager.changeGoldIncome(consts.getBaseGoldIncome());
-										}
 										game_map1.getClosestAsteroid()->setFaction(hero_faction);
 									}
 									break;
@@ -496,9 +490,6 @@ void gameCycle(std::string map_name) {
 									if (resource_manager.spendGold(consts.getBaseSciencePrice())) {
 										if (!game_map1.addStructure(game_map1.getClosestAsteroid(), science)) {
 											resource_manager.addGold(consts.getBaseSciencePrice());
-										}
-										else {
-											resource_manager.changeResearchIncome(consts.getBaseResearchIncome());
 										}
 										game_map1.getClosestAsteroid()->setFaction(hero_faction);
 									}

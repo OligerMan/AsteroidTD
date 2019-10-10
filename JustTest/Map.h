@@ -271,7 +271,9 @@ class Map {
 											else {
 												vect = (prev_enemy->getPosition() - object1->getPosition()).getNormal();
 											}
-											if ((object1->getPosition() - prev_enemy->getPosition()).getLength() > object1->getUnitInfo()->getAngerRange()) {
+											if ((object1->getPosition() - prev_enemy->getPosition()).getLength() > object1->getUnitInfo()->getAngerRange() * 
+												((object1->getObjectType() == turret && object1->getUnitInfo()->getFaction() == hero_faction) ? research_manager.getTurretAttackRangeCoef() : 1)) {
+												
 												object1->getUnitInfo()->setEnemy(nullptr);
 											}
 											else {
@@ -294,7 +296,9 @@ class Map {
 												}
 											}
 										}
-										else if((object1->getPosition() - object2->getPosition()).getLength() <= object1->getUnitInfo()->getAngerRange()){
+										else if((object1->getPosition() - object2->getPosition()).getLength() <= object1->getUnitInfo()->getAngerRange() * 
+											((object1->getObjectType() == turret && object1->getUnitInfo()->getFaction() == hero_faction) ? research_manager.getTurretAttackRangeCoef() : 1)){
+											
 											object1->getUnitInfo()->setEnemy((void *)object2);
 										}
 									}
@@ -364,12 +368,6 @@ class Map {
 					if (objects[layer][i] == hero_object) {
 						hero_object = nullptr;
 					}
-					if (objects[layer][i]->getObjectType() == gold && objects[layer][i]->getUnitInfo()->getFaction() == hero_faction) {
-						resource_manager.changeGoldIncome(-consts.getBaseGoldIncome());
-					}
-					if (objects[layer][i]->getObjectType() == science && objects[layer][i]->getUnitInfo()->getFaction() == hero_faction) {
-						resource_manager.changeResearchIncome(-consts.getBaseResearchIncome());
-					}
 					delete objects[layer][i];
 					objects[layer].erase(objects[layer].begin() + i);
 				}
@@ -411,9 +409,11 @@ class Map {
 			case attack:
 
 				if (unit1 != nullptr && unit2 != nullptr) {
-					unit2->dealDamage(unit1->getAttackDamage(1));
-					if (unit1->isAffected(damage_buff)) {
-						unit2->dealDamage(unit1->getAttackDamage(1));
+					float damage = unit1->getAttackDamage(1) * (unit1->isAffected(damage_buff) ? 2 : 1);
+					unit2->dealDamage(damage);
+					if ((obj1->getObjectType() == turret && obj1->getUnitInfo()->getFaction() == hero_faction)) {
+						unit2->dealDamage(damage * research_manager.getDomeGlobalDamageBonusCoef() * unit1->getDomeCount());
+						unit1->grantHeal((1 + research_manager.getDomeGlobalDamageBonusCoef() * unit1->getDomeCount()) * unit1->getAttackDamage(1) * research_manager.getTurretLifestealCoef() * (unit1->isAffected(damage_buff) ? 2 : 1));
 					}
 				}
 				break;
@@ -647,7 +647,7 @@ class Map {
 		}
 	}
 
-	void processRegen() {
+	void processDomeBonuses() {
 		hero_object->getUnitInfo()->grantHeal(consts.getHeroHeal());
 		// regeneration of structures for amount of domes on asteroid
 		for (int i = 0; i < objects[landscape_layer].size(); i++) {
@@ -662,7 +662,20 @@ class Map {
 				}
 			}
 			for (int j = 0; j < attach->size(); j++) {
-				(*attach)[j]->getUnitInfo()->grantHeal(cnt * consts.getDomeHeal());
+				(*attach)[j]->getUnitInfo()->grantHeal(cnt * research_manager.getDomeGlobalRegenCoef() * consts.getDomeHeal());
+				switch ((*attach)[j]->getObjectType()) {
+				case gold:
+					(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getGoldRegenCoef());
+					resource_manager.addGold(consts.getBaseGoldIncome() * (research_manager.getGoldIncomeCoef() + cnt * research_manager.getDomeGlobalGoldIncomeCoef()) * consts.getFPSLock() / fps.getFPS());
+					break;
+				case science:
+					(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getScienceRegenCoef());
+					resource_manager.addResearch(consts.getBaseResearchIncome() * (research_manager.getScienceIncomeCoef() + cnt * research_manager.getDomeGlobalResearchIncomeCoef()) * consts.getFPSLock() / fps.getFPS());
+					break;
+				case turret:
+					(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getTurretRegenCoef());
+					break;
+				}
 			}
 		}
 	}
@@ -724,7 +737,7 @@ public:
 		processObjectSpeed();
 		processCollisionFrame();
 		updateClosestAsteroid();
-		processRegen();
+		processDomeBonuses();
 		processUnitAI();
 		processEventBuffer();
 		garbageCollector();
