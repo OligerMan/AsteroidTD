@@ -84,6 +84,7 @@ void gameCycle(std::string map_name) {
 
 	bool is_game_cycle = true;
 	int frame_num = 0;
+	int game_frame_num = 0;
 
 	Point previous_speed;
 
@@ -108,11 +109,13 @@ void gameCycle(std::string map_name) {
 		}
 
 		frame_num++;
+
 		// FPS 
 		fps.processFrame(frame_num);
 
 		if (game_status == game_hero_mode || game_status == game_strategic_mode || game_status == pause) {
 
+			game_frame_num++;
 			
 			if (!(game_status == game_strategic_mode || game_status == pause)) {
 				main_background_sprite.setPosition(main_back_pos);
@@ -167,15 +170,16 @@ void gameCycle(std::string map_name) {
 			}
 
 			if (game_status != pause) {
-				if (frame_num == next_wave) {
+				if (game_frame_num >= next_wave) {
 					if (!(game_status == game_strategic_mode)) {
-						game_map1.spawnEnemy(frame_num / 8000, Point(view1.getCenter().x, view1.getCenter().y));
+						game_map1.spawnEnemy(game_frame_num / 8000, Point(view1.getCenter().x, view1.getCenter().y));
 					}
 					else {
-						game_map1.spawnEnemy(frame_num / 8000, Point(view2.getCenter().x, view2.getCenter().y));
+						game_map1.spawnEnemy(game_frame_num / 8000, Point(view2.getCenter().x, view2.getCenter().y));
 					}
 					gui_manager.forceSetTopSign("New Wave", 5);
 					next_wave += wave_delay;
+					std::cout << "Next wave in " << next_wave << " frames" << std::endl;
 					wave_delay += 200;
 				}
 			}
@@ -290,7 +294,7 @@ void gameCycle(std::string map_name) {
 
 			if (!(game_status == game_strategic_mode)) {
 				Object * closest_asteroid = game_map1.getClosestAsteroid();
-				if (closest_asteroid != nullptr && frame_num > 1500) {
+				if (closest_asteroid != nullptr && game_frame_num > 1500) {
 					switch (closest_asteroid->getUnitInfo()->getFaction()) {
 					case null_faction:
 						gui_manager.setTopSign("Empty", 0.01);
@@ -561,7 +565,7 @@ void gameCycle(std::string map_name) {
 
 
 			if (hero_object != nullptr) {
-				const double view_speed_coef = 0.012;    // must be from 0 to 1, where 0 for static camera and 1 for camera istantly over hero
+				const double view_speed_coef = 0.05;    // must be from 0 to 1, where 0 for static camera and 1 for camera istantly over hero
 				Point hero_position = hero_object->getPosition();
 				Point diff = (hero_position - Point(view1.getCenter())) * view_speed_coef * consts.getFPSLock() / fps.getFPS();
 				view1.setCenter(view1.getCenter() + sf::Vector2f(diff.x, diff.y));
@@ -676,7 +680,7 @@ void gameCycle(std::string map_name) {
 				}
 			}
 
-			const double view_speed_coef = 0.03;    // must be from 0 to 1, where 0 for static camera and 1 for camera istantly over hero
+			const double view_speed_coef = 0.035;    // must be from 0 to 1, where 0 for static camera and 1 for camera istantly over hero
 			Point research_pos = research_graph[cur_research_index]->pos;
 			Point diff = (research_pos - Point(view3.getCenter())) * view_speed_coef * consts.getFPSLock() / fps.getFPS();
 			view3.setCenter(view3.getCenter() + sf::Vector2f(diff.x, diff.y));

@@ -32,7 +32,7 @@ class Constants {
 	const float fire_damage = 0.25;
 	const float regen_buff = 0.06;
 	const float const_heal = 250;
-	const float move_speed_buff_mult = 5;
+	const float move_speed_buff_mult = 4;
 
 	const float skills_icon_size = 120;
 	const float skills_icon_shift_radius = 100;

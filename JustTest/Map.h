@@ -341,7 +341,7 @@ class Map {
 							object->getUnitInfo()->setEnemy(object1);     // to remember who is shooting
 							object->setAutoOrigin();
 							object->setAngle(object1->getAngle());
-							object->setSpeed(Point(cos((object1->getAngle() - 90) / 180 * PI), sin((object1->getAngle() - 90) / 180 * PI)) * 5);
+							object->setSpeed(Point(cos((object1->getAngle() - 90) / 180 * PI), sin((object1->getAngle() - 90) / 180 * PI)) * 15);
 
 							addObject(object, main_layer);
 						}
@@ -936,7 +936,7 @@ public:
 			convex_hull(convex);
 		}
 
-		int group_amount = enemy_lvl * 1.5;
+		int group_amount = enemy_lvl;
 
 		while (group_amount > 0) {
 			int nearest_point = rand() % convex.size();
