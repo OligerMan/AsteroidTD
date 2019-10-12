@@ -673,7 +673,7 @@ void gameCycle(std::string map_name) {
 				}
 			}
 			
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, A)) {
 				if (!research_list[cur_research_index]->unlocked && research_manager.isResearchActive(cur_research_index)) {
 					resource_manager.spendResearch(research_list[cur_research_index]->cost);
 					research_list[cur_research_index]->unlocked = true;
