@@ -223,6 +223,9 @@ public:
 	}
 
     void initResearch(std::string path) {
+		research_list.clear();
+		graph.clear();
+
         std::ifstream input_file;
         input_file.open(path);
 

@@ -16,7 +16,8 @@ class CollisionModel {
 	Point square_border;
 	double angle = 0;
 
-	Point speed;
+	Point speed, delayed_collision_fix, delayed_collision_force_fix;
+
 	bool is_static = false;
 
 	std::vector<Circle> col_model;
@@ -135,6 +136,26 @@ public:
 
 	Point getSquareBorder(){
 		return square_border;
+	}
+
+	void changeDelayedCollisionFix(Point fix) {
+		delayed_collision_fix = fix;
+	}
+
+	Point getDelayedCollisionFix() {
+		Point ans = delayed_collision_fix;
+		delayed_collision_fix = Point();
+		return ans;
+	}
+
+	void changeDelayedCollisionForceFix(Point fix) {
+		delayed_collision_fix = fix;
+	}
+
+	Point getDelayedCollisionForceFix() {
+		Point ans = delayed_collision_fix;
+		delayed_collision_fix = Point();
+		return ans;
 	}
 };
 

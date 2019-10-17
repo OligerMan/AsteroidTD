@@ -7,7 +7,7 @@ class FPS {
 	int frame_stamp = 0;
 	std::chrono::time_point<std::chrono::system_clock> time_stamp;
 	int fps = 240;
-	const int update_time = 333;  // in milliseconds
+	int update_time = 100;  // in milliseconds
 	const float percent = 0.2;
 
 public:
@@ -28,6 +28,6 @@ public:
 	}
 
 	float getFPS() {
-		return fps;
+		return std::max(fps, 1);
 	}
 }fps;

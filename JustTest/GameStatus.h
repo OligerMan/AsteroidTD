@@ -6,7 +6,9 @@ enum GameStatus {
 	game_strategic_mode,
 	research,
 	pause,
-	game_over
+	game_over,
+	settings_list,
+	exit_to_desktop
 };
 
 enum SkillsMode {

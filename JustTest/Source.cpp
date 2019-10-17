@@ -15,27 +15,7 @@ enum XBOXGamepadButtons {
 	A,B,X,Y,LB,RB,BACK,START,LSTICK,RSTICK
 };
 
-void gameCycle(std::string map_name) {
-	collision_type_init();
-	object_type_init();
-	event_type_init();
-	sprite_type_init();
-	animation_type_init();
-	faction_type_init();
-
-	srand(time(NULL));   // setting a magic number to random generation
-
-	if (!settings.isLoaded()) {
-		std::cout << "Settings file error, enabling default settings" << std::endl;
-		settings.setDefaults();
-	}
-
-	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-	sf::RenderWindow window(sf::VideoMode(settings.getWindowWidth(), settings.getWindowHeight()), "AsteroidTD", sf::Style::None);
-	int screenW = GetSystemMetrics(SM_CXSCREEN);
-	int screenH = GetSystemMetrics(SM_CYSCREEN);
-	window.setSize(sf::Vector2u(screenW, screenH));
-	window.setPosition(sf::Vector2i(0, 0));
+void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController & visual_ctrl, GUIVisualController & gui_visual_ctrl, ResearchVisualController & res_visual_ctrl) {
 
 	sf::View view1(sf::Vector2f(0.0, 0.0), sf::Vector2f(window.getSize().x * 1.2, window.getSize().y * 1.2));  // main game mode
 	sf::View view2(sf::Vector2f(0.0, 0.0), sf::Vector2f(window.getSize().x * 5, window.getSize().y * 5));      // strategic view
@@ -51,9 +31,6 @@ void gameCycle(std::string map_name) {
 
 	window.setFramerateLimit(consts.getFPSLock());
 
-	VisualController visual_ctrl;
-	GUIVisualController gui_visual_ctrl(&window);
-	ResearchVisualController res_visual_ctrl;
 	Map game_map1("maps/" + map_name + ".map");
 
 	resource_manager.clear(settings.getStartGold(), 5);
@@ -580,6 +557,7 @@ void gameCycle(std::string map_name) {
 			}
 		}
 		if (game_status == game_over) {
+			game_status = exit_to_desktop;
             return;
 		}
         if (game_status == research) {
@@ -686,7 +664,6 @@ void gameCycle(std::string map_name) {
 			view3.setCenter(view3.getCenter() + sf::Vector2f(diff.x, diff.y));
         }
 
-
 		vibration_time--;
 
 		window.display();
@@ -696,15 +673,215 @@ void gameCycle(std::string map_name) {
 
 int main() {
 
-	HWND hWnd = GetConsoleWindow();
-	//ShowWindow(hWnd, SW_HIDE);
+	HWND console_hWnd = GetConsoleWindow();
+	//ShowWindow(console_hWnd, SW_HIDE);
 
-	std::string input;
+	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+	sf::RenderWindow window(sf::VideoMode(settings.getWindowWidth(), settings.getWindowHeight()), "AsteroidTD", sf::Style::None);
 
-	//std::cout << "Enter map name" << std::endl;
-	//std::cin >> input; // path to game map
-	input = "map2";    // for tests
-	gameCycle(input);
+	collision_type_init();
+	object_type_init();
+	event_type_init();
+	sprite_type_init();
+	animation_type_init();
+	faction_type_init();
+
+
+	srand(time(NULL));   // setting a magic number to random generation
+
+	if (!settings.isLoaded()) {
+		std::cout << "Settings file error, enabling default settings" << std::endl;
+		settings.setDefaults();
+	}
+
+	int screenW = GetSystemMetrics(SM_CXSCREEN);
+	int screenH = GetSystemMetrics(SM_CYSCREEN);
+	window.setSize(sf::Vector2u(screenW, screenH));
+	window.setPosition(sf::Vector2i(0, 0));
+
+	VisualController visual_ctrl;
+	GUIVisualController gui_visual_ctrl(&window);
+	ResearchVisualController res_visual_ctrl;
+
+	sf::Texture menu_background_texture;
+	menu_background_texture.loadFromFile("background/menu_background.png");
+	sf::Sprite menu_background_sprite;
+	menu_background_sprite.setTexture(menu_background_texture);
+	menu_background_sprite.setPosition(0, 0);
+
+	sf::Text title;
+	sf::Font base_font;
+	base_font.loadFromFile("a_Alterna.ttf");
+	
+	title.setPosition(sf::Vector2f(window.getSize().x / 2, 150));
+	title.setFillColor(sf::Color::White);
+	title.setOutlineColor(sf::Color::Black);
+	title.setOutlineThickness(1);
+	title.setCharacterSize(50);
+	title.setFont(base_font);
+
+	game_status = menu;
+
+	struct Button {
+		Point pos;
+		sf::Texture texture_default, texture_selected;
+		sf::Sprite sprite;
+		float radius = 75;
+		std::string advice_string;
+	};
+	enum buttons_name {
+		infinity_mode_button,
+		settings_button
+	};
+	std::vector<Button> buttons;
+	buttons.resize(2);
+	buttons[infinity_mode_button].pos = Point(window.getSize().x / 2, 300);
+	buttons[infinity_mode_button].texture_default.loadFromFile("menu_buttons\\inf_mode.png");
+	buttons[infinity_mode_button].texture_selected.loadFromFile("menu_buttons\\inf_mode_selected.png");
+	buttons[infinity_mode_button].sprite.setTexture(buttons[infinity_mode_button].texture_default);
+	buttons[infinity_mode_button].advice_string = "start infinity mode";
+
+	buttons[settings_button].pos = Point(window.getSize().x / 2, 500);
+	buttons[settings_button].texture_default.loadFromFile("menu_buttons\\settings.png");
+	buttons[settings_button].texture_selected.loadFromFile("menu_buttons\\settings_selected.png");
+	buttons[settings_button].sprite.setTexture(buttons[settings_button].texture_default);
+	buttons[settings_button].advice_string = "open settings";
+
+	int chosen_button = infinity_mode_button;
+
+	int frame_num = 0;
+	int last_menu_choice = 0;
+
+	while (true) {
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window.close();
+		}
+
+		frame_num++;
+
+		if (game_status == menu) {
+			for (int i = 0; i < buttons.size(); i++) {
+				if (i == chosen_button) {
+					buttons[i].sprite.setTexture(buttons[i].texture_selected);
+				}
+				else {
+					buttons[i].sprite.setTexture(buttons[i].texture_default);
+				}
+				buttons[i].sprite.setScale(sf::Vector2f(buttons[i].radius * 2 / buttons[i].sprite.getTexture()->getSize().x, buttons[i].radius * 2 / buttons[i].sprite.getTexture()->getSize().y));
+				buttons[i].sprite.setOrigin(sf::Vector2f(buttons[i].sprite.getTexture()->getSize().x / 2, buttons[i].sprite.getTexture()->getSize().y / 2));
+				buttons[i].sprite.setPosition(sf::Vector2f(buttons[i].pos.x, buttons[i].pos.y));
+			}
+
+			title.setString("Press Space to " + buttons[chosen_button].advice_string);
+			if (sf::Joystick::isConnected(0)) {
+				title.setString("Press Start to " + buttons[chosen_button].advice_string);
+			}
+			title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, START))) {
+				if (chosen_button == infinity_mode_button) {
+					game_status = game_hero_mode;
+				}
+				if (chosen_button == settings_button) {
+					game_status = settings_list;
+				}
+			}
+
+			Point move_vector;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
+				sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
+				sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
+				sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+					move_vector += Point(0, -1);
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+					move_vector += Point(-1, 0);
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+					move_vector += Point(0, 1);
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+					move_vector += Point(1, 0);
+				}
+			}
+			else if (sf::Joystick::isConnected(0)) {         // gamepad input
+
+				move_vector = Point(
+					sf::Joystick::getAxisPosition(0, sf::Joystick::X),
+					sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
+
+				if (abs(move_vector.x) < 5 && abs(move_vector.y) < 5) {
+					move_vector = Point();
+				}
+
+				int buttons_count = sf::Joystick::getButtonCount(0);
+				for (int i = 0; i < buttons_count; i++) {
+					if (sf::Joystick::isButtonPressed(0, i)) {
+						if (settings.isGamepadDebugEnabled()) {
+							std::cout << "Gamepad button number " << i << " is pressed" << std::endl;
+						}
+					}
+				}
+			}
+			move_vector.normalize();
+
+			if (move_vector.x != 0 || move_vector.y != 0) {
+
+				int next_menu_button = -1;
+				double min_distance = 1e9;
+
+				for (int i = 0; i < buttons.size(); i++) {
+					double angle_diff =
+						(std::atan2(move_vector.x, move_vector.y) -
+							std::atan2(
+								buttons[i].pos.x - buttons[chosen_button].pos.x,
+								buttons[i].pos.y - buttons[chosen_button].pos.y));
+
+					if (abs(angle_diff) > 0.000001) {     // angle_diff is not close to zero
+						if (abs(angle_diff) > abs(angle_diff + 2 * PI)) {
+							angle_diff += 2 * PI;
+						}
+						if (abs(angle_diff) > abs(angle_diff - 2 * PI)) {
+							angle_diff -= 2 * PI;
+						}
+					}
+					if (abs(angle_diff) <= PI / 8.0) {
+						if (min_distance > (buttons[i].pos - buttons[chosen_button].pos).getLength() && (buttons[i].pos - buttons[chosen_button].pos).getLength() > 0.01 /*not close to zero*/) {
+							next_menu_button = i;
+							min_distance = (buttons[i].pos - buttons[chosen_button].pos).getLength();
+						}
+					}
+				}
+
+
+				if ((next_menu_button != -1) && ((frame_num - last_menu_choice) > consts.getFPSLock() / 2)) {
+					chosen_button = next_menu_button;
+					last_menu_choice = frame_num;
+				}
+			}
+
+			window.draw(menu_background_sprite);
+			for (int i = 0; i < buttons.size(); i++) {
+				window.draw(buttons[i].sprite);
+			}
+			window.draw(title);
+			window.display();
+		}
+		else if (game_status == settings_list) {
+			game_status = menu;
+		}
+		else if (game_status == exit_to_desktop) {
+			return 0;
+		}
+		else {
+			gameCycle("map2", window, visual_ctrl, gui_visual_ctrl, res_visual_ctrl);
+		}
+	}
 
 	return 0;
 }

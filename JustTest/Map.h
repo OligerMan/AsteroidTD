@@ -10,13 +10,13 @@
 #include "FPS.h"
 #include "ResourceManager.h"
 
+
 void fixCollision(Object * obj1, Object * obj2) {
 	if (obj1->getObjectType() == ObjectType::bullet || obj2->getObjectType() == ObjectType::bullet) {
 		return;
 	}
 	bool force_move = obj1->getCollisionModel()->isStatic() && obj2->getCollisionModel()->isStatic();
 	const double min_speed = 0.001;
-	float eps_speed = 0.1;
 
 	CollisionModel * col1 = obj1->getCollisionModel();
 	CollisionModel * col2 = obj2->getCollisionModel();
@@ -74,15 +74,20 @@ void fixCollision(Object * obj1, Object * obj2) {
 		obj1->forceChangePosition(normal_speed1 * consts.getFPSLock() / fps.getFPS());
 		obj2->forceChangePosition(normal_speed2 * consts.getFPSLock() / fps.getFPS());
 	}
-
+	Point pos_diff = obj1->getPosition() - obj2->getPosition();
+	if (pos_diff.getLength() < 0.00001) {    // approximately zero
+		pos_diff = Point(0, -1);
+	}
 	if (checkModelCollision(col1, col2)) {
-		obj1->changePosition((obj1->getPosition() - obj2->getPosition()).getNormal() * eps_speed * consts.getFPSLock() / fps.getFPS());
-		obj2->changePosition((obj2->getPosition() - obj1->getPosition()).getNormal() * eps_speed * consts.getFPSLock() / fps.getFPS());
+		obj1->getCollisionModel()->changeDelayedCollisionFix(pos_diff);
+		obj2->getCollisionModel()->changeDelayedCollisionFix(Point() - pos_diff);
 		if (force_move) {
-			obj1->forceChangePosition((obj1->getPosition() - obj2->getPosition()).getNormal() * eps_speed * consts.getFPSLock() / fps.getFPS());
-			obj2->forceChangePosition((obj2->getPosition() - obj1->getPosition()).getNormal() * eps_speed * consts.getFPSLock() / fps.getFPS());
+			obj1->getCollisionModel()->changeDelayedCollisionForceFix(pos_diff);
+			obj2->getCollisionModel()->changeDelayedCollisionForceFix(Point()-pos_diff);
 		}
 	}
+
+
 }
 
 class Map {
@@ -209,6 +214,22 @@ class Map {
 						}
 					}
 				}
+			}
+		}
+
+		for (int cnt = 0; cnt < objects.size(); cnt++) {
+			for (int i = 0; i < objects[cnt].size(); i++) {
+				if (objects[cnt][i]->getCollisionModel()->isStatic()) {
+					continue;
+				}
+
+				const int collision_fix_speed = 3;
+				Point 
+					force_fix = objects[cnt][i]->getCollisionModel()->getDelayedCollisionForceFix(), 
+					fix = objects[cnt][i]->getCollisionModel()->getDelayedCollisionForceFix();
+
+				objects[cnt][i]->forceChangePosition(force_fix.getNormal() * collision_fix_speed * consts.getFPSLock() / fps.getFPS());
+				objects[cnt][i]->changePosition(fix * collision_fix_speed * consts.getFPSLock() / fps.getFPS());
 			}
 		}
 	}
