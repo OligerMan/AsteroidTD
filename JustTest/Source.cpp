@@ -81,8 +81,10 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::Closed)
+			if (event.type == sf::Event::Closed) {
 				window.close();
+				game_status = exit_to_desktop;
+			}
 		}
 
 		frame_num++;
@@ -756,8 +758,10 @@ int main() {
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::Closed)
+			if (event.type == sf::Event::Closed) {
 				window.close();
+				game_status = exit_to_desktop;
+			}
 		}
 
 		frame_num++;
@@ -777,11 +781,11 @@ int main() {
 
 			title.setString("Press Space to " + buttons[chosen_button].advice_string);
 			if (sf::Joystick::isConnected(0)) {
-				title.setString("Press Start to " + buttons[chosen_button].advice_string);
+				title.setString("Press A to " + buttons[chosen_button].advice_string);
 			}
 			title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, START))) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, A))) {
 				if (chosen_button == infinity_mode_button) {
 					game_status = game_hero_mode;
 				}
