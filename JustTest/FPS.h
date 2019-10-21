@@ -30,4 +30,10 @@ public:
 	float getFPS() {
 		return std::max(fps, 1);
 	}
+
+	void reset() {
+		frame_stamp = 0;
+		time_stamp = std::chrono::system_clock::now();
+		fps = 240;
+	}
 }fps;

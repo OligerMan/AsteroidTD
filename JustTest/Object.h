@@ -26,6 +26,8 @@ public:
 		for (int i = 0; i < attached_objects.size(); i++) {
 			attached_objects[i]->deleteObject();
 		}
+		unit_info = nullptr;
+		col_model = nullptr;
 	}
 
 	Object() {}
@@ -155,22 +157,37 @@ public:
 	}
 
 	Point getSpeed() {
+		if (isDeleted() || !col_model) {
+			return Point();
+		}
 		return col_model->getSpeed();
 	}
 
 	void setSpeed(Point speed) {
+		if (isDeleted() || !col_model) {
+			return;
+		}
 		col_model->setSpeed(speed);
 	}
 
 	void changeSpeed(Point difference) {
+		if (isDeleted() || !col_model) {
+			return;
+		}
 		col_model->changeSpeed(difference);
 	}
 
 	Point getPosition() {
+		if (isDeleted() || !col_model) {
+			return Point();
+		}
 		return col_model->getPosition();
 	}
 
 	void setPosition(Point origin) {
+		if (isDeleted() || !col_model) {
+			return;
+		}
 		for (int i = 0; i < attached_objects.size(); i++) {
 			attached_objects[i]->setPosition(origin + (getPosition() - attached_objects[i]->getPosition()));
 		}
@@ -178,6 +195,9 @@ public:
 	}
 
 	void changePosition(Point difference) {
+		if (isDeleted() || !col_model) {
+			return;
+		}
 		for (int i = 0; i < attached_objects.size(); i++) {
 			attached_objects[i]->changePosition(difference);
 		}
@@ -185,6 +205,9 @@ public:
 	}
 
 	void forceChangePosition(Point difference) {
+		if (isDeleted() || !col_model) {
+			return;
+		}
 		for (int i = 0; i < attached_objects.size(); i++) {
 			attached_objects[i]->forceChangePosition(difference);
 		}
@@ -192,30 +215,51 @@ public:
 	}
 
 	Point getOrigin() {
+		if (isDeleted() || !col_model) {
+			return Point();
+		}
 		return col_model->getOrigin();
 	}
 
 	void setOrigin(Point origin) {
+		if (isDeleted() || !col_model) {
+			return;
+		}
 		col_model->setOrigin(origin);
 	}
 
 	void changeOrigin(Point difference) {
+		if (isDeleted() || !col_model) {
+			return;
+		}
 		col_model->changeOrigin(difference);
 	}
 
 	void setAutoOrigin() {
+		if (isDeleted() || !col_model) {
+			return;
+		}
 		col_model->setAutoOrigin();
 	}
 
 	double getAngle() {
+		if (isDeleted() || !col_model) {
+			return 0;
+		}
 		return col_model->getAngle();
 	}
 
 	void setAngle(double angle) {
+		if (isDeleted() || !col_model) {
+			return;
+		}
 		col_model->setAngle(angle);
 	}
 
 	void changeAngle(double difference) {
+		if (isDeleted() || !col_model) {
+			return;
+		}
 		col_model->changeAngle(difference);
 	}
 

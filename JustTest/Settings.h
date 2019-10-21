@@ -45,7 +45,7 @@ public:
 
 		std::ifstream settings_input;
 		settings_input.open("config.cfg");
-		
+
 		if (settings_input.is_open()) {
 			std::string setting, value;
 			is_settings_loaded = true;

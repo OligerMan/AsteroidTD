@@ -119,6 +119,7 @@ class UnitInfo {
 				std::cout << "Unit info file " << path << " not found" << std::endl;
 			}
 			*status = false;
+			unit_input.close();
 			return;
 		}
 
@@ -255,6 +256,7 @@ class UnitInfo {
 				break;
 			}
 		}
+		unit_input.close();
 	}
 
 public:

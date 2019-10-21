@@ -39,6 +39,7 @@ std::vector<Circle> collisionParse(std::string path, bool & is_static, bool * st
 			std::cout << "Collision file " << path << " not found" << std::endl;
 		}
 		*status = false;
+		collision_file.close();
 		return output;
 	}
 
@@ -117,5 +118,6 @@ std::vector<Circle> collisionParse(std::string path, bool & is_static, bool * st
 			std::cout << "Collision file " << path << " is invalid" << std::endl;
 		}
 	}
+	collision_file.close();
 	return output;
 }

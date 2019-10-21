@@ -223,6 +223,12 @@ public:
 	}
 
     void initResearch(std::string path) {
+		for (int i = 0; i < research_list.size(); i++) {
+			delete research_list[i];
+		}
+		for (int i = 0; i < graph.size(); i++) {
+			delete graph[i];
+		}
 		research_list.clear();
 		graph.clear();
 
@@ -255,11 +261,13 @@ public:
 			input_file >> string;
 			if (string != "research_start") {
 				if (string == "") {
+					input_file.close();
 					return;
 				}
 				if (settings.isErrorOutputEnabled()) {
 					std::cout << "Wrong format of research file" << std::endl;
 				}
+				input_file.close();
 				return;
 			}
 			input_file >> string;
@@ -270,6 +278,7 @@ public:
 				if (settings.isErrorOutputEnabled()) {
 					std::cout << "Missing type of research" << std::endl;
 				}
+				input_file.close();
 				return;
 			}
 			Research * research = new Research;
@@ -282,6 +291,7 @@ public:
 				if (settings.isErrorOutputEnabled()) {
 					std::cout << "Wrong type of research" << std::endl;
 				}
+				input_file.close();
 				return;
 			}
 			research->type = type;
@@ -292,6 +302,7 @@ public:
 				if (settings.isErrorOutputEnabled()) {
 					std::cout << "Missing cost of research" << std::endl;
 				}
+				input_file.close();
 				return;
 			}
 
@@ -301,6 +312,7 @@ public:
 				if (settings.isErrorOutputEnabled()) {
 					std::cout << "Missing position of research button" << std::endl;
 				}
+				input_file.close();
 				return;
 			}
 			research_node->pos.x = getFloat(input_file);
@@ -311,6 +323,7 @@ public:
 				if (settings.isErrorOutputEnabled()) {
 					std::cout << "Missing research's parent block" << std::endl;
 				}
+				input_file.close();
 				return;
 			}
 
@@ -324,6 +337,7 @@ public:
 					if (settings.isErrorOutputEnabled()) {
 						std::cout << "Wrong type of research's parent" << std::endl;
 					}
+					input_file.close();
 					return;
 				}
 				research_node->parents.push_back(parent_type);
@@ -339,6 +353,7 @@ public:
 			research_list[(int)research->type] = research;
 			graph[(int)research->type] = research_node;
 		}
+		input_file.close();
     }
 
 	bool unlockResearch(ResearchList research_name) {

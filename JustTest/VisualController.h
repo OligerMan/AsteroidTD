@@ -86,6 +86,16 @@ public:
 		initSprites();
 	}
 
+	void reset() {
+		texture_buffer.clear();
+		sprite_buffer.clear();
+
+		const std::string texture_path = "sprites";
+
+		uploadTextures(texture_path);
+		initSprites();
+	}
+
 	void setActive() {
 		is_active = true;
 	}

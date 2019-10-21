@@ -1,7 +1,7 @@
 #pragma once
 
 enum GameStatus {
-	menu,
+	main_menu,
 	game_hero_mode,
 	game_strategic_mode,
 	research,

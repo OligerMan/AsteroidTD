@@ -15,21 +15,44 @@ enum XBOXGamepadButtons {
 	A,B,X,Y,LB,RB,BACK,START,LSTICK,RSTICK
 };
 
+
 void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController & visual_ctrl, GUIVisualController & gui_visual_ctrl, ResearchVisualController & res_visual_ctrl) {
+
+
+	sf::Texture main_background_texture, research_background_texture, game_over_background_texture;
+	sf::Sprite main_background_sprite, research_background_sprite, game_over_background_sprite;
+
+
+	main_background_texture.loadFromFile("background/main_background.png");
+	research_background_texture.loadFromFile("background/research_background.png");
+
+	main_background_sprite.setTexture(main_background_texture);
+	main_background_sprite.setOrigin(sf::Vector2f((int)main_background_texture.getSize().x / 2, (int)main_background_texture.getSize().y / 2));
+	research_background_sprite.setTexture(research_background_texture);
+	research_background_sprite.setOrigin(sf::Vector2f((int)research_background_texture.getSize().x / 2, (int)research_background_texture.getSize().y / 2));
+
+	game_over_background_texture.loadFromFile("background/game_over_background.png");
+	game_over_background_sprite.setTexture(game_over_background_texture);
+	game_over_background_sprite.setPosition(0, 0);
+	game_over_background_sprite.setScale(sf::Vector2f(window.getSize().x / game_over_background_texture.getSize().x, window.getSize().y / game_over_background_texture.getSize().y));
+
+	sf::Text title;
+	sf::Font base_font;
 
 	sf::View view1(sf::Vector2f(0.0, 0.0), sf::Vector2f(window.getSize().x * 1.2, window.getSize().y * 1.2));  // main game mode
 	sf::View view2(sf::Vector2f(0.0, 0.0), sf::Vector2f(window.getSize().x * 5, window.getSize().y * 5));      // strategic view
 	sf::View view3(sf::Vector2f(0.0, 0.0), sf::Vector2f(window.getSize().x, window.getSize().y));      // research view
+	sf::View view4(sf::Vector2f((int)window.getSize().x / 2, (int)window.getSize().y / 2), sf::Vector2f(window.getSize().x, window.getSize().y));      // main menu view
+	
 	int last_view_change = 0;    // number of frame when you changed view last time
 	int last_mode_change = 0;    // number of frame when you changed mode last time
 	int last_build = 0;    // number of frame when you built smth last time
 	int last_pause = 0;    // number of frame when you paused game last time
     int last_research_open = 0; // number of frame when you opened research list last time
 	int last_research_choice = 0; // number of frame when you chose another research last time
+	int last_menu_choice = 0;
 
 	GameStatus prev_game_status = pause;
-
-	window.setFramerateLimit(consts.getFPSLock());
 
 	Map game_map1("maps/" + map_name + ".map");
 
@@ -40,22 +63,12 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	std::vector<ResearchNode *> research_graph = research_manager.getResearchGraph();
 	int cur_research_index = 0;
 
-	Map object_presets("redactor_resources/object_templates.map");
-	GUIManager gui_manager(object_presets.getObjectsBuffer(), window.getSize().y);
-
-	sf::Texture main_background_texture, research_background_texture;
-    main_background_texture.loadFromFile("background/main_background.png");
-    research_background_texture.loadFromFile("background/research_background.png");
-
-	sf::Sprite main_background_sprite, research_background_sprite;
-    main_background_sprite.setTexture(main_background_texture);
-    main_background_sprite.setOrigin(sf::Vector2f((int)main_background_texture.getSize().x / 2, (int)main_background_texture.getSize().y / 2));
-    research_background_sprite.setTexture(research_background_texture);
-    research_background_sprite.setOrigin(sf::Vector2f((int)research_background_texture.getSize().x / 2, (int)research_background_texture.getSize().y / 2));
+	GUIManager gui_manager(window.getSize().y);
 
 	sf::Vector2f strategic_back_pos, main_back_pos;
 
 	game_status = game_hero_mode;
+	skills_mode = set2;
 
 	window.setView(view1);
 
@@ -75,20 +88,44 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 	Point viewport_pos;
 
+	title.setPosition(sf::Vector2f(window.getSize().x / 2, 150));
+	title.setFillColor(sf::Color::White);
+	title.setOutlineColor(sf::Color::Black);
+	title.setOutlineThickness(1);
+	title.setCharacterSize(50);
+	title.setFont(base_font);
+
+	struct Button {
+		Point pos;
+		sf::Texture texture_default, texture_selected;
+		sf::Sprite sprite;
+		float radius = 75;
+		std::string advice_string;
+	};
+	enum buttons_name {
+		retry,
+		menu
+	};
+	std::vector<Button> buttons;
+	buttons.resize(2);
+	buttons[retry].pos = Point(window.getSize().x / 2, 300);
+	buttons[retry].texture_default.loadFromFile("game_over_buttons\\retry.png");
+	buttons[retry].texture_selected.loadFromFile("game_over_buttons\\retry_selected.png");
+	buttons[retry].sprite.setTexture(buttons[retry].texture_default);
+	buttons[retry].advice_string = "try again";
+
+	buttons[menu].pos = Point(window.getSize().x / 2, 500);
+	buttons[menu].texture_default.loadFromFile("game_over_buttons\\menu.png");
+	buttons[menu].texture_selected.loadFromFile("game_over_buttons\\menu_selected.png");
+	buttons[menu].sprite.setTexture(buttons[menu].texture_default);
+	buttons[menu].advice_string = "go back to menu";
+
+	int chosen_button = retry;
+
 	while (window.isOpen())
 	{
 
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed) {
-				window.close();
-				game_status = exit_to_desktop;
-			}
-		}
-
 		frame_num++;
-
 		// FPS 
 		fps.processFrame(frame_num);
 
@@ -166,7 +203,6 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			if (is_game_cycle) {
 				// set background
 				window.draw(main_background_sprite);
-
 
 				is_game_cycle = visual_ctrl.processFrame(&window, game_map1.getObjectsBuffer());
 				float hero_hp = hero_object->getUnitInfo()->getHealth() / hero_object->getUnitInfo()->getMaxHealth();
@@ -253,7 +289,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			if (game_map1.getHero() == nullptr) {
 				// end game code
 				game_status = game_over;
-				break;
+				continue;
 			}
 
 			Event gui_event = gui_manager.getEvent();
@@ -267,7 +303,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				}
 			}
 
-			double hero_speed = hero_object->getUnitInfo()->getDefaultSpeed() * consts.getFPSLock() / fps.getFPS();
+			double hero_speed = hero_object->getUnitInfo()->getDefaultSpeed();
 
 			Point new_speed;
 
@@ -492,6 +528,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					}
 					else {
 						game_status = prev_game_status;
+						if (game_status == research) {
+							game_status = game_hero_mode;
+						}
 						prev_game_status = pause;
 						last_pause = frame_num;
 						if (game_status == game_hero_mode) {
@@ -559,8 +598,126 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			}
 		}
 		if (game_status == game_over) {
-			game_status = exit_to_desktop;
-            return;
+			window.setView(view4);
+			for (int i = 0; i < buttons.size(); i++) {
+				if (i == chosen_button) {
+					buttons[i].sprite.setTexture(buttons[i].texture_selected);
+				}
+				else {
+					buttons[i].sprite.setTexture(buttons[i].texture_default);
+				}
+				buttons[i].sprite.setScale(sf::Vector2f(buttons[i].radius * 2 / buttons[i].sprite.getTexture()->getSize().x, buttons[i].radius * 2 / buttons[i].sprite.getTexture()->getSize().y));
+				buttons[i].sprite.setOrigin(sf::Vector2f(buttons[i].sprite.getTexture()->getSize().x / 2, buttons[i].sprite.getTexture()->getSize().y / 2));
+				buttons[i].sprite.setPosition(sf::Vector2f(buttons[i].pos.x, buttons[i].pos.y));
+			}
+
+			title.setString("Press Space to " + buttons[chosen_button].advice_string);
+			if (sf::Joystick::isConnected(0)) {
+				title.setString("Press A to " + buttons[chosen_button].advice_string);
+			}
+			title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
+
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+				Point cursor_pos;
+				sf::Vector2i mouse_pos = sf::Mouse::getPosition();
+				sf::Vector2i window_pos = window.getPosition();
+				cursor_pos = Point(mouse_pos.x/* - window.getSize().x / 2*/ - window.getPosition().x, mouse_pos.y/* - window.getSize().y / 2*/ - window.getPosition().y);
+				for (int i = 0; i < buttons.size(); i++) {
+					if ((cursor_pos - buttons[i].pos).getLength() <= buttons[i].radius) {
+						if (i == retry) {
+							game_status = game_hero_mode;
+							return;
+						}
+						if (i == menu) {
+							game_status = main_menu;
+							return;
+						}
+					}
+				}
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, A))) {
+				if (chosen_button == retry) {
+					game_status = game_hero_mode;
+					return;
+				}
+				if (chosen_button == menu) {
+					game_status = main_menu;
+					return;
+				}
+			}
+
+			Point move_vector;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
+				sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
+				sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
+				sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+					move_vector += Point(0, -1);
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+					move_vector += Point(-1, 0);
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+					move_vector += Point(0, 1);
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+					move_vector += Point(1, 0);
+				}
+			}
+			else if (sf::Joystick::isConnected(0)) {         // gamepad input
+
+				move_vector = Point(
+					sf::Joystick::getAxisPosition(0, sf::Joystick::X),
+					sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
+
+				if (abs(move_vector.x) < 5 && abs(move_vector.y) < 5) {
+					move_vector = Point();
+				}
+			}
+			move_vector.normalize();
+
+			if (move_vector.x != 0 || move_vector.y != 0) {
+
+				int next_menu_button = -1;
+				double min_distance = 1e9;
+
+				for (int i = 0; i < buttons.size(); i++) {
+					double angle_diff =
+						(std::atan2(move_vector.x, move_vector.y) -
+							std::atan2(
+								buttons[i].pos.x - buttons[chosen_button].pos.x,
+								buttons[i].pos.y - buttons[chosen_button].pos.y));
+
+					if (abs(angle_diff) > 0.000001) {     // angle_diff is not close to zero
+						if (abs(angle_diff) > abs(angle_diff + 2 * PI)) {
+							angle_diff += 2 * PI;
+						}
+						if (abs(angle_diff) > abs(angle_diff - 2 * PI)) {
+							angle_diff -= 2 * PI;
+						}
+					}
+					if (abs(angle_diff) <= PI / 8.0) {
+						if (min_distance > (buttons[i].pos - buttons[chosen_button].pos).getLength() && (buttons[i].pos - buttons[chosen_button].pos).getLength() > 0.01 /*not close to zero*/) {
+							next_menu_button = i;
+							min_distance = (buttons[i].pos - buttons[chosen_button].pos).getLength();
+						}
+					}
+				}
+
+
+				if ((next_menu_button != -1) && ((frame_num - last_menu_choice) > consts.getFPSLock() / 2)) {
+					chosen_button = next_menu_button;
+					last_menu_choice = frame_num;
+				}
+			}
+
+			window.draw(game_over_background_sprite);
+			for (int i = 0; i < buttons.size(); i++) {
+				window.draw(buttons[i].sprite);
+			}
+			window.draw(title);
 		}
         if (game_status == research) {
 
@@ -667,9 +824,16 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
         }
 
 		vibration_time--;
-
 		window.display();
-		
+
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed) {
+				window.close();
+				game_status = exit_to_desktop;
+			}
+		}
 	}
 }
 
@@ -680,6 +844,11 @@ int main() {
 
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 	sf::RenderWindow window(sf::VideoMode(settings.getWindowWidth(), settings.getWindowHeight()), "AsteroidTD", sf::Style::None);
+	sf::View main_view(sf::Vector2f((int)window.getSize().x / 2, (int)window.getSize().y / 2), sf::Vector2f(window.getSize().x, window.getSize().y));      // main menu view
+
+
+
+	window.setFramerateLimit(consts.getFPSLock());
 
 	collision_type_init();
 	object_type_init();
@@ -710,6 +879,8 @@ int main() {
 	sf::Sprite menu_background_sprite;
 	menu_background_sprite.setTexture(menu_background_texture);
 	menu_background_sprite.setPosition(0, 0);
+	menu_background_sprite.setScale(sf::Vector2f(window.getSize().x / menu_background_texture.getSize().x, window.getSize().y / menu_background_texture.getSize().y));
+
 
 	sf::Text title;
 	sf::Font base_font;
@@ -722,7 +893,7 @@ int main() {
 	title.setCharacterSize(50);
 	title.setFont(base_font);
 
-	game_status = menu;
+	game_status = main_menu;
 
 	struct Button {
 		Point pos;
@@ -733,26 +904,36 @@ int main() {
 	};
 	enum buttons_name {
 		infinity_mode_button,
-		settings_button
+		settings_button,
+		shutdown_button,
+
+		BUTTONS_NAME_LIST_SIZE
 	};
 	std::vector<Button> buttons;
-	buttons.resize(2);
-	buttons[infinity_mode_button].pos = Point(window.getSize().x / 2, 300);
+	buttons.resize(BUTTONS_NAME_LIST_SIZE);
+
+	buttons[infinity_mode_button].pos = Point(window.getSize().x / 2 - 150, 350);
 	buttons[infinity_mode_button].texture_default.loadFromFile("menu_buttons\\inf_mode.png");
 	buttons[infinity_mode_button].texture_selected.loadFromFile("menu_buttons\\inf_mode_selected.png");
 	buttons[infinity_mode_button].sprite.setTexture(buttons[infinity_mode_button].texture_default);
 	buttons[infinity_mode_button].advice_string = "start infinity mode";
 
-	buttons[settings_button].pos = Point(window.getSize().x / 2, 500);
+	buttons[settings_button].pos = Point(window.getSize().x / 2 + 150, 350);
 	buttons[settings_button].texture_default.loadFromFile("menu_buttons\\settings.png");
 	buttons[settings_button].texture_selected.loadFromFile("menu_buttons\\settings_selected.png");
 	buttons[settings_button].sprite.setTexture(buttons[settings_button].texture_default);
 	buttons[settings_button].advice_string = "open settings";
 
+	buttons[shutdown_button].pos = Point(window.getSize().x / 2, 550);
+	buttons[shutdown_button].texture_default.loadFromFile("menu_buttons\\shutdown.png");
+	buttons[shutdown_button].texture_selected.loadFromFile("menu_buttons\\shutdown_selected.png");
+	buttons[shutdown_button].sprite.setTexture(buttons[shutdown_button].texture_default);
+	buttons[shutdown_button].advice_string = "close the game";
+
 	int chosen_button = infinity_mode_button;
 
 	int frame_num = 0;
-	int last_menu_choice = 0;
+	int last_menu_choice = -1000;
 
 	while (true) {
 		sf::Event event;
@@ -766,7 +947,9 @@ int main() {
 
 		frame_num++;
 
-		if (game_status == menu) {
+		window.setView(main_view);
+
+		if (game_status == main_menu) {
 			for (int i = 0; i < buttons.size(); i++) {
 				if (i == chosen_button) {
 					buttons[i].sprite.setTexture(buttons[i].texture_selected);
@@ -785,13 +968,38 @@ int main() {
 			}
 			title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, A))) {
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+				Point cursor_pos;
+				sf::Vector2i mouse_pos = sf::Mouse::getPosition();
+				sf::Vector2i window_pos = window.getPosition();
+				cursor_pos = Point(mouse_pos.x/* - window.getSize().x / 2*/ - window.getPosition().x, mouse_pos.y/* - window.getSize().y / 2*/ - window.getPosition().y);
+				for (int i = 0; i < buttons.size(); i++) {
+					if ((cursor_pos - buttons[i].pos).getLength() <= buttons[i].radius) {
+						if (i == infinity_mode_button) {
+							game_status = game_hero_mode;
+						}
+						if (i == settings_button) {
+							game_status = settings_list;
+						}
+						if (i == shutdown_button) {
+							game_status = exit_to_desktop;
+						}
+						last_menu_choice = frame_num;
+					}
+				}
+			}
+			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, A))) && (frame_num - last_menu_choice) > consts.getFPSLock()) {
 				if (chosen_button == infinity_mode_button) {
 					game_status = game_hero_mode;
 				}
 				if (chosen_button == settings_button) {
 					game_status = settings_list;
 				}
+				if (chosen_button == shutdown_button) {
+					game_status = exit_to_desktop;
+				}
+				last_menu_choice = frame_num;
 			}
 
 			Point move_vector;
@@ -821,15 +1029,6 @@ int main() {
 
 				if (abs(move_vector.x) < 5 && abs(move_vector.y) < 5) {
 					move_vector = Point();
-				}
-
-				int buttons_count = sf::Joystick::getButtonCount(0);
-				for (int i = 0; i < buttons_count; i++) {
-					if (sf::Joystick::isButtonPressed(0, i)) {
-						if (settings.isGamepadDebugEnabled()) {
-							std::cout << "Gamepad button number " << i << " is pressed" << std::endl;
-						}
-					}
 				}
 			}
 			move_vector.normalize();
@@ -877,13 +1076,19 @@ int main() {
 			window.display();
 		}
 		else if (game_status == settings_list) {
-			game_status = menu;
+			game_status = main_menu;
 		}
 		else if (game_status == exit_to_desktop) {
 			return 0;
 		}
 		else {
-			gameCycle("map2", window, visual_ctrl, gui_visual_ctrl, res_visual_ctrl);
+			fps.reset();
+			try {
+				gameCycle("map2", window, visual_ctrl, gui_visual_ctrl, res_visual_ctrl);
+			}
+			catch (std::exception exc) {
+				std::cout << "Exception handled" << std::endl;
+			}
 		}
 	}
 

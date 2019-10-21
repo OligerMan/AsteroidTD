@@ -178,7 +178,6 @@ public:
 	}
 
 	bool processFrame(sf::RenderWindow * window, std::vector<std::vector<Object *>> * objects, std::vector<std::pair<sf::Text, int>> * text, Point viewport_pos, float hero_hp_percent) {  // render for GUI elements
-
 		if (game_status == pause || game_status == game_strategic_mode) {
 			hero_hp_percent = 0;
 		}
@@ -311,5 +310,18 @@ public:
 		// skill icons draw
 		
 		return is_active;
+	}
+
+	void reset(sf::RenderWindow * window) {
+		texture_buffer.clear();
+		sprite_buffer.clear();
+		skills_texture.clear();
+		skills_sprite.clear();
+
+		const std::string texture_path = "GUI";
+
+		uploadTextures(texture_path);
+		setSkillsIconPosition(window);
+		initSprites();
 	}
 };

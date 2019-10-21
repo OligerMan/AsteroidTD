@@ -88,7 +88,7 @@ public:
 
 	GUIManager() {}
 
-	GUIManager(std::vector<std::vector<Object*>> * redactor_mode_objects, int window_height) {
+	GUIManager(int window_height) {
 		base_font.loadFromFile("a_Alterna.ttf");
 		srand(time(NULL));
 		text.resize(1);

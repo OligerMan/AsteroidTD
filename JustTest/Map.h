@@ -12,6 +12,11 @@
 
 
 void fixCollision(Object * obj1, Object * obj2) {
+
+	if (!obj1 || !obj2) {
+		return;
+	}
+
 	if (obj1->getObjectType() == ObjectType::bullet || obj2->getObjectType() == ObjectType::bullet) {
 		return;
 	}
@@ -20,6 +25,10 @@ void fixCollision(Object * obj1, Object * obj2) {
 
 	CollisionModel * col1 = obj1->getCollisionModel();
 	CollisionModel * col2 = obj2->getCollisionModel();
+
+	if (!col1 || !col2) {
+		return;
+	}
 
 	Point tmp_speed1 = obj1->getSpeed();
 	Point tmp_speed2 = obj2->getSpeed();
@@ -86,8 +95,6 @@ void fixCollision(Object * obj1, Object * obj2) {
 			obj2->getCollisionModel()->changeDelayedCollisionForceFix(Point()-pos_diff);
 		}
 	}
-
-
 }
 
 class Map {
@@ -363,8 +370,10 @@ class Map {
 							object->setAutoOrigin();
 							object->setAngle(object1->getAngle());
 							object->setSpeed(Point(cos((object1->getAngle() - 90) / 180 * PI), sin((object1->getAngle() - 90) / 180 * PI)) * 15);
-
+							
 							addObject(object, main_layer);
+
+							object1->attachObject(object);
 						}
 						
 					}
@@ -388,6 +397,12 @@ class Map {
 				if (objects[layer][i]->isDeleted() || !(objects[layer][i]->getUnitInfo() != nullptr && !objects[layer][i]->getUnitInfo()->isDead())) {
 					if (objects[layer][i] == hero_object) {
 						hero_object = nullptr;
+					}
+					if (objects[layer][i] == closest_asteroid) {
+						closest_asteroid = nullptr;
+					}
+					if (objects[layer][i] == last_clicked_object) {
+						last_clicked_object = nullptr;
 					}
 					delete objects[layer][i];
 					objects[layer].erase(objects[layer].begin() + i);
@@ -428,7 +443,6 @@ class Map {
 				}
 				break;
 			case attack:
-
 				if (unit1 != nullptr && unit2 != nullptr) {
 					float damage = unit1->getAttackDamage(1) * (unit1->isAffected(damage_buff) ? 2 : 1);
 					unit2->dealDamage(damage);
@@ -828,10 +842,10 @@ public:
 				inner_ring.push_back((*base->getAttached())[i]);
 			}
 		}
-		if (inner_ring.size() == 7 && type != turret) {
+		if (inner_ring.size() >= 7 && type != turret) {
 			return false;
 		}
-		if (outer_ring.size() == 10 && type == turret) {
+		if (outer_ring.size() >= 10 && type == turret) {
 			return false;
 		}
 		Object * object = nullptr;

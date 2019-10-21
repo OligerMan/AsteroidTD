@@ -54,6 +54,7 @@ std::vector<std::vector<Object *>> parseMap(std::string path) {
 				if (settings.isErrorOutputEnabled()) {
 					std::cout << "Settings block is crashed in map " << path << std::endl;
 				}
+				map_file.close();
 				return output;
 			}
 			if (input == "layers_amount") {
@@ -83,6 +84,7 @@ std::vector<std::vector<Object *>> parseMap(std::string path) {
 				if (settings.isErrorOutputEnabled()) {
 					std::cout << "Objects block is crashed in map " << path << std::endl;
 				}
+				map_file.close();
 				return output;
 			}
 			if (input == "object") {
@@ -261,7 +263,7 @@ std::vector<std::vector<Object *>> parseMap(std::string path) {
 			std::cout << "Objects block is missing in map " << path << std::endl;
 		}
 	}
-
+	map_file.close();
 	return output;
 }
 
