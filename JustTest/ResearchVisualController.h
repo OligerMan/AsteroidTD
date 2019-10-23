@@ -17,6 +17,9 @@ class ResearchVisualController {
 	std::vector<std::vector<sf::Texture>> texture_buffer;
 	std::vector<sf::Sprite> sprite_buffer;
 
+	sf::Font font;
+	sf::Text cost_sign, description;
+
 	bool is_active = true;
 
 	void uploadTextures(std::string path) {
@@ -56,14 +59,39 @@ class ResearchVisualController {
 		}
 	}
 
+	void drawResearchInfo(sf::RenderWindow * window, sf::Vector2f viewport_pos, int cur_research_index) {
+		cost_sign.setString("Research points: " + std::to_string((int)resource_manager.getResearch()) +"\nCost: " + std::to_string((int)research_manager.getResearch((ResearchList)cur_research_index)->cost) + " research points");
+		cost_sign.setOrigin(-viewport_pos);
+		description.setString(research_manager.getResearchNode((ResearchList)cur_research_index)->description);
+		description.setOrigin(-viewport_pos + sf::Vector2f(0, description.getGlobalBounds().height));
+
+		window->draw(cost_sign);
+		window->draw(description);
+	}
 
 public:
 
-	ResearchVisualController() {
+	ResearchVisualController(sf::RenderWindow * window) {
 		const std::string texture_path = "research_sprites";
 
 		uploadTextures(texture_path);
 		initSprites();
+
+		font.loadFromFile("a_Alterna.ttf");
+
+		cost_sign.setPosition(sf::Vector2f(-(int)window->getSize().x / 2 + 100, -(int)window->getSize().y / 2 + 100));
+		cost_sign.setFillColor(sf::Color::White);
+		cost_sign.setOutlineColor(sf::Color::Black);
+		cost_sign.setOutlineThickness(1);
+		cost_sign.setCharacterSize(40);
+		cost_sign.setFont(font);
+
+		description.setPosition(sf::Vector2f(-(int)window->getSize().x / 2 + 100, (int)window->getSize().y / 2 - 100));
+		description.setFillColor(sf::Color::White);
+		description.setOutlineColor(sf::Color::Black);
+		description.setOutlineThickness(1);
+		description.setCharacterSize(40);
+		description.setFont(font);
 	}
 
 	void setActive() {
@@ -92,7 +120,7 @@ public:
 		window->draw(*sprite);
 	}
 
-	bool processFrame(sf::RenderWindow * window) {
+	bool processFrame(sf::RenderWindow * window, sf::Vector2f viewport_pos, int cur_research_index) {
 		int res_amount = research_manager.getResearchAmount();
 		for (int i = 0; i < res_amount; i++) {   // draw connections between nodes
 			ResearchNode * node = research_manager.getResearchNode(i);
@@ -115,7 +143,7 @@ public:
 			}
 			drawResearch(research_manager.getResearchNode(i), window);
 		}
-
+		drawResearchInfo(window, viewport_pos, cur_research_index);
 		return is_active;
 	}
 

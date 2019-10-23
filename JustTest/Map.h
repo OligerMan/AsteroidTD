@@ -447,8 +447,8 @@ class Map {
 					float damage = unit1->getAttackDamage(1) * (unit1->isAffected(damage_buff) ? 2 : 1);
 					unit2->dealDamage(damage);
 					if ((obj1->getObjectType() == turret && obj1->getUnitInfo()->getFaction() == hero_faction)) {
-						unit2->dealDamage(damage * research_manager.getDomeGlobalDamageBonusCoef() * unit1->getDomeCount());
-						unit1->grantHeal((1 + research_manager.getDomeGlobalDamageBonusCoef() * unit1->getDomeCount()) * unit1->getAttackDamage(1) * research_manager.getTurretLifestealCoef() * (unit1->isAffected(damage_buff) ? 2 : 1));
+						unit2->dealDamage(damage * research_manager.getDomeLocalDamageBonusCoef() * unit1->getDomeCount());
+						unit1->grantHeal((1 + research_manager.getDomeLocalDamageBonusCoef() * unit1->getDomeCount()) * unit1->getAttackDamage(1) * research_manager.getTurretLifestealCoef() * (unit1->isAffected(damage_buff) ? 2 : 1));
 					}
 				}
 				break;
@@ -697,15 +697,15 @@ class Map {
 				}
 			}
 			for (int j = 0; j < attach->size(); j++) {
-				(*attach)[j]->getUnitInfo()->grantHeal(cnt * research_manager.getDomeGlobalRegenCoef() * consts.getDomeHeal());
+				(*attach)[j]->getUnitInfo()->grantHeal(cnt * research_manager.getDomeLocalRegenCoef() * consts.getDomeHeal());
 				switch ((*attach)[j]->getObjectType()) {
 				case gold:
 					(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getGoldRegenCoef());
-					resource_manager.addGold(consts.getBaseGoldIncome() * (research_manager.getGoldIncomeCoef() + cnt * research_manager.getDomeGlobalGoldIncomeCoef()) * consts.getFPSLock() / fps.getFPS());
+					resource_manager.addGold(consts.getBaseGoldIncome() * (research_manager.getGoldIncomeCoef() + cnt * research_manager.getDomeLocalGoldIncomeCoef()) * consts.getFPSLock() / fps.getFPS());
 					break;
 				case science:
 					(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getScienceRegenCoef());
-					resource_manager.addResearch(consts.getBaseResearchIncome() * (research_manager.getScienceIncomeCoef() + cnt * research_manager.getDomeGlobalResearchIncomeCoef()) * consts.getFPSLock() / fps.getFPS());
+					resource_manager.addResearch(consts.getBaseResearchIncome() * (research_manager.getScienceIncomeCoef() + cnt * research_manager.getDomeLocalResearchIncomeCoef()) * consts.getFPSLock() / fps.getFPS());
 					break;
 				case turret:
 					(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getTurretRegenCoef());

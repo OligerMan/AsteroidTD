@@ -22,49 +22,51 @@ e:\projects\asteroidtd\justtest\FPS.h(23): warning C4244: '=': conversion from '
 e:\projects\asteroidtd\justtest\FPS.h(31): warning C4244: 'return': conversion from 'const int' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\ResourceManager.h(81): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\ResourceManager.h(82): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Research.h(214): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Research.h(286): warning C4101: 'data_f': unreferenced local variable
-e:\projects\asteroidtd\justtest\Research.h(287): warning C4101: 'data_i': unreferenced local variable
-e:\projects\asteroidtd\justtest\Research.h(403): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-e:\projects\asteroidtd\justtest\Research.h(421): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(427): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(441): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(447): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(486): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(489): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(492): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(506): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(509): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(512): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(526): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(529): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(532): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(545): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(551): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(565): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(571): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(588): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(602): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(605): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(608): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(611): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(619): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(622): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(625): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(636): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(639): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(642): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(653): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(656): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(659): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(672): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(678): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(689): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(695): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(719): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(725): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(736): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Research.h(742): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(314): warning C4129: '|': unrecognized character escape sequence
+e:\projects\asteroidtd\justtest\Research.h(318): warning C4129: '|': unrecognized character escape sequence
+e:\projects\asteroidtd\justtest\Research.h(216): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Research.h(271): warning C4101: 'data_f': unreferenced local variable
+e:\projects\asteroidtd\justtest\Research.h(272): warning C4101: 'data_i': unreferenced local variable
+e:\projects\asteroidtd\justtest\Research.h(410): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\Research.h(428): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(434): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(448): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(454): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(493): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(496): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(499): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(513): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(516): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(519): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(533): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(536): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(539): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(552): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(558): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(572): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(578): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(595): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(609): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(612): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(615): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(618): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(626): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(629): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(632): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(643): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(646): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(649): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(660): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(663): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(666): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(679): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(685): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(696): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(702): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(726): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(732): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(743): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Research.h(749): warning C4305: '=': truncation from 'double' to 'float'
 e:\projects\asteroidtd\justtest\UnitInfo.h(79): warning C4305: 'initializing': truncation from 'double' to 'float'
 e:\projects\asteroidtd\justtest\UnitInfo.h(145): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\UnitInfo.h(152): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
@@ -151,9 +153,11 @@ e:\projects\asteroidtd\justtest\GUIManager.h(141): warning C4244: '=': conversio
 e:\projects\asteroidtd\justtest\GUIManager.h(147): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 e:\projects\asteroidtd\justtest\GUIManager.h(158): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\GUIManager.h(164): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-e:\projects\asteroidtd\justtest\ResearchVisualController.h(85): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\ResearchVisualController.h(103): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\ResearchVisualController.h(104): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\ResearchVisualController.h(82): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\ResearchVisualController.h(89): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\ResearchVisualController.h(113): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\ResearchVisualController.h(131): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\ResearchVisualController.h(132): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 Source.cpp(30): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 Source.cpp(32): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 Source.cpp(37): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
@@ -218,9 +222,9 @@ C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): war
               _Other2=double &
           ]
   Generating code
-  125 of 2662 functions ( 4.7%) were compiled, the rest were copied from previous compilation.
+  128 of 2671 functions ( 4.8%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    16 functions had inline decision re-evaluated but remain unchanged
+    13 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.exe
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.pdb (Full PDB)

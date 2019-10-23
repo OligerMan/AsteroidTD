@@ -35,27 +35,27 @@ enum ResearchList {
 	turret_ultimate,
 
 	dome_initial,
-	dome_global_regen_lvl1,
-	dome_global_regen_lvl2,
-	dome_global_regen_lvl3,
-	dome_global_health_lvl1,
-	dome_global_health_lvl2,
-	dome_global_health_lvl3,
+	dome_local_regen_lvl1,
+	dome_local_regen_lvl2,
+	dome_local_regen_lvl3,
+	dome_local_health_lvl1,
+	dome_local_health_lvl2,
+	dome_local_health_lvl3,
 	dome_max_health_lvl1,
 	dome_max_health_lvl2,
 	dome_max_health_lvl3,
-	dome_global_damage_reduction_lvl1,
-	dome_global_damage_reduction_lvl2,
-	dome_global_damage_reduction_lvl3,
-	dome_global_damage_lvl1,
-	dome_global_damage_lvl2,
-	dome_global_damage_lvl3,
-	dome_global_research_income_lvl1,
-	dome_global_research_income_lvl2,
-	dome_global_research_income_lvl3,
-	dome_global_gold_income_lvl1,
-	dome_global_gold_income_lvl2,
-	dome_global_gold_income_lvl3,
+	dome_local_damage_reduction_lvl1,
+	dome_local_damage_reduction_lvl2,
+	dome_local_damage_reduction_lvl3,
+	dome_local_damage_lvl1,
+	dome_local_damage_lvl2,
+	dome_local_damage_lvl3,
+	dome_local_research_income_lvl1,
+	dome_local_research_income_lvl2,
+	dome_local_research_income_lvl3,
+	dome_local_gold_income_lvl1,
+	dome_local_gold_income_lvl2,
+	dome_local_gold_income_lvl3,
 	dome_ultimate,
 
 	science_initial,
@@ -92,6 +92,7 @@ struct ResearchNode {
     ResearchList type;
     Point pos;
     std::vector<ResearchList> parents;
+	std::string description;
 };
 
 class ResearchManager {
@@ -135,7 +136,7 @@ class ResearchManager {
 		"dome_mhp1",
 		"dome_mhp2",
 		"dome_mhp3",
-		"dome_g_dmg_red1",  // global damage reduction
+		"dome_g_dmg_red1",  // local damage reduction
 		"dome_g_dmg_red2",
 		"dome_g_dmg_red3",
 		"dome_g_dmg1",
@@ -177,6 +178,7 @@ class ResearchManager {
     type <research_type>
     cost <cost>
     pos <coor x> <coor y>
+	description |incredibly giant string with description of that research|   @ as \n
     parent_start
     <parent 1 type>
     <parent 2 type>
@@ -236,23 +238,6 @@ public:
         input_file.open(path);
 
 		std::string string;
-
-		/*input_file >> string;
-		if (string != "list_start") {
-			if (settings.isErrorOutputEnabled()) {
-				std::cout << "Wrong format of research file" << std::endl;
-			}
-		}
-
-		while (true) {
-			input_file >> string;
-			if (string == "list_end") {
-				break;
-			}
-			if (isParserKeyword(string)) {
-
-			}
-		}*/
 
 		graph.resize(research_name.size());
 		research_list.resize(research_name.size());
@@ -317,6 +302,28 @@ public:
 			}
 			research_node->pos.x = getFloat(input_file);
 			research_node->pos.y = getFloat(input_file);
+
+			input_file >> string;
+			if (string != "description") {
+				if (settings.isErrorOutputEnabled()) {
+					std::cout << "Missing research's description block" << std::endl;
+				}
+				input_file.close();
+				return;
+			}
+			while (input_file.get() != '\|') {}
+			string.clear();
+			while (true) {
+				unsigned char input_char = input_file.get();
+				if (input_char == '\|') {
+					break;
+				}
+				if (input_char == '@') {
+					input_char = '\n';
+				}
+				string.push_back(input_char);
+			}
+			research_node->description = string;
 
 			input_file >> string;
 			if (string != "parent_start") {
@@ -539,18 +546,18 @@ public:
 
 	// dome researches block
 
-	float getDomeGlobalRegenCoef() {
+	float getDomeLocalRegenCoef() {
 		float coef = 0;
 		if (research_list[dome_initial]->unlocked) {
 			coef = 0.1;
 		}
-		if (research_list[dome_global_regen_lvl1]->unlocked) {
+		if (research_list[dome_local_regen_lvl1]->unlocked) {
 			coef = 0.25;
 		}
-		if (research_list[dome_global_regen_lvl1]->unlocked) {
+		if (research_list[dome_local_regen_lvl1]->unlocked) {
 			coef = 0.6;
 		}
-		if (research_list[dome_global_regen_lvl1]->unlocked) {
+		if (research_list[dome_local_regen_lvl1]->unlocked) {
 			coef = 1;
 		}
 		if (research_list[dome_ultimate]->unlocked) {
@@ -579,15 +586,15 @@ public:
 		return coef;
 	}
 
-	float getDomeGlobalMaxHealthCoef() {
+	float getDomeLocalMaxHealthCoef() {
 		float coef = 0;
-		if (research_list[dome_global_health_lvl1]->unlocked) {
+		if (research_list[dome_local_health_lvl1]->unlocked) {
 			coef = 0.25;
 		}
-		if (research_list[dome_global_health_lvl2]->unlocked) {
+		if (research_list[dome_local_health_lvl2]->unlocked) {
 			coef = 0.65;
 		}
-		if (research_list[dome_global_health_lvl3]->unlocked) {
+		if (research_list[dome_local_health_lvl3]->unlocked) {
 			coef = 1.5;
 		}
 		if (research_list[dome_ultimate]->unlocked) {
@@ -596,15 +603,15 @@ public:
 		return coef;
 	}
 
-	float getDomeGlobalDamageReductionCoef() {
+	float getDomeLocalDamageReductionCoef() {
 		float coef = 0;
-		if (research_list[dome_global_damage_reduction_lvl1]->unlocked) {
+		if (research_list[dome_local_damage_reduction_lvl1]->unlocked) {
 			coef = 0.02;
 		}
-		if (research_list[dome_global_damage_reduction_lvl2]->unlocked) {
+		if (research_list[dome_local_damage_reduction_lvl2]->unlocked) {
 			coef = 0.03;
 		}
-		if (research_list[dome_global_damage_reduction_lvl3]->unlocked) {
+		if (research_list[dome_local_damage_reduction_lvl3]->unlocked) {
 			coef = 0.04;
 		}
 		if (research_list[dome_ultimate]->unlocked) {
@@ -613,15 +620,15 @@ public:
 		return coef;
 	}
 
-	float getDomeGlobalDamageBonusCoef() {
+	float getDomeLocalDamageBonusCoef() {
 		float coef = 0;
-		if (research_list[dome_global_damage_lvl1]->unlocked) {
+		if (research_list[dome_local_damage_lvl1]->unlocked) {
 			coef = 0.05;
 		}
-		if (research_list[dome_global_damage_lvl1]->unlocked) {
+		if (research_list[dome_local_damage_lvl1]->unlocked) {
 			coef = 0.1;
 		}
-		if (research_list[dome_global_damage_lvl1]->unlocked) {
+		if (research_list[dome_local_damage_lvl1]->unlocked) {
 			coef = 0.15;
 		}
 		if (research_list[dome_ultimate]->unlocked) {
@@ -630,15 +637,15 @@ public:
 		return coef;
 	}
 
-	float getDomeGlobalGoldIncomeCoef() {
+	float getDomeLocalGoldIncomeCoef() {
 		float coef = 0;
-		if (research_list[dome_global_gold_income_lvl1]->unlocked) {
+		if (research_list[dome_local_gold_income_lvl1]->unlocked) {
 			coef = 0.05;
 		}
-		if (research_list[dome_global_gold_income_lvl1]->unlocked) {
+		if (research_list[dome_local_gold_income_lvl1]->unlocked) {
 			coef = 0.1;
 		}
-		if (research_list[dome_global_gold_income_lvl1]->unlocked) {
+		if (research_list[dome_local_gold_income_lvl1]->unlocked) {
 			coef = 0.15;
 		}
 		if (research_list[dome_ultimate]->unlocked) {
@@ -647,15 +654,15 @@ public:
 		return coef;
 	}
 
-	float getDomeGlobalResearchIncomeCoef() {
+	float getDomeLocalResearchIncomeCoef() {
 		float coef = 0;
-		if (research_list[dome_global_research_income_lvl1]->unlocked) {
+		if (research_list[dome_local_research_income_lvl1]->unlocked) {
 			coef = 1.05;
 		}
-		if (research_list[dome_global_research_income_lvl1]->unlocked) {
+		if (research_list[dome_local_research_income_lvl1]->unlocked) {
 			coef = 1.1;
 		}
-		if (research_list[dome_global_research_income_lvl1]->unlocked) {
+		if (research_list[dome_local_research_income_lvl1]->unlocked) {
 			coef = 1.15;
 		}
 		if (research_list[dome_ultimate]->unlocked) {

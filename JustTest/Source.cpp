@@ -733,7 +733,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			window.setView(view3);
             window.clear(sf::Color::Black);
 
-			res_visual_ctrl.processFrame(&window);
+			res_visual_ctrl.processFrame(&window, view3.getCenter(), cur_research_index);
 
 			Point move_vector;
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || 
@@ -872,7 +872,7 @@ int main() {
 
 	VisualController visual_ctrl;
 	GUIVisualController gui_visual_ctrl(&window);
-	ResearchVisualController res_visual_ctrl;
+	ResearchVisualController res_visual_ctrl(&window);
 
 	sf::Texture menu_background_texture;
 	menu_background_texture.loadFromFile("background/menu_background.png");
