@@ -175,8 +175,8 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				gui_manager.forceSetTopSign("Pause", 0.01);
             }
 
-			gui_manager.setText(std::to_string((int)resource_manager.getGold()), 0.01, gold_sign, Point(-(int)window.getSize().x / 2, -(int)window.getSize().y / 2), 30);
-			gui_manager.setText(std::to_string((int)resource_manager.getResearch()), 0.01, research_sign, Point(-(int)window.getSize().x / 2, -(int)window.getSize().y / 2 + 50), 30);
+			gui_manager.setText("Gold: " + std::to_string((int)resource_manager.getGold()), 0.01, gold_sign, Point(-(int)window.getSize().x / 2, -(int)window.getSize().y / 2), 35);
+			gui_manager.setText("Research: " + std::to_string((int)resource_manager.getResearch()), 0.01, research_sign, Point(-(int)window.getSize().x / 2, -(int)window.getSize().y / 2 + 55), 35);
 
 			if (skills_mode == set1) {
 				gui_manager.setText("Ability Mode", 0.01, skill_status_sign, Point(window.getSize().x / 2 - 150, -(int)window.getSize().y / 2), 50);
@@ -382,7 +382,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				}
 
 				if (game_status != pause) {
-					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Joystick::isButtonPressed(0, LB)) && (frame_num - last_view_change) > consts.getFPSLock() / 3 /* 0.33 sec delay for changing view again */) {
+					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Joystick::isButtonPressed(0, LB)) && (frame_num - last_view_change) > fps.getFPS() / 3 /* 0.33 sec delay for changing view again */) {
 						if (!(game_status == game_strategic_mode)) {
 							game_status = game_strategic_mode;
 							last_view_change = frame_num;
@@ -394,7 +394,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 							window.setView(view1);
 						}
 					}
-					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::E) || sf::Joystick::isButtonPressed(0, RB)) && (frame_num - last_mode_change) > consts.getFPSLock() / 3 /* 0.33 sec delay for changing view again */) {
+					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::E) || sf::Joystick::isButtonPressed(0, RB)) && (frame_num - last_mode_change) > fps.getFPS() / 3 /* 0.33 sec delay for changing view again */) {
 						if (skills_mode == set1) {
 							skills_mode = set2;
 						}
@@ -404,7 +404,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 						last_mode_change = frame_num;
 						last_build = frame_num - consts.getFPSLock();
 					}
-					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) || sf::Joystick::isButtonPressed(0, Y)) && (frame_num - last_build) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
+					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) || sf::Joystick::isButtonPressed(0, Y)) && (frame_num - last_build) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */) {
 						if (skills_mode == set1) {
 							// hero attack 1 (mb rocket launch)
 						}
@@ -435,7 +435,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 						}
 
 					}
-					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) || sf::Joystick::isButtonPressed(0, X)) && (frame_num - last_build) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
+					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) || sf::Joystick::isButtonPressed(0, X)) && (frame_num - last_build) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */) {
 						if (skills_mode == set1) {
 							// hero speed increase
 							if (resource_manager.spendGold(consts.getSpeedBuffPrice())) {
@@ -460,7 +460,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 							}
 						}
 					}
-					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) || sf::Joystick::isButtonPressed(0, B)) && (frame_num - last_build) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
+					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) || sf::Joystick::isButtonPressed(0, B)) && (frame_num - last_build) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */) {
 						if (skills_mode == set1) {
 							// attack buff for asteroid
 							if (game_map1.getClosestAsteroid() != nullptr) {
@@ -488,7 +488,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 							}
 						}
 					}
-					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) || sf::Joystick::isButtonPressed(0, A)) && (frame_num - last_build) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
+					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) || sf::Joystick::isButtonPressed(0, A)) && (frame_num - last_build) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */) {
 						if (skills_mode == set1) {
 							// heal for asteroid and self
 							if (game_map1.getClosestAsteroid() != nullptr) {
@@ -519,7 +519,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 						}
 					}
 				}
-				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::R) || sf::Joystick::isButtonPressed(0, START)) && (frame_num - last_pause) > consts.getFPSLock() / 4) {
+				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::R) || sf::Joystick::isButtonPressed(0, START)) && (frame_num - last_pause) > fps.getFPS() / 4) {
 					if (game_status != pause) {
 						prev_game_status = game_status;
 						game_status = pause;
@@ -541,7 +541,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 						}
 					}
 				}
-				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::F) || sf::Joystick::isButtonPressed(0, BACK)) && (frame_num - last_research_open) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
+				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::F) || sf::Joystick::isButtonPressed(0, BACK)) && (frame_num - last_research_open) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */) {
 					last_research_open = frame_num;
 					prev_game_status = game_status;
 					game_status = research;
