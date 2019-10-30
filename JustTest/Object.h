@@ -92,17 +92,12 @@ public:
 
 		delete col_model;
 
-		bool status;
-
-		col_model = new CollisionModel("collision/" + collision_type[new_object_type] + ".col", &status);
+		col_model = new CollisionModel(collision_info_set[new_object_type]);
 		col_model->setPosition(point);
 		col_model->setOrigin(origin);
 		
-		unit_info = new UnitInfo("unit_info/" + object_type[new_object_type] + ".unit", &status);
-		if (!status) {
-			delete unit_info;
-			unit_info = nullptr;
-		}
+		unit_info = new UnitInfo(unit_info_set[new_object_type]);
+
 		time_left = lifetime[object_type_info];
 	}
 

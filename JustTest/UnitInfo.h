@@ -279,6 +279,11 @@ public:
 		hp = new_hp;
 	}
 
+	void setMaxHealth(float new_max_hp) {
+		hp = hp * new_max_hp / max_hp;
+		max_hp = new_max_hp;
+	}
+
 	void setMana(float new_mana) {
 		mana = new_mana;
 	}
@@ -490,3 +495,15 @@ public:
 		return dome_cnt;
 	}
 };
+
+std::vector<UnitInfo> unit_info_set;
+
+void unit_info_init() {
+	bool status;
+	for (int i = 0; i < object_type.size(); i++) {
+		unit_info_set.push_back(UnitInfo("unit_info/" + object_type[i] + ".unit", &status));
+		if (!status) {
+			unit_info_set[unit_info_set.size() - 1] = UnitInfo();
+		}
+	}
+}

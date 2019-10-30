@@ -6,6 +6,7 @@
 #include "GameStatus.h"
 #include "Research.h"
 #include "ResearchVisualController.h"
+#include "Tutorial.h"
 
 #include <chrono>
 #include <Windows.h>
@@ -130,8 +131,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 		fps.processFrame(frame_num);
 
 		if (game_status == game_hero_mode || game_status == game_strategic_mode || game_status == pause) {
-
+			
 			game_frame_num++;
+			
 			
 			if (!(game_status == game_strategic_mode || game_status == pause)) {
 				main_background_sprite.setPosition(main_back_pos);
@@ -382,7 +384,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				}
 
 				if (game_status != pause) {
-					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Joystick::isButtonPressed(0, LB)) && (frame_num - last_view_change) > fps.getFPS() / 3 /* 0.33 sec delay for changing view again */) {
+					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Joystick::isButtonPressed(0, LB)) && (frame_num - last_view_change) > fps.getFPS() / 3 /* 0.33 sec delay for changing view again */)) {
 						if (!(game_status == game_strategic_mode)) {
 							game_status = game_strategic_mode;
 							last_view_change = frame_num;
@@ -394,7 +396,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 							window.setView(view1);
 						}
 					}
-					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::E) || sf::Joystick::isButtonPressed(0, RB)) && (frame_num - last_mode_change) > fps.getFPS() / 3 /* 0.33 sec delay for changing view again */) {
+					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::E) || sf::Joystick::isButtonPressed(0, RB)) && (frame_num - last_mode_change) > fps.getFPS() / 3 /* 0.33 sec delay for changing view again */)) {
 						if (skills_mode == set1) {
 							skills_mode = set2;
 						}
@@ -846,8 +848,6 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode(settings.getWindowWidth(), settings.getWindowHeight()), "AsteroidTD", sf::Style::None);
 	sf::View main_view(sf::Vector2f((int)window.getSize().x / 2, (int)window.getSize().y / 2), sf::Vector2f(window.getSize().x, window.getSize().y));      // main menu view
 
-
-
 	window.setFramerateLimit(consts.getFPSLock());
 
 	collision_type_init();
@@ -857,6 +857,8 @@ int main() {
 	animation_type_init();
 	faction_type_init();
 
+	unit_info_init();
+	collision_info_init();
 
 	srand(time(NULL));   // setting a magic number to random generation
 

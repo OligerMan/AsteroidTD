@@ -19,6 +19,9 @@ class VisualController {
 
 	bool is_active = true;
 
+	sf::Text hp_sign;
+	sf::Font base_font;
+
 	void uploadTextures(std::string path) {
 		if (settings.isSpriteDebugOutputEnabled()) {
 			std::cout << " -- Sprites loading start -- " << std::endl;
@@ -84,6 +87,14 @@ public:
 
 		uploadTextures(texture_path);
 		initSprites();
+
+		base_font.loadFromFile("a_Alterna.ttf");
+
+		hp_sign.setFillColor(sf::Color::White);
+		hp_sign.setOutlineColor(sf::Color::Black);
+		hp_sign.setOutlineThickness(1);
+		hp_sign.setCharacterSize(20);
+		hp_sign.setFont(base_font);
 	}
 
 	void reset() {
@@ -134,6 +145,11 @@ public:
 				Object * object = (*objects)[layer][i];
 
 				drawObject(object, window);
+
+				hp_sign.setPosition(object->getPosition().x, object->getPosition().y);
+				hp_sign.setString(std::to_string((int)object->getUnitInfo()->getHealth()));
+				hp_sign.setOrigin(object->getCollisionModel()->getSquareBorder().x / 2, object->getCollisionModel()->getSquareBorder().y / 2);
+				window->draw(hp_sign);
 			}
 		}
 

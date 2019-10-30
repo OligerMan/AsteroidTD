@@ -144,6 +144,7 @@
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="StructureSetGeneration.h" />
+    <ClInclude Include="Tutorial.h" />
     <ClInclude Include="UnitInfo.h" />
     <ClInclude Include="VisualController.h" />
     <ClInclude Include="VisualInfo.h" />

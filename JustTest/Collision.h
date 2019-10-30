@@ -4,6 +4,7 @@
 
 #include "GeometryComponents.h"
 #include "CollisionParser.h"
+#include "ObjectTypes.h"
 
 /*
 	There are will be only really simple collisions because 
@@ -183,4 +184,16 @@ bool checkModelCollision(CollisionModel * m1, CollisionModel * m2) {
 		}
 	}
 	return false;
+}
+
+std::vector<CollisionModel> collision_info_set;
+
+void collision_info_init() {
+	bool status;
+	for (int i = 0; i < collision_type.size(); i++) {
+		collision_info_set.push_back(CollisionModel("collision/" + collision_type[i] + ".col", &status));
+		if (!status) {
+			collision_info_set[collision_info_set.size() - 1] = CollisionModel();
+		}
+	}
 }
