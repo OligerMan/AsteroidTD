@@ -7,7 +7,7 @@ class Constants {
 	const double default_hero_speed = 1;
 	const double strategic_camera_speed = 10;
 	const double knockback_speed = 0;
-	const double friction_coef = 0.01;
+	const double friction_coef = 0.1;
 	const float fps_lock = 240;
 	const double interaction_distance = 600;
 

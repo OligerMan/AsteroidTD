@@ -8,7 +8,14 @@ public:
 		base_description,
 		movement_tutorial,
 		switching_view_tutorial,
-		build_mode_tutorial,
+		build_mode_dome_tutorial,
+		build_mode_dome_description_tutorial,
+		build_mode_turret_tutorial,
+		build_mode_turret_description_tutorial,
+		build_mode_gold_tutorial,
+		build_mode_gold_description_tutorial,
+		build_mode_science_tutorial,
+		build_mode_science_description_tutorial,
 		switching_modes_tutorial,
 		using_skills_tutorial,
 		research_tutorial,
@@ -30,7 +37,7 @@ public:
 	}
 
 	bool isWorkingOnStep(step current_step) {  // need this to unlock some steps of tutorial and not to lock if tutorial isn't activated
-		return (cur_step == current_step) || (current_step == no_tutorial);
+		return (cur_step == current_step) || (cur_step == no_tutorial);
 	}
 	
 	void nextStep() {

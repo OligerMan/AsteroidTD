@@ -142,7 +142,7 @@ public:
 		}
 	}
 
-	void forceSetTopSign(char * string, float time /*in seconds*/) {
+	void forceSetTopSign(std::string string, float time /*in seconds*/) {
 		text[0].first.setString(string);
 		text[0].second = consts.getFPSLock() * time;
 	}

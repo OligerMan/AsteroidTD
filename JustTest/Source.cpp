@@ -52,6 +52,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
     int last_research_open = 0; // number of frame when you opened research list last time
 	int last_research_choice = 0; // number of frame when you chose another research last time
 	int last_menu_choice = 0;
+	int last_tutorial = 0;
 
 	GameStatus prev_game_status = pause;
 
@@ -86,6 +87,11 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	float hero_hp = 0;
 	int vibration_time = 0;
 	int vibr_on_dmg_time = 30;
+
+	// movement tutorial counter
+	float move_points_left = 1500;
+	int switching_view_counter = 2;
+	int switching_modes_counter = 2;
 
 	Point viewport_pos;
 
@@ -132,8 +138,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 		if (game_status == game_hero_mode || game_status == game_strategic_mode || game_status == pause) {
 			
-			game_frame_num++;
-			
+			if (tutorial.isWorkingOnStep(tutorial.no_tutorial)) {
+				game_frame_num++;
+			}
 			
 			if (!(game_status == game_strategic_mode || game_status == pause)) {
 				main_background_sprite.setPosition(main_back_pos);
@@ -187,7 +194,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				gui_manager.setText("Build Mode", 0.01, skill_status_sign, Point(window.getSize().x / 2 - 150, -(int)window.getSize().y / 2), 50);
 			}
 
-			if (game_status != pause) {
+			if (game_status != pause && tutorial.isWorkingOnStep(tutorial.no_tutorial)) {
 				if (game_frame_num >= next_wave) {
 					if (!(game_status == game_strategic_mode)) {
 						game_map1.spawnEnemy(game_frame_num / 8000, Point(view1.getCenter().x, view1.getCenter().y));
@@ -201,6 +208,63 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					wave_delay += 200;
 				}
 			}
+
+			// tutorial code
+			if (tutorial.getCurrentStep() != tutorial.no_tutorial) {
+				if (tutorial.isWorkingOnStep(tutorial.base_description)) {
+					gui_manager.forceSetTopSign("This tutorial will show you\nsome base mechanics of\nthis game\n(press " + (sf::Joystick::isConnected(0) ? std::string("A") : std::string("Space")) + " for next step)", 0.01);
+				}
+				if (tutorial.isWorkingOnStep(tutorial.movement_tutorial)) {
+					gui_manager.forceSetTopSign("Try to move with WASD keys\nor left gamepad stick\n(" + std::to_string((int)move_points_left) + " pts left)", 0.01);
+					move_points_left -= hero_object->getSpeed().getLength();
+					if (move_points_left < 0) {
+						tutorial.nextStep();
+					}
+				}
+				if (tutorial.isWorkingOnStep(tutorial.switching_view_tutorial)) {
+					gui_manager.forceSetTopSign("OK! Now let's try to change\ncamera mode with Q keyboard key\nor LB gamepad key\n(" + std::to_string(switching_view_counter) + " times left)", 0.01);
+					if (switching_view_counter == 0) {
+						tutorial.nextStep();
+					}
+				}
+
+				if (tutorial.isWorkingOnStep(tutorial.build_mode_dome_tutorial)) {
+					gui_manager.forceSetTopSign("Fly to the nearest asteroid\nand build dome on it\nwith key 1 on keyboard\nor Y on gamepad", 0.01);
+				}
+				if (tutorial.isWorkingOnStep(tutorial.build_mode_dome_description_tutorial)) {
+					gui_manager.forceSetTopSign("Dome grants some nregeneration\nfor all structures on same asteroid\n(Space or A to proceed)", 0.01);
+				}
+
+				if (tutorial.isWorkingOnStep(tutorial.build_mode_turret_tutorial)) {
+					gui_manager.forceSetTopSign("Fly to the nearest asteroid\nand build turret on it\nwith key 2 on keyboard\nor X on gamepad", 0.01);
+				}
+				if (tutorial.isWorkingOnStep(tutorial.build_mode_turret_description_tutorial)) {
+					gui_manager.forceSetTopSign("Turret is full-autonomous static\ndefence system for asteroid\nwith one minus - range so\nyou need more to defend your structures\n(Space or A to proceed)", 0.01);
+				}
+
+				if (tutorial.isWorkingOnStep(tutorial.build_mode_gold_tutorial)) {
+					gui_manager.forceSetTopSign("Fly to the nearest asteroid\nand build gold mine on it\nwith key 3 on keyboard\nor B on gamepad", 0.01);
+				}
+				if (tutorial.isWorkingOnStep(tutorial.build_mode_gold_description_tutorial)) {
+					gui_manager.forceSetTopSign("You need gold mines to extract\nfrom asteroid all you can sell for gold\n(Space or A to proceed)", 0.01);
+				}
+
+				if (tutorial.isWorkingOnStep(tutorial.build_mode_gold_tutorial)) {
+					gui_manager.forceSetTopSign("Fly to the nearest asteroid\nand build science station on it\nwith key 4 on keyboard\nor A on gamepad", 0.01);
+				}
+				if (tutorial.isWorkingOnStep(tutorial.build_mode_gold_description_tutorial)) {
+					gui_manager.forceSetTopSign("You need science stations to\nget some research points\n(about it slightly further,\nSpace or A to proceed)", 0.01);
+				}
+
+				if (tutorial.isWorkingOnStep(tutorial.switching_modes_tutorial)) {
+					gui_manager.forceSetTopSign("OK! Now let's try to change\nbuild mode to skills mode with Q keyboard key\nor LB gamepad key\n(" + std::to_string(switching_view_counter) + " times left)", 0.01);
+					if (switching_modes_counter == 0) {
+						tutorial.nextStep();
+					}
+				}
+			}
+			
+
 			
 			if (is_game_cycle) {
 				// set background
@@ -384,29 +448,37 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				}
 
 				if (game_status != pause) {
-					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Joystick::isButtonPressed(0, LB)) && (frame_num - last_view_change) > fps.getFPS() / 3 /* 0.33 sec delay for changing view again */)) {
+					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Joystick::isButtonPressed(0, LB)) && (frame_num - last_view_change) > fps.getFPS() / 3 /* 0.33 sec delay for changing view again */) && tutorial.isWorkingOnStep(tutorial.switching_view_tutorial)) {
 						if (!(game_status == game_strategic_mode)) {
 							game_status = game_strategic_mode;
 							last_view_change = frame_num;
 							window.setView(view2);
+							if (tutorial.isWorkingOnStep(tutorial.switching_view_tutorial)) {
+								switching_view_counter--;
+							}
 						}
 						else {
 							game_status = game_hero_mode;
 							last_view_change = frame_num;
 							window.setView(view1);
+							if (tutorial.isWorkingOnStep(tutorial.switching_view_tutorial)) {
+								switching_view_counter--;
+							}
 						}
 					}
-					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::E) || sf::Joystick::isButtonPressed(0, RB)) && (frame_num - last_mode_change) > fps.getFPS() / 3 /* 0.33 sec delay for changing view again */)) {
+					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::E) || sf::Joystick::isButtonPressed(0, RB)) && (frame_num - last_mode_change) > fps.getFPS() / 3 /* 0.33 sec delay for changing view again */) && tutorial.isWorkingOnStep(tutorial.switching_modes_tutorial)) {
 						if (skills_mode == set1) {
 							skills_mode = set2;
+							switching_modes_counter--;
 						}
 						else {
 							skills_mode = set1;
+							switching_modes_counter--;
 						}
 						last_mode_change = frame_num;
 						last_build = frame_num - consts.getFPSLock();
 					}
-					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) || sf::Joystick::isButtonPressed(0, Y)) && (frame_num - last_build) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */) {
+					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) || sf::Joystick::isButtonPressed(0, Y)) && (frame_num - last_build) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */ && tutorial.isWorkingOnStep(tutorial.build_mode_dome_tutorial)) {
 						if (skills_mode == set1) {
 							// hero attack 1 (mb rocket launch)
 						}
@@ -437,7 +509,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 						}
 
 					}
-					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) || sf::Joystick::isButtonPressed(0, X)) && (frame_num - last_build) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */) {
+					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) || sf::Joystick::isButtonPressed(0, X)) && (frame_num - last_build) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */ && tutorial.isWorkingOnStep(tutorial.build_mode_turret_tutorial)) {
 						if (skills_mode == set1) {
 							// hero speed increase
 							if (resource_manager.spendGold(consts.getSpeedBuffPrice())) {
@@ -462,7 +534,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 							}
 						}
 					}
-					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) || sf::Joystick::isButtonPressed(0, B)) && (frame_num - last_build) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */) {
+					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) || sf::Joystick::isButtonPressed(0, B)) && (frame_num - last_build) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */ && tutorial.isWorkingOnStep(tutorial.build_mode_gold_tutorial)) {
 						if (skills_mode == set1) {
 							// attack buff for asteroid
 							if (game_map1.getClosestAsteroid() != nullptr) {
@@ -490,7 +562,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 							}
 						}
 					}
-					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) || sf::Joystick::isButtonPressed(0, A)) && (frame_num - last_build) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */) {
+					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) || sf::Joystick::isButtonPressed(0, A)) && (frame_num - last_build) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */ && tutorial.isWorkingOnStep(tutorial.build_mode_science_tutorial)) {
 						if (skills_mode == set1) {
 							// heal for asteroid and self
 							if (game_map1.getClosestAsteroid() != nullptr) {
@@ -548,6 +620,14 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					prev_game_status = game_status;
 					game_status = research;
 				}
+			
+				if (tutorial.isWorkingOnStep(tutorial.base_description) && tutorial.isWorkingOnStep(tutorial.build_mode_dome_description_tutorial) && tutorial.isWorkingOnStep(tutorial.build_mode_turret_description_tutorial) && tutorial.isWorkingOnStep(tutorial.build_mode_gold_description_tutorial) && tutorial.isWorkingOnStep(tutorial.build_mode_science_description_tutorial)) {
+					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, A)) && (frame_num - last_tutorial) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */) {
+						last_tutorial = frame_num;
+						tutorial.nextStep();
+					}
+				}
+				
 			}
 
 			if (!(game_status == game_strategic_mode || game_status == pause)) {
@@ -555,10 +635,13 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					hero_speed *= consts.getMoveSpeedBuffMultiplier();
 				}
 				new_speed = new_speed.getNormal() * hero_speed;
+				if (!tutorial.isWorkingOnStep(tutorial.movement_tutorial)) {
+					new_speed = Point();
+				}
 				if (hero_object != nullptr) {
-					Point old_pos = hero_object->getSpeed();
-					old_pos -= previous_speed;
-					hero_object->setSpeed(old_pos * (1 - consts.getFrictionCoef()));
+					Point old_speed = hero_object->getSpeed();
+					old_speed -= previous_speed;
+					hero_object->setSpeed(old_speed * (1 - consts.getFrictionCoef()));
 
 					hero_object->changeSpeed(new_speed);
 					previous_speed = new_speed;
