@@ -17,7 +17,10 @@ public:
 		build_mode_science_tutorial,
 		build_mode_science_description_tutorial,
 		switching_modes_tutorial,
-		using_skills_tutorial,
+		using_skills_rocket_tutorial,
+		using_skills_speed_tutorial,
+		using_skills_damage_tutorial,
+		using_skills_heal_tutorial,
 		research_tutorial,
 		research_tutorial_close,
 		pause_tutorial,
@@ -28,7 +31,7 @@ public:
 
 private:
 
-	int cur_step = no_tutorial;
+	int cur_step = base_description;
 
 public:
 
@@ -42,7 +45,7 @@ public:
 	
 	void nextStep() {
 		cur_step++;
-		if (cur_step == STEPS_COUNT) {
+		if (cur_step == STEPS_COUNT || cur_step == base_description) {
 			cur_step = no_tutorial;
 		}
 	}
