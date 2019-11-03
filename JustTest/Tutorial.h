@@ -1,5 +1,7 @@
 #pragma once
 
+#include <fstream>
+
 class Tutorial {
 public:
 
@@ -35,6 +37,15 @@ private:
 
 public:
 
+	Tutorial() {
+		std::ifstream tutorial;
+		tutorial.open("tutorial.passed");
+		if (tutorial.good()) {
+			cur_step = no_tutorial;
+		}
+		tutorial.close();
+	}
+
 	int getCurrentStep() {
 		return cur_step;
 	}
@@ -45,7 +56,16 @@ public:
 	
 	void nextStep() {
 		cur_step++;
-		if (cur_step == STEPS_COUNT || cur_step == base_description) {
+		if (cur_step == STEPS_COUNT){
+
+			std::ofstream tutorial_msg;
+			tutorial_msg.open("tutorial.passed", std::ofstream::out);
+			tutorial_msg << "Congratulations!";
+			tutorial_msg.close();
+
+			cur_step = no_tutorial;
+		}
+		if (cur_step == base_description) {
 			cur_step = no_tutorial;
 		}
 	}

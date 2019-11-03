@@ -244,9 +244,9 @@ C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): war
               _Other2=double &
           ]
   Generating code
-  138 of 2904 functions ( 4.8%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    14 functions had inline decision re-evaluated but remain unchanged
+  152 of 2908 functions ( 5.2%) were compiled, the rest were copied from previous compilation.
+    2 functions were new in current compilation
+    26 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.exe
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.pdb (Full PDB)
