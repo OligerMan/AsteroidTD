@@ -5,6 +5,7 @@
 #include "Research.h"
 #include "FileSearch.h"
 #include "Settings.h"
+#include "Tutorial.h"
 
 #include <SFML\Graphics.hpp>
 
@@ -18,7 +19,7 @@ class ResearchVisualController {
 	std::vector<sf::Sprite> sprite_buffer;
 
 	sf::Font font;
-	sf::Text cost_sign, description;
+	sf::Text cost_sign, description, tutorial_sign;
 
 	bool is_active = true;
 
@@ -92,6 +93,13 @@ public:
 		description.setOutlineThickness(1);
 		description.setCharacterSize(40);
 		description.setFont(font);
+
+		tutorial_sign.setPosition(sf::Vector2f(0, -(int)window->getSize().y / 2 + 100));
+		tutorial_sign.setFillColor(sf::Color::White);
+		tutorial_sign.setOutlineColor(sf::Color::Black);
+		tutorial_sign.setOutlineThickness(1);
+		tutorial_sign.setCharacterSize(40);
+		tutorial_sign.setFont(font);
 	}
 
 	void setActive() {
@@ -144,6 +152,16 @@ public:
 			drawResearch(research_manager.getResearchNode(i), window);
 		}
 		drawResearchInfo(window, viewport_pos, cur_research_index);
+
+		if (tutorial.getCurrentStep() == tutorial.research_tutorial_close) {
+			tutorial_sign.setString("Try to research something by selecting it\nwith WASD on left stick and pressing\nSpace on keyboard or A on gamepad\nand then exit with F");
+			tutorial_sign.setOrigin(-viewport_pos + sf::Vector2f(tutorial_sign.getLocalBounds().width / 2, 0));
+		}
+		else {
+			tutorial_sign.setString("");
+		}
+		window->draw(tutorial_sign);
+
 		return is_active;
 	}
 

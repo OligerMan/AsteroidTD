@@ -27,6 +27,7 @@ public:
 		research_tutorial_close,
 		pause_tutorial,
 		unpause_tutorial,
+		tutorial_end,
 
 		STEPS_COUNT
 	};

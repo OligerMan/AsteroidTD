@@ -286,6 +286,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				if (tutorial.isWorkingOnStep(tutorial.unpause_tutorial)) {
 					gui_manager.forceSetTopSign("Game paused! Press R to unpause the game", 0.01);
 				}
+				if (tutorial.isWorkingOnStep(tutorial.tutorial_end)) {
+					gui_manager.forceSetTopSign("Now you know all game basics.\nPress Space or A to start new game. GL HF!", 0.01);
+				}
 			}
 			
 
@@ -678,9 +681,14 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					}
 				}
 			
-				if (tutorial.isWorkingOnStep(tutorial.base_description) || tutorial.isWorkingOnStep(tutorial.build_mode_dome_description_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_turret_description_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_gold_description_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_science_description_tutorial)) {
+				if (tutorial.isWorkingOnStep(tutorial.base_description) || tutorial.isWorkingOnStep(tutorial.build_mode_dome_description_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_turret_description_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_gold_description_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_science_description_tutorial) || tutorial.isWorkingOnStep(tutorial.tutorial_end)) {
 					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, A)) && (frame_num - last_tutorial) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */) {
 						last_tutorial = frame_num;
+						if (tutorial.isWorkingOnStep(tutorial.tutorial_end)) {
+							game_status = game_hero_mode;
+							tutorial.nextStep();
+							return;
+						}
 						tutorial.nextStep();
 					}
 				}

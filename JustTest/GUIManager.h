@@ -20,7 +20,17 @@ enum textboxList {
 class GUIManager {
 
 	std::vector<std::string> start_game_signs{
-		std::string("Let's start")
+		std::string("Let's start"),
+		std::string("GL HF!"),
+		std::string("Show your skill"),
+		std::string("Let's see how far you can go"),
+		std::string("New stranger on the battlefield!"),
+		std::string("What a new ship I see in outer space?"),
+		std::string("Welcome back"),
+		std::string("Hello, Mr(s).Stranger. Nice to meet you again"),
+		std::string("Welcome to the battlefield"),
+		std::string("Happy Hunger Games! And may the odds be ever in your favor"),
+		std::string("Hello there\n<Obi-Wan Kenobi.jpg>")
 	};
 
 	std::vector<std::vector<Object *>> gui_elements;
