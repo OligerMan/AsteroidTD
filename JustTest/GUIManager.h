@@ -13,6 +13,8 @@ enum textboxList {
 	gold_sign,
 	research_sign,
 	skill_status_sign,
+	rank_start,
+	rank_end = rank_start + 11,  // researved for online rank
 
 	SIGN_NUM
 };

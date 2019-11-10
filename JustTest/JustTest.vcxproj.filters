@@ -126,6 +126,12 @@
     <ClInclude Include="Tutorial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerStat.pb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnlineRank.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -174,9 +180,15 @@
     <None Include="research.cfg">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="PlayerStat.proto">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerStat.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

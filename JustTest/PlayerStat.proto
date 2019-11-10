@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+message PlayerKillStat{
+	required int32 kills = 1;
+	required int32 kills_place = 2;
+	required string nickname = 3;
+}
+
+message PlayerSurviveStat{
+	required int32 time_survived = 1;
+	required int32 time_survived_place = 2;
+	required string nickname = 3;
+}
+
+message RankInfo{
+	repeated PlayerKillStat top5kill = 1;
+	repeated PlayerKillStat round5kill = 2;
+	repeated PlayerSurviveStat top5survive = 3;
+	repeated PlayerSurviveStat round5survive = 4;
+	required int32 online_count = 5;
+}
+
+message PlayerInfo{
+	required int32 kills = 1;
+	required int32 time_survived = 2;
+	required string nickname = 3;
+	required int32 hash = 4;
+	required bool live = 5;
+}

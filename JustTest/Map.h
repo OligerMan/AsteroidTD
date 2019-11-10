@@ -9,7 +9,7 @@
 #include "ConvexHull.h"
 #include "FPS.h"
 #include "ResourceManager.h"
-
+#include "OnlineRank.h"
 
 void fixCollision(Object * obj1, Object * obj2) {
 
@@ -403,6 +403,9 @@ class Map {
 					}
 					if (objects[layer][i] == last_clicked_object) {
 						last_clicked_object = nullptr;
+					}
+					if (objects[layer][i]->getObjectType() == ObjectType::alien_fighter) {
+						rank.addKills(1);
 					}
 					delete objects[layer][i];
 					objects[layer].erase(objects[layer].begin() + i);

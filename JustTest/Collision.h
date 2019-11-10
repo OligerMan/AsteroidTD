@@ -15,6 +15,8 @@ class CollisionModel {
 	Point position;
 	Point origin;
 	Point square_border;
+	double max_radius = 0;
+
 	double angle = 0;
 
 	Point speed, delayed_collision_fix, delayed_collision_force_fix;
@@ -29,6 +31,9 @@ public:
 
 	CollisionModel(std::string object_path, bool * status) {
 		col_model = collisionParse(object_path, is_static, status);
+		for (int i = 0; i < col_model.size(); i++) {
+			max_radius = std::max(max_radius, col_model[i].center.getLength() + col_model[i].collision_radius);
+		}
 	}
 
 	bool isStatic() {
@@ -158,9 +163,20 @@ public:
 		delayed_collision_fix = Point();
 		return ans;
 	}
+
+	double getMaxRadius() {
+		return max_radius;
+	}
 };
 
 bool checkModelCollision(CollisionModel * m1, CollisionModel * m2) {
+	if ((m1->getPosition() - m2->getPosition()).getLength() > 1500) {
+		return false;
+	}
+	if ((m1->getPosition() - m2->getPosition()).getLength() > (m1->getMaxRadius() + m2->getMaxRadius())) {
+		return false;
+	}
+
 	unsigned int m1_size = m1->getModelSize();
 	unsigned int m2_size = m2->getModelSize();
 

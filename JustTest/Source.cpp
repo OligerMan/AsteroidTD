@@ -7,6 +7,7 @@
 #include "Research.h"
 #include "ResearchVisualController.h"
 #include "Tutorial.h"
+#include "OnlineRank.h"
 
 #include <chrono>
 #include <Windows.h>
@@ -82,6 +83,24 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 	int wave_delay = 10000;
 	int next_wave = 10000;
+
+	rank.resetUserInfo();
+	std::chrono::time_point<std::chrono::steady_clock> round_start = std::chrono::steady_clock::now();
+
+
+	auto time_check = [&round_start]() {
+		while (true) {
+			if (game_status == game_hero_mode || game_status == game_strategic_mode) {
+				rank.addGameplayTime(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - round_start).count());
+				round_start = std::chrono::steady_clock::now();
+				Sleep(1000);
+			}
+		}
+	};
+
+	std::thread thread(time_check);
+	thread.detach();
+
 
 	// for defining vibration on damage
 	float hero_hp = 0;
@@ -382,6 +401,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			if (game_map1.getHero() == nullptr) {
 				// end game code
 				game_status = game_over;
+				rank.selfRankUpdate(false);
 				continue;
 			}
 
@@ -650,6 +670,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 						game_status = pause;
 						last_pause = frame_num;
 						window.setView(view2);
+						rank.addGameplayTime(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - round_start).count());
 						if (tutorial.isWorkingOnStep(tutorial.pause_tutorial)) {
 							tutorial.nextStep();
 						}
@@ -660,7 +681,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 							game_status = game_hero_mode;
 						}
 						prev_game_status = pause;
-						last_pause = frame_num;
+						round_start = std::chrono::steady_clock::now();
 						if (game_status == game_hero_mode) {
 							window.setView(view1);
 						}
@@ -675,24 +696,38 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::F) || sf::Joystick::isButtonPressed(0, BACK)) && (frame_num - last_research_open) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */ && tutorial.isWorkingOnStep(tutorial.research_tutorial)) {
 					last_research_open = frame_num;
 					prev_game_status = game_status;
-					game_status = research;
+					game_status = research; rank.addGameplayTime(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - round_start).count());
 					if (tutorial.isWorkingOnStep(tutorial.research_tutorial)) {
 						tutorial.nextStep();
 					}
 				}
-			
-				if (tutorial.isWorkingOnStep(tutorial.base_description) || tutorial.isWorkingOnStep(tutorial.build_mode_dome_description_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_turret_description_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_gold_description_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_science_description_tutorial) || tutorial.isWorkingOnStep(tutorial.tutorial_end)) {
-					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, A)) && (frame_num - last_tutorial) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */) {
-						last_tutorial = frame_num;
-						if (tutorial.isWorkingOnStep(tutorial.tutorial_end)) {
-							game_status = game_hero_mode;
+
+				if (tutorial.getCurrentStep() != tutorial.no_tutorial) {
+					if (tutorial.isWorkingOnStep(tutorial.base_description) || tutorial.isWorkingOnStep(tutorial.build_mode_dome_description_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_turret_description_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_gold_description_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_science_description_tutorial) || tutorial.isWorkingOnStep(tutorial.tutorial_end)) {
+						if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, A)) && (frame_num - last_tutorial) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */) {
+							last_tutorial = frame_num;
+							if (tutorial.getCurrentStep() == tutorial.tutorial_end) {
+								game_status = game_hero_mode;
+								tutorial.nextStep();
+								return;
+							}
 							tutorial.nextStep();
-							return;
 						}
-						tutorial.nextStep();
 					}
 				}
-				
+
+				if (abs(sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z)) > 80) {
+					std::vector<std::string> rank_list;
+					if (sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z) > 0) {
+						rank_list = rank.getTopKillList();
+					}
+					else {
+						rank_list = rank.getTopSurviveTimeList();
+					}
+					for (int i = 0; i < rank_list.size(); i++) {
+						gui_manager.setText(rank_list[i], 0.01, rank_start + i, Point(-window.getView().getSize().x / 2 + 100, -300 + 50 * i), 40);
+					}
+				}
 			}
 
 			if (!(game_status == game_strategic_mode || game_status == pause)) {
@@ -876,7 +911,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					tutorial.nextStep();
 					last_research_open = frame_num;
 					game_status = prev_game_status;
-					prev_game_status = research;
+					round_start = std::chrono::steady_clock::now();
 				}
             }
 
@@ -1081,6 +1116,9 @@ int main() {
 
 	int frame_num = 0;
 	int last_menu_choice = -1000;
+
+	rank.launchUpdateWorker();
+	rank.launchSelfRankUpdateWorker();
 
 	while (true) {
 		sf::Event event;

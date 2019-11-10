@@ -41,6 +41,8 @@ class Constants {
 	const float research_icon_size = 120;
 	const float research_icon_border = 100;
 
+	const std::string balance_version = "0.1";
+
 public:
 
 	const double getSpeedDamageThreshold() {
@@ -161,5 +163,9 @@ public:
 
 	const float getResearchIconSize() {
 		return research_icon_size;
+	}
+
+	const std::string getBalanceVersion() {
+		return balance_version;
 	}
 } consts;
