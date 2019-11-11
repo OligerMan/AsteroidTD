@@ -57,10 +57,11 @@ public:
 
 	void launchUpdateWorker() {
 		auto rank_updater = [&]() {
-			if (socket.connect("127.0.0.1", 50000) != sf::Socket::Done) {
+			if (socket.connect("oliger.ddns.net", 50000) != sf::Socket::Done) {
 				std::cout << "Socket connect fail" << std::endl;
 				return;
 			}
+			std::cout << "Socket for ranking connected" << std::endl;
 			std::size_t received;
 			const int data_max_size = 10000;
 			char data[data_max_size];
