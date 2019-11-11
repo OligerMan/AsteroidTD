@@ -20,23 +20,52 @@ class Settings {
 
 	// map generation settings
 	int generation_key = 42;
-	int min_asteroid_distance = 200;
-	int max_asteroid_distance = 500;
-	int asteroid_amount = 100;
-	bool is_infinite = false;
-	int infinite_map_radius = 2000;
+	int min_asteroid_distance;
+	int max_asteroid_distance;
+	int asteroid_amount;
+	bool is_infinite;
+	int infinite_map_radius;
 	
 	// service variable
-	bool is_settings_loaded = false;
+	bool is_settings_loaded;
 
 	// balance settings
 	int start_gold = 1500;
+
+	// online ranking settings
+	std::string rank_server;
+
+	// user settings
+	std::string nickname;
 
 public:
 
 	void setDefaults() {
 		window_height = 720;
 		window_width = 1200;
+	}
+
+	void saveSettings() {
+		std::ofstream settings_input;
+		settings_input.open("config.cfg");
+
+		settings_input << "error_output " << error_output_enabled << std::endl;
+		settings_input << "sprt_debug " << sprite_loader_debug_output_enabled << std::endl;
+		settings_input << "window_height " << window_height << std::endl;
+		settings_input << "window_width " << window_width << std::endl;
+		settings_input << "collision_debug " << collision_debug_mode << std::endl;
+		settings_input << "gamepad_debug " << gamepad_debug_output << std::endl;
+		settings_input << "navigation_debug " << navigation_debug_mode << std::endl;
+		settings_input << "generation_key " << generation_key << std::endl;
+		settings_input << "min_asteroid_distance " << min_asteroid_distance << std::endl;
+		settings_input << "max_asteroid_distance " << max_asteroid_distance << std::endl;
+		settings_input << "asteroid_amount " << asteroid_amount << std::endl;
+		settings_input << "is_infinite " << is_infinite << std::endl;
+		settings_input << "infinite_map_radius " << infinite_map_radius << std::endl;
+		settings_input << "ranking_server " << rank_server << std::endl;
+		settings_input << "start_gold " << start_gold << std::endl;
+		settings_input << "nickname " << nickname << std::endl;
+		settings_input << "config_end" << std::endl;
 	}
 
 	Settings() {
@@ -94,8 +123,14 @@ public:
 				if (setting == "infinite_map_radius") {
 					infinite_map_radius = std::stoi(value);
 				}
+				if (setting == "ranking_server") {
+					rank_server = value;
+				}
+				if (setting == "nickname") {
+					nickname = value;
+				}
 				if (setting == "start_gold") {
-					start_gold = std::stoi(value);
+					//start_gold = std::stoi(value);
 				}
 				if (setting == "config_end") {
 					is_settings_loaded = true;
@@ -108,6 +143,10 @@ public:
 		}
 		
 		settings_input.close();
+	}
+
+	~Settings() {
+		saveSettings();
 	}
 
 	bool isLoaded() {
@@ -152,6 +191,14 @@ public:
 
 	int getStartGold() {
 		return start_gold;
+	}
+
+	std::string getNickname() {
+		return nickname;
+	}
+
+	std::string getRankingServer() {
+		return rank_server;
 	}
 };
 

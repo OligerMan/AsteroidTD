@@ -2,6 +2,7 @@
 
 enum GameStatus {
 	main_menu,
+	nickname_enter,
 	game_hero_mode,
 	game_strategic_mode,
 	research,

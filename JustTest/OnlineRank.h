@@ -9,6 +9,7 @@
 
 #include "PlayerStat.pb.h"
 #include "GameConstants.h"
+#include "Settings.h"
 
 class OnlineRank {
 	std::vector<PlayerKillStat> top5kill;
@@ -19,7 +20,6 @@ class OnlineRank {
 	int online_count = 1;
 
 	sf::TcpSocket socket;
-	std::string nickname = "TestGuy";
 	std::thread * rank_update_worker = nullptr;
 
 	// user info
@@ -29,11 +29,6 @@ class OnlineRank {
 
 public:
 
-	void setNickname(std::string new_nickname) {
-		nickname = new_nickname;
-	}
-
-
 	void selfRankUpdate(bool live) {
 		if (!live) {
 			std::cout << "Sending post-game statistics(" << kills_amount << " kills, " << gameplay_time << " time)" << std::endl;
@@ -42,7 +37,7 @@ public:
 		PlayerInfo info;
 		info.set_kills(kills_amount);
 		info.set_time_survived(gameplay_time);
-		info.set_nickname(nickname);
+		info.set_nickname(settings.getNickname());
 		std::hash<std::string> hash_str;
 		info.set_hash(hash_str(consts.getBalanceVersion()));
 		info.set_live(live);
@@ -65,10 +60,10 @@ public:
 			std::size_t received;
 			const int data_max_size = 10000;
 			char data[data_max_size];
-			for (int i = 0; i < nickname.size(); i++) {
-				data[i] = nickname[i];
+			for (int i = 0; i < settings.getNickname().size(); i++) {
+				data[i] = settings.getNickname()[i];
 			}
-			socket.send(data, nickname.size());
+			socket.send(data, settings.getNickname().size());
 
 			RankInfo rank_info;
 
