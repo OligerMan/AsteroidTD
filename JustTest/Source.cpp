@@ -82,8 +82,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 	Point previous_speed;
 
-	int wave_delay = 10000;
-	int next_wave = 10000;
+	int wave_delay = 40;
+	int wave_count = 0;
+	std::chrono::time_point<std::chrono::steady_clock> last_wave = std::chrono::steady_clock::now();
 
 	rank.resetUserInfo();
 	std::chrono::time_point<std::chrono::steady_clock> round_start = std::chrono::steady_clock::now();
@@ -216,17 +217,17 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			}
 
 			if (game_status != pause && tutorial.isWorkingOnStep(tutorial.no_tutorial)) {
-				if (game_frame_num >= next_wave) {
+				if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - last_wave).count() > wave_delay) {
+					wave_count++;
 					if (!(game_status == game_strategic_mode)) {
-						game_map1.spawnEnemy(game_frame_num / 8000, Point(view1.getCenter().x, view1.getCenter().y));
+						game_map1.spawnEnemy(wave_count, Point(view1.getCenter().x, view1.getCenter().y));
 					}
 					else {
-						game_map1.spawnEnemy(game_frame_num / 8000, Point(view2.getCenter().x, view2.getCenter().y));
+						game_map1.spawnEnemy(wave_count, Point(view2.getCenter().x, view2.getCenter().y));
 					}
 					gui_manager.forceSetTopSign("New Wave", 5);
-					next_wave += wave_delay;
-					std::cout << "Next wave in " << next_wave << " frames" << std::endl;
-					wave_delay += 200;
+					last_wave = std::chrono::steady_clock::now();
+					wave_delay += 1;
 				}
 			}
 
@@ -893,7 +894,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				}
 
 
-				if ((next_menu_button != -1) && ((frame_num - last_menu_choice) > consts.getFPSLock() / 2)) {
+				if ((next_menu_button != -1) && ((frame_num - last_menu_choice) > fps.getFPS() / 2)) {
 					chosen_button = next_menu_button;
 					last_menu_choice = frame_num;
 				}
@@ -907,7 +908,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 		}
         if (game_status == research) {
 
-            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::F) || sf::Joystick::isButtonPressed(0, BACK)) && (frame_num - last_research_open) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::F) || sf::Joystick::isButtonPressed(0, BACK)) && (frame_num - last_research_open) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */) {
 				if (tutorial.getCurrentStep() == tutorial.no_tutorial || (tutorial.getCurrentStep() == tutorial.research_tutorial_close && research_number > 0)) {
 					tutorial.nextStep();
 					last_research_open = frame_num;
@@ -984,7 +985,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				}
 
 
-				if (next_research_index != -1 && ((frame_num - last_research_choice) > consts.getFPSLock() / 2)) {
+				if (next_research_index != -1 && ((frame_num - last_research_choice) > fps.getFPS() / 2)) {
 					cur_research_index = next_research_index;
 					last_research_choice = frame_num;
 				}
