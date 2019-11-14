@@ -52,7 +52,8 @@ class KeyboardBuffer {
 		sf::Keyboard::Num8,
 		sf::Keyboard::Num9,
 		sf::Keyboard::Num0,
-		sf::Keyboard::Subtract,
+		sf::Keyboard::Dash,
+		sf::Keyboard::BackSpace,
 	};
 	std::vector<char> symbols = {
 		'q',
@@ -92,6 +93,7 @@ class KeyboardBuffer {
 		'9',
 		'0',
 		'-',
+		'\b',
 	};
 	std::vector<char> alt_symbols = {
 		'Q',
@@ -131,10 +133,13 @@ class KeyboardBuffer {
 		'(',
 		')',
 		'_',
+		'\b',
 	};
 	std::vector<KeyStat> key_stat;
 	std::vector<std::chrono::time_point<std::chrono::steady_clock>> key_time_stamps;
 	bool active = false;
+	const int MAX_BUFFER_SIZE = 1000000000;
+	int max_size = MAX_BUFFER_SIZE;
 
 public:
 
@@ -152,44 +157,81 @@ public:
 			while (true) {
 				if (active) {
 					for (int i = 0; i < keys.size(); i++) {
-						if (sf::Keyboard::isKeyPressed(keys[i])) {
-							if (key_stat[i] == idle) {
-								if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)) {
-									buffer.push_back(alt_symbols[i]);
-								}
-								else {
-									buffer.push_back(symbols[i]);
-								}
-								key_stat[i] = first_pressed;
-								key_time_stamps[i] = std::chrono::steady_clock::now();
-							}
-							else if (key_stat[i] == first_pressed) {
-								if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - key_time_stamps[i]).count() > 400) {
+
+						if (buffer.size() < max_size || symbols[i] == '\b') {
+							if (sf::Keyboard::isKeyPressed(keys[i])) {
+								if (key_stat[i] == idle) {
 									if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)) {
-										buffer.push_back(alt_symbols[i]);
+										if (symbols[i] != '\b') {
+											buffer.push_back(alt_symbols[i]);
+										}
+										else if(buffer.size()){
+											buffer.pop_back();
+										}
 									}
 									else {
-										buffer.push_back(symbols[i]);
+										if (symbols[i] != '\b') {
+											buffer.push_back(symbols[i]);
+										}
+										else if (buffer.size()) {
+											buffer.pop_back();
+										}
 									}
-									key_stat[i] = pressed;
+									key_stat[i] = first_pressed;
 									key_time_stamps[i] = std::chrono::steady_clock::now();
+								}
+								else if (key_stat[i] == first_pressed) {
+									if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - key_time_stamps[i]).count() > 400) {
+										if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)) {
+											if (symbols[i] != '\b') {
+												buffer.push_back(alt_symbols[i]);
+											}
+											else if (buffer.size()) {
+												buffer.pop_back();
+											}
+										}
+										else {
+											if (symbols[i] != '\b') {
+												buffer.push_back(symbols[i]);
+											}
+											else if (buffer.size()) {
+												buffer.pop_back();
+											}
+										}
+										key_stat[i] = pressed;
+										key_time_stamps[i] = std::chrono::steady_clock::now();
+									}
+								}
+								else {
+									if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - key_time_stamps[i]).count() > 50) {
+										if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)) {
+											if (symbols[i] != '\b') {
+												buffer.push_back(alt_symbols[i]);
+											}
+											else if (buffer.size()) {
+												buffer.pop_back();
+											}
+										}
+										else {
+											if (symbols[i] != '\b') {
+												buffer.push_back(symbols[i]);
+											}
+											else if (buffer.size()) {
+												buffer.pop_back();
+											}
+										}
+										key_time_stamps[i] = std::chrono::steady_clock::now();
+									}
 								}
 							}
 							else {
-								if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - key_time_stamps[i]).count() > 200) {
-									if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)) {
-										buffer.push_back(alt_symbols[i]);
-									}
-									else {
-										buffer.push_back(symbols[i]);
-									}
-									key_time_stamps[i] = std::chrono::steady_clock::now();
-								}
+								key_stat[i] = idle;
 							}
 						}
 						else {
 							key_stat[i] = idle;
 						}
+						
 					}
 				}
 				Sleep(10);
@@ -215,5 +257,14 @@ public:
 
 	std::string getBuffer() {
 		return buffer;
+	}
+
+	void setMaxBufferSize(int size) {
+		if (size <= 0 || size > MAX_BUFFER_SIZE) {
+			max_size = MAX_BUFFER_SIZE;
+		}
+		else {
+			max_size = size;
+		}
 	}
 } keyboard_buffer;

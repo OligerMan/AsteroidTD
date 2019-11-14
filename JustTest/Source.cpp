@@ -1021,10 +1021,11 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 int main() {
 
 	HWND console_hWnd = GetConsoleWindow();
-	//ShowWindow(console_hWnd, SW_HIDE);
-
+	ShowWindow(console_hWnd, SW_HIDE);
+	sf::ContextSettings context_settings;
+	context_settings.antialiasingLevel = 8;
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-	sf::RenderWindow window(sf::VideoMode(settings.getWindowWidth(), settings.getWindowHeight()), "AsteroidTD", sf::Style::None);
+	sf::RenderWindow window(sf::VideoMode(settings.getWindowWidth(), settings.getWindowHeight()), "AsteroidTD", sf::Style::None, context_settings);
 
 	window.setFramerateLimit(consts.getFPSLock());
 
@@ -1074,11 +1075,11 @@ int main() {
 	title.setCharacterSize(50);
 	title.setFont(base_font);
 
-	nickname_title.setPosition(sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2));
+	nickname_title.setPosition(sf::Vector2f(window.getSize().x / 2 - 75, window.getSize().y / 2 - 200));
 	nickname_title.setFillColor(sf::Color::White);
 	nickname_title.setOutlineColor(sf::Color::Black);
 	nickname_title.setOutlineThickness(1);
-	nickname_title.setCharacterSize(70);
+	nickname_title.setCharacterSize(50);
 	nickname_title.setFont(base_font);
 
 	sf::View main_view(sf::Vector2f((int)window.getSize().x / 2, (int)window.getSize().y / 2), sf::Vector2f(window.getSize().x, window.getSize().y));      // main menu view
@@ -1130,6 +1131,7 @@ int main() {
 	if (!settings.getNickname().size()) {
 		game_status = nickname_enter;
 		keyboard_buffer.activate();
+		keyboard_buffer.setMaxBufferSize(24);
 	}
 
 	rank.launchUpdateWorker();
@@ -1189,7 +1191,7 @@ int main() {
 					}
 				}
 			}
-			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, A))) && (frame_num - last_menu_choice) > consts.getFPSLock()) {
+			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, A))) && (frame_num - last_menu_choice) > consts.getFPSLock() / 4) {
 				if (chosen_button == infinity_mode_button) {
 					game_status = game_hero_mode;
 				}
