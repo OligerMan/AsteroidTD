@@ -64,7 +64,9 @@ public:
 		settings_input << "infinite_map_radius " << infinite_map_radius << std::endl;
 		settings_input << "ranking_server " << rank_server << std::endl;
 		settings_input << "start_gold " << start_gold << std::endl;
-		settings_input << "nickname " << nickname << std::endl;
+		if (nickname.size()) {
+			settings_input << "nickname " << nickname << std::endl;
+		}
 		settings_input << "config_end" << std::endl;
 	}
 
@@ -157,8 +159,16 @@ public:
 		return window_height;
 	}
 
+	void setWindowHeight(int new_window_height) {
+		window_height = new_window_height;
+	}
+
 	int getWindowWidth() {
 		return window_width;
+	}
+
+	void setWindowWidth(int new_window_width) {
+		window_width = new_window_width;
 	}
 
 	bool isSpriteDebugOutputEnabled() {
@@ -182,7 +192,7 @@ public:
 	}
 
 	void switchNavigationGridMode() {
-		navigation_debug_mode = navigation_debug_mode ^ true;
+		navigation_debug_mode ^= true;
 	}
 
 	bool isUnitInfoDebugEnabled() {
@@ -195,6 +205,10 @@ public:
 
 	std::string getNickname() {
 		return nickname;
+	}
+
+	void setNickname(std::string new_nickname) {
+		nickname = new_nickname;
 	}
 
 	std::string getRankingServer() {

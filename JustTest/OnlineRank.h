@@ -10,6 +10,7 @@
 #include "PlayerStat.pb.h"
 #include "GameConstants.h"
 #include "Settings.h"
+#include "GameStatus.h"
 
 class OnlineRank {
 	std::vector<PlayerKillStat> top5kill;
@@ -52,6 +53,7 @@ public:
 
 	void launchUpdateWorker() {
 		auto rank_updater = [&]() {
+			while (game_status == nickname_enter && !settings.getNickname().size()) { Sleep(1000); }
 			if (socket.connect("oliger.ddns.net", 50000) != sf::Socket::Done) {
 				std::cout << "Socket connect fail" << std::endl;
 				return;
@@ -62,6 +64,10 @@ public:
 			char data[data_max_size];
 			for (int i = 0; i < settings.getNickname().size(); i++) {
 				data[i] = settings.getNickname()[i];
+			}
+			if (settings.getNickname().size() == 0) {
+				socket.disconnect();
+				return;
 			}
 			socket.send(data, settings.getNickname().size());
 
@@ -107,6 +113,7 @@ public:
 
 	void launchSelfRankUpdateWorker() {
 		auto self_rank_updater = [&]() {
+			while (game_status == nickname_enter) { Sleep(1000); }
 			while (true) {
 				if (!dead) {
 					selfRankUpdate(true);

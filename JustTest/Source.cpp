@@ -8,6 +8,7 @@
 #include "ResearchVisualController.h"
 #include "Tutorial.h"
 #include "OnlineRank.h"
+#include "KeyboardBuffer.h"
 
 #include <chrono>
 #include <Windows.h>
@@ -716,9 +717,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					}
 				}
 
-				if (abs(sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z)) > 80) {
+				if ((abs(sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z)) > 80) || sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)) {
 					std::vector<std::string> rank_list;
-					if (sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z) > 0) {
+					if (sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z) > 0 || sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
 						rank_list = rank.getTopKillList();
 					}
 					else {
@@ -1062,6 +1063,7 @@ int main() {
 
 
 	sf::Text title;
+	sf::Text nickname_title;
 	sf::Font base_font;
 	base_font.loadFromFile("a_Alterna.ttf");
 	
@@ -1071,6 +1073,13 @@ int main() {
 	title.setOutlineThickness(1);
 	title.setCharacterSize(50);
 	title.setFont(base_font);
+
+	nickname_title.setPosition(sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2));
+	nickname_title.setFillColor(sf::Color::White);
+	nickname_title.setOutlineColor(sf::Color::Black);
+	nickname_title.setOutlineThickness(1);
+	nickname_title.setCharacterSize(70);
+	nickname_title.setFont(base_font);
 
 	sf::View main_view(sf::Vector2f((int)window.getSize().x / 2, (int)window.getSize().y / 2), sf::Vector2f(window.getSize().x, window.getSize().y));      // main menu view
 	window.setView(main_view);
@@ -1116,6 +1125,12 @@ int main() {
 
 	int frame_num = 0;
 	int last_menu_choice = -1000;
+
+
+	if (!settings.getNickname().size()) {
+		game_status = nickname_enter;
+		keyboard_buffer.activate();
+	}
 
 	rank.launchUpdateWorker();
 	rank.launchSelfRankUpdateWorker();
@@ -1265,6 +1280,30 @@ int main() {
 		}
 		else if (game_status == exit_to_desktop) {
 			return 0;
+		}
+		else if (game_status == nickname_enter) {
+			title.setString("Please enter your nickname and press Enter");
+
+			if (sf::Joystick::isConnected(0)) {
+				title.setString("Please enter your nickname and press A");
+			}
+
+			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Return) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, A))) && (frame_num - last_menu_choice) > consts.getFPSLock()) {
+				settings.setNickname(keyboard_buffer.getBuffer());
+				keyboard_buffer.activate();
+				keyboard_buffer.clearBuffer();
+				game_status = main_menu;
+				continue;
+			}
+
+			nickname_title.setString("Your nickname: " + keyboard_buffer.getBuffer());
+			title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
+			nickname_title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
+
+			window.draw(menu_background_sprite);
+			window.draw(title);
+			window.draw(nickname_title);
+			window.display();
 		}
 		else {
 			fps.reset();

@@ -136,6 +136,7 @@
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="GUIParser.h" />
     <ClInclude Include="GUIVisualController.h" />
+    <ClInclude Include="KeyboardBuffer.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapParser.h" />
     <ClInclude Include="Object.h" />
