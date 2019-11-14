@@ -94,7 +94,7 @@ public:
 		hp_sign.setFillColor(sf::Color::White);
 		hp_sign.setOutlineColor(sf::Color::Black);
 		hp_sign.setOutlineThickness(1);
-		hp_sign.setCharacterSize(20);
+		hp_sign.setCharacterSize(30);
 		hp_sign.setFont(base_font);
 	}
 

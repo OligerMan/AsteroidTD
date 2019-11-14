@@ -567,18 +567,18 @@ public:
 	}
 
 	float getDomeMaxHealthCoef() {
-		float coef = 0;
+		float coef = 1;
 		if (research_list[dome_initial]->unlocked) {
-			coef = 0.1;
+			coef = 1.1;
 		}
 		if (research_list[dome_max_health_lvl1]->unlocked) {
-			coef = 0.25;
+			coef = 1.25;
 		}
 		if (research_list[dome_max_health_lvl2]->unlocked) {
-			coef = 0.6;
+			coef = 1.6;
 		}
 		if (research_list[dome_max_health_lvl3]->unlocked) {
-			coef = 1;
+			coef = 2;
 		}
 		if (research_list[dome_ultimate]->unlocked) {
 			coef = 6;

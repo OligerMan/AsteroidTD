@@ -215,7 +215,7 @@ class Map {
 				else {
 					for (int j = 0; j < objects[landscape_layer].size(); j++) {
 						if (objects[landscape_layer][j]->getObjectType() != asteroid) {
-							if (checkObjectCollision(objects[cnt][i], objects[landscape_layer][j])) {
+							if ((objects[landscape_layer][j]->getUnitInfo()->getFaction() != objects[cnt][i]->getUnitInfo()->getFaction()) && checkObjectCollision(objects[cnt][i], objects[landscape_layer][j])) {
 								event_buffer.addEvent(EventType::default_collision, objects[cnt][i], objects[landscape_layer][j]);
 							}
 						}
@@ -282,7 +282,7 @@ class Map {
 
 								int faction2 = object2->getUnitInfo()->getFaction();
 
-								if (areEnemies((FactionList)faction1, (FactionList)faction2)) {
+								if (areEnemies((FactionList)faction1, (FactionList)faction2) && object1->getObjectType() != bullet && object2->getObjectType() != bullet) {
 
 									
 									if (!(object1->getObjectType() == ObjectType::hero) && (object1->canObjectAttack() || object1->getUnitInfo()->getDefaultSpeed() > 0.0001)) {
@@ -365,7 +365,7 @@ class Map {
 									1000000000
 								)
 							);
-							object->getUnitInfo()->setFaction(FactionList::null_faction);
+							object->getUnitInfo()->setFaction(object1->getUnitInfo()->getFaction());
 							object->getUnitInfo()->setEnemy(object1);     // to remember who is shooting
 							object->setAutoOrigin();
 							object->setAngle(object1->getAngle());
@@ -440,7 +440,7 @@ class Map {
 					event_buffer.addEvent(EventType::attack, (Object *)obj1->getUnitInfo()->getEnemy(), obj2);
 					
 				}
-				if (obj2->getObjectType() == ObjectType::bullet && obj1->getObjectType() != ObjectType::asteroid) {
+				if (obj2->getObjectType() == ObjectType::bullet && obj1->getObjectType() != ObjectType::asteroid && (obj1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
 					obj2->deleteObject();
 					event_buffer.addEvent(EventType::attack, (Object *)obj2->getUnitInfo()->getEnemy(), obj1);
 				}
@@ -852,6 +852,13 @@ public:
 			return false;
 		}
 		Object * object = nullptr;
+
+		int dome_amount = 0;
+		for (int i = 0; i < base->getAttached()->size(); i++) {
+			if ((*base->getAttached())[i]->getObjectType() == dome) {
+				dome_amount++;
+			}
+		}
 		switch (type) {
 		case turret:
 			object = new Object
@@ -868,6 +875,7 @@ public:
 				)
 			);
 			object->setAutoOrigin();
+			object->getUnitInfo()->setMaxHealth(object->getUnitInfo()->getMaxHealth() * (research_manager.getTurretMaxHealthCoef() + dome_amount * research_manager.getDomeLocalMaxHealthCoef()));
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
 			outer_ring.push_back(object);
@@ -887,6 +895,7 @@ public:
 				)
 			);
 			object->setAutoOrigin();
+			object->getUnitInfo()->setMaxHealth(object->getUnitInfo()->getMaxHealth() * (research_manager.getDomeMaxHealthCoef() + dome_amount * research_manager.getDomeLocalMaxHealthCoef()));
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
 			inner_ring.push_back(object);
@@ -906,6 +915,7 @@ public:
 				)
 			);
 			object->setAutoOrigin();
+			object->getUnitInfo()->setMaxHealth(object->getUnitInfo()->getMaxHealth() * (research_manager.getScienceMaxHealthCoef() + dome_amount * research_manager.getDomeLocalMaxHealthCoef()));
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
 			inner_ring.push_back(object);
@@ -925,6 +935,7 @@ public:
 				)
 			);
 			object->setAutoOrigin();
+			object->getUnitInfo()->setMaxHealth(object->getUnitInfo()->getMaxHealth() * (research_manager.getGoldMaxHealthCoef() + dome_amount * research_manager.getDomeLocalMaxHealthCoef()));
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
 			inner_ring.push_back(object);
