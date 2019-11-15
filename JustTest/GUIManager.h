@@ -93,7 +93,6 @@ class GUIManager {
 				selected_object->setAutoOrigin();
 			}
 		}
-		
 	}
 
 public:
@@ -113,7 +112,6 @@ public:
 		text[0].first.setFont(base_font);
 		text[0].second = consts.getFPSLock() * 5;
 	}
-
 
 	bool loadFromFile(std::string path) {
 		gui_parser(path, &gui_elements);

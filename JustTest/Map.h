@@ -36,7 +36,6 @@ void fixCollision(Object * obj1, Object * obj2) {
 	Point speed1 = tmp_speed1, speed2 = tmp_speed2;
 	Point origin1 = obj1->getOrigin(), origin2 = obj2->getOrigin();
 
-
 	// set previous position and add to it half of speed
 
 	tmp_speed1 /= 2;
@@ -374,6 +373,10 @@ class Map {
 							addObject(object, main_layer);
 
 							object1->attachObject(object);
+
+							if (!object->getUnitInfo()) {
+								std::cout << "Bullet creation wrong" << std::endl;
+							}
 						}
 						
 					}
@@ -437,7 +440,12 @@ class Map {
 				}
 				if (obj1->getObjectType() == ObjectType::bullet && obj2->getObjectType() != ObjectType::asteroid) {
 					obj1->deleteObject();
-					event_buffer.addEvent(EventType::attack, (Object *)obj1->getUnitInfo()->getEnemy(), obj2);
+					if (obj1->getUnitInfo()) {
+						event_buffer.addEvent(EventType::attack, (Object *)obj1->getUnitInfo()->getEnemy(), obj2);
+					}
+					else {
+						std::cout << "Bullet bug triggered" << std::endl;
+					}
 					
 				}
 				if (obj2->getObjectType() == ObjectType::bullet && obj1->getObjectType() != ObjectType::asteroid && (obj1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {

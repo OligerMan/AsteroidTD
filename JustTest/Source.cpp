@@ -133,21 +133,45 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	};
 	enum buttons_name {
 		retry,
-		menu
+		menu,
+		pause_continue,
+		pause_to_menu,
+		pause_to_desktop,
+
+		BUTTONS_NAME_LIST_SIZE
 	};
 	std::vector<Button> buttons;
-	buttons.resize(2);
+	buttons.resize(BUTTONS_NAME_LIST_SIZE);
+
 	buttons[retry].pos = Point(window.getSize().x / 2, 300);
-	buttons[retry].texture_default.loadFromFile("game_over_buttons\\retry.png");
-	buttons[retry].texture_selected.loadFromFile("game_over_buttons\\retry_selected.png");
+	buttons[retry].texture_default.loadFromFile("menu_buttons\\retry.png");
+	buttons[retry].texture_selected.loadFromFile("menu_buttons\\retry_selected.png");
 	buttons[retry].sprite.setTexture(buttons[retry].texture_default);
 	buttons[retry].advice_string = "try again";
 
 	buttons[menu].pos = Point(window.getSize().x / 2, 500);
-	buttons[menu].texture_default.loadFromFile("game_over_buttons\\menu.png");
-	buttons[menu].texture_selected.loadFromFile("game_over_buttons\\menu_selected.png");
+	buttons[menu].texture_default.loadFromFile("menu_buttons\\menu.png");
+	buttons[menu].texture_selected.loadFromFile("menu_buttons\\menu_selected.png");
 	buttons[menu].sprite.setTexture(buttons[menu].texture_default);
 	buttons[menu].advice_string = "go back to menu";
+
+	buttons[pause_continue].pos = Point(0, -1000);
+	buttons[pause_continue].texture_default.loadFromFile("menu_buttons\\pause_continue.png");
+	buttons[pause_continue].texture_selected.loadFromFile("menu_buttons\\pause_continue_selected.png");
+	buttons[pause_continue].sprite.setTexture(buttons[pause_continue].texture_default);
+	buttons[pause_continue].advice_string = "continue game";
+
+	buttons[pause_to_menu].pos = Point();
+	buttons[pause_to_menu].texture_default.loadFromFile("menu_buttons\\pause_to_menu.png");
+	buttons[pause_to_menu].texture_selected.loadFromFile("menu_buttons\\pause_to_menu_selected.png");
+	buttons[pause_to_menu].sprite.setTexture(buttons[pause_to_menu].texture_default);
+	buttons[pause_to_menu].advice_string = "go to menu";
+
+	buttons[pause_to_desktop].pos = Point(0, 1000);
+	buttons[pause_to_desktop].texture_default.loadFromFile("menu_buttons\\pause_to_desktop.png");
+	buttons[pause_to_desktop].texture_selected.loadFromFile("menu_buttons\\pause_to_desktop_selected.png");
+	buttons[pause_to_desktop].sprite.setTexture(buttons[pause_to_desktop].texture_default);
+	buttons[pause_to_desktop].advice_string = "go to desktop";
 
 	int chosen_button = retry;
 
@@ -200,11 +224,6 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			}
 			hero_hp = hero_object->getUnitInfo()->getHealth();
 			// game cycle
-
-			// resource manager control
-			if (game_status == pause) {
-				gui_manager.forceSetTopSign("Pause", 0.01);
-            }
 
 			gui_manager.setText("Gold: " + std::to_string((int)resource_manager.getGold()), 0.01, gold_sign, Point(-(int)window.getSize().x / 2, -(int)window.getSize().y / 2), 35);
 			gui_manager.setText("Research: " + std::to_string((int)resource_manager.getResearch()), 0.01, research_sign, Point(-(int)window.getSize().x / 2, -(int)window.getSize().y / 2 + 55), 35);
@@ -404,6 +423,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				// end game code
 				game_status = game_over;
 				rank.selfRankUpdate(false);
+				chosen_button = retry;
 				continue;
 			}
 
@@ -676,23 +696,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 						if (tutorial.isWorkingOnStep(tutorial.pause_tutorial)) {
 							tutorial.nextStep();
 						}
-					}
-					else {
-						game_status = prev_game_status;
-						if (game_status == research) {
-							game_status = game_hero_mode;
-						}
-						prev_game_status = pause;
-						round_start = std::chrono::steady_clock::now();
-						if (game_status == game_hero_mode) {
-							window.setView(view1);
-						}
-						else {
-							window.setView(view2);
-						}
-						if (tutorial.isWorkingOnStep(tutorial.unpause_tutorial)) {
-							tutorial.nextStep();
-						}
+						chosen_button = pause_continue;
 					}
 				}
 				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::F) || sf::Joystick::isButtonPressed(0, BACK)) && (frame_num - last_research_open) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */ && tutorial.isWorkingOnStep(tutorial.research_tutorial)) {
@@ -759,7 +763,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					}
 				}
 			}
-			else {
+			else if (game_status != pause) {
 					hero_object->setSpeed(Point());
 					hero_object->setAnimationType(hold_anim);
 					new_speed = new_speed.getNormal() * consts.getStrategicCameraSpeed() * consts.getFPSLock() / fps.getFPS();
@@ -783,10 +787,168 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			else {
 				window.setView(view2);
 			}
+
+			if (game_status == pause) {
+				for (int i = pause_continue; i <= pause_to_desktop; i++) {
+					if (i == chosen_button) {
+						buttons[i].sprite.setTexture(buttons[i].texture_selected);
+					}
+					else {
+						buttons[i].sprite.setTexture(buttons[i].texture_default);
+					}
+					buttons[i].sprite.setScale(sf::Vector2f(buttons[i].radius * 2 / buttons[i].sprite.getTexture()->getSize().x / window.getSize().x * window.getView().getSize().x, buttons[i].radius * 2 / buttons[i].sprite.getTexture()->getSize().y / window.getSize().y * window.getView().getSize().y));
+					buttons[i].sprite.setOrigin(sf::Vector2f(buttons[i].sprite.getTexture()->getSize().x / 2, buttons[i].sprite.getTexture()->getSize().y / 2));
+					buttons[i].sprite.setPosition(sf::Vector2f(buttons[i].pos.x + viewport_pos.x, buttons[i].pos.y + viewport_pos.y));
+				}
+
+				gui_manager.forceSetTopSign("Press Space to " + buttons[chosen_button].advice_string, 0.01);
+				if (sf::Joystick::isConnected(0)) {
+					gui_manager.forceSetTopSign("Press A to " + buttons[chosen_button].advice_string, 0.01);
+				}
+				title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
+
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+					Point cursor_pos;
+					sf::Vector2i mouse_pos = sf::Mouse::getPosition();
+					sf::Vector2i window_pos = window.getPosition();
+					cursor_pos = Point(mouse_pos.x/* - window.getSize().x / 2*/ - window.getPosition().x, mouse_pos.y/* - window.getSize().y / 2*/ - window.getPosition().y);
+					for (int i = pause_continue; i <= pause_to_desktop; i++) {
+						if ((cursor_pos - buttons[i].pos).getLength() <= buttons[i].radius) {
+							if (i == pause_continue) {
+								game_status = prev_game_status;
+								if (game_status == research) {
+									game_status = game_hero_mode;
+								}
+								prev_game_status = pause;
+								round_start = std::chrono::steady_clock::now();
+								if (game_status == game_hero_mode) {
+									window.setView(view1);
+								}
+								else {
+									window.setView(view2);
+								}
+								if (tutorial.isWorkingOnStep(tutorial.unpause_tutorial)) {
+									tutorial.nextStep();
+								}
+							}
+							if (i == pause_to_menu) {
+								game_status = main_menu;
+								return;
+							}
+							if (i == pause_to_desktop) {
+								game_status = exit_to_desktop;
+								return;
+							}
+						}
+					}
+				}
+
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, A))) {
+					
+					if (chosen_button == pause_continue) {
+						game_status = prev_game_status;
+						if (game_status == research) {
+							game_status = game_hero_mode;
+						}
+						prev_game_status = pause;
+						round_start = std::chrono::steady_clock::now();
+						if (game_status == game_hero_mode) {
+							window.setView(view1);
+						}
+						else {
+							window.setView(view2);
+						}
+						if (tutorial.isWorkingOnStep(tutorial.unpause_tutorial)) {
+							tutorial.nextStep();
+						}
+					}
+					if (chosen_button == pause_to_menu) {
+						game_status = main_menu;
+						return;
+					}
+					if (chosen_button == pause_to_desktop) {
+						game_status = exit_to_desktop;
+						return;
+					}
+				}
+				////
+				Point move_vector;
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
+					sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
+					sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
+					sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+						move_vector += Point(0, -1);
+					}
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+						move_vector += Point(-1, 0);
+					}
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+						move_vector += Point(0, 1);
+					}
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+						move_vector += Point(1, 0);
+					}
+				}
+				else if (sf::Joystick::isConnected(0)) {         // gamepad input
+
+					move_vector = Point(
+						sf::Joystick::getAxisPosition(0, sf::Joystick::X),
+						sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
+
+					if (abs(move_vector.x) < 5 && abs(move_vector.y) < 5) {
+						move_vector = Point();
+					}
+				}
+				move_vector.normalize();
+
+				if (move_vector.x != 0 || move_vector.y != 0) {
+
+					int next_menu_button = -1;
+					double min_distance = 1e9;
+
+					for (int i = pause_continue; i <= pause_to_desktop; i++) {
+						double angle_diff =
+							(std::atan2(move_vector.x, move_vector.y) -
+								std::atan2(
+									buttons[i].pos.x - buttons[chosen_button].pos.x,
+									buttons[i].pos.y - buttons[chosen_button].pos.y));
+
+						if (abs(angle_diff) > 0.000001) {     // angle_diff is not close to zero
+							if (abs(angle_diff) > abs(angle_diff + 2 * PI)) {
+								angle_diff += 2 * PI;
+							}
+							if (abs(angle_diff) > abs(angle_diff - 2 * PI)) {
+								angle_diff -= 2 * PI;
+							}
+						}
+						if (abs(angle_diff) <= PI / 8.0) {
+							if (min_distance > (buttons[i].pos - buttons[chosen_button].pos).getLength() && (buttons[i].pos - buttons[chosen_button].pos).getLength() > 0.01 /*not close to zero*/) {
+								next_menu_button = i;
+								min_distance = (buttons[i].pos - buttons[chosen_button].pos).getLength();
+							}
+						}
+					}
+
+
+					if ((next_menu_button != -1) && ((frame_num - last_menu_choice) > fps.getFPS() / 2)) {
+						chosen_button = next_menu_button;
+						last_menu_choice = frame_num;
+					}
+				}
+				for (int i = pause_continue; i <= pause_to_desktop; i++) {
+					window.draw(buttons[i].sprite);
+				}
+				window.draw(title);
+			}
+			
+
 		}
 		if (game_status == game_over) {
 			window.setView(view4);
-			for (int i = 0; i < buttons.size(); i++) {
+			for (int i = 0; i <= menu; i++) {
 				if (i == chosen_button) {
 					buttons[i].sprite.setTexture(buttons[i].texture_selected);
 				}
@@ -1022,7 +1184,8 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 int main() {
 
 	HWND console_hWnd = GetConsoleWindow();
-	ShowWindow(console_hWnd, SW_HIDE);
+	//ShowWindow(console_hWnd, SW_HIDE);
+
 	sf::ContextSettings context_settings;
 	context_settings.antialiasingLevel = 8;
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
