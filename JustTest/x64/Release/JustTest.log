@@ -189,85 +189,85 @@ e:\projects\asteroidtd\justtest\ResearchVisualController.h(97): warning C4244: '
 e:\projects\asteroidtd\justtest\ResearchVisualController.h(121): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\ResearchVisualController.h(139): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\ResearchVisualController.h(140): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-Source.cpp(35): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-Source.cpp(40): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(45): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(46): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(34): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+Source.cpp(36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+Source.cpp(41): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 Source.cpp(47): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(48): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 Source.cpp(48): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(96): warning C4244: 'argument': conversion from '__int64' to 'int', possible loss of data
-Source.cpp(120): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(233): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(234): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(237): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(240): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(261): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(264): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(265): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-Source.cpp(271): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(278): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(281): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(285): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(288): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(292): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(295): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(299): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(302): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(306): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(313): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(316): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(319): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(322): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(326): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(329): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+Source.cpp(49): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(97): warning C4244: 'argument': conversion from '__int64' to 'int', possible loss of data
+Source.cpp(121): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(184): warning C4244: 'argument': conversion from '__int64' to 'int', possible loss of data
+Source.cpp(259): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(260): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(263): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(266): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(287): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(290): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(291): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+Source.cpp(297): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(304): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(307): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(311): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(314): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(318): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(321): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(325): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(328): warning C4305: 'argument': truncation from 'double' to 'float'
 Source.cpp(332): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(335): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(352): warning C4018: '<': signed/unsigned mismatch
-Source.cpp(353): warning C4018: '<': signed/unsigned mismatch
-Source.cpp(357): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(358): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(373): warning C4018: '<': signed/unsigned mismatch
-Source.cpp(374): warning C4018: '<': signed/unsigned mismatch
-Source.cpp(376): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-Source.cpp(379): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(380): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(395): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(396): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(455): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(458): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(461): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(464): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(467): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(553): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-Source.cpp(597): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-Source.cpp(630): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-Source.cpp(671): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-Source.cpp(700): warning C4244: 'argument': conversion from '__int64' to 'int', possible loss of data
-Source.cpp(710): warning C4244: 'argument': conversion from '__int64' to 'int', possible loss of data
-Source.cpp(739): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(775): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(776): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(785): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(786): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(805): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(806): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(809): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(811): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(964): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(965): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(1087): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(1172): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(1199): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-Source.cpp(1211): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-Source.cpp(1232): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(1240): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(1247): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(1254): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-Source.cpp(1254): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(1332): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(1333): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(339): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(342): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(345): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(348): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(352): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(355): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(358): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(361): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(378): warning C4018: '<': signed/unsigned mismatch
+Source.cpp(379): warning C4018: '<': signed/unsigned mismatch
+Source.cpp(383): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(384): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(399): warning C4018: '<': signed/unsigned mismatch
+Source.cpp(400): warning C4018: '<': signed/unsigned mismatch
+Source.cpp(402): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+Source.cpp(405): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(406): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(421): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(422): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(481): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(484): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(487): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(490): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(493): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(579): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(623): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(656): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(697): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(722): warning C4244: 'argument': conversion from '__int64' to 'int', possible loss of data
+Source.cpp(758): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(794): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(795): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(804): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(805): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(824): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(825): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(828): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(830): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(958): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(959): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(1081): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(1166): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(1196): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+Source.cpp(1208): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+Source.cpp(1229): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(1237): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(1244): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(1251): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+Source.cpp(1251): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(1338): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(1339): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   e:\projects\asteroidtd\justtest\AStarAlgorithm.h(49): note: see reference to function template instantiation 'std::pair<Point,int>::pair<Point,double&,void,0>(_Other1 &&,_Other2) noexcept' being compiled
           with
@@ -282,9 +282,9 @@ C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): war
               _Other2=double &
           ]
   Generating code
-  148 of 4022 functions ( 3.7%) were compiled, the rest were copied from previous compilation.
+  148 of 4026 functions ( 3.7%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    13 functions had inline decision re-evaluated but remain unchanged
+    12 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.exe
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.pdb (Full PDB)

@@ -13,6 +13,7 @@
 #include <chrono>
 #include <Windows.h>
 #include <Xinput.h>
+#include <SFML\Audio.hpp>
 
 enum XBOXGamepadButtons {
 	A,B,X,Y,LB,RB,BACK,START,LSTICK,RSTICK
@@ -174,6 +175,36 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	buttons[pause_to_desktop].advice_string = "go to desktop";
 
 	int chosen_button = retry;
+
+	auto pause_game = [&]() {
+		prev_game_status = game_status;
+		game_status = pause;
+		last_pause = frame_num;
+		window.setView(view2);
+		rank.addGameplayTime(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - round_start).count());
+		if (tutorial.isWorkingOnStep(tutorial.pause_tutorial)) {
+			tutorial.nextStep();
+		}
+		chosen_button = pause_continue;
+	};
+
+	auto unpause_game = [&]() {
+		game_status = prev_game_status;
+		if (game_status == research) {
+			game_status = game_hero_mode;
+		}
+		prev_game_status = pause;
+		round_start = std::chrono::steady_clock::now();
+		if (game_status == game_hero_mode) {
+			window.setView(view1);
+		}
+		else {
+			window.setView(view2);
+		}
+		if (tutorial.isWorkingOnStep(tutorial.unpause_tutorial)) {
+			tutorial.nextStep();
+		}
+	};
 
 	while (window.isOpen())
 	{
@@ -685,28 +716,21 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 							}
 						}
 					}
+					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::F) || sf::Joystick::isButtonPressed(0, BACK)) && (frame_num - last_research_open) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */ && tutorial.isWorkingOnStep(tutorial.research_tutorial)) {
+						last_research_open = frame_num;
+						prev_game_status = game_status;
+						game_status = research; rank.addGameplayTime(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - round_start).count());
+						if (tutorial.isWorkingOnStep(tutorial.research_tutorial)) {
+							tutorial.nextStep();
+						}
+					}
 				}
 				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::R) || sf::Joystick::isButtonPressed(0, START)) && (frame_num - last_pause) > fps.getFPS() / 4 && (tutorial.isWorkingOnStep(tutorial.pause_tutorial) || tutorial.isWorkingOnStep(tutorial.unpause_tutorial))) {
 					if (game_status != pause) {
-						prev_game_status = game_status;
-						game_status = pause;
-						last_pause = frame_num;
-						window.setView(view2);
-						rank.addGameplayTime(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - round_start).count());
-						if (tutorial.isWorkingOnStep(tutorial.pause_tutorial)) {
-							tutorial.nextStep();
-						}
-						chosen_button = pause_continue;
+						pause_game();
 					}
 				}
-				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::F) || sf::Joystick::isButtonPressed(0, BACK)) && (frame_num - last_research_open) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */ && tutorial.isWorkingOnStep(tutorial.research_tutorial)) {
-					last_research_open = frame_num;
-					prev_game_status = game_status;
-					game_status = research; rank.addGameplayTime(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - round_start).count());
-					if (tutorial.isWorkingOnStep(tutorial.research_tutorial)) {
-						tutorial.nextStep();
-					}
-				}
+				
 
 				if (tutorial.getCurrentStep() != tutorial.no_tutorial) {
 					if (tutorial.isWorkingOnStep(tutorial.base_description) || tutorial.isWorkingOnStep(tutorial.build_mode_dome_description_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_turret_description_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_gold_description_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_science_description_tutorial) || tutorial.isWorkingOnStep(tutorial.tutorial_end)) {
@@ -807,7 +831,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				}
 				title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
 
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && window.hasFocus()) {
 
 					Point cursor_pos;
 					sf::Vector2i mouse_pos = sf::Mouse::getPosition();
@@ -816,21 +840,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					for (int i = pause_continue; i <= pause_to_desktop; i++) {
 						if ((cursor_pos - buttons[i].pos).getLength() <= buttons[i].radius) {
 							if (i == pause_continue) {
-								game_status = prev_game_status;
-								if (game_status == research) {
-									game_status = game_hero_mode;
-								}
-								prev_game_status = pause;
-								round_start = std::chrono::steady_clock::now();
-								if (game_status == game_hero_mode) {
-									window.setView(view1);
-								}
-								else {
-									window.setView(view2);
-								}
-								if (tutorial.isWorkingOnStep(tutorial.unpause_tutorial)) {
-									tutorial.nextStep();
-								}
+								unpause_game();
 							}
 							if (i == pause_to_menu) {
 								game_status = main_menu;
@@ -844,24 +854,10 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					}
 				}
 
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, A))) {
+				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, A))) && window.hasFocus()) {
 					
 					if (chosen_button == pause_continue) {
-						game_status = prev_game_status;
-						if (game_status == research) {
-							game_status = game_hero_mode;
-						}
-						prev_game_status = pause;
-						round_start = std::chrono::steady_clock::now();
-						if (game_status == game_hero_mode) {
-							window.setView(view1);
-						}
-						else {
-							window.setView(view2);
-						}
-						if (tutorial.isWorkingOnStep(tutorial.unpause_tutorial)) {
-							tutorial.nextStep();
-						}
+						unpause_game();
 					}
 					if (chosen_button == pause_to_menu) {
 						game_status = main_menu;
@@ -874,34 +870,37 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				}
 				////
 				Point move_vector;
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
-					sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
-					sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
-					sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+				if (window.hasFocus()) {
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
+						sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
+						sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
+						sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 
-					if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-						move_vector += Point(0, -1);
+						if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+							move_vector += Point(0, -1);
+						}
+						if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+							move_vector += Point(-1, 0);
+						}
+						if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+							move_vector += Point(0, 1);
+						}
+						if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+							move_vector += Point(1, 0);
+						}
 					}
-					if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-						move_vector += Point(-1, 0);
-					}
-					if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-						move_vector += Point(0, 1);
-					}
-					if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-						move_vector += Point(1, 0);
+					else if (sf::Joystick::isConnected(0)) {         // gamepad input
+
+						move_vector = Point(
+							sf::Joystick::getAxisPosition(0, sf::Joystick::X),
+							sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
+
+						if (abs(move_vector.x) < 5 && abs(move_vector.y) < 5) {
+							move_vector = Point();
+						}
 					}
 				}
-				else if (sf::Joystick::isConnected(0)) {         // gamepad input
-
-					move_vector = Point(
-						sf::Joystick::getAxisPosition(0, sf::Joystick::X),
-						sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
-
-					if (abs(move_vector.x) < 5 && abs(move_vector.y) < 5) {
-						move_vector = Point();
-					}
-				}
+				
 				move_vector.normalize();
 
 				if (move_vector.x != 0 || move_vector.y != 0) {
@@ -1177,6 +1176,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				window.close();
 				game_status = exit_to_desktop;
 			}
+			if (event.type == sf::Event::LostFocus) {
+				pause_game();
+			}
 		}
 	}
 }
@@ -1231,7 +1233,7 @@ int main() {
 	sf::Text nickname_title;
 	sf::Font base_font;
 	base_font.loadFromFile("a_Alterna.ttf");
-	
+
 	title.setPosition(sf::Vector2f(window.getSize().x / 2, 150));
 	title.setFillColor(sf::Color::White);
 	title.setOutlineColor(sf::Color::Black);
@@ -1301,6 +1303,15 @@ int main() {
 	rank.launchUpdateWorker();
 	rank.launchSelfRankUpdateWorker();
 
+	sf::Music music;
+	if (!music.openFromFile("space_back1.1.flac")) {
+		std::cout << "Music load failed" << std::endl;
+	}
+	else {
+		music.setLoop(true);
+		music.play();
+	}
+
 	while (true) {
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -1314,172 +1325,174 @@ int main() {
 		frame_num++;
 
 		window.setView(main_view);
-
-		if (game_status == main_menu) {
-			for (int i = 0; i < buttons.size(); i++) {
-				if (i == chosen_button) {
-					buttons[i].sprite.setTexture(buttons[i].texture_selected);
-				}
-				else {
-					buttons[i].sprite.setTexture(buttons[i].texture_default);
-				}
-				buttons[i].sprite.setScale(sf::Vector2f(buttons[i].radius * 2 / buttons[i].sprite.getTexture()->getSize().x, buttons[i].radius * 2 / buttons[i].sprite.getTexture()->getSize().y));
-				buttons[i].sprite.setOrigin(sf::Vector2f(buttons[i].sprite.getTexture()->getSize().x / 2, buttons[i].sprite.getTexture()->getSize().y / 2));
-				buttons[i].sprite.setPosition(sf::Vector2f(buttons[i].pos.x, buttons[i].pos.y));
-			}
-
-			title.setString("Press Space to " + buttons[chosen_button].advice_string);
-			if (sf::Joystick::isConnected(0)) {
-				title.setString("Press A to " + buttons[chosen_button].advice_string);
-			}
-			title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
-
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-
-				Point cursor_pos;
-				sf::Vector2i mouse_pos = sf::Mouse::getPosition();
-				sf::Vector2i window_pos = window.getPosition();
-				cursor_pos = Point(mouse_pos.x/* - window.getSize().x / 2*/ - window.getPosition().x, mouse_pos.y/* - window.getSize().y / 2*/ - window.getPosition().y);
+		if (window.hasFocus()) {
+			if (game_status == main_menu) {
 				for (int i = 0; i < buttons.size(); i++) {
-					if ((cursor_pos - buttons[i].pos).getLength() <= buttons[i].radius) {
-						if (i == infinity_mode_button) {
-							game_status = game_hero_mode;
+					if (i == chosen_button) {
+						buttons[i].sprite.setTexture(buttons[i].texture_selected);
+					}
+					else {
+						buttons[i].sprite.setTexture(buttons[i].texture_default);
+					}
+					buttons[i].sprite.setScale(sf::Vector2f(buttons[i].radius * 2 / buttons[i].sprite.getTexture()->getSize().x, buttons[i].radius * 2 / buttons[i].sprite.getTexture()->getSize().y));
+					buttons[i].sprite.setOrigin(sf::Vector2f(buttons[i].sprite.getTexture()->getSize().x / 2, buttons[i].sprite.getTexture()->getSize().y / 2));
+					buttons[i].sprite.setPosition(sf::Vector2f(buttons[i].pos.x, buttons[i].pos.y));
+				}
+
+				title.setString("Press Space to " + buttons[chosen_button].advice_string);
+				if (sf::Joystick::isConnected(0)) {
+					title.setString("Press A to " + buttons[chosen_button].advice_string);
+				}
+				title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
+
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+					Point cursor_pos;
+					sf::Vector2i mouse_pos = sf::Mouse::getPosition();
+					sf::Vector2i window_pos = window.getPosition();
+					cursor_pos = Point(mouse_pos.x/* - window.getSize().x / 2*/ - window.getPosition().x, mouse_pos.y/* - window.getSize().y / 2*/ - window.getPosition().y);
+					for (int i = 0; i < buttons.size(); i++) {
+						if ((cursor_pos - buttons[i].pos).getLength() <= buttons[i].radius) {
+							if (i == infinity_mode_button) {
+								game_status = game_hero_mode;
+							}
+							if (i == settings_button) {
+								game_status = settings_list;
+							}
+							if (i == shutdown_button) {
+								game_status = exit_to_desktop;
+							}
+							last_menu_choice = frame_num;
 						}
-						if (i == settings_button) {
-							game_status = settings_list;
+					}
+				}
+				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, A))) && (frame_num - last_menu_choice) > consts.getFPSLock() / 4) {
+					if (chosen_button == infinity_mode_button) {
+						game_status = game_hero_mode;
+					}
+					if (chosen_button == settings_button) {
+						game_status = settings_list;
+					}
+					if (chosen_button == shutdown_button) {
+						game_status = exit_to_desktop;
+					}
+					last_menu_choice = frame_num;
+				}
+
+				Point move_vector;
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
+					sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
+					sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
+					sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+						move_vector += Point(0, -1);
+					}
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+						move_vector += Point(-1, 0);
+					}
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+						move_vector += Point(0, 1);
+					}
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+						move_vector += Point(1, 0);
+					}
+				}
+				else if (sf::Joystick::isConnected(0)) {         // gamepad input
+
+					move_vector = Point(
+						sf::Joystick::getAxisPosition(0, sf::Joystick::X),
+						sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
+
+					if (abs(move_vector.x) < 5 && abs(move_vector.y) < 5) {
+						move_vector = Point();
+					}
+				}
+				move_vector.normalize();
+
+				if (move_vector.x != 0 || move_vector.y != 0) {
+
+					int next_menu_button = -1;
+					double min_distance = 1e9;
+
+					for (int i = 0; i < buttons.size(); i++) {
+						double angle_diff =
+							(std::atan2(move_vector.x, move_vector.y) -
+								std::atan2(
+									buttons[i].pos.x - buttons[chosen_button].pos.x,
+									buttons[i].pos.y - buttons[chosen_button].pos.y));
+
+						if (abs(angle_diff) > 0.000001) {     // angle_diff is not close to zero
+							if (abs(angle_diff) > abs(angle_diff + 2 * PI)) {
+								angle_diff += 2 * PI;
+							}
+							if (abs(angle_diff) > abs(angle_diff - 2 * PI)) {
+								angle_diff -= 2 * PI;
+							}
 						}
-						if (i == shutdown_button) {
-							game_status = exit_to_desktop;
+						if (abs(angle_diff) <= PI / 8.0) {
+							if (min_distance > (buttons[i].pos - buttons[chosen_button].pos).getLength() && (buttons[i].pos - buttons[chosen_button].pos).getLength() > 0.01 /*not close to zero*/) {
+								next_menu_button = i;
+								min_distance = (buttons[i].pos - buttons[chosen_button].pos).getLength();
+							}
 						}
+					}
+
+
+					if ((next_menu_button != -1) && ((frame_num - last_menu_choice) > consts.getFPSLock() / 2)) {
+						chosen_button = next_menu_button;
 						last_menu_choice = frame_num;
 					}
 				}
-			}
-			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, A))) && (frame_num - last_menu_choice) > consts.getFPSLock() / 4) {
-				if (chosen_button == infinity_mode_button) {
-					game_status = game_hero_mode;
-				}
-				if (chosen_button == settings_button) {
-					game_status = settings_list;
-				}
-				if (chosen_button == shutdown_button) {
-					game_status = exit_to_desktop;
-				}
-				last_menu_choice = frame_num;
-			}
 
-			Point move_vector;
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
-				sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
-				sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
-				sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-					move_vector += Point(0, -1);
-				}
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-					move_vector += Point(-1, 0);
-				}
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-					move_vector += Point(0, 1);
-				}
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-					move_vector += Point(1, 0);
-				}
-			}
-			else if (sf::Joystick::isConnected(0)) {         // gamepad input
-
-				move_vector = Point(
-					sf::Joystick::getAxisPosition(0, sf::Joystick::X),
-					sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
-
-				if (abs(move_vector.x) < 5 && abs(move_vector.y) < 5) {
-					move_vector = Point();
-				}
-			}
-			move_vector.normalize();
-
-			if (move_vector.x != 0 || move_vector.y != 0) {
-
-				int next_menu_button = -1;
-				double min_distance = 1e9;
-
+				window.draw(menu_background_sprite);
 				for (int i = 0; i < buttons.size(); i++) {
-					double angle_diff =
-						(std::atan2(move_vector.x, move_vector.y) -
-							std::atan2(
-								buttons[i].pos.x - buttons[chosen_button].pos.x,
-								buttons[i].pos.y - buttons[chosen_button].pos.y));
-
-					if (abs(angle_diff) > 0.000001) {     // angle_diff is not close to zero
-						if (abs(angle_diff) > abs(angle_diff + 2 * PI)) {
-							angle_diff += 2 * PI;
-						}
-						if (abs(angle_diff) > abs(angle_diff - 2 * PI)) {
-							angle_diff -= 2 * PI;
-						}
-					}
-					if (abs(angle_diff) <= PI / 8.0) {
-						if (min_distance > (buttons[i].pos - buttons[chosen_button].pos).getLength() && (buttons[i].pos - buttons[chosen_button].pos).getLength() > 0.01 /*not close to zero*/) {
-							next_menu_button = i;
-							min_distance = (buttons[i].pos - buttons[chosen_button].pos).getLength();
-						}
-					}
+					window.draw(buttons[i].sprite);
 				}
-
-
-				if ((next_menu_button != -1) && ((frame_num - last_menu_choice) > consts.getFPSLock() / 2)) {
-					chosen_button = next_menu_button;
-					last_menu_choice = frame_num;
-				}
+				window.draw(title);
+				window.display();
 			}
-
-			window.draw(menu_background_sprite);
-			for (int i = 0; i < buttons.size(); i++) {
-				window.draw(buttons[i].sprite);
-			}
-			window.draw(title);
-			window.display();
-		}
-		else if (game_status == settings_list) {
-			game_status = main_menu;
-		}
-		else if (game_status == exit_to_desktop) {
-			return 0;
-		}
-		else if (game_status == nickname_enter) {
-			title.setString("Please enter your nickname and press Enter");
-
-			if (sf::Joystick::isConnected(0)) {
-				title.setString("Please enter your nickname and press A");
-			}
-
-			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Return) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, A))) && (frame_num - last_menu_choice) > consts.getFPSLock()) {
-				settings.setNickname(keyboard_buffer.getBuffer());
-				keyboard_buffer.activate();
-				keyboard_buffer.clearBuffer();
+			else if (game_status == settings_list) {
 				game_status = main_menu;
-				continue;
 			}
+			else if (game_status == exit_to_desktop) {
+				return 0;
+			}
+			else if (game_status == nickname_enter) {
+				title.setString("Please enter your nickname and press Enter");
 
-			nickname_title.setString("Your nickname: " + keyboard_buffer.getBuffer());
-			title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
-			nickname_title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
+				if (sf::Joystick::isConnected(0)) {
+					title.setString("Please enter your nickname and press A");
+				}
 
-			window.draw(menu_background_sprite);
-			window.draw(title);
-			window.draw(nickname_title);
-			window.display();
-		}
-		else {
-			fps.reset();
-			try {
-				gameCycle("map2", window, visual_ctrl, gui_visual_ctrl, res_visual_ctrl);
+				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Return) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, A))) && (frame_num - last_menu_choice) > consts.getFPSLock()) {
+					settings.setNickname(keyboard_buffer.getBuffer());
+					keyboard_buffer.activate();
+					keyboard_buffer.clearBuffer();
+					game_status = main_menu;
+					continue;
+				}
+
+				nickname_title.setString("Your nickname: " + keyboard_buffer.getBuffer());
+				title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
+				nickname_title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
+
+				window.draw(menu_background_sprite);
+				window.draw(title);
+				window.draw(nickname_title);
+				window.display();
 			}
-			catch (std::exception exc) {
-				std::cout << "Exception handled" << std::endl;
+			else {
+				fps.reset();
+				try {
+					gameCycle("map2", window, visual_ctrl, gui_visual_ctrl, res_visual_ctrl);
+				}
+				catch (std::exception exc) {
+					std::cout << "Exception handled" << std::endl;
+				}
 			}
 		}
+		
 	}
 
 	return 0;
