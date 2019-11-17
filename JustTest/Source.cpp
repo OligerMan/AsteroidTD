@@ -725,7 +725,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 						}
 					}
 				}
-				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::R) || sf::Joystick::isButtonPressed(0, START)) && (frame_num - last_pause) > fps.getFPS() / 4 && (tutorial.isWorkingOnStep(tutorial.pause_tutorial) || tutorial.isWorkingOnStep(tutorial.unpause_tutorial))) {
+				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || sf::Joystick::isButtonPressed(0, START)) && (frame_num - last_pause) > fps.getFPS() / 4 && (tutorial.isWorkingOnStep(tutorial.pause_tutorial) || tutorial.isWorkingOnStep(tutorial.unpause_tutorial))) {
 					if (game_status != pause) {
 						pause_game();
 					}
@@ -813,6 +813,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			}
 
 			if (game_status == pause) {
+				bool is_input_state = false;
 				for (int i = pause_continue; i <= pause_to_desktop; i++) {
 					if (i == chosen_button) {
 						buttons[i].sprite.setTexture(buttons[i].texture_selected);
@@ -841,6 +842,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 						if ((cursor_pos - buttons[i].pos).getLength() <= buttons[i].radius) {
 							if (i == pause_continue) {
 								unpause_game();
+								is_input_state = true;
 							}
 							if (i == pause_to_menu) {
 								game_status = main_menu;
@@ -857,6 +859,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, A))) && window.hasFocus()) {
 					
 					if (chosen_button == pause_continue) {
+						is_input_state = true;
 						unpause_game();
 					}
 					if (chosen_button == pause_to_menu) {
@@ -936,6 +939,10 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 						chosen_button = next_menu_button;
 						last_menu_choice = frame_num;
 					}
+					is_input_state = true;
+				}
+				if (!is_input_state) {
+					last_menu_choice = frame_num - 200;
 				}
 				for (int i = pause_continue; i <= pause_to_desktop; i++) {
 					window.draw(buttons[i].sprite);
@@ -1360,6 +1367,7 @@ int main() {
 				}
 				title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
 
+				bool is_input_state = false;
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 
 					Point cursor_pos;
@@ -1370,12 +1378,15 @@ int main() {
 						if ((cursor_pos - buttons[i].pos).getLength() <= buttons[i].radius) {
 							if (i == infinity_mode_button) {
 								game_status = game_hero_mode;
+								is_input_state = true;
 							}
 							if (i == settings_button) {
 								game_status = settings_menu;
+								is_input_state = true;
 							}
 							if (i == shutdown_button) {
 								game_status = exit_to_desktop;
+								is_input_state = true;
 							}
 							last_menu_choice = frame_num;
 						}
@@ -1384,14 +1395,17 @@ int main() {
 				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, A))) && (frame_num - last_menu_choice) > consts.getFPSLock() / 4) {
 					if (chosen_button == infinity_mode_button) {
 						game_status = game_hero_mode;
+						is_input_state = true;
 					}
 					if (chosen_button == settings_button) {
 						game_status = settings_menu;
+						is_input_state = true;
 					}
-if (chosen_button == shutdown_button) {
-	game_status = exit_to_desktop;
-}
-last_menu_choice = frame_num;
+					if (chosen_button == shutdown_button) {
+						game_status = exit_to_desktop;
+						is_input_state = true;
+					}
+					last_menu_choice = frame_num;
 				}
 
 				Point move_vector;
@@ -1457,7 +1471,12 @@ last_menu_choice = frame_num;
 					if ((next_menu_button != -1) && ((frame_num - last_menu_choice) > consts.getFPSLock() / 2)) {
 						chosen_button = next_menu_button;
 						last_menu_choice = frame_num;
+						is_input_state = true;
 					}
+				}
+
+				if (!is_input_state) {
+					last_menu_choice = frame_num - 200;
 				}
 
 				window.draw(menu_background_sprite);
@@ -1512,7 +1531,7 @@ last_menu_choice = frame_num;
 						}
 						key_pressed = true;
 					}
-					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) || (sf::Joystick::isConnected(0) && (sf::Joystick::isButtonPressed(0, A) > 10)))) {
+					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) || (sf::Joystick::isConnected(0) && (sf::Joystick::isButtonPressed(0, A))))) {
 						if ((frame_num - last_menu_choice) > consts.getFPSLock() / 4) {
 							last_menu_choice = frame_num;
 							settings_changing = true;
@@ -1522,7 +1541,7 @@ last_menu_choice = frame_num;
 						}
 						key_pressed = true;
 					}
-					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) || (sf::Joystick::isConnected(0) && (sf::Joystick::isButtonPressed(0, BACK) > 10)))) {
+					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) || (sf::Joystick::isConnected(0) && (sf::Joystick::isButtonPressed(0, BACK))))) {
 						if ((frame_num - last_menu_choice) > consts.getFPSLock() / 4) {
 							game_status = main_menu;
 						}
@@ -1532,7 +1551,7 @@ last_menu_choice = frame_num;
 					title.setString("Press Escape on keyboard or Back on gamepad to exit settings");
 				}
 				else {
-					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) || (sf::Joystick::isConnected(0) && (sf::Joystick::isButtonPressed(0, A) > 10)))) {
+					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) || (sf::Joystick::isConnected(0) && (sf::Joystick::isButtonPressed(0, A))))) {
 						if ((frame_num - last_menu_choice) > consts.getFPSLock() / 4) {
 							last_menu_choice = frame_num;
 							settings_changing = false;
@@ -1544,7 +1563,7 @@ last_menu_choice = frame_num;
 						}
 						key_pressed = true;
 					}
-					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) || (sf::Joystick::isConnected(0) && (sf::Joystick::isButtonPressed(0, BACK) > 10)))) {
+					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) || (sf::Joystick::isConnected(0) && (sf::Joystick::isButtonPressed(0, BACK))))) {
 						if ((frame_num - last_menu_choice) > consts.getFPSLock() / 4) {
 							last_menu_choice = frame_num;
 							settings_changing = false;
