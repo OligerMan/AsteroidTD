@@ -1,10 +1,10 @@
 ﻿  Source.cpp
-e:\projects\asteroidtd\justtest\Settings.h(90): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\asteroidtd\justtest\Settings.h(93): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\asteroidtd\justtest\Settings.h(102): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\asteroidtd\justtest\Settings.h(105): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\asteroidtd\justtest\Settings.h(108): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\asteroidtd\justtest\Settings.h(123): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\asteroidtd\justtest\Settings.h(248): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\asteroidtd\justtest\Settings.h(252): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\asteroidtd\justtest\Settings.h(256): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\asteroidtd\justtest\Settings.h(260): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\asteroidtd\justtest\Settings.h(264): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\asteroidtd\justtest\Settings.h(272): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
 e:\projects\asteroidtd\justtest\CollisionParser.h(52): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
 e:\projects\asteroidtd\justtest\Collision.h(44): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
 e:\projects\asteroidtd\justtest\Collision.h(185): warning C4018: '<': signed/unsigned mismatch
@@ -266,25 +266,7 @@ Source.cpp(1237): warning C4244: 'argument': conversion from 'unsigned int' to '
 Source.cpp(1244): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
 Source.cpp(1251): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 Source.cpp(1251): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(1338): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(1339): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-  e:\projects\asteroidtd\justtest\AStarAlgorithm.h(49): note: see reference to function template instantiation 'std::pair<Point,int>::pair<Point,double&,void,0>(_Other1 &&,_Other2) noexcept' being compiled
-          with
-          [
-              _Other1=Point,
-              _Other2=double &
-          ]
-  e:\projects\asteroidtd\justtest\AStarAlgorithm.h(49): note: see reference to function template instantiation 'std::pair<Point,int>::pair<Point,double&,void,0>(_Other1 &&,_Other2) noexcept' being compiled
-          with
-          [
-              _Other1=Point,
-              _Other2=double &
-          ]
-  Generating code
-  148 of 4026 functions ( 3.7%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    12 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.exe
-  JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.pdb (Full PDB)
+Source.cpp(1324): error C2561: 'main': function must return a value
+  Source.cpp(1186): note: see declaration of 'main'
+Source.cpp(1341): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(1342): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data

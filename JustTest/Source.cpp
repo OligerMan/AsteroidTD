@@ -1253,6 +1253,7 @@ int main() {
 
 	game_status = main_menu;
 
+	// main menu
 	struct Button {
 		Point pos;
 		sf::Texture texture_default, texture_selected;
@@ -1290,6 +1291,7 @@ int main() {
 
 	int chosen_button = infinity_mode_button;
 
+
 	int frame_num = 0;
 	int last_menu_choice = -1000;
 
@@ -1312,13 +1314,14 @@ int main() {
 		music.play();
 	}
 
+
 	while (true) {
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed) {
 				window.close();
-				game_status = exit_to_desktop;
+				return 0;
 			}
 		}
 
@@ -1454,6 +1457,9 @@ int main() {
 			}
 			else if (game_status == settings_list) {
 				game_status = main_menu;
+				//window.draw(menu_background_sprite);
+				//window.draw(title);
+				//window.display();
 			}
 			else if (game_status == exit_to_desktop) {
 				return 0;
