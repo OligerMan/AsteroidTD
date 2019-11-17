@@ -8,7 +8,7 @@ enum GameStatus {
 	research,
 	pause,
 	game_over,
-	settings_list,
+	settings_menu,
 	exit_to_desktop
 };
 

@@ -27,6 +27,7 @@ class OnlineRank {
 	int kills_amount = 0;
 	int gameplay_time = 0; // in milliseconds
 	bool dead = true;
+	bool online = true;
 
 public:
 
@@ -73,7 +74,7 @@ public:
 
 			RankInfo rank_info;
 
-			while (true) {
+			while (online) {
 				for (int i = 0; i < data_max_size; i++) {
 					data[i] = 0;
 				}
@@ -105,17 +106,24 @@ public:
 					round5survive.push_back(rank_info.round5survive()[i]);
 				}
 			}
+			online = true;
 		};
 
 		std::thread thread(rank_updater);
 		thread.detach();
 	}
 
+	void reboot() {
+		online = false;
+		while (!online) { Sleep(10); }
+		launchUpdateWorker();
+	}
+
 	void launchSelfRankUpdateWorker() {
 		auto self_rank_updater = [&]() {
 			while (game_status == nickname_enter) { Sleep(1000); }
 			while (true) {
-				if (!dead) {
+				if (!dead && online) {
 					selfRankUpdate(true);
 				}
 				Sleep(1000);

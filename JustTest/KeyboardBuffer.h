@@ -54,6 +54,8 @@ class KeyboardBuffer {
 		sf::Keyboard::Num0,
 		sf::Keyboard::Dash,
 		sf::Keyboard::BackSpace,
+		sf::Keyboard::Comma,
+		sf::Keyboard::Period,
 	};
 	std::vector<char> symbols = {
 		'q',
@@ -94,6 +96,8 @@ class KeyboardBuffer {
 		'0',
 		'-',
 		'\b',
+		',',
+		'.',
 	};
 	std::vector<char> alt_symbols = {
 		'Q',
@@ -134,6 +138,8 @@ class KeyboardBuffer {
 		')',
 		'_',
 		'\b',
+		'<',
+		'>',
 	};
 	std::vector<KeyStat> key_stat;
 	std::vector<std::chrono::time_point<std::chrono::steady_clock>> key_time_stamps;

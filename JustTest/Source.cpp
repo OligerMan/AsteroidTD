@@ -1291,6 +1291,18 @@ int main() {
 
 	int chosen_button = infinity_mode_button;
 
+	std::vector<std::string> settings_list = settings.getChangeableSettingsList();
+	float shift = 0;
+	float max_shift = 3.5;
+	int chosen_setting = 0;
+	int max_font_size = 50;
+	int sign_distance = 100;
+	sf::Text settings_sign;
+	settings_sign.setFillColor(sf::Color::White);
+	settings_sign.setOutlineColor(sf::Color::Black);
+	settings_sign.setOutlineThickness(1);
+	settings_sign.setFont(base_font);
+	bool settings_changing = false;
 
 	int frame_num = 0;
 	int last_menu_choice = -1000;
@@ -1360,7 +1372,7 @@ int main() {
 								game_status = game_hero_mode;
 							}
 							if (i == settings_button) {
-								game_status = settings_list;
+								game_status = settings_menu;
 							}
 							if (i == shutdown_button) {
 								game_status = exit_to_desktop;
@@ -1374,12 +1386,12 @@ int main() {
 						game_status = game_hero_mode;
 					}
 					if (chosen_button == settings_button) {
-						game_status = settings_list;
+						game_status = settings_menu;
 					}
-					if (chosen_button == shutdown_button) {
-						game_status = exit_to_desktop;
-					}
-					last_menu_choice = frame_num;
+if (chosen_button == shutdown_button) {
+	game_status = exit_to_desktop;
+}
+last_menu_choice = frame_num;
 				}
 
 				Point move_vector;
@@ -1455,11 +1467,100 @@ int main() {
 				window.draw(title);
 				window.display();
 			}
-			else if (game_status == settings_list) {
-				game_status = main_menu;
-				//window.draw(menu_background_sprite);
-				//window.draw(title);
-				//window.display();
+			else if (game_status == settings_menu) {
+				window.draw(menu_background_sprite);
+				for (int i = 0; i < settings_list.size(); i++) {
+					if (settings_list[i] == "nickname") {
+						settings_sign.setString("Nickname: ");
+					}
+					if (settings_list[i] == "ranking_server") {
+						settings_sign.setString("Ranking server: ");
+					}
+					if (settings_list[i] == "window_width") {
+						settings_sign.setString("Window width: ");
+					}
+					if (settings_list[i] == "window_height") {
+						settings_sign.setString("Window height: ");
+					}
+					if (!settings_changing || i != chosen_setting) {
+						settings_sign.setString(settings_sign.getString() + settings.getSettingString(settings_list[i]));
+					}
+					else {
+						settings_sign.setString(settings_sign.getString() + keyboard_buffer.getBuffer());
+					}
+					settings_sign.setPosition(window.getView().getSize().x / 2, window.getView().getSize().y / 2 + sign_distance * (i - shift) - 100);
+					int char_size_raw = (max_shift - std::min(max_shift, abs(i - shift))) / max_shift * max_font_size;
+					settings_sign.setCharacterSize(char_size_raw < 15 ? 0 : std::max(30, char_size_raw));
+					settings_sign.setOrigin(settings_sign.getGlobalBounds().width / 2, settings_sign.getGlobalBounds().height / 2);
+					if (settings_sign.getCharacterSize() > 5) {
+						window.draw(settings_sign);
+					}
+				}
+				bool key_pressed = false;
+				if (!settings_changing) {
+					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::W)) || (sf::Joystick::isConnected(0) && (sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Y) < -10))) {
+						if ((frame_num - last_menu_choice) > consts.getFPSLock() / 4) {
+							last_menu_choice = frame_num;
+							chosen_setting = std::max(0, chosen_setting - 1);
+						}
+						key_pressed = true;
+					}
+					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::S)) || (sf::Joystick::isConnected(0) && (sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Y) > 10)))) {
+						if ((frame_num - last_menu_choice) > consts.getFPSLock() / 4) {
+							last_menu_choice = frame_num;
+							chosen_setting = std::min((int)settings_list.size() - 1, chosen_setting + 1);
+						}
+						key_pressed = true;
+					}
+					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) || (sf::Joystick::isConnected(0) && (sf::Joystick::isButtonPressed(0, A) > 10)))) {
+						if ((frame_num - last_menu_choice) > consts.getFPSLock() / 4) {
+							last_menu_choice = frame_num;
+							settings_changing = true;
+							keyboard_buffer.activate();
+							keyboard_buffer.clearBuffer();
+							keyboard_buffer.setMaxBufferSize(24);
+						}
+						key_pressed = true;
+					}
+					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) || (sf::Joystick::isConnected(0) && (sf::Joystick::isButtonPressed(0, BACK) > 10)))) {
+						if ((frame_num - last_menu_choice) > consts.getFPSLock() / 4) {
+							game_status = main_menu;
+						}
+						key_pressed = true;
+					}
+
+					title.setString("Press Escape on keyboard or Back on gamepad to exit settings");
+				}
+				else {
+					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) || (sf::Joystick::isConnected(0) && (sf::Joystick::isButtonPressed(0, A) > 10)))) {
+						if ((frame_num - last_menu_choice) > consts.getFPSLock() / 4) {
+							last_menu_choice = frame_num;
+							settings_changing = false;
+							keyboard_buffer.deactivate();
+							settings.setSetting(settings_list[chosen_setting], keyboard_buffer.getBuffer());
+							if (settings_list[chosen_setting] == "nickname" || settings_list[chosen_setting] == "ranking_server") {
+								rank.reboot();
+							}
+						}
+						key_pressed = true;
+					}
+					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) || (sf::Joystick::isConnected(0) && (sf::Joystick::isButtonPressed(0, BACK) > 10)))) {
+						if ((frame_num - last_menu_choice) > consts.getFPSLock() / 4) {
+							last_menu_choice = frame_num;
+							settings_changing = false;
+							keyboard_buffer.deactivate();
+						}
+						key_pressed = true;
+					}
+					title.setString("Press Escape on keyboard or Back on gamepad to discard changes");
+				}
+				if (!key_pressed) {
+					last_menu_choice = frame_num - 200;
+				}
+				shift = shift + (chosen_setting - shift) * 0.05;
+				title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
+				window.draw(title);
+				window.display();
 			}
 			else if (game_status == exit_to_desktop) {
 				return 0;

@@ -6,6 +6,7 @@
 
 class Settings {
 
+public:
 	struct Setting {
 		std::string name;
 		std::string value;
@@ -46,7 +47,7 @@ class Settings {
 
 	};
 
-	enum settings {
+	enum settings_name {
 		window_height,
 		window_width,
 		sprt_debug,
@@ -66,6 +67,7 @@ class Settings {
 		nickname,
 	};
 
+private:
 	std::vector<Setting> set = {
 		Setting("window_height", 720),
 		Setting("window_width", 1200),
@@ -85,38 +87,6 @@ class Settings {
 		Setting("start_gold", 1500),
 		Setting("nickname", ""),
 	};
-
-	//// window settings
-	//int window_height;
-	//int window_width;
-
-	//// runtime mode settings
-	//bool sprite_loader_debug_output_enabled = false;
-	////bool console_enabled = false;
-	//bool error_output_enabled = false;
-	//bool gamepad_debug_output = false;
-	//bool collision_debug_mode = false;
-	//bool navigation_debug_mode = false;
-	//bool unit_info_debug = false;
-
-	//// map generation settings
-	//int generation_key = 42;
-	//int min_asteroid_distance;
-	//int max_asteroid_distance;
-	//int asteroid_amount;
-	//bool is_infinite;
-	//int infinite_map_radius;
-	//
-	//// service variable
-
-	//// balance settings
-	//int start_gold = 1500;
-
-	//// online ranking settings
-	//std::string rank_server;
-
-	//// user settings
-	//std::string nickname;
 
 	bool is_settings_loaded;
 
@@ -222,6 +192,23 @@ public:
 				return;
 			}
 		}
+	}
+
+	std::vector<std::string> getSettingsList() {
+		std::vector<std::string> output;
+		for (int i = 0; i < set.size(); i++) {
+			output.push_back(set[i].name);
+		}
+	}
+
+	std::vector<std::string> getChangeableSettingsList() {
+		std::vector<std::string> output = {
+			std::string("nickname"),
+			std::string("ranking_server"),
+			std::string("window_width"),
+			std::string("window_height"),
+		};
+		return output;
 	}
 
 	bool isLoaded() {
