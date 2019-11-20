@@ -373,10 +373,6 @@ class Map {
 							addObject(object, main_layer);
 
 							object1->attachObject(object);
-
-							if (!object->getUnitInfo()) {
-								std::cout << "Bullet creation wrong" << std::endl;
-							}
 						}
 						
 					}
@@ -386,6 +382,46 @@ class Map {
 	}
 
 	void garbageCollector() {
+		bool dirty = true;
+		while (dirty) {
+			bool smth_cleaned = false;
+			for (int layer = 0; layer < objects.size(); layer++) {
+				for (int i = 0; i < objects[layer].size(); i++) {
+					objects[layer][i]->garbageCollector();
+					Object * enemy = (Object *)objects[layer][i]->getUnitInfo()->getEnemy();
+					if (enemy != nullptr && (enemy->isDeleted() || !(enemy->getUnitInfo() != nullptr && !enemy->getUnitInfo()->isDead()))) {
+						objects[layer][i]->getUnitInfo()->setEnemy(nullptr);
+					}
+				}
+			}
+			for (int layer = 0; layer < objects.size(); layer++) {
+				for (int i = 0; i < objects[layer].size(); i++) {
+					if (objects[layer][i]->isDeleted() || !(objects[layer][i]->getUnitInfo() != nullptr && !objects[layer][i]->getUnitInfo()->isDead())) {
+						if (objects[layer][i] == hero_object) {
+							hero_object = nullptr;
+						}
+						if (objects[layer][i] == closest_asteroid) {
+							closest_asteroid = nullptr;
+						}
+						if (objects[layer][i] == last_clicked_object) {
+							last_clicked_object = nullptr;
+						}
+						if (objects[layer][i]->getObjectType() == ObjectType::alien_fighter) {
+							rank.addKills(1);
+						}
+						smth_cleaned = true;
+						delete objects[layer][i];
+						objects[layer].erase(objects[layer].begin() + i);
+					}
+				}
+			}
+			if (!smth_cleaned) {
+				dirty = false;
+			}
+		}
+	}
+
+	void garbageCollectorTest() {
 		for (int layer = 0; layer < objects.size(); layer++) {
 			for (int i = 0; i < objects[layer].size(); i++) {
 				objects[layer][i]->garbageCollector();
@@ -409,6 +445,10 @@ class Map {
 					}
 					if (objects[layer][i]->getObjectType() == ObjectType::alien_fighter) {
 						rank.addKills(1);
+					}
+					std::cout << "Test failed" << std::endl;
+					if (objects[layer][i]->getObjectType() == bullet) {
+						std::cout << "Test failed on bullet" << std::endl;
 					}
 					delete objects[layer][i];
 					objects[layer].erase(objects[layer].begin() + i);
@@ -440,17 +480,33 @@ class Map {
 				}
 				if (obj1->getObjectType() == ObjectType::bullet && obj2->getObjectType() != ObjectType::asteroid) {
 					obj1->deleteObject();
-					if (obj1->getUnitInfo()) {
-						event_buffer.addEvent(EventType::attack, (Object *)obj1->getUnitInfo()->getEnemy(), obj2);
+					if (unit1 && unit2) {
+						if ((obj1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
+							event_buffer.addEvent(EventType::attack, (Object *)obj1->getUnitInfo()->getEnemy(), obj2);
+						}
 					}
 					else {
 						std::cout << "Bullet bug triggered" << std::endl;
+						if (obj1->isDeleted()) {
+							std::cout << "Supposed to be deleted" << std::endl;
+						}
 					}
 					
 				}
-				if (obj2->getObjectType() == ObjectType::bullet && obj1->getObjectType() != ObjectType::asteroid && (obj1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
+				if (obj2->getObjectType() == ObjectType::bullet && obj1->getObjectType() != ObjectType::asteroid) {
 					obj2->deleteObject();
-					event_buffer.addEvent(EventType::attack, (Object *)obj2->getUnitInfo()->getEnemy(), obj1);
+					if (unit1 && unit2) {
+						if ((obj1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
+							event_buffer.addEvent(EventType::attack, (Object *)obj2->getUnitInfo()->getEnemy(), obj1);
+						}
+					}
+					else {
+						std::cout << "Bullet bug triggered" << std::endl;
+						if (obj2->isDeleted()) {
+							std::cout << "Supposed to be deleted" << std::endl;
+						}
+					}
+					
 				}
 				break;
 			case attack:
@@ -787,6 +843,7 @@ public:
 		processUnitAI();
 		processEventBuffer();
 		garbageCollector();
+		garbageCollectorTest();
 
 		if (hero_object == nullptr) {
 			return;

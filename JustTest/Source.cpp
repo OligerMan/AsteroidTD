@@ -177,32 +177,36 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	int chosen_button = retry;
 
 	auto pause_game = [&]() {
-		prev_game_status = game_status;
-		game_status = pause;
-		last_pause = frame_num;
-		window.setView(view2);
-		rank.addGameplayTime(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - round_start).count());
-		if (tutorial.isWorkingOnStep(tutorial.pause_tutorial)) {
-			tutorial.nextStep();
+		if (game_status != pause) {
+			prev_game_status = game_status;
+			game_status = pause;
+			last_pause = frame_num;
+			window.setView(view2);
+			rank.addGameplayTime(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - round_start).count());
+			if (tutorial.isWorkingOnStep(tutorial.pause_tutorial)) {
+				tutorial.nextStep();
+			}
+			chosen_button = pause_continue;
 		}
-		chosen_button = pause_continue;
 	};
 
 	auto unpause_game = [&]() {
-		game_status = prev_game_status;
-		if (game_status == research) {
-			game_status = game_hero_mode;
-		}
-		prev_game_status = pause;
-		round_start = std::chrono::steady_clock::now();
-		if (game_status == game_hero_mode) {
-			window.setView(view1);
-		}
-		else {
-			window.setView(view2);
-		}
-		if (tutorial.isWorkingOnStep(tutorial.unpause_tutorial)) {
-			tutorial.nextStep();
+		if (game_status == pause) {
+			game_status = prev_game_status;
+			if (game_status == research) {
+				game_status = game_hero_mode;
+			}
+			prev_game_status = pause;
+			round_start = std::chrono::steady_clock::now();
+			if (game_status == game_hero_mode) {
+				window.setView(view1);
+			}
+			else {
+				window.setView(view2);
+			}
+			if (tutorial.isWorkingOnStep(tutorial.unpause_tutorial)) {
+				tutorial.nextStep();
+			}
 		}
 	};
 
@@ -275,7 +279,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					else {
 						game_map1.spawnEnemy(wave_count, Point(view2.getCenter().x, view2.getCenter().y));
 					}
-					gui_manager.forceSetTopSign("New Wave", 5);
+					gui_manager.forceSetTopSign("New Wave(" + std::to_string(wave_count) + ")", 5);
 					last_wave = std::chrono::steady_clock::now();
 					wave_delay += 1;
 				}
@@ -942,7 +946,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					is_input_state = true;
 				}
 				if (!is_input_state) {
-					last_menu_choice = frame_num - 200;
+					last_menu_choice = frame_num - fps.getFPS();
 				}
 				for (int i = pause_continue; i <= pause_to_desktop; i++) {
 					window.draw(buttons[i].sprite);
@@ -1076,7 +1080,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 		}
         if (game_status == research) {
 
-            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::F) || sf::Joystick::isButtonPressed(0, BACK)) && (frame_num - last_research_open) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */) {
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::F) || sf::Joystick::isButtonPressed(0, BACK)) && (frame_num - last_research_open) > consts.getFPSLock() / 4 /* 0.25 sec delay for changing view again */) {
 				if (tutorial.getCurrentStep() == tutorial.no_tutorial || (tutorial.getCurrentStep() == tutorial.research_tutorial_close && research_number > 0)) {
 					tutorial.nextStep();
 					last_research_open = frame_num;
@@ -1093,6 +1097,8 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 			res_visual_ctrl.processFrame(&window, view3.getCenter(), cur_research_index);
 
+			bool is_input_state = false;
+			bool is_keyboard_input = false;
 			Point move_vector;
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || 
 				sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
@@ -1111,6 +1117,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 					move_vector += Point(1, 0);
 				}
+				is_keyboard_input = true;
 			}
 			else if (sf::Joystick::isConnected(0)) {         // gamepad input
 
@@ -1126,8 +1133,10 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 			if (move_vector.x != 0 || move_vector.y != 0) {
 
+				is_input_state = true;
+
 				int next_research_index = -1;
-				double min_distance = 1e9;
+				double min_distance = 1500;
 
 				for (int i = 0; i < research_graph.size(); i++) {
 					double angle_diff =
@@ -1144,8 +1153,8 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 							angle_diff -= 2 * PI;
 						}
 					}
-					if (abs(angle_diff) <= PI / 8.0) {
-						if (min_distance > (research_graph[i]->pos - research_graph[cur_research_index]->pos).getLength() && (research_graph[i]->pos - research_graph[cur_research_index]->pos).getLength() > 0.01 /*not close to zero*/) {
+					if (abs(angle_diff) <= PI / (is_keyboard_input ? 3.0 : 6.0)) {
+						if ((next_research_index == -1 || ((research_graph[i]->pos - research_graph[cur_research_index]->pos).getLength() < (research_graph[next_research_index]->pos - research_graph[cur_research_index]->pos).getLength())) && (min_distance > (research_graph[i]->pos - research_graph[cur_research_index]->pos).getLength()) && (research_graph[i]->pos - research_graph[cur_research_index]->pos).getLength() > 0.01 /*not close to zero*/) {
 							next_research_index = i;
 							min_distance = (research_graph[i]->pos - research_graph[cur_research_index]->pos).getLength();
 						}
@@ -1157,6 +1166,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					cur_research_index = next_research_index;
 					last_research_choice = frame_num;
 				}
+			}
+			if (!is_input_state) {
+				last_research_choice = frame_num - fps.getFPS();
 			}
 			
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, A)) {
@@ -1476,7 +1488,7 @@ int main() {
 				}
 
 				if (!is_input_state) {
-					last_menu_choice = frame_num - 200;
+					last_menu_choice = frame_num - fps.getFPS();
 				}
 
 				window.draw(menu_background_sprite);
@@ -1574,7 +1586,7 @@ int main() {
 					title.setString("Press Escape on keyboard or Back on gamepad to discard changes");
 				}
 				if (!key_pressed) {
-					last_menu_choice = frame_num - 200;
+					last_menu_choice = frame_num - fps.getFPS();
 				}
 				shift = shift + (chosen_setting - shift) * 0.05;
 				title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);

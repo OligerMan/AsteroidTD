@@ -272,6 +272,9 @@ public:
 
 	void deleteObject() {
 		deleted = true;
+		for (int i = 0; i < attached_objects.size(); i++) {
+			attached_objects[i]->deleteObject();
+		}
 	}
 
 	bool isDeleted() {
@@ -300,6 +303,11 @@ public:
 			if (attached_objects[i]->isDeleted() || !(attached_objects[i]->getUnitInfo() != nullptr && !attached_objects[i]->getUnitInfo()->isDead())) {
 				attached_objects[i]->deleteObject();
 				attached_objects.erase(attached_objects.begin() + i);
+			}
+		}
+		if (this->isDeleted() || !(this->getUnitInfo() != nullptr && !this->getUnitInfo()->isDead())) {
+			for (int i = 0; i < attached_objects.size(); i++) {
+				attached_objects[i]->deleteObject();
 			}
 		}
 	}
