@@ -443,12 +443,12 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			if (game_status != pause) {
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
 					if (!gui_manager.processFrame(cursor_pos, viewport_pos)) {
-						game_map1.processFrame(cursor_pos + viewport_pos);
+						game_map1.processFrame(cursor_pos + viewport_pos, viewport_pos);
 					}
 				}
 				else {
 					if (!gui_manager.processFrame(Point(10000000, 100000000), viewport_pos)) {
-						game_map1.processFrame(Point(10000000, 100000000));
+						game_map1.processFrame(Point(10000000, 100000000), viewport_pos);
 					}
 				}
 			}
@@ -764,7 +764,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				}
 			}
 
-			if (!(game_status == game_strategic_mode || game_status == pause)) {
+			if (game_status == game_hero_mode) {
 				if (hero_object->getUnitInfo()->isAffected(move_speed_buff)) {
 					hero_speed *= consts.getMoveSpeedBuffMultiplier();
 				}
@@ -791,13 +791,22 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					}
 				}
 			}
-			else if (game_status != pause) {
-					hero_object->setSpeed(Point());
-					hero_object->setAnimationType(hold_anim);
-					new_speed = new_speed.getNormal() * consts.getStrategicCameraSpeed() * consts.getFPSLock() / fps.getFPS();
-					view2.setCenter(view2.getCenter() + sf::Vector2f(new_speed.x, new_speed.y));
-					strategic_back_pos = strategic_back_pos + sf::Vector2f(new_speed.x * 0.95, new_speed.y * 0.95);
-				
+			else if (game_status == game_strategic_mode) {
+					
+					if (sf::Joystick::isButtonPressed(0, LSTICK)) {
+						const double view2_speed_coef = 0.05;
+						Point hero_position = hero_object->getPosition();
+						Point diff = (hero_position - Point(view2.getCenter())) * view2_speed_coef * consts.getFPSLock() / fps.getFPS();
+						view2.setCenter(view2.getCenter() + sf::Vector2f(diff.x, diff.y));
+						strategic_back_pos = strategic_back_pos + sf::Vector2f(diff.x * 0.95, diff.y * 0.95);
+					}
+					else {
+						hero_object->setSpeed(Point());
+						hero_object->setAnimationType(hold_anim);
+						new_speed = new_speed.getNormal() * consts.getStrategicCameraSpeed() * consts.getFPSLock() / fps.getFPS();
+						view2.setCenter(view2.getCenter() + sf::Vector2f(new_speed.x, new_speed.y));
+						strategic_back_pos = strategic_back_pos + sf::Vector2f(new_speed.x * 0.95, new_speed.y * 0.95);
+					}
 			}
 
 
@@ -807,6 +816,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				Point diff = (hero_position - Point(view1.getCenter())) * view_speed_coef * consts.getFPSLock() / fps.getFPS();
 				view1.setCenter(view1.getCenter() + sf::Vector2f(diff.x, diff.y));
 				main_back_pos = main_back_pos + sf::Vector2f(diff.x * 0.95, diff.y * 0.95);
+
 			}
 
 			if (!(game_status == game_strategic_mode || game_status == pause)) {
@@ -954,7 +964,6 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				window.draw(title);
 			}
 			
-
 		}
 		if (game_status == game_over) {
 			window.setView(view4);

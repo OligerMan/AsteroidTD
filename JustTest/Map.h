@@ -116,8 +116,8 @@ class Map {
 	Object * last_clicked_object = nullptr;
 
 	Point gen_basis;
-	float gen_radius = 6000, cam_radius = 2500, min_range = 1500, max_range = 2700, asteroid_speed = 0;
-	int asteroid_amount = 20, max_try_count = 100;
+	float gen_radius = 8500, cam_radius = 5500, min_range = 1500, max_range = 2700, asteroid_speed = 0;
+	int asteroid_amount = 50, max_try_count = 100;
 	bool save_out_range = true, fixed_asteroids = true;
 
 	//////////////////////////////////////////////
@@ -213,7 +213,7 @@ class Map {
 				}
 				else {
 					for (int j = 0; j < objects[landscape_layer].size(); j++) {
-						if (objects[landscape_layer][j]->getObjectType() != asteroid) {
+						if (objects[landscape_layer][j]->getObjectType() != asteroid && objects[landscape_layer][j]->getObjectType() != bullet) {
 							if ((objects[landscape_layer][j]->getUnitInfo()->getFaction() != objects[cnt][i]->getUnitInfo()->getFaction()) && checkObjectCollision(objects[cnt][i], objects[landscape_layer][j])) {
 								event_buffer.addEvent(EventType::default_collision, objects[cnt][i], objects[landscape_layer][j]);
 							}
@@ -382,18 +382,30 @@ class Map {
 	}
 
 	void garbageCollector() {
-		bool dirty = true;
-		while (dirty) {
+		int try_count = 3;
+		//bool dirty = true;
+		while (try_count > 0) {
 			bool smth_cleaned = false;
 			for (int layer = 0; layer < objects.size(); layer++) {
 				for (int i = 0; i < objects[layer].size(); i++) {
-					objects[layer][i]->garbageCollector();
+					if (objects[layer][i]->garbageCollector()) {
+						smth_cleaned = true;
+					}
 					Object * enemy = (Object *)objects[layer][i]->getUnitInfo()->getEnemy();
-					if (enemy != nullptr && (enemy->isDeleted() || !(enemy->getUnitInfo() != nullptr && !enemy->getUnitInfo()->isDead()))) {
+					if (enemy != nullptr && (enemy->isDeleted() || enemy->getUnitInfo() == nullptr || enemy->getUnitInfo()->isDead())) {
 						objects[layer][i]->getUnitInfo()->setEnemy(nullptr);
+						smth_cleaned = true;
 					}
 				}
 			}
+			if (!smth_cleaned) {
+				try_count--;
+			}
+		}
+		try_count = 3;
+		//dirty = true;
+		while (try_count > 0) {
+			bool smth_cleaned = false;
 			for (int layer = 0; layer < objects.size(); layer++) {
 				for (int i = 0; i < objects[layer].size(); i++) {
 					if (objects[layer][i]->isDeleted() || !(objects[layer][i]->getUnitInfo() != nullptr && !objects[layer][i]->getUnitInfo()->isDead())) {
@@ -410,13 +422,13 @@ class Map {
 							rank.addKills(1);
 						}
 						smth_cleaned = true;
-						delete objects[layer][i];
+						//delete objects[layer][i];
 						objects[layer].erase(objects[layer].begin() + i);
 					}
 				}
 			}
 			if (!smth_cleaned) {
-				dirty = false;
+				try_count--;
 			}
 		}
 	}
@@ -424,33 +436,13 @@ class Map {
 	void garbageCollectorTest() {
 		for (int layer = 0; layer < objects.size(); layer++) {
 			for (int i = 0; i < objects[layer].size(); i++) {
-				objects[layer][i]->garbageCollector();
-				Object * enemy = (Object *)objects[layer][i]->getUnitInfo()->getEnemy();
-				if (enemy != nullptr && (enemy->isDeleted() || !(enemy->getUnitInfo() != nullptr && !enemy->getUnitInfo()->isDead()))) {
-					objects[layer][i]->getUnitInfo()->setEnemy(nullptr);
-				}
-			}
-		}
-		for (int layer = 0; layer < objects.size(); layer++) {
-			for (int i = 0; i < objects[layer].size(); i++) {
-				if (objects[layer][i]->isDeleted() || !(objects[layer][i]->getUnitInfo() != nullptr && !objects[layer][i]->getUnitInfo()->isDead())) {
-					if (objects[layer][i] == hero_object) {
-						hero_object = nullptr;
-					}
-					if (objects[layer][i] == closest_asteroid) {
-						closest_asteroid = nullptr;
-					}
-					if (objects[layer][i] == last_clicked_object) {
-						last_clicked_object = nullptr;
-					}
-					if (objects[layer][i]->getObjectType() == ObjectType::alien_fighter) {
-						rank.addKills(1);
-					}
-					std::cout << "Test failed" << std::endl;
+				if (objects[layer][i]->isDeleted() || objects[layer][i]->getUnitInfo() == nullptr || objects[layer][i]->getUnitInfo()->isDead()) {
+					
+					std::cout << "Wrong" << std::endl;
 					if (objects[layer][i]->getObjectType() == bullet) {
-						std::cout << "Test failed on bullet" << std::endl;
+						std::cout << "Bullet" << std::endl;
 					}
-					delete objects[layer][i];
+					//delete objects[layer][i];
 					objects[layer].erase(objects[layer].begin() + i);
 				}
 			}
@@ -834,7 +826,7 @@ public:
 		last_clicked_object = object;
 	}
 
-	void processFrame(Point click) {
+	void processFrame(Point click, Point view_pos) {
 		processClick(click);
 		processObjectSpeed();
 		processCollisionFrame();
@@ -843,13 +835,13 @@ public:
 		processUnitAI();
 		processEventBuffer();
 		garbageCollector();
-		garbageCollectorTest();
+		//garbageCollectorTest();
 
 		if (hero_object == nullptr) {
 			return;
 		}
 
-		rebuildMap(hero_object->getPosition(), gen_radius, cam_radius, save_out_range, 1, asteroid_amount, min_range, max_range);
+		rebuildMap(/*hero_object->getPosition()*/view_pos, gen_radius, cam_radius, save_out_range, 1, asteroid_amount, min_range, max_range);
 	}
 
 	Object * getHero() {

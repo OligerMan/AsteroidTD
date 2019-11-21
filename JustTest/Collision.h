@@ -170,12 +170,9 @@ public:
 };
 
 bool checkModelCollision(CollisionModel * m1, CollisionModel * m2) {
-	if ((m1->getPosition() - m2->getPosition()).getLength() > 1500) {
+	/*if ((m1->getPosition() - m2->getPosition()).getLength() > (m1->getMaxRadius() + m2->getMaxRadius())) {
 		return false;
-	}
-	if ((m1->getPosition() - m2->getPosition()).getLength() > (m1->getMaxRadius() + m2->getMaxRadius())) {
-		return false;
-	}
+	}*/
 
 	unsigned int m1_size = m1->getModelSize();
 	unsigned int m2_size = m2->getModelSize();

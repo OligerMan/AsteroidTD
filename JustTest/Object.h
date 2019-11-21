@@ -26,6 +26,7 @@ public:
 		for (int i = 0; i < attached_objects.size(); i++) {
 			attached_objects[i]->deleteObject();
 		}
+		attached_objects.clear();
 		unit_info = nullptr;
 		col_model = nullptr;
 	}
@@ -289,7 +290,7 @@ public:
 		if (getUnitInfo() == nullptr) {
 			return false;
 		}
-		
+	
 		return getUnitInfo()->canObjectAttack();
 	}
 
@@ -297,19 +298,27 @@ public:
 		attached_objects.push_back(object);
 	}
 
-	void garbageCollector() {
+	bool garbageCollector() {   // returns true if something worked
 		time_left--;
-		for (int i = 0; i < attached_objects.size(); i++) {
-			if (attached_objects[i]->isDeleted() || !(attached_objects[i]->getUnitInfo() != nullptr && !attached_objects[i]->getUnitInfo()->isDead())) {
-				attached_objects[i]->deleteObject();
-				attached_objects.erase(attached_objects.begin() + i);
-			}
-		}
-		if (this->isDeleted() || !(this->getUnitInfo() != nullptr && !this->getUnitInfo()->isDead())) {
+		bool cleaned = false;
+		if (this->isDeleted() || this->getUnitInfo() == nullptr || this->getUnitInfo()->isDead()) {
+			this->deleteObject();
 			for (int i = 0; i < attached_objects.size(); i++) {
 				attached_objects[i]->deleteObject();
+				cleaned = true;
+			}
+			attached_objects.clear();
+		}
+		else {
+			for (int i = 0; i < attached_objects.size(); i++) {
+				if (attached_objects[i]->isDeleted() || attached_objects[i]->getUnitInfo() == nullptr || attached_objects[i]->getUnitInfo()->isDead()) {
+					//attached_objects[i]->deleteObject();
+					attached_objects.erase(attached_objects.begin() + i);
+					cleaned = true;
+				}
 			}
 		}
+		return cleaned;
 	}
 
 	std::vector<Object *> * getAttached() {
@@ -337,5 +346,12 @@ public:
 };
 
 bool checkObjectCollision(Object * obj1, Object * obj2) {
+	if ((obj1->getCollisionModel()->getPosition() - obj2->getCollisionModel()->getPosition()).getLength() > (obj1->getCollisionModel()->getMaxRadius() + obj2->getCollisionModel()->getMaxRadius())) {
+		return false;
+	}
+	/*ObjectType type1 = obj1->getObjectType(), type2 = obj1->getObjectType();
+	if ((type2 != bullet && (type1 == dome || type1 == turret || type1 == science || type1 == gold)) || (type1 != bullet && (type2 == dome || type2 == turret || type2 == science || type2 == gold))){
+		return false;
+	}*/
 	return checkModelCollision(obj1->getCollisionModel(), obj2->getCollisionModel());
 }
