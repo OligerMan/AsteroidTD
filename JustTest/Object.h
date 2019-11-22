@@ -326,9 +326,13 @@ public:
 	}
 
 	void setFaction(int new_faction) {
-		unit_info->setFaction(new_faction);
+		if (unit_info) {
+			unit_info->setFaction(new_faction);
+		}
 		for (int i = 0; i < attached_objects.size(); i++) {
-			attached_objects[i]->setFaction(new_faction);
+			if (attached_objects[i]->getObjectType() != bullet) {
+				attached_objects[i]->setFaction(new_faction);
+			}
 		}
 	}
 

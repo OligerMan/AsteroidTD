@@ -193,7 +193,7 @@ class Map {
 	void processCollisionFrame(){
 		for (int cnt = 0; cnt < objects.size(); cnt++) {
 			for (int i = 0; i < objects[cnt].size(); i++) {
-				if (objects[cnt][i]->getCollisionModel()->isStatic()) {
+				if (objects[cnt][i]->getCollisionModel()->isStatic() || objects[cnt][i]->getObjectType() == alien_turret1) {
 					continue;
 				}
 				if (objects[cnt][i] != hero_object) {
@@ -204,6 +204,10 @@ class Map {
 				if (objects[cnt][i]->getObjectType() != ObjectType::bullet) {
 					for (int j = 0; j < objects[cnt].size(); j++) {
 						if (i != j) {
+							ObjectType type = objects[cnt][j]->getObjectType();
+							if (type == bullet || type == dome || type == turret || type == science || type == gold || type == alien_turret1) {
+								continue;
+							}
 							if (checkObjectCollision(objects[cnt][i], objects[cnt][j])) {
 								event_buffer.addEvent(EventType::default_collision, objects[cnt][i], objects[cnt][j]);
 								fixCollision(objects[cnt][i], objects[cnt][j]);
@@ -268,6 +272,10 @@ class Map {
 
 				int faction1 = object1->getUnitInfo()->getFaction();
 
+				ObjectType type = object1->getObjectType();
+				if (type == bullet || type == dome || type == science || type == gold || type == alien_turret1) {
+					continue;
+				}
 
 				// turn to closest enemy
 				if (faction1 != FactionList::null_faction) {
@@ -422,7 +430,7 @@ class Map {
 							rank.addKills(1);
 						}
 						smth_cleaned = true;
-						//delete objects[layer][i];
+						delete objects[layer][i];
 						objects[layer].erase(objects[layer].begin() + i);
 					}
 				}
@@ -841,7 +849,7 @@ public:
 			return;
 		}
 
-		rebuildMap(/*hero_object->getPosition()*/view_pos, gen_radius, cam_radius, save_out_range, 1, asteroid_amount, min_range, max_range);
+		rebuildMap(view_pos, gen_radius, cam_radius, save_out_range, 1, asteroid_amount, min_range, max_range);
 	}
 
 	Object * getHero() {
