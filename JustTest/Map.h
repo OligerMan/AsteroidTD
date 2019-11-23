@@ -273,7 +273,7 @@ class Map {
 				int faction1 = object1->getUnitInfo()->getFaction();
 
 				ObjectType type = object1->getObjectType();
-				if (type == bullet || type == dome || type == science || type == gold || type == alien_turret1) {
+				if (type == bullet || type == dome || type == science || type == gold) {
 					continue;
 				}
 
@@ -940,7 +940,7 @@ public:
 				)
 			);
 			object->setAutoOrigin();
-			object->getUnitInfo()->setMaxHealth(object->getUnitInfo()->getMaxHealth() * (research_manager.getTurretMaxHealthCoef() + dome_amount * research_manager.getDomeLocalMaxHealthCoef()));
+			//object->getUnitInfo()->setMaxHealth(object->getUnitInfo()->getMaxHealth() * (research_manager.getTurretMaxHealthCoef() + dome_amount * research_manager.getDomeLocalMaxHealthCoef()));
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
 			outer_ring.push_back(object);
@@ -960,7 +960,7 @@ public:
 				)
 			);
 			object->setAutoOrigin();
-			object->getUnitInfo()->setMaxHealth(object->getUnitInfo()->getMaxHealth() * (research_manager.getDomeMaxHealthCoef() + dome_amount * research_manager.getDomeLocalMaxHealthCoef()));
+			//object->getUnitInfo()->setMaxHealth(object->getUnitInfo()->getMaxHealth() * (research_manager.getDomeMaxHealthCoef() + dome_amount * research_manager.getDomeLocalMaxHealthCoef()));
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
 			inner_ring.push_back(object);
@@ -980,7 +980,7 @@ public:
 				)
 			);
 			object->setAutoOrigin();
-			object->getUnitInfo()->setMaxHealth(object->getUnitInfo()->getMaxHealth() * (research_manager.getScienceMaxHealthCoef() + dome_amount * research_manager.getDomeLocalMaxHealthCoef()));
+			//object->getUnitInfo()->setMaxHealth(object->getUnitInfo()->getMaxHealth() * (research_manager.getScienceMaxHealthCoef() + dome_amount * research_manager.getDomeLocalMaxHealthCoef()));
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
 			inner_ring.push_back(object);
@@ -1000,7 +1000,7 @@ public:
 				)
 			);
 			object->setAutoOrigin();
-			object->getUnitInfo()->setMaxHealth(object->getUnitInfo()->getMaxHealth() * (research_manager.getGoldMaxHealthCoef() + dome_amount * research_manager.getDomeLocalMaxHealthCoef()));
+			//object->getUnitInfo()->setMaxHealth(object->getUnitInfo()->getMaxHealth() * (research_manager.getGoldMaxHealthCoef() + dome_amount * research_manager.getDomeLocalMaxHealthCoef()));
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
 			inner_ring.push_back(object);
@@ -1009,6 +1009,7 @@ public:
 		if (object == nullptr) {
 			return false;
 		}
+		object->researchApply(dome_amount);
 		base->attachObject(object);
 		// rebuild structures list
 		float base_angle = 0;

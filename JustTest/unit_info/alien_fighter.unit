@@ -1,6 +1,6 @@
 max_hp 200
 inf_hp 0
-default_speed 1
+default_speed 3
 
 anger_range 1000000
 

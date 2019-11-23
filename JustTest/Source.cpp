@@ -281,7 +281,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					}
 					gui_manager.forceSetTopSign("New Wave(" + std::to_string(wave_count) + ")", 5);
 					last_wave = std::chrono::steady_clock::now();
-					wave_delay += 1;
+					//wave_delay += 1;
 				}
 			}
 
@@ -1051,7 +1051,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				int next_menu_button = -1;
 				double min_distance = 1e9;
 
-				for (int i = 0; i < buttons.size(); i++) {
+				for (int i = retry; i <= menu; i++) {
 					double angle_diff =
 						(std::atan2(move_vector.x, move_vector.y) -
 							std::atan2(

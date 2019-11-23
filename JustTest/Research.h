@@ -588,6 +588,9 @@ public:
 
 	float getDomeLocalMaxHealthCoef() {
 		float coef = 0;
+		if (research_list[dome_initial]->unlocked) {
+			coef = 0.1;
+		}
 		if (research_list[dome_local_health_lvl1]->unlocked) {
 			coef = 0.25;
 		}

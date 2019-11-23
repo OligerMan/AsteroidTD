@@ -375,6 +375,10 @@ public:
 		anger_range = new_anger_range;
 	}
 
+	size_t getAttackInfoSize() {
+		return attack.size();
+	}
+
 	float getAttackRange(int num) {
 		if (attack.size() <= num) {
 			return 0.0;
