@@ -132,7 +132,8 @@ class GUIVisualController{
 
 	void setSkillsIconPosition(sf::RenderWindow * window) {
 		for (int i = 0; i < skills_texture.size(); i++) {
-			Point center = Point(window->getSize().x / 2 - consts.getSkillsIconBorder() - consts.getSkillsIconShiftRadius() - consts.getSkillsIconSize() / 2, window->getSize().y / 2 - consts.getSkillsIconBorder() - consts.getSkillsIconShiftRadius() - consts.getSkillsIconSize() / 2);
+			//Point center = Point(window->getSize().x / 2 - consts.getSkillsIconBorder() - (consts.getSkillsIconShiftRadius() + consts.getSkillsIconSize() / 2) * window->getView().getSize().x / 1920, window->getSize().y / 2 - consts.getSkillsIconBorder() - (consts.getSkillsIconShiftRadius() + consts.getSkillsIconSize() / 2) * window->getView().getSize().y / 1080);
+			Point center = Point(window->getView().getSize().x / 2 - (consts.getSkillsIconSize() + consts.getSkillsIconShiftRadius() + consts.getSkillsIconBorder()) * window->getView().getSize().x / 1920, window->getView().getSize().y / 2 - (consts.getSkillsIconSize() + consts.getSkillsIconShiftRadius() + consts.getSkillsIconBorder()) * window->getView().getSize().y / 1080);
 			for (int j = 0; j < skills_texture[0].size(); j++) {
 				skills_sprite[i][j].setTexture(skills_texture[i][j]);
 				sf::Vector2u v = skills_texture[i][j].getSize();
@@ -140,7 +141,7 @@ class GUIVisualController{
 				if (v.x != 0 && v.y != 0) {
 					skills_sprite[i][j].setScale(coef / v.x, coef / v.y);
 				}
-				Point pos = center + Point(cos((float)(i % 4) / 4.0 * PI * 2 - PI / 2), sin((float)(i % 4) / 4.0 * PI * 2 - PI / 2)) * consts.getSkillsIconShiftRadius();
+				Point pos = center + Point(cos((float)(i % 4) / 4.0 * PI * 2 - PI / 2), sin((float)(i % 4) / 4.0 * PI * 2 - PI / 2)) * consts.getSkillsIconShiftRadius() * window->getView().getSize().y / 1080;
 				skills_sprite[i][j].setPosition(sf::Vector2f(pos.x, pos.y));
 			}
 		}
@@ -161,11 +162,10 @@ class GUIVisualController{
 
 public:
 
-	GUIVisualController(sf::RenderWindow * window) {
+	GUIVisualController() {
 		const std::string texture_path = "GUI";
 
 		uploadTextures(texture_path);
-		setSkillsIconPosition(window);
 		initSprites();
 	}
 
@@ -206,21 +206,18 @@ public:
 				sprite->setPosition(position.x, position.y);
 				sprite->setOrigin(object->getOrigin().x, object->getOrigin().y);
 				sprite->setRotation(angle);
+				sprite->setScale(sf::Vector2f(window->getView().getSize().x / 1920, window->getView().getSize().y / 1080));
 				
 				window->draw(*sprite);
 			}
 		}
 
 		// gui text render
+		(*text)[0].first.setPosition(sf::Vector2f(0, -window->getView().getSize().y / 2 / 1.2));
 		for (int i = 0; i < text->size(); i++) {
 			sf::Vector2f prev_pos = (*text)[i].first.getPosition();
 			int prev_font_size = (*text)[i].first.getCharacterSize();
-			if (game_status == game_strategic_mode || game_status == pause) {
-				sf::Vector2f v = (*text)[i].first.getPosition();
-				(*text)[i].first.setPosition(sf::Vector2f(v.x * 4.15, v.y * 4.15));
-				(*text)[i].first.setCharacterSize((*text)[i].first.getCharacterSize() * 4.15);
-			}
-
+			(*text)[i].first.setCharacterSize((*text)[i].first.getCharacterSize() * window->getView().getSize().y / 1080);
 			if (i <= text->size()) {
 				(*text)[i].first.setOrigin(-viewport_pos.x, -viewport_pos.y);
 			}
@@ -236,11 +233,14 @@ public:
 		}
 
 		// skills icons render
-
+		setSkillsIconPosition(window);
 		for (int i = 0; i < SKILL_AMOUNT; i++) {
 			for (int j = 0; j < SKILL_STATE_AMOUNT; j++) {
-                sf::Vector2f v = skills_sprite[i][j].getScale();
-				skills_sprite[i][j].setOrigin(-viewport_pos.x / v.x, -viewport_pos.y / v.y);
+				skills_sprite[i][j].setScale(sf::Vector2f(consts.getSkillsIconSize() / skills_texture[i][j].getSize().x * window->getView().getSize().x / 1920, consts.getSkillsIconSize() / skills_texture[i][j].getSize().y * window->getView().getSize().y / 1080));
+
+				sf::Vector2f v = skills_sprite[i][j].getScale();
+				//skills_sprite[i][j].setOrigin(-viewport_pos.x * v.x, -viewport_pos.y * v.y);
+				skills_sprite[i][j].setOrigin(-window->getView().getCenter().x / v.x, -window->getView().getCenter().y / v.y);
 			}
 		}
 
@@ -301,8 +301,8 @@ public:
         }
 
 		// hero HP draw
-		sf::RectangleShape hp_rectangle(sf::Vector2f(window->getSize().x * hero_hp_percent * 1.2, window->getSize().y * 1.2 / 40));
-		hp_rectangle.setPosition(sf::Vector2f(-(int)window->getSize().x * 0.6, window->getSize().y * 19 / 40 * 1.2));
+		sf::RectangleShape hp_rectangle(sf::Vector2f(window->getView().getSize().x * hero_hp_percent, window->getView().getSize().y / 40));
+		hp_rectangle.setPosition(sf::Vector2f(-(int)window->getView().getSize().x / 2, window->getView().getSize().y * 19 / 40));
 		hp_rectangle.setOrigin(-viewport_pos.x, -viewport_pos.y);
 		hp_rectangle.setFillColor(sf::Color(0,122,204));
 		window->draw(hp_rectangle);
@@ -312,7 +312,7 @@ public:
 		return is_active;
 	}
 
-	void reset(sf::RenderWindow * window) {
+	void reset() {
 		texture_buffer.clear();
 		sprite_buffer.clear();
 		skills_texture.clear();
@@ -321,7 +321,6 @@ public:
 		const std::string texture_path = "GUI";
 
 		uploadTextures(texture_path);
-		setSkillsIconPosition(window);
 		initSprites();
 	}
 };

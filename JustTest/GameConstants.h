@@ -36,12 +36,15 @@ class Constants {
 
 	const float skills_icon_size = 120;
 	const float skills_icon_shift_radius = 100;
-	const float skills_icon_border = 20;
+	const float skills_icon_border = 75;
 
 	const float research_icon_size = 120;
 	const float research_icon_border = 100;
 
 	const std::string balance_version = "0.1";
+
+	const float hero_view_scale = 1.5;
+	const float strategic_view_scale = 5;
 
 public:
 
@@ -167,5 +170,13 @@ public:
 
 	const std::string getBalanceVersion() {
 		return balance_version;
+	}
+
+	const float getHeroViewScale() {
+		return hero_view_scale;
+	}
+
+	const float getStrategicViewScale() {
+		return strategic_view_scale;
 	}
 } consts;

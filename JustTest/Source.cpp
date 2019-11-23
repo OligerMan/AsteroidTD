@@ -42,9 +42,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 	sf::Text title;
 	sf::Font base_font;
-
-	sf::View view1(sf::Vector2f(0.0, 0.0), sf::Vector2f(window.getSize().x * 1.2, window.getSize().y * 1.2));  // main game mode
-	sf::View view2(sf::Vector2f(0.0, 0.0), sf::Vector2f(window.getSize().x * 5, window.getSize().y * 5));      // strategic view
+	
+	sf::View view1(sf::Vector2f(0.0, 0.0), sf::Vector2f(window.getSize().x * consts.getHeroViewScale(), window.getSize().y * consts.getHeroViewScale()));  // main game mode
+	sf::View view2(sf::Vector2f(0.0, 0.0), sf::Vector2f(window.getSize().x * consts.getStrategicViewScale(), window.getSize().y * consts.getStrategicViewScale()));      // strategic view
 	sf::View view3(sf::Vector2f(0.0, 0.0), sf::Vector2f(window.getSize().x, window.getSize().y));      // research view
 	sf::View view4(sf::Vector2f((int)window.getSize().x / 2, (int)window.getSize().y / 2), sf::Vector2f(window.getSize().x, window.getSize().y));      // main menu view
 	
@@ -68,7 +68,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	std::vector<ResearchNode *> research_graph = research_manager.getResearchGraph();
 	int cur_research_index = 0;
 
-	GUIManager gui_manager(window.getSize().y);
+	GUIManager gui_manager;
 
 	sf::Vector2f strategic_back_pos, main_back_pos;
 
@@ -122,7 +122,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	title.setFillColor(sf::Color::White);
 	title.setOutlineColor(sf::Color::Black);
 	title.setOutlineThickness(1);
-	title.setCharacterSize(50);
+	title.setCharacterSize(50 * window.getView().getSize().y / 1080);
 	title.setFont(base_font);
 
 	struct Button {
@@ -144,19 +144,19 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	std::vector<Button> buttons;
 	buttons.resize(BUTTONS_NAME_LIST_SIZE);
 
-	buttons[retry].pos = Point(window.getSize().x / 2, 300);
+	buttons[retry].pos = Point(0, 300);
 	buttons[retry].texture_default.loadFromFile("menu_buttons\\retry.png");
 	buttons[retry].texture_selected.loadFromFile("menu_buttons\\retry_selected.png");
 	buttons[retry].sprite.setTexture(buttons[retry].texture_default);
 	buttons[retry].advice_string = "try again";
 
-	buttons[menu].pos = Point(window.getSize().x / 2, 500);
+	buttons[menu].pos = Point(0, 500);
 	buttons[menu].texture_default.loadFromFile("menu_buttons\\menu.png");
 	buttons[menu].texture_selected.loadFromFile("menu_buttons\\menu_selected.png");
 	buttons[menu].sprite.setTexture(buttons[menu].texture_default);
 	buttons[menu].advice_string = "go back to menu";
 
-	buttons[pause_continue].pos = Point(0, -1000);
+	buttons[pause_continue].pos = Point(0, -250);
 	buttons[pause_continue].texture_default.loadFromFile("menu_buttons\\pause_continue.png");
 	buttons[pause_continue].texture_selected.loadFromFile("menu_buttons\\pause_continue_selected.png");
 	buttons[pause_continue].sprite.setTexture(buttons[pause_continue].texture_default);
@@ -168,7 +168,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	buttons[pause_to_menu].sprite.setTexture(buttons[pause_to_menu].texture_default);
 	buttons[pause_to_menu].advice_string = "go to menu";
 
-	buttons[pause_to_desktop].pos = Point(0, 1000);
+	buttons[pause_to_desktop].pos = Point(0, 250);
 	buttons[pause_to_desktop].texture_default.loadFromFile("menu_buttons\\pause_to_desktop.png");
 	buttons[pause_to_desktop].texture_selected.loadFromFile("menu_buttons\\pause_to_desktop_selected.png");
 	buttons[pause_to_desktop].sprite.setTexture(buttons[pause_to_desktop].texture_default);
@@ -260,14 +260,14 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			hero_hp = hero_object->getUnitInfo()->getHealth();
 			// game cycle
 
-			gui_manager.setText("Gold: " + std::to_string((int)resource_manager.getGold()), 0.01, gold_sign, Point(-(int)window.getSize().x / 2, -(int)window.getSize().y / 2), 35);
-			gui_manager.setText("Research: " + std::to_string((int)resource_manager.getResearch()), 0.01, research_sign, Point(-(int)window.getSize().x / 2, -(int)window.getSize().y / 2 + 55), 35);
+			gui_manager.setText("Gold: " + std::to_string((int)resource_manager.getGold()), 0.01, gold_sign, Point(-(int)window.getView().getSize().x / 2 / 1.2, -(int)window.getView().getSize().y / 2 / 1.2), 35);
+			gui_manager.setText("Research: " + std::to_string((int)resource_manager.getResearch()), 0.01, research_sign, Point(-(int)window.getView().getSize().x / 2 / 1.2, -(int)window.getView().getSize().y / 2 / 1.2 + 55 * window.getView().getSize().y / 1080), 35);
 
 			if (skills_mode == set1) {
-				gui_manager.setText("Ability Mode", 0.01, skill_status_sign, Point(window.getSize().x / 2 - 150, -(int)window.getSize().y / 2), 50);
+				gui_manager.setText("Ability Mode", 0.01, skill_status_sign, Point(window.getView().getSize().x / 2 / 1.2 - 150 * window.getView().getSize().x / 1920, -(int)window.getView().getSize().y / 2 / 1.2), 50);
 			}
 			else {
-				gui_manager.setText("Build Mode", 0.01, skill_status_sign, Point(window.getSize().x / 2 - 150, -(int)window.getSize().y / 2), 50);
+				gui_manager.setText("Build Mode", 0.01, skill_status_sign, Point(window.getView().getSize().x / 2 / 1.2 - 150 * window.getView().getSize().x / 1920, -(int)window.getView().getSize().y / 2 / 1.2), 50);
 			}
 
 			if (game_status != pause && tutorial.isWorkingOnStep(tutorial.no_tutorial)) {
@@ -793,7 +793,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			}
 			else if (game_status == game_strategic_mode) {
 					
-					if (sf::Joystick::isButtonPressed(0, LSTICK)) {
+					if (sf::Joystick::isButtonPressed(0, LSTICK) || sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
 						const double view2_speed_coef = 0.05;
 						Point hero_position = hero_object->getPosition();
 						Point diff = (hero_position - Point(view2.getCenter())) * view2_speed_coef * consts.getFPSLock() / fps.getFPS();
@@ -812,7 +812,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 			if (hero_object != nullptr) {
 				const double view_speed_coef = 0.05;    // must be from 0 to 1, where 0 for static camera and 1 for camera istantly over hero
-				Point hero_position = hero_object->getPosition();
+				Point hero_position = Point(hero_object->getPosition().x * window.getSize().x / 1920, hero_object->getPosition().y * window.getSize().y / 1080);
 				Point diff = (hero_position - Point(view1.getCenter())) * view_speed_coef * consts.getFPSLock() / fps.getFPS();
 				view1.setCenter(view1.getCenter() + sf::Vector2f(diff.x, diff.y));
 				main_back_pos = main_back_pos + sf::Vector2f(diff.x * 0.95, diff.y * 0.95);
@@ -835,9 +835,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					else {
 						buttons[i].sprite.setTexture(buttons[i].texture_default);
 					}
-					buttons[i].sprite.setScale(sf::Vector2f(buttons[i].radius * 2 / buttons[i].sprite.getTexture()->getSize().x / window.getSize().x * window.getView().getSize().x, buttons[i].radius * 2 / buttons[i].sprite.getTexture()->getSize().y / window.getSize().y * window.getView().getSize().y));
+					buttons[i].sprite.setScale(sf::Vector2f(buttons[i].radius * 2 / buttons[i].sprite.getTexture()->getSize().x * window.getView().getSize().x / 1920, buttons[i].radius * 2 / buttons[i].sprite.getTexture()->getSize().y * window.getView().getSize().y / 1080));
 					buttons[i].sprite.setOrigin(sf::Vector2f(buttons[i].sprite.getTexture()->getSize().x / 2, buttons[i].sprite.getTexture()->getSize().y / 2));
-					buttons[i].sprite.setPosition(sf::Vector2f(buttons[i].pos.x + viewport_pos.x, buttons[i].pos.y + viewport_pos.y));
+					buttons[i].sprite.setPosition(sf::Vector2f(buttons[i].pos.x * window.getView().getSize().x / 1920 + viewport_pos.x, buttons[i].pos.y * window.getView().getSize().y / 1080 + viewport_pos.y));
 				}
 
 				gui_manager.forceSetTopSign("Press Space to " + buttons[chosen_button].advice_string, 0.01);
@@ -967,16 +967,16 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 		}
 		if (game_status == game_over) {
 			window.setView(view4);
-			for (int i = 0; i <= menu; i++) {
+			for (int i = retry; i <= menu; i++) {
 				if (i == chosen_button) {
 					buttons[i].sprite.setTexture(buttons[i].texture_selected);
 				}
 				else {
 					buttons[i].sprite.setTexture(buttons[i].texture_default);
 				}
-				buttons[i].sprite.setScale(sf::Vector2f(buttons[i].radius * 2 / buttons[i].sprite.getTexture()->getSize().x, buttons[i].radius * 2 / buttons[i].sprite.getTexture()->getSize().y));
+				buttons[i].sprite.setScale(sf::Vector2f(buttons[i].radius * 2 / buttons[i].sprite.getTexture()->getSize().x * window.getView().getSize().x / 1920, buttons[i].radius * 2 / buttons[i].sprite.getTexture()->getSize().y * window.getView().getSize().y / 1080));
 				buttons[i].sprite.setOrigin(sf::Vector2f(buttons[i].sprite.getTexture()->getSize().x / 2, buttons[i].sprite.getTexture()->getSize().y / 2));
-				buttons[i].sprite.setPosition(sf::Vector2f(buttons[i].pos.x, buttons[i].pos.y));
+				buttons[i].sprite.setPosition(sf::Vector2f(buttons[i].pos.x * window.getView().getSize().x / 1920, buttons[i].pos.y * window.getView().getSize().y / 1080));
 			}
 
 			title.setString("Press Space to " + buttons[chosen_button].advice_string);
@@ -990,8 +990,8 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				Point cursor_pos;
 				sf::Vector2i mouse_pos = sf::Mouse::getPosition();
 				sf::Vector2i window_pos = window.getPosition();
-				cursor_pos = Point(mouse_pos.x/* - window.getSize().x / 2*/ - window.getPosition().x, mouse_pos.y/* - window.getSize().y / 2*/ - window.getPosition().y);
-				for (int i = 0; i < buttons.size(); i++) {
+				cursor_pos = Point(mouse_pos.x - window.getPosition().x, mouse_pos.y - window.getPosition().y);
+				for (int i = retry; i < menu; i++) {
 					if ((cursor_pos - buttons[i].pos).getLength() <= buttons[i].radius) {
 						if (i == retry) {
 							game_status = game_hero_mode;
@@ -1082,7 +1082,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			}
 
 			window.draw(game_over_background_sprite);
-			for (int i = 0; i < buttons.size(); i++) {
+			for (int i = retry; i < menu; i++) {
 				window.draw(buttons[i].sprite);
 			}
 			window.draw(title);
@@ -1221,6 +1221,9 @@ int main() {
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 	sf::RenderWindow window(sf::VideoMode(settings.getWindowWidth(), settings.getWindowHeight()), "AsteroidTD", sf::Style::None, context_settings);
 
+	sf::View main_view(sf::Vector2f((int)window.getSize().x / 2, (int)window.getSize().y / 2), sf::Vector2f(window.getSize().x, window.getSize().y));      // main menu view
+	window.setView(main_view);
+
 	window.setFramerateLimit(consts.getFPSLock());
 
 	collision_type_init();
@@ -1246,7 +1249,7 @@ int main() {
 	window.setPosition(sf::Vector2i(0, 0));
 
 	VisualController visual_ctrl;
-	GUIVisualController gui_visual_ctrl(&window);
+	GUIVisualController gui_visual_ctrl;
 	ResearchVisualController res_visual_ctrl(&window);
 
 	sf::Texture menu_background_texture;
@@ -1254,19 +1257,18 @@ int main() {
 	sf::Sprite menu_background_sprite;
 	menu_background_sprite.setTexture(menu_background_texture);
 	menu_background_sprite.setPosition(0, 0);
-	menu_background_sprite.setScale(sf::Vector2f(window.getSize().x / menu_background_texture.getSize().x, window.getSize().y / menu_background_texture.getSize().y));
-
+	menu_background_sprite.setScale(sf::Vector2f(window.getView().getSize().x / menu_background_texture.getSize().x, window.getView().getSize().y / menu_background_texture.getSize().y));
 
 	sf::Text title;
 	sf::Text nickname_title;
 	sf::Font base_font;
 	base_font.loadFromFile("a_Alterna.ttf");
 
-	title.setPosition(sf::Vector2f(window.getSize().x / 2, 150));
+	title.setPosition(sf::Vector2f(window.getView().getSize().x / 2, 150 * window.getView().getSize().y / 1080));
 	title.setFillColor(sf::Color::White);
 	title.setOutlineColor(sf::Color::Black);
 	title.setOutlineThickness(1);
-	title.setCharacterSize(50);
+	title.setCharacterSize(50 * window.getView().getSize().y / 1080);
 	title.setFont(base_font);
 
 	nickname_title.setPosition(sf::Vector2f(window.getSize().x / 2 - 75, window.getSize().y / 2 - 200));
@@ -1276,8 +1278,6 @@ int main() {
 	nickname_title.setCharacterSize(50);
 	nickname_title.setFont(base_font);
 
-	sf::View main_view(sf::Vector2f((int)window.getSize().x / 2, (int)window.getSize().y / 2), sf::Vector2f(window.getSize().x, window.getSize().y));      // main menu view
-	window.setView(main_view);
 
 	game_status = main_menu;
 
@@ -1286,7 +1286,7 @@ int main() {
 		Point pos;
 		sf::Texture texture_default, texture_selected;
 		sf::Sprite sprite;
-		float radius = 75;
+		float radius;
 		std::string advice_string;
 	};
 	enum buttons_name {
@@ -1299,22 +1299,25 @@ int main() {
 	std::vector<Button> buttons;
 	buttons.resize(BUTTONS_NAME_LIST_SIZE);
 
-	buttons[infinity_mode_button].pos = Point(window.getSize().x / 2 - 150, 350);
+	buttons[infinity_mode_button].pos = Point(window.getView().getSize().x / 2 - 150 * window.getView().getSize().x / 1920, 350 * window.getView().getSize().y / 1080);
 	buttons[infinity_mode_button].texture_default.loadFromFile("menu_buttons\\inf_mode.png");
 	buttons[infinity_mode_button].texture_selected.loadFromFile("menu_buttons\\inf_mode_selected.png");
 	buttons[infinity_mode_button].sprite.setTexture(buttons[infinity_mode_button].texture_default);
+	buttons[infinity_mode_button].radius = 75 * window.getView().getSize().y / 1080;
 	buttons[infinity_mode_button].advice_string = "start infinity mode";
 
-	buttons[settings_button].pos = Point(window.getSize().x / 2 + 150, 350);
+	buttons[settings_button].pos = Point(window.getView().getSize().x / 2 + 150 * window.getView().getSize().x / 1920, 350 * window.getView().getSize().y / 1080);
 	buttons[settings_button].texture_default.loadFromFile("menu_buttons\\settings.png");
 	buttons[settings_button].texture_selected.loadFromFile("menu_buttons\\settings_selected.png");
 	buttons[settings_button].sprite.setTexture(buttons[settings_button].texture_default);
+	buttons[settings_button].radius = 75 * window.getView().getSize().y / 1080;
 	buttons[settings_button].advice_string = "open settings";
 
-	buttons[shutdown_button].pos = Point(window.getSize().x / 2, 550);
+	buttons[shutdown_button].pos = Point(window.getView().getSize().x / 2, 550 * window.getView().getSize().y / 1080);
 	buttons[shutdown_button].texture_default.loadFromFile("menu_buttons\\shutdown.png");
 	buttons[shutdown_button].texture_selected.loadFromFile("menu_buttons\\shutdown_selected.png");
 	buttons[shutdown_button].sprite.setTexture(buttons[shutdown_button].texture_default);
+	buttons[shutdown_button].radius = 75 * window.getView().getSize().y / 1080;
 	buttons[shutdown_button].advice_string = "close the game";
 
 	int chosen_button = infinity_mode_button;
@@ -1633,6 +1636,7 @@ int main() {
 				fps.reset();
 				try {
 					gameCycle("map2", window, visual_ctrl, gui_visual_ctrl, res_visual_ctrl);
+					last_menu_choice = frame_num - consts.getFPSLock();
 				}
 				catch (std::exception exc) {
 					std::cout << "Exception handled" << std::endl;

@@ -94,7 +94,6 @@ public:
 		hp_sign.setFillColor(sf::Color::White);
 		hp_sign.setOutlineColor(sf::Color::Black);
 		hp_sign.setOutlineThickness(1);
-		hp_sign.setCharacterSize(30);
 		hp_sign.setFont(base_font);
 	}
 
@@ -130,9 +129,10 @@ public:
 		if (texture_buffer[obj_type][anim_type].size() != 1) {
 			sprite->setTexture(texture_buffer[obj_type][anim_type][frame_num % texture_buffer[obj_type][anim_type].size()]);
 		}
-		sprite->setPosition(position.x, position.y);
+		sprite->setPosition(position.x * window->getSize().x / 1920, position.y * window->getSize().y / 1080);
 		sprite->setRotation(angle);
 		sprite->setOrigin(origin.x, origin.y);
+		sprite->setScale(window->getSize().x / 1920, window->getSize().y / 1080);
 
 		object->frameIncrement();
 
@@ -144,15 +144,17 @@ public:
 		for (int layer = 0; layer < objects->size(); layer++) {
 			for (int i = 0; i < (*objects)[layer].size(); i++) {
 				Object * object = (*objects)[layer][i];
-				double radius = object->getCollisionModel()->getMaxRadius();
+				double radius = object->getCollisionModel()->getMaxRadius() * window->getSize().y / 1080;
 				float hp = (float)object->getUnitInfo()->getHealth();
 				float max_hp = (float)object->getUnitInfo()->getMaxHealth();
 
 				drawObject(object, window);
 
-				hp_sign.setPosition(object->getPosition().x, object->getPosition().y);
+				Point pos = object->getPosition() * window->getSize().y / 1080;
+				hp_sign.setPosition(pos.x, pos.y);
 				hp_sign.setString((int)hp ? std::to_string((int)hp) : "");
 				hp_sign.setOrigin(hp_sign.getLocalBounds().width / 2, hp_sign.getLocalBounds().height / 2);
+				hp_sign.setCharacterSize(30 * window->getSize().y / 1080);
 				
 				auto getColor = [](float ratio) {
 					sf::Color color_max = sf::Color::Green;
@@ -160,33 +162,32 @@ public:
 
 					return sf::Color(color_min.r + ratio * (color_max.r - color_min.r), color_min.g + ratio * (color_max.g - color_min.g), color_min.b + ratio * (color_max.b - color_min.b));
 				};
-
 				sf::Vertex line[] =
 				{
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(0) * radius, object->getPosition().y + cos(0) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12) * radius, object->getPosition().y + cos(PI * 2 / 12) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12) * radius, object->getPosition().y + cos(PI * 2 / 12) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12 * 2) * radius, object->getPosition().y + cos(PI * 2 / 12 * 2) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12 * 2) * radius, object->getPosition().y + cos(PI * 2 / 12 * 2) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12 * 3) * radius, object->getPosition().y + cos(PI * 2 / 12 * 3) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12 * 3) * radius, object->getPosition().y + cos(PI * 2 / 12 * 3) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12 * 4) * radius, object->getPosition().y + cos(PI * 2 / 12 * 4) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12 * 4) * radius, object->getPosition().y + cos(PI * 2 / 12 * 4) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12 * 5) * radius, object->getPosition().y + cos(PI * 2 / 12 * 5) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12 * 5) * radius, object->getPosition().y + cos(PI * 2 / 12 * 5) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12 * 6) * radius, object->getPosition().y + cos(PI * 2 / 12 * 6) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12 * 6) * radius, object->getPosition().y + cos(PI * 2 / 12 * 6) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12 * 7) * radius, object->getPosition().y + cos(PI * 2 / 12 * 7) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12 * 7) * radius, object->getPosition().y + cos(PI * 2 / 12 * 7) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12 * 8) * radius, object->getPosition().y + cos(PI * 2 / 12 * 8) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12 * 8) * radius, object->getPosition().y + cos(PI * 2 / 12 * 8) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12 * 9) * radius, object->getPosition().y + cos(PI * 2 / 12 * 9) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12 * 9) * radius, object->getPosition().y + cos(PI * 2 / 12 * 9) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12 * 10) * radius, object->getPosition().y + cos(PI * 2 / 12 * 10) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12 * 10) * radius, object->getPosition().y + cos(PI * 2 / 12 * 10) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12 * 11) * radius, object->getPosition().y + cos(PI * 2 / 12 * 11) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(PI * 2 / 12 * 11) * radius, object->getPosition().y + cos(PI * 2 / 12 * 11) * radius)),
-					sf::Vertex(sf::Vector2f(object->getPosition().x + sin(0) * radius, object->getPosition().y + cos(0) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(0) * radius, pos.y + cos(0) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12) * radius, pos.y + cos(PI * 2 / 12) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12) * radius, pos.y + cos(PI * 2 / 12) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 2) * radius, pos.y + cos(PI * 2 / 12 * 2) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 2) * radius, pos.y + cos(PI * 2 / 12 * 2) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 3) * radius, pos.y + cos(PI * 2 / 12 * 3) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 3) * radius, pos.y + cos(PI * 2 / 12 * 3) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 4) * radius, pos.y + cos(PI * 2 / 12 * 4) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 4) * radius, pos.y + cos(PI * 2 / 12 * 4) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 5) * radius, pos.y + cos(PI * 2 / 12 * 5) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 5) * radius, pos.y + cos(PI * 2 / 12 * 5) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 6) * radius, pos.y + cos(PI * 2 / 12 * 6) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 6) * radius, pos.y + cos(PI * 2 / 12 * 6) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 7) * radius, pos.y + cos(PI * 2 / 12 * 7) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 7) * radius, pos.y + cos(PI * 2 / 12 * 7) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 8) * radius, pos.y + cos(PI * 2 / 12 * 8) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 8) * radius, pos.y + cos(PI * 2 / 12 * 8) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 9) * radius, pos.y + cos(PI * 2 / 12 * 9) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 9) * radius, pos.y + cos(PI * 2 / 12 * 9) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 10) * radius, pos.y + cos(PI * 2 / 12 * 10) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 10) * radius, pos.y + cos(PI * 2 / 12 * 10) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 11) * radius, pos.y + cos(PI * 2 / 12 * 11) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 11) * radius, pos.y + cos(PI * 2 / 12 * 11) * radius)),
+					sf::Vertex(sf::Vector2f(pos.x + sin(0) * radius, pos.y + cos(0) * radius)),
 				};
 				for (int i = 0; i < 24; i++) {
 					line[i].color = getColor(hp / max_hp);

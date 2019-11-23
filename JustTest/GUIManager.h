@@ -97,14 +97,11 @@ class GUIManager {
 
 public:
 
-	GUIManager() {}
-
-	GUIManager(int window_height) {
+	GUIManager() {
 		base_font.loadFromFile("a_Alterna.ttf");
 		srand(time(NULL));
 		text.resize(1);
 		text[0].first.setString(start_game_signs[rand() % (start_game_signs.size())]);
-		text[0].first.setPosition(sf::Vector2f(0, -window_height / 2));
 		text[0].first.setFillColor(sf::Color::White);
 		text[0].first.setOutlineColor(sf::Color::Black);
 		text[0].first.setOutlineThickness(1);
