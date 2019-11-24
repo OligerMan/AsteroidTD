@@ -144,13 +144,13 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	std::vector<Button> buttons;
 	buttons.resize(BUTTONS_NAME_LIST_SIZE);
 
-	buttons[retry].pos = Point(0, 300);
+	buttons[retry].pos = Point(960, 300);
 	buttons[retry].texture_default.loadFromFile("menu_buttons\\retry.png");
 	buttons[retry].texture_selected.loadFromFile("menu_buttons\\retry_selected.png");
 	buttons[retry].sprite.setTexture(buttons[retry].texture_default);
 	buttons[retry].advice_string = "try again";
 
-	buttons[menu].pos = Point(0, 500);
+	buttons[menu].pos = Point(960, 500);
 	buttons[menu].texture_default.loadFromFile("menu_buttons\\menu.png");
 	buttons[menu].texture_selected.loadFromFile("menu_buttons\\menu_selected.png");
 	buttons[menu].sprite.setTexture(buttons[menu].texture_default);
@@ -991,7 +991,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				sf::Vector2i mouse_pos = sf::Mouse::getPosition();
 				sf::Vector2i window_pos = window.getPosition();
 				cursor_pos = Point(mouse_pos.x - window.getPosition().x, mouse_pos.y - window.getPosition().y);
-				for (int i = retry; i < menu; i++) {
+				for (int i = retry; i <= menu; i++) {
 					if ((cursor_pos - buttons[i].pos).getLength() <= buttons[i].radius) {
 						if (i == retry) {
 							game_status = game_hero_mode;
@@ -1082,7 +1082,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			}
 
 			window.draw(game_over_background_sprite);
-			for (int i = retry; i < menu; i++) {
+			for (int i = retry; i <= menu; i++) {
 				window.draw(buttons[i].sprite);
 			}
 			window.draw(title);
@@ -1189,7 +1189,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			}
 
 			const double view_speed_coef = 0.035;    // must be from 0 to 1, where 0 for static camera and 1 for camera istantly over hero
-			Point research_pos = research_graph[cur_research_index]->pos;
+			Point research_pos = research_graph[cur_research_index]->pos * window.getView().getSize().y / 1080;
 			Point diff = (research_pos - Point(view3.getCenter())) * view_speed_coef * consts.getFPSLock() / fps.getFPS();
 			view3.setCenter(view3.getCenter() + sf::Vector2f(diff.x, diff.y));
         }
@@ -1416,22 +1416,26 @@ int main() {
 						}
 					}
 				}
-				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, A))) && (frame_num - last_menu_choice) > consts.getFPSLock() / 4) {
-					if (chosen_button == infinity_mode_button) {
-						game_status = game_hero_mode;
-						is_input_state = true;
+				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, A)))) {
+					if ((frame_num - last_menu_choice) > consts.getFPSLock() / 4) {
+						if (chosen_button == infinity_mode_button) {
+							game_status = game_hero_mode;
+							is_input_state = true;
+						}
+						if (chosen_button == settings_button) {
+							game_status = settings_menu;
+							is_input_state = true;
+						}
+						if (chosen_button == shutdown_button) {
+							game_status = exit_to_desktop;
+							is_input_state = true;
+						}
+						last_menu_choice = frame_num;
 					}
-					if (chosen_button == settings_button) {
-						game_status = settings_menu;
-						is_input_state = true;
-					}
-					if (chosen_button == shutdown_button) {
-						game_status = exit_to_desktop;
-						is_input_state = true;
-					}
-					last_menu_choice = frame_num;
+					is_input_state = true;
 				}
 
+				bool is_keyboard_input = false;
 				Point move_vector;
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
 					sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
@@ -1450,6 +1454,7 @@ int main() {
 					if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 						move_vector += Point(1, 0);
 					}
+					is_keyboard_input = true;
 				}
 				else if (sf::Joystick::isConnected(0)) {         // gamepad input
 
@@ -1483,7 +1488,7 @@ int main() {
 								angle_diff -= 2 * PI;
 							}
 						}
-						if (abs(angle_diff) <= PI / 8.0) {
+						if (abs(angle_diff) <= PI / (is_keyboard_input ? 3.0 : 6.0)) {
 							if (min_distance > (buttons[i].pos - buttons[chosen_button].pos).getLength() && (buttons[i].pos - buttons[chosen_button].pos).getLength() > 0.01 /*not close to zero*/) {
 								next_menu_button = i;
 								min_distance = (buttons[i].pos - buttons[chosen_button].pos).getLength();
@@ -1636,7 +1641,7 @@ int main() {
 				fps.reset();
 				try {
 					gameCycle("map2", window, visual_ctrl, gui_visual_ctrl, res_visual_ctrl);
-					last_menu_choice = frame_num - consts.getFPSLock();
+					last_menu_choice = frame_num + consts.getFPSLock();
 				}
 				catch (std::exception exc) {
 					std::cout << "Exception handled" << std::endl;

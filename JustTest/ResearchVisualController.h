@@ -63,8 +63,10 @@ class ResearchVisualController {
 	void drawResearchInfo(sf::RenderWindow * window, sf::Vector2f viewport_pos, int cur_research_index) {
 		cost_sign.setString("Research points: " + std::to_string((int)resource_manager.getResearch()) +"\nCost: " + std::to_string((int)research_manager.getResearch((ResearchList)cur_research_index)->cost) + " research points");
 		cost_sign.setOrigin(-viewport_pos);
+		cost_sign.setCharacterSize(40 * window->getView().getSize().y / 1080);
 		description.setString(research_manager.getResearchNode((ResearchList)cur_research_index)->description);
 		description.setOrigin(-viewport_pos + sf::Vector2f(0, description.getGlobalBounds().height));
+		description.setCharacterSize(40 * window->getView().getSize().y / 1080);
 
 		window->draw(cost_sign);
 		window->draw(description);
@@ -113,7 +115,7 @@ public:
 	void drawResearch(ResearchNode * res_node, sf::RenderWindow * window) {
 		int obj_type = (int)res_node->type;
 
-		Point position = res_node->pos;
+		Point position = res_node->pos * window->getView().getSize().y / 1080;
 		Point origin = Point(texture_buffer[obj_type][0].getSize().x / 2, texture_buffer[obj_type][0].getSize().y / 2);
 
 		sf::Sprite * sprite = &sprite_buffer[obj_type];
@@ -122,8 +124,8 @@ public:
 		Point lu_corner = research_manager.getLeftUpGraphCorner();
 		Point graph_size = research_manager.getGraphSize();
 
-		sprite->setScale(sf::Vector2f(consts.getResearchIconSize() / sprite->getTexture()->getSize().x, consts.getResearchIconSize() / sprite->getTexture()->getSize().y));
-		sprite->setOrigin((consts.getResearchIconSize()) / sprite->getScale().x / 2, (consts.getResearchIconSize()) / sprite->getScale().y / 2);
+		sprite->setScale(sf::Vector2f(consts.getResearchIconSize() / sprite->getTexture()->getSize().x * window->getView().getSize().y / 1080, consts.getResearchIconSize() / sprite->getTexture()->getSize().y * window->getView().getSize().y / 1080));
+		sprite->setOrigin((consts.getResearchIconSize()) / sprite->getScale().x / 2 * window->getView().getSize().y / 1080, (consts.getResearchIconSize()) / sprite->getScale().y / 2 * window->getView().getSize().y / 1080);
 		
 		window->draw(*sprite);
 	}
@@ -136,8 +138,8 @@ public:
 				ResearchNode * par_node = research_manager.getResearchNode(node->parents[par_num]);
 				sf::Vertex line[] =
 				{
-					sf::Vertex(sf::Vector2f(node->pos.x, node->pos.y)),
-					sf::Vertex(sf::Vector2f(par_node->pos.x, par_node->pos.y))
+					sf::Vertex(sf::Vector2f(node->pos.x * window->getView().getSize().y / 1080, node->pos.y * window->getView().getSize().y / 1080)),
+					sf::Vertex(sf::Vector2f(par_node->pos.x * window->getView().getSize().y / 1080, par_node->pos.y * window->getView().getSize().y / 1080))
 				};
 				line->color = sf::Color::White;
 
@@ -156,6 +158,7 @@ public:
 		if (tutorial.getCurrentStep() == tutorial.research_tutorial_close) {
 			tutorial_sign.setString("Try to research something by selecting it\nwith WASD on left stick and pressing\nSpace on keyboard or A on gamepad\nand then exit with F");
 			tutorial_sign.setOrigin(-viewport_pos + sf::Vector2f(tutorial_sign.getLocalBounds().width / 2, 0));
+			tutorial_sign.setCharacterSize(40 * window->getView().getSize().y / 1080);
 		}
 		else {
 			tutorial_sign.setString("");

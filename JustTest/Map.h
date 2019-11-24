@@ -843,7 +843,6 @@ public:
 		processUnitAI();
 		processEventBuffer();
 		garbageCollector();
-		//garbageCollectorTest();
 
 		if (hero_object == nullptr) {
 			return;
@@ -940,7 +939,6 @@ public:
 				)
 			);
 			object->setAutoOrigin();
-			//object->getUnitInfo()->setMaxHealth(object->getUnitInfo()->getMaxHealth() * (research_manager.getTurretMaxHealthCoef() + dome_amount * research_manager.getDomeLocalMaxHealthCoef()));
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
 			outer_ring.push_back(object);
@@ -960,7 +958,6 @@ public:
 				)
 			);
 			object->setAutoOrigin();
-			//object->getUnitInfo()->setMaxHealth(object->getUnitInfo()->getMaxHealth() * (research_manager.getDomeMaxHealthCoef() + dome_amount * research_manager.getDomeLocalMaxHealthCoef()));
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
 			inner_ring.push_back(object);
@@ -980,7 +977,6 @@ public:
 				)
 			);
 			object->setAutoOrigin();
-			//object->getUnitInfo()->setMaxHealth(object->getUnitInfo()->getMaxHealth() * (research_manager.getScienceMaxHealthCoef() + dome_amount * research_manager.getDomeLocalMaxHealthCoef()));
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
 			inner_ring.push_back(object);
@@ -1000,7 +996,6 @@ public:
 				)
 			);
 			object->setAutoOrigin();
-			//object->getUnitInfo()->setMaxHealth(object->getUnitInfo()->getMaxHealth() * (research_manager.getGoldMaxHealthCoef() + dome_amount * research_manager.getDomeLocalMaxHealthCoef()));
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
 			inner_ring.push_back(object);
@@ -1014,7 +1009,6 @@ public:
 		// rebuild structures list
 		float base_angle = 0;
 		if (type == turret) {
-
 			base_angle = (float)(rand() % 1024) / 512 * PI;
 			for (int i = 0; i < outer_ring.size(); i++) {
 				float cur_angle = (float)i / outer_ring.size() * 2 * PI + base_angle;
