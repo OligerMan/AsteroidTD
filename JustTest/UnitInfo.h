@@ -100,6 +100,7 @@ class UnitInfo {
 
 	// AI info
 	float anger_range = 600;
+	float min_flight_range = 450;
 	int faction = 0;              // faction index: 0 for non-unit objects, 1 for hero and his allies, from 2 to infinity(2^31) for other factions
 	void * enemy_object_ptr = nullptr;
 
@@ -178,6 +179,12 @@ class UnitInfo {
 				inf_endur = std::stoi(value);
 				if (settings.isUnitInfoDebugEnabled()) {
 					std::cout << "Infinite endurance is set to " << inf_endur << std::endl;
+				}
+			}
+			if (setting == "min_flight_range") {
+				min_flight_range = std::stoi(value);
+				if (settings.isUnitInfoDebugEnabled()) {
+					std::cout << "Minimal flight range is set to " << min_flight_range << std::endl;
 				}
 			}
 			if (setting.substr(0,6) == "attack") {
@@ -497,6 +504,10 @@ public:
 
 	int getDomeCount() {
 		return dome_cnt;
+	}
+
+	float getMinimalFlightRange() {
+		return min_flight_range;
 	}
 };
 

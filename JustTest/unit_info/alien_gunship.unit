@@ -1,0 +1,8 @@
+max_hp 1500
+inf_hp 0
+default_speed 2.5
+
+anger_range 1000000
+min_flight_range 700
+
+unit_info_end

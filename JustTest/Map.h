@@ -322,11 +322,11 @@ class Map {
 													}
 													object1->changeAngle(angle_diff / 10.0 * consts.getFPSLock() / fps.getFPS());
 												}
-												if (!object1->getCollisionModel()->isStatic() && (((Object *)object1->getUnitInfo()->getEnemy())->getPosition() - object1->getPosition()).getLength() > consts.getMinimalFlightRange()) {
+												if (!object1->getCollisionModel()->isStatic() && (((Object *)object1->getUnitInfo()->getEnemy())->getPosition() - object1->getPosition()).getLength() > object1->getUnitInfo()->getMinimalFlightRange()) {
 													Point speed(-cos(object1->getAngle() / 180 * PI + PI / 2), -sin(object1->getAngle() / 180 * PI + PI / 2));
 													object1->setSpeed(speed.getNormal()*object1->getUnitInfo()->getDefaultSpeed());
 												}
-												else if((((Object *)object1->getUnitInfo()->getEnemy())->getPosition() - object1->getPosition()).getLength() < consts.getMinimalFlightRange()){
+												else if((((Object *)object1->getUnitInfo()->getEnemy())->getPosition() - object1->getPosition()).getLength() < object1->getUnitInfo()->getMinimalFlightRange()){
 													object1->setSpeed(Point());
 												}
 											}
@@ -479,10 +479,10 @@ class Map {
 					break;
 				}
 				if (obj1->getObjectType() == ObjectType::bullet && obj2->getObjectType() != ObjectType::asteroid) {
-					obj1->deleteObject();
 					if (unit1 && unit2) {
-						if ((obj1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
+						if ((((Object *)obj1->getUnitInfo()->getEnemy())->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
 							event_buffer.addEvent(EventType::attack, (Object *)obj1->getUnitInfo()->getEnemy(), obj2);
+							obj1->deleteObject();
 						}
 					}
 					else {
@@ -699,12 +699,11 @@ class Map {
 		}
 	}
 
-	void spawnEnemyGroup(int enemy_lvl, Point pos) {
-		int enemy_amount = sqrt(enemy_lvl);
+	void spawnEnemyGroup(int fighter_amount, int gunship_amount, Point pos) {
 
-		for (int i = 0; i < enemy_amount; i++) {
-			float angle = ((float)i / enemy_amount) * 2 * PI;
-			Point new_pos = pos + Point(cos(angle), sin(angle)) * (350 + enemy_amount * 10);
+		for (int i = 0; i < fighter_amount; i++) {
+			float angle = ((float)i / fighter_amount) * 2 * PI;
+			Point new_pos = pos + Point(cos(angle), sin(angle)) * (350 + fighter_amount * 10);
 
 			Object * object = new Object
 			(
@@ -724,16 +723,40 @@ class Map {
 			addObject(object, landscape_layer);
 			setTurretArray(object);
 		}
+
+		for (int i = 0; i < gunship_amount; i++) {
+			float angle = ((float)i / gunship_amount) * 2 * PI;
+			Point new_pos = pos + Point(cos(angle), sin(angle)) * (500 + gunship_amount * 10);
+
+			Object * object = new Object
+			(
+				new_pos,
+				Point(),
+				ObjectType::alien_gunship,
+				CollisionType::alien_gunship_col,
+				VisualInfo
+				(
+					SpriteType::alien_gunship_sprite,
+					AnimationType::hold_anim,
+					1000000000
+				)
+			);
+			object->setAutoOrigin();
+			object->getUnitInfo()->setFaction(aggressive_faction);
+			addObject(object, landscape_layer);
+			setTurretArray(object);
+		}
 	}
 
 	void setTurretArray(Object * base) {
+		Object * object;
 		switch (base->getObjectType()) {
 		case alien_fighter:
-			Object * object = new Object
+			object = new Object
 			(
 				base->getPosition(),
 				Point(),
-				ObjectType::alien_turret1,
+				ObjectType::alien_turret2,
 				CollisionType::alien_turret1_col,
 				VisualInfo
 				(
@@ -746,6 +769,80 @@ class Map {
 			object->getUnitInfo()->setFaction(aggressive_faction);
 			addObject(object, main_layer);
 			base->attachObject(object);
+			break;
+		case alien_gunship:
+			object = new Object
+			(
+				base->getPosition() + Point(-95, 45),
+				Point(),
+				ObjectType::alien_turret2,
+				CollisionType::alien_turret2_col,
+				VisualInfo
+				(
+					SpriteType::alien_turret2_sprite,
+					AnimationType::hold_anim,
+					1000000000
+				)
+			);
+			object->setAutoOrigin();
+			object->getUnitInfo()->setFaction(aggressive_faction);
+			addObject(object, main_layer);
+			base->attachObject(object);
+
+			object = new Object
+			(
+				base->getPosition() + Point(95, 45),
+				Point(),
+				ObjectType::alien_turret2,
+				CollisionType::alien_turret2_col,
+				VisualInfo
+				(
+					SpriteType::alien_turret2_sprite,
+					AnimationType::hold_anim,
+					1000000000
+				)
+			);
+			object->setAutoOrigin();
+			object->getUnitInfo()->setFaction(aggressive_faction);
+			addObject(object, main_layer);
+			base->attachObject(object);
+
+			object = new Object
+			(
+				base->getPosition() + Point(-80, -30),
+				Point(),
+				ObjectType::alien_turret2,
+				CollisionType::alien_turret2_col,
+				VisualInfo
+				(
+					SpriteType::alien_turret2_sprite,
+					AnimationType::hold_anim,
+					1000000000
+				)
+			);
+			object->setAutoOrigin();
+			object->getUnitInfo()->setFaction(aggressive_faction);
+			addObject(object, main_layer);
+			base->attachObject(object);
+
+			object = new Object
+			(
+				base->getPosition() + Point(80, -30),
+				Point(),
+				ObjectType::alien_turret2,
+				CollisionType::alien_turret2_col,
+				VisualInfo
+				(
+					SpriteType::alien_turret2_sprite,
+					AnimationType::hold_anim,
+					1000000000
+				)
+			);
+			object->setAutoOrigin();
+			object->getUnitInfo()->setFaction(aggressive_faction);
+			addObject(object, main_layer);
+			base->attachObject(object);
+			break;
 		}
 	}
 
@@ -1045,7 +1142,9 @@ public:
 			convex_hull(convex);
 		}
 
-		int group_amount = enemy_lvl;
+		int group_amount = std::min(5, enemy_lvl) + sqrt(enemy_lvl);
+		int gunship_amount = enemy_lvl / 15;
+		int fighter_amount = std::max(1, enemy_lvl / 2 - 4 * gunship_amount);
 
 		while (group_amount > 0) {
 			int nearest_point = rand() % convex.size();
@@ -1065,7 +1164,8 @@ public:
 				continue;
 			}
 
-			spawnEnemyGroup(enemy_lvl, new_spawn_point);
+
+			spawnEnemyGroup(fighter_amount, gunship_amount, new_spawn_point);
 			group_amount--;
 		}
 		

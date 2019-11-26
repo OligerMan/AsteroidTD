@@ -290,7 +290,12 @@ public:
 		if (getUnitInfo() == nullptr) {
 			return false;
 		}
-	
+		/*if (unit_info->getEnemy() == nullptr) {
+			return false;
+		}*/
+		/*else if ((((Object *)unit_info->getEnemy())->getPosition() - this->getPosition()).getLength() > unit_info->getAttackRange(1)) {
+			return false;
+		}*/
 		return getUnitInfo()->canObjectAttack();
 	}
 

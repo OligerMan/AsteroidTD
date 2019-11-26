@@ -1,5 +1,5 @@
-max_hp 1000
+max_hp 10000
 inf_hp 0
-default_speed 3
+default_speed 2.5
 
 unit_info_end

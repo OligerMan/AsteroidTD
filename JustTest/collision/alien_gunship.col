@@ -1,0 +1,39 @@
+settings_start
+    is_static 0
+settings_end
+collision_start
+
+element left_front_wing_part
+    position -95 45
+	radius 30
+
+element right_front_wing_part
+    position 95 45
+	radius 30
+
+element left_back_wing_part
+    position -80 -30
+	radius 25
+
+element right_back_wing_part
+    position 80 30
+	radius 25
+
+element left_fire
+    position -80 -74.9
+	radius 0.1
+
+element right_fire
+    position 80 -74.9
+	radius 0.1
+
+element left_body_part
+    position -30 -25
+	radius 20
+
+element right_body_part
+    position 30 -25
+	radius 20
+
+
+collision_end

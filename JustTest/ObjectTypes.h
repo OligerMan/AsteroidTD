@@ -16,6 +16,8 @@ enum CollisionType {
 	bullet_col,
 	alien_fighter_col,
 	alien_turret1_col,
+	alien_gunship_col,
+	alien_turret2_col,
 
 	COUNT_COLLISION
 };
@@ -38,6 +40,8 @@ void collision_type_init() {
 	collision_type[bullet_col] = "bullet";
 	collision_type[alien_fighter_col] = "alien_fighter";
 	collision_type[alien_turret1_col] = "alien_turret1";
+	collision_type[alien_gunship_col] = "alien_gunship";
+	collision_type[alien_turret2_col] = "alien_turret2";
 }
 
 int is_collision_type_exists(std::string example) {
@@ -62,6 +66,8 @@ enum ObjectType {
 	bullet,
 	alien_fighter,
 	alien_turret1,
+	alien_gunship,
+	alien_turret2,
 
 	COUNT_OBJECT
 };
@@ -83,6 +89,8 @@ void object_type_init() {
 	object_type[bullet] = "bullet";
 	object_type[alien_fighter] = "alien_fighter";
 	object_type[alien_turret1] = "alien_turret1";
+	object_type[alien_gunship] = "alien_gunship";
+	object_type[alien_turret2] = "alien_turret2";
 
 }
 
@@ -108,4 +116,6 @@ std::vector<int> lifetime{
 	480, // bullet
 	-1, // alien_fighter
 	-1, // alien_turret1
+	-1, // alien_gunship1
+	-1, // alien_turret2
 };

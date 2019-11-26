@@ -192,7 +192,7 @@ public:
 				for (int i = 0; i < 24; i++) {
 					line[i].color = getColor(hp / max_hp);
 				}
-				if (object->getObjectType() != hero && object->getObjectType() != alien_turret1) {
+				if (object->getObjectType() != hero && object->getObjectType() != alien_turret1 && object->getObjectType() != alien_turret2) {
 					window->draw(hp_sign);
 					window->draw(line, ceil(24.0 * hp / max_hp), sf::Lines);
 				}
