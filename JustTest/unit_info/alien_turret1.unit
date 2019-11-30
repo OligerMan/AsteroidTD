@@ -3,7 +3,7 @@ inf_hp 0
 default_speed 0
 
 attack1_range 800
-attack1_damage 25
+attack1_damage 20
 attack1_delay 1000
 attack1_cooldown 60
 

@@ -177,7 +177,7 @@ public:
 		return is_active;
 	}
 
-	bool processFrame(sf::RenderWindow * window, std::vector<std::vector<Object *>> * objects, std::vector<std::pair<sf::Text, int>> * text, Point viewport_pos, float hero_hp_percent) {  // render for GUI elements
+	bool processFrame(sf::RenderWindow * window, std::vector<std::vector<Object *>> * objects, std::vector<std::pair<sf::Text *, int>> & text, Point viewport_pos, float hero_hp_percent) {  // render for GUI elements
 		if (game_status == pause || game_status == game_strategic_mode) {
 			hero_hp_percent = 0;
 		}
@@ -213,23 +213,23 @@ public:
 		}
 
 		// gui text render
-		(*text)[0].first.setPosition(sf::Vector2f(0, -window->getView().getSize().y / 2 / 1.2));
-		for (int i = 0; i < text->size(); i++) {
-			sf::Vector2f prev_pos = (*text)[i].first.getPosition();
-			int prev_font_size = (*text)[i].first.getCharacterSize();
-			(*text)[i].first.setCharacterSize((*text)[i].first.getCharacterSize() * window->getView().getSize().y / 1080);
-			if (i <= text->size()) {
-				(*text)[i].first.setOrigin(-viewport_pos.x, -viewport_pos.y);
+		text[0].first->setPosition(sf::Vector2f(0, -window->getView().getSize().y / 2 / 1.2));
+		for (int i = 0; i < text.size(); i++) {
+			sf::Vector2f prev_pos = text[i].first->getPosition();
+			int prev_font_size = text[i].first->getCharacterSize();
+			text[i].first->setCharacterSize(text[i].first->getCharacterSize() * window->getView().getSize().y / 1080);
+			if (i <= text.size()) {
+				text[i].first->setOrigin(-viewport_pos.x, -viewport_pos.y);
 			}
 			if (i <= 0) {
-				(*text)[i].first.setOrigin(-viewport_pos.x + (*text)[i].first.getLocalBounds().width / 2, -viewport_pos.y + (*text)[i].first.getLocalBounds().height / 2);
+				text[i].first->setOrigin(-viewport_pos.x + text[i].first->getLocalBounds().width / 2, -viewport_pos.y + text[i].first->getLocalBounds().height / 2);
 			}
-			if ((*text)[i].second > 0) {
-				window->draw((*text)[i].first);
-				(*text)[i].second--;
+			if (text[i].second > 0) {
+				window->draw(*text[i].first);
+				text[i].second--;
 			}
-			(*text)[i].first.setPosition(prev_pos);
-			(*text)[i].first.setCharacterSize(prev_font_size);
+			text[i].first->setPosition(prev_pos);
+			text[i].first->setCharacterSize(prev_font_size);
 		}
 
 		// skills icons render

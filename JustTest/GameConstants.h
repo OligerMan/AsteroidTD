@@ -11,7 +11,7 @@ class Constants {
 	const float fps_lock = 240;
 	const double interaction_distance = 600;
 
-	const float base_gold_income = 0.006;
+	const float base_gold_income = 0.0055;
 	const float base_research_income = 0.0001;
 	const float base_turret_price = 100;
 	const float base_science_price = 100;

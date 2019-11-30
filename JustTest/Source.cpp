@@ -376,7 +376,6 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				float hero_hp = hero_object->getUnitInfo()->getHealth() / hero_object->getUnitInfo()->getMaxHealth();
 
 				is_game_cycle = gui_visual_ctrl.processFrame(&window, gui_manager.getObjectsBuffer(), gui_manager.getGUIText(), viewport_pos, hero_hp) && is_game_cycle;
-
 				if (settings.isCollisionDebugMode()) {
 
 					for (int x = 0; x < window.getSize().x; x += 3) {
@@ -1214,7 +1213,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 int main() {
 
 	HWND console_hWnd = GetConsoleWindow();
-	//ShowWindow(console_hWnd, SW_HIDE);
+	ShowWindow(console_hWnd, SW_HIDE);
 
 	sf::ContextSettings context_settings;
 	context_settings.antialiasingLevel = 8;

@@ -602,7 +602,7 @@ class Map {
 					1000000000
 				)
 			);
-			float angle = rand() / 16384.0 * PI * 2;
+			float angle = rand() / (float)RAND_MAX * PI;
 			float range = asteroid_speed;
 			float x = cos(angle)*range, y = sin(angle)*range;
 			object->setSpeed(Point(x, y));
@@ -612,7 +612,7 @@ class Map {
 
 			std::vector<Object *> struct_arr = getRandomStructureSet(new_pos, object->getCollisionModel()->getModelElem(0)->collision_radius, struct_set, faction);
 			for (int i = 0; i < struct_arr.size(); i++) {
-				angle = rand() / 16384.0 * PI * 2;
+				angle = rand() / (float)RAND_MAX * PI;
 				range = asteroid_speed;
 				x = cos(angle)*range, y = sin(angle)*range;
 				struct_arr[i]->setSpeed(Point(x, y));
@@ -627,8 +627,8 @@ class Map {
 			float angle, range, x, y;
 			while ((in_min || !in_max) && (cnt > 0) && (try_count > 0)) {
 				in_min = false, in_max = false;
-				angle = rand() / 16384.0 * PI * 2;
-				range = cam_radius + rand() / 16384.0 * (gen_radius - cam_radius);
+				angle = rand() / (float)RAND_MAX * PI * 2;
+				range = cam_radius + rand() / (float)RAND_MAX * (gen_radius - cam_radius);
 				x = cos(angle)*range + gen_basis.x, y = sin(angle)*range + gen_basis.y;
 				for (int j = 0; j < objects[landscape_layer].size(); j++) {
 					int cur_dist = (objects[landscape_layer][j]->getPosition() - Point(x, y)).getLength();
@@ -679,7 +679,7 @@ class Map {
 				)
 			);
 			object->setAutoOrigin();
-			angle = rand() / 16384.0 * PI * 2;
+			angle = rand() / (float)RAND_MAX * PI;
 			range = asteroid_speed;
 			x = cos(angle)*range, y = sin(angle)*range;
 			object->setSpeed(Point(x,y));
@@ -689,7 +689,7 @@ class Map {
 
 			std::vector<Object *> struct_arr = getRandomStructureSet(new_pos, object->getCollisionModel()->getModelElem(0)->collision_radius, struct_set, faction);
 			for (int i = 0; i < struct_arr.size(); i++) {
-				angle = rand() / 16384.0 * PI * 2;
+				angle = rand() / (float)RAND_MAX * PI;
 				range = asteroid_speed;
 				x = cos(angle)*range, y = sin(angle)*range;
 				struct_arr[i]->setSpeed(Point(x, y));
@@ -1143,8 +1143,8 @@ public:
 		}
 
 		int group_amount = std::min(5, enemy_lvl) + sqrt(enemy_lvl);
-		int gunship_amount = enemy_lvl / 15;
-		int fighter_amount = std::max(1, enemy_lvl / 2 - 4 * gunship_amount);
+		int gunship_amount = enemy_lvl / 10;
+		int fighter_amount = std::max(1, enemy_lvl / 2 - 3 * gunship_amount);
 
 		while (group_amount > 0) {
 			int nearest_point = rand() % convex.size();

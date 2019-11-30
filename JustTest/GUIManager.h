@@ -44,7 +44,7 @@ class GUIManager {
 	Object * selected_object = nullptr;
 
 	sf::Font base_font;
-	std::vector<std::pair<sf::Text, int>> text;
+	std::vector<std::pair<sf::Text *, int>> text;
 
 	bool checkClick(Point click) {
 		Object * cursor = new Object(click);
@@ -100,13 +100,13 @@ public:
 	GUIManager() {
 		base_font.loadFromFile("a_Alterna.ttf");
 		srand(time(NULL));
-		text.resize(1);
-		text[0].first.setString(start_game_signs[rand() % (start_game_signs.size())]);
-		text[0].first.setFillColor(sf::Color::White);
-		text[0].first.setOutlineColor(sf::Color::Black);
-		text[0].first.setOutlineThickness(1);
-		text[0].first.setCharacterSize(50);
-		text[0].first.setFont(base_font);
+		text.resize(1, std::pair<sf::Text *, int>(new sf::Text, 0));
+		text[0].first->setString(start_game_signs[rand() % (start_game_signs.size())]);
+		text[0].first->setFillColor(sf::Color::White);
+		text[0].first->setOutlineColor(sf::Color::Black);
+		text[0].first->setOutlineThickness(1);
+		text[0].first->setCharacterSize(50);
+		text[0].first->setFont(base_font);
 		text[0].second = consts.getFPSLock() * 5;
 	}
 
@@ -133,24 +133,24 @@ public:
 		return selected_object;
 	}
 
-	std::vector<std::pair<sf::Text, int>> * getGUIText() {
-		return &text;
+	std::vector<std::pair<sf::Text *, int>> & getGUIText() {
+		return text;
 	}
 
 	void setTopSign(std::string string, float time /*in seconds*/) {
-		text[0].first.setString(string);
+		text[0].first->setString(string);
 		text[0].second = consts.getFPSLock() * time;
 	}
 
 	void setTopSign(char * string, float time /*in seconds*/) {
 		if (text[0].second <= 0) {
-			text[0].first.setString(string);
+			text[0].first->setString(string);
 			text[0].second = consts.getFPSLock() * time;
 		}
 	}
 
 	void forceSetTopSign(std::string string, float time /*in seconds*/) {
-		text[0].first.setString(string);
+		text[0].first->setString(string);
 		text[0].second = consts.getFPSLock() * time;
 	}
 
@@ -159,15 +159,15 @@ public:
 			return;
 		}
 		if (text.size() <= number) {
-			text.resize(number + 1);
+			text.resize(number + 1, std::pair<sf::Text *, int>(new sf::Text, 0));
 		}
-		text[number].first.setString(string);
-		text[number].first.setPosition(sf::Vector2f(pos.x, pos.y));
-		text[number].first.setFillColor(sf::Color::White);
-		text[number].first.setOutlineColor(sf::Color::Black);
-		text[number].first.setOutlineThickness(1);
-		text[number].first.setCharacterSize(character_size);
-		text[number].first.setFont(base_font);
+		text[number].first->setString(string);
+		text[number].first->setPosition(sf::Vector2f(pos.x, pos.y));
+		text[number].first->setFillColor(sf::Color::White);
+		text[number].first->setOutlineColor(sf::Color::Black);
+		text[number].first->setOutlineThickness(1);
+		text[number].first->setCharacterSize(character_size);
+		text[number].first->setFont(base_font);
 		text[number].second = consts.getFPSLock() * time;
 	}
 };

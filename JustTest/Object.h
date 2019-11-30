@@ -9,9 +9,9 @@ class Object {
 
 	CollisionModel * col_model = new CollisionModel();
 
-	CollisionType object_col_type;
+	CollisionType object_col_type = null_col;
 	VisualInfo vis_info;
-	UnitInfo * unit_info;
+	UnitInfo * unit_info = nullptr;
 	ObjectType object_type_info;
 
 	bool deleted = false;
@@ -21,8 +21,12 @@ class Object {
 public:
 
 	~Object() {
-		delete col_model;
-		delete unit_info;
+		if (col_model) {
+			delete col_model;
+		}
+		if (unit_info) {
+			delete unit_info;
+		}
 		for (int i = 0; i < attached_objects.size(); i++) {
 			attached_objects[i]->deleteObject();
 		}
