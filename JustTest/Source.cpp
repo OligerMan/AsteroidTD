@@ -9,6 +9,7 @@
 #include "Tutorial.h"
 #include "OnlineRank.h"
 #include "KeyboardBuffer.h"
+#include "MusicManager.h"
 
 #include <chrono>
 #include <Windows.h>
@@ -1347,15 +1348,8 @@ int main() {
 	rank.launchUpdateWorker();
 	rank.launchSelfRankUpdateWorker();
 
-	sf::Music music;
-	if (!music.openFromFile("space_back1.1.flac")) {
-		std::cout << "Music load failed" << std::endl;
-	}
-	else {
-		music.setLoop(true);
-		music.play();
-	}
-
+	MusicManager music_manager("music");
+	music_manager.launchMusicWorker();
 
 	while (true) {
 		sf::Event event;

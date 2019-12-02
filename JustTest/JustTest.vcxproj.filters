@@ -135,6 +135,9 @@
     <ClInclude Include="KeyboardBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MusicManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
