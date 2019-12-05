@@ -1214,7 +1214,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 int main() {
 
 	HWND console_hWnd = GetConsoleWindow();
-	ShowWindow(console_hWnd, SW_HIDE);
+	//ShowWindow(console_hWnd, SW_HIDE);
 
 	sf::ContextSettings context_settings;
 	context_settings.antialiasingLevel = 8;

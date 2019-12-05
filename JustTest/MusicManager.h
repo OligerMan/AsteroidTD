@@ -12,6 +12,7 @@
 
 class MusicManager {
 	std::vector<sf::Music *> playlist;
+	std::vector<std::string> track_name;
 	int current_track = 0;
 	bool play_state = true;
 
@@ -26,10 +27,15 @@ class MusicManager {
 public:
 
 	MusicManager(std::string path) {
-		std::vector<std::string> file_list = *getFileList(path);
-		playlist.resize(file_list.size(), new sf::Music());
-		for (int i = 0; i < file_list.size(); i++) {
-			playlist[i]->openFromFile(path + "/" + file_list[i]);
+		track_name = *getFileList(path);
+		playlist.resize(track_name.size());
+		for (int i = 0; i < playlist.size(); i++) {
+			playlist[i] = new sf::Music();
+		}
+		std::cout << "Loading music list" << std::endl;
+		for (int i = 0; i < track_name.size(); i++) {
+			std::cout << "Loading track " << track_name[i] << std::endl;
+			playlist[i]->openFromFile(path + "/" + track_name[i]);
 		}
 		generator = std::default_random_engine(r());
 		distribution = std::uniform_int_distribution<int>(1, playlist.size());
@@ -72,12 +78,13 @@ public:
 						}
 						playlist[current_track]->setVolume(30.0f);
 						play_state = true;
+
+						std::cout << "New track is " << track_name[current_track] << std::endl;
+						playlist[current_track]->play();
 					}
 					else {
 						play_state = false;
 					}
-					std::cout << "New track is number " << current_track << std::endl;
-					playlist[current_track]->play();
 				}
 				Sleep(200);
 			}
