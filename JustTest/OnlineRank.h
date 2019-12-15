@@ -3,7 +3,6 @@
 #include <thread>
 #include <vector>
 #include <string>
-#include <functional>
 #include <SFML\Network.hpp>
 #include <Windows.h>
 

@@ -100,8 +100,10 @@ class Map {
 	std::vector<std::vector<Object *>> objects;                // vector of objects layers, it is defining order for render and reducing amount of collisions
 	std::vector<std::string> animation_type;
 
+public:
 	int landscape_layer = 0;
 	int main_layer = 1;
+private:
 
 	std::vector<std::vector<int>> navigation_grid;
 	std::vector<std::vector<Point>> navigation_paths;
@@ -999,20 +1001,31 @@ public:
 		std::vector<Object *> outer_ring;
 		std::vector<Object *> inner_ring;
 		for (int i = 0; i < base->getAttached()->size(); i++) {
-			if ((*base->getAttached())[i]->getObjectType() == turret) {
+			if (((*base->getAttached())[i]->getPosition() - base->getPosition()).getLength() <= 150) {
+				inner_ring.push_back((*base->getAttached())[i]);
+				std::cout << ((*base->getAttached())[i]->getPosition() - base->getPosition()).getLength() << std::endl;
+			}
+			else {
+				outer_ring.push_back((*base->getAttached())[i]);
+				std::cout << ((*base->getAttached())[i]->getPosition() - base->getPosition()).getLength() << std::endl;
+			}
+			/*if ((*base->getAttached())[i]->getObjectType() == turret) {
 				outer_ring.push_back((*base->getAttached())[i]);
 			}
 			else {
 				inner_ring.push_back((*base->getAttached())[i]);
-			}
+			}*/
 		}
-		if (inner_ring.size() >= 7 && type != turret) {
+		/*if (inner_ring.size() >= 7 && type != turret) {
 			return false;
 		}
 		if (outer_ring.size() >= 10 && type == turret) {
 			return false;
-		}
+		}*/
 		Object * object = nullptr;
+		if (outer_ring.size() >= 10 && inner_ring.size() >= 7) {
+			return false;
+		}
 
 		int dome_amount = 0;
 		for (int i = 0; i < base->getAttached()->size(); i++) {
@@ -1038,7 +1051,7 @@ public:
 			object->setAutoOrigin();
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
-			outer_ring.push_back(object);
+			//outer_ring.push_back(object);
 			break;
 		case dome:
 			object = new Object
@@ -1057,7 +1070,7 @@ public:
 			object->setAutoOrigin();
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
-			inner_ring.push_back(object);
+			//inner_ring.push_back(object);
 			break;
 		case science:
 			object = new Object
@@ -1076,7 +1089,7 @@ public:
 			object->setAutoOrigin();
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
-			inner_ring.push_back(object);
+			//inner_ring.push_back(object);
 			break;
 		case gold:
 			object = new Object
@@ -1095,7 +1108,7 @@ public:
 			object->setAutoOrigin();
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
-			inner_ring.push_back(object);
+			//inner_ring.push_back(object);
 			break;
 		}
 		if (object == nullptr) {
@@ -1104,25 +1117,51 @@ public:
 		object->researchApply(dome_amount);
 		base->attachObject(object);
 		// rebuild structures list
+
 		float base_angle = 0;
 		if (type == turret) {
-			base_angle = (float)(rand() % 1024) / 512 * PI;
-			for (int i = 0; i < outer_ring.size(); i++) {
-				float cur_angle = (float)i / outer_ring.size() * 2 * PI + base_angle;
-				outer_ring[i]->setPosition(base->getPosition() + Point(sin(cur_angle), cos(cur_angle)) * (base->getCollisionModel()->getModelElem(0)->collision_radius - 60));
+			if (outer_ring.size() >= 10) {
+				inner_ring.push_back(object);
+				base_angle = (float)(rand() % 1024) / 512 * PI;
+				for (int i = 0; i < inner_ring.size(); i++) {
+					float cur_angle = (float)i / std::min(6, (int)inner_ring.size()) * 2 * PI + base_angle;
+					inner_ring[i]->setPosition(base->getPosition() + Point(sin(cur_angle), cos(cur_angle)) * (base->getCollisionModel()->getModelElem(0)->collision_radius - 180));
+				}
+				if (inner_ring.size() % 6 == 1) {
+					inner_ring[inner_ring.size() - 1]->setPosition(base->getPosition());
+				}
+			}
+			else {
+				outer_ring.push_back(object);
+				base_angle = (float)(rand() % 1024) / 512 * PI;
+				for (int i = 0; i < outer_ring.size(); i++) {
+					float cur_angle = (float)i / outer_ring.size() * 2 * PI + base_angle;
+					outer_ring[i]->setPosition(base->getPosition() + Point(sin(cur_angle), cos(cur_angle)) * (base->getCollisionModel()->getModelElem(0)->collision_radius - 60));
+				}
 			}
 		}
 		else {
-			base_angle = (float)(rand() % 1024) / 512 * PI;
-			for (int i = 0; i < inner_ring.size(); i++) {
-				float cur_angle = (float)i / std::min(6, (int)inner_ring.size()) * 2 * PI + base_angle;
-				inner_ring[i]->setPosition(base->getPosition() + Point(sin(cur_angle), cos(cur_angle)) * (base->getCollisionModel()->getModelElem(0)->collision_radius - 180));
+			if (inner_ring.size() >= 7) {
+				outer_ring.push_back(object);
+				base_angle = (float)(rand() % 1024) / 512 * PI;
+				for (int i = 0; i < outer_ring.size(); i++) {
+					float cur_angle = (float)i / outer_ring.size() * 2 * PI + base_angle;
+					outer_ring[i]->setPosition(base->getPosition() + Point(sin(cur_angle), cos(cur_angle)) * (base->getCollisionModel()->getModelElem(0)->collision_radius - 60));
+				}
+			}
+			else {
+				inner_ring.push_back(object);
+				base_angle = (float)(rand() % 1024) / 512 * PI;
+				for (int i = 0; i < inner_ring.size(); i++) {
+					float cur_angle = (float)i / std::min(6, (int)inner_ring.size()) * 2 * PI + base_angle;
+					inner_ring[i]->setPosition(base->getPosition() + Point(sin(cur_angle), cos(cur_angle)) * (base->getCollisionModel()->getModelElem(0)->collision_radius - 180));
+				}
+				if (inner_ring.size() % 6 == 1) {
+					inner_ring[inner_ring.size() - 1]->setPosition(base->getPosition());
+				}
 			}
 		}
 
-		if (inner_ring.size() % 6 == 1) {
-			inner_ring[inner_ring.size()-1]->setPosition(base->getPosition());
-		}
 		addObject(object, landscape_layer);
 
 		return true;
@@ -1142,7 +1181,7 @@ public:
 			convex_hull(convex);
 		}
 
-		int group_amount = std::min(5, enemy_lvl) + sqrt(enemy_lvl);
+		int group_amount = std::min(5, enemy_lvl / 2) + sqrt(enemy_lvl);
 		int gunship_amount = enemy_lvl / 10;
 		int fighter_amount = std::max(1, enemy_lvl / 2 - 3 * gunship_amount);
 

@@ -1,16 +1,16 @@
 ﻿  Source.cpp
-e:\projects\asteroidtd\justtest\settings.h(248): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\asteroidtd\justtest\settings.h(252): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\asteroidtd\justtest\settings.h(256): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\asteroidtd\justtest\settings.h(260): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\asteroidtd\justtest\settings.h(264): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\asteroidtd\justtest\settings.h(272): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\asteroidtd\justtest\settings.h(235): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\asteroidtd\justtest\settings.h(239): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\asteroidtd\justtest\settings.h(243): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\asteroidtd\justtest\settings.h(247): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\asteroidtd\justtest\settings.h(251): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\asteroidtd\justtest\settings.h(259): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
 e:\projects\asteroidtd\justtest\collisionparser.h(52): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
 e:\projects\asteroidtd\justtest\collision.h(44): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-e:\projects\asteroidtd\justtest\collision.h(185): warning C4018: '<': signed/unsigned mismatch
-e:\projects\asteroidtd\justtest\collision.h(186): warning C4018: '<': signed/unsigned mismatch
+e:\projects\asteroidtd\justtest\collision.h(182): warning C4018: '<': signed/unsigned mismatch
+e:\projects\asteroidtd\justtest\collision.h(183): warning C4018: '<': signed/unsigned mismatch
 e:\projects\asteroidtd\justtest\effect.h(19): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\gameconstants.h(77): warning C4244: 'return': conversion from 'const double' to 'const float', possible loss of data
+e:\projects\asteroidtd\justtest\gameconstants.h(80): warning C4244: 'return': conversion from 'const double' to 'const float', possible loss of data
 e:\projects\asteroidtd\justtest\fps.h(21): warning C4244: 'initializing': conversion from '__int64' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\fps.h(23): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
 e:\projects\asteroidtd\justtest\fps.h(31): warning C4244: 'return': conversion from 'const int' to 'float', possible loss of data
@@ -22,18 +22,19 @@ e:\projects\asteroidtd\justtest\research.h(216): warning C4244: 'initializing': 
 e:\projects\asteroidtd\justtest\research.h(271): warning C4101: 'data_f': unreferenced local variable
 e:\projects\asteroidtd\justtest\research.h(272): warning C4101: 'data_i': unreferenced local variable
 e:\projects\asteroidtd\justtest\research.h(410): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-e:\projects\asteroidtd\justtest\unitinfo.h(145): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\unitinfo.h(152): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\asteroidtd\justtest\unitinfo.h(158): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\unitinfo.h(165): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\asteroidtd\justtest\unitinfo.h(171): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\unitinfo.h(178): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\asteroidtd\justtest\unitinfo.h(185): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-e:\projects\asteroidtd\justtest\unitinfo.h(217): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\unitinfo.h(223): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\unitinfo.h(229): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\unitinfo.h(235): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\asteroidtd\justtest\unitinfo.h(247): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\unitinfo.h(146): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\unitinfo.h(153): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\asteroidtd\justtest\unitinfo.h(159): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\unitinfo.h(166): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\asteroidtd\justtest\unitinfo.h(172): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\unitinfo.h(179): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\asteroidtd\justtest\unitinfo.h(185): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\unitinfo.h(192): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\unitinfo.h(224): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\unitinfo.h(230): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\unitinfo.h(236): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\unitinfo.h(242): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\asteroidtd\justtest\unitinfo.h(254): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\astaralgorithm.h(27): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data
 e:\projects\asteroidtd\justtest\astaralgorithm.h(46): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data
 e:\projects\asteroidtd\justtest\astaralgorithm.h(47): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data

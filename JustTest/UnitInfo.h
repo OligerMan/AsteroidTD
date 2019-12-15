@@ -221,7 +221,7 @@ class UnitInfo {
 			}
 			
 			if (setting == "default_speed") {
-				default_speed = std::stoi(value); 
+				default_speed = std::stof(value); 
 				if (settings.isUnitInfoDebugEnabled()) {
 					std::cout << "Default speed is set to " << default_speed << std::endl;
 				}

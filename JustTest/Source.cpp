@@ -58,6 +58,8 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	int last_menu_choice = 0;
 	int last_tutorial = 0;
 
+	int last_shot = 0;
+
 	GameStatus prev_game_status = pause;
 
 	Map game_map1("maps/" + map_name + ".map");
@@ -474,7 +476,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			}
 
 			double hero_speed = hero_object->getUnitInfo()->getDefaultSpeed();
-
+			if (hero_speed == 0) {
+				std::cout << "kek";
+			}
 			Point new_speed;
 
 			if (!(game_status == game_strategic_mode)) {
@@ -552,6 +556,49 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				}
 
 				if (game_status != pause) {
+					if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
+						new_speed = Point(static_cast<int>(sf::Mouse::getPosition().x) - static_cast<int>(window.getSize().x / 2), static_cast<int>(sf::Mouse::getPosition().y) - static_cast<int>(window.getSize().y / 2));
+						hero_object->setAnimationType(move_anim); 
+						hero_object->setAngle(atan2(new_speed.y, new_speed.x) / PI * 180);
+					}
+					if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+						Point mouse_vector = Point(static_cast<int>(sf::Mouse::getPosition().x) - static_cast<int>(window.getSize().x / 2), static_cast<int>(sf::Mouse::getPosition().y) - static_cast<int>(window.getSize().y / 2));
+						//hero_object->setAngle(atan2(mouse_vector.y, mouse_vector.x) / PI * 180);
+						if (skills_mode == set1) {
+							if (hero_object->getUnitInfo()->attackReady(1)) {
+								if (resource_manager.spendGold(consts.getAttackAbilityPrice())) {
+									// hero attack 1 (mb rocket launch)
+									Point bullet_pos = hero_object->getPosition() + Point(cos((hero_object->getAngle()) / 180 * PI), sin((hero_object->getAngle()) / 180 * PI)) * hero_object->getCollisionModel()->getMaxRadius();
+									Object * object = new Object
+									(
+										bullet_pos,
+										Point(),
+										ObjectType::bullet,
+										CollisionType::bullet_col,
+										VisualInfo
+										(
+											SpriteType::bullet_sprite,
+											AnimationType::hold_anim,
+											1000000000
+										)
+									);
+									object->getUnitInfo()->setFaction(hero_object->getUnitInfo()->getFaction());
+									object->getUnitInfo()->setEnemy(hero_object);     // to remember who is shooting
+									object->setAutoOrigin();
+									object->setAngle(hero_object->getAngle());
+									object->setSpeed(Point(cos((hero_object->getAngle()) / 180 * PI), sin((hero_object->getAngle()) / 180 * PI)) * 15);
+
+									game_map1.addObject(object, game_map1.main_layer);
+
+									hero_object->attachObject(object);
+
+									if (tutorial.isWorkingOnStep(tutorial.using_skills_rocket_tutorial)) {
+										tutorial.nextStep();
+									}
+								}
+							}
+						}
+					}
 					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Joystick::isButtonPressed(0, LB)) && (frame_num - last_view_change) > fps.getFPS() / 3 /* 0.33 sec delay for changing view again */) && tutorial.isWorkingOnStep(tutorial.switching_view_tutorial)) {
 						if (!(game_status == game_strategic_mode)) {
 							game_status = game_strategic_mode;
@@ -584,9 +631,37 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					}
 					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) || sf::Joystick::isButtonPressed(0, Y)) && (frame_num - last_build) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */ && (tutorial.isWorkingOnStep(tutorial.build_mode_dome_tutorial) || tutorial.isWorkingOnStep(tutorial.using_skills_rocket_tutorial))) {
 						if (skills_mode == set1) {
-							// hero attack 1 (mb rocket launch)
-							if (tutorial.isWorkingOnStep(tutorial.using_skills_rocket_tutorial)) {
-								tutorial.nextStep();
+							if (hero_object->getUnitInfo()->attackReady(1)) {
+								if (resource_manager.spendGold(consts.getAttackAbilityPrice())) {
+									// hero attack 1 (mb rocket launch)
+									Point bullet_pos = hero_object->getPosition() + Point(cos((hero_object->getAngle()) / 180 * PI), sin((hero_object->getAngle()) / 180 * PI)) * hero_object->getCollisionModel()->getMaxRadius();
+									Object * object = new Object
+									(
+										bullet_pos,
+										Point(),
+										ObjectType::bullet,
+										CollisionType::bullet_col,
+										VisualInfo
+										(
+											SpriteType::bullet_sprite,
+											AnimationType::hold_anim,
+											1000000000
+										)
+									);
+									object->getUnitInfo()->setFaction(hero_object->getUnitInfo()->getFaction());
+									object->getUnitInfo()->setEnemy(hero_object);     // to remember who is shooting
+									object->setAutoOrigin();
+									object->setAngle(hero_object->getAngle());
+									object->setSpeed(Point(cos((hero_object->getAngle()) / 180 * PI), sin((hero_object->getAngle()) / 180 * PI)) * 15);
+
+									game_map1.addObject(object, game_map1.main_layer);
+
+									hero_object->attachObject(object);
+
+									if (tutorial.isWorkingOnStep(tutorial.using_skills_rocket_tutorial)) {
+										tutorial.nextStep();
+									}
+								}
 							}
 						}
 						else {
@@ -769,26 +844,20 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					hero_speed *= consts.getMoveSpeedBuffMultiplier();
 				}
 				new_speed = new_speed.getNormal() * hero_speed;
+				/*if (hero_speed == 0) {
+					std::cout << "kek";
+				}*/
 				if (!(tutorial.isWorkingOnStep(tutorial.movement_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_dome_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_turret_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_gold_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_science_tutorial))) {
 					new_speed = Point();
 				}
 				if (hero_object != nullptr) {
-					Point old_speed = hero_object->getSpeed();
-					old_speed -= previous_speed;
-					hero_object->setSpeed(old_speed * (1 - consts.getFrictionCoef()));
-
 					hero_object->changeSpeed(new_speed);
-					previous_speed = new_speed;
-
-					if (hero_object->getSpeed().getLength() != 0) {
-						hero_object->setAngle(atan2(hero_object->getSpeed().y, hero_object->getSpeed().x) / PI * 180);
+					hero_object->setSpeed(hero_object->getSpeed() * 0.99);
+					Point speed = hero_object->getSpeed();
+					if (speed.getLength() > consts.getMaxHeroSpeed()) {
+						hero_object->setSpeed(hero_object->getSpeed().getNormal() * consts.getMaxHeroSpeed());
 					}
-					else {
-						previous_speed = Point();
-					}
-					if (hero_object->getSpeed() == Point()) {
-						hero_object->setAnimationType(hold_anim);
-					}
+					hero_object->setAngle(atan2(speed.y, speed.x) / PI * 180);
 				}
 			}
 			else if (game_status == game_strategic_mode) {

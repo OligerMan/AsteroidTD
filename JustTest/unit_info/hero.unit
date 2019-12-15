@@ -1,5 +1,10 @@
 max_hp 10000
 inf_hp 0
-default_speed 2.5
+default_speed 0.05
+
+attack1_range 0
+attack1_damage 45
+attack1_delay 1000
+attack1_cooldown 25
 
 unit_info_end

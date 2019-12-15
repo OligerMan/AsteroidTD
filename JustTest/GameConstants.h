@@ -4,21 +4,21 @@ class Constants {
 
 	const double speed_damage_threshold = 100;
 	const double speed_damage_coef = 1;
-	const double default_hero_speed = 1;
+	const double max_hero_speed = 10;
 	const double strategic_camera_speed = 10;
 	const double knockback_speed = 0;
 	const double friction_coef = 0.1;
 	const float fps_lock = 240;
 	const double interaction_distance = 600;
 
-	const float base_gold_income = 0.0055;
-	const float base_research_income = 0.0001;
+	const float base_gold_income = 0.004;
+	const float base_research_income = 0.0005;
 	const float base_turret_price = 100;
 	const float base_science_price = 100;
 	const float base_gold_price = 100;
-	const float base_dome_price = 100;
+	const float base_dome_price = 500;
 
-	const float attack_abil_price = 10;
+	const float attack_abil_price = 3;
 	const float speed_buff_price = 30;
 	const float damage_buff_price = 50;
 	const float heal_buff_price = 100;
@@ -43,7 +43,7 @@ class Constants {
 
 	const std::string balance_version = "0.1";
 
-	const float hero_view_scale = 1.5;
+	const float hero_view_scale = 2;
 	const float strategic_view_scale = 5;
 
 public:
@@ -56,8 +56,8 @@ public:
 		return speed_damage_coef;
 	}
 	
-	const double getDefaultHeroSpeed() {
-		return default_hero_speed;
+	const double getMaxHeroSpeed() {
+		return max_hero_speed;
 	}
 
 	const double getKnockbackSpeed() {
