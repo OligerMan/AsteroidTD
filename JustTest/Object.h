@@ -189,7 +189,9 @@ public:
 			return;
 		}
 		for (int i = 0; i < attached_objects.size(); i++) {
-			attached_objects[i]->setPosition(origin + (getPosition() - attached_objects[i]->getPosition()));
+			if (attached_objects[i]->getObjectType() != bullet) {
+				attached_objects[i]->setPosition(origin + (getPosition() - attached_objects[i]->getPosition()));
+			}
 		}
 		col_model->setPosition(origin);
 	}
@@ -199,7 +201,9 @@ public:
 			return;
 		}
 		for (int i = 0; i < attached_objects.size(); i++) {
-			attached_objects[i]->changePosition(difference);
+			if (attached_objects[i]->getObjectType() != bullet) {
+				attached_objects[i]->changePosition(difference);
+			}
 		}
 		col_model->changePosition(difference);
 	}
@@ -209,7 +213,9 @@ public:
 			return;
 		}
 		for (int i = 0; i < attached_objects.size(); i++) {
-			attached_objects[i]->forceChangePosition(difference);
+			if (attached_objects[i]->getObjectType() != bullet) {
+				attached_objects[i]->forceChangePosition(difference);
+			}
 		}
 		col_model->forceChangePosition(difference);
 	}
@@ -259,6 +265,11 @@ public:
 	void changeAngle(double difference) {
 		if (isDeleted() || !col_model) {
 			return;
+		}
+		for (int i = 0; i < attached_objects.size(); i++) {
+			if (attached_objects[i]->getObjectType() != bullet) {
+				attached_objects[i]->setPosition(this->getPosition() + (attached_objects[i]->getPosition() - this->getPosition()).getRotated(difference));
+			}
 		}
 		col_model->changeAngle(difference);
 	}

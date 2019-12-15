@@ -775,7 +775,7 @@ private:
 		case alien_gunship:
 			object = new Object
 			(
-				base->getPosition() + Point(-95, 45),
+				base->getPosition() + Point(-80, 45),
 				Point(),
 				ObjectType::alien_turret2,
 				CollisionType::alien_turret2_col,
@@ -793,7 +793,7 @@ private:
 
 			object = new Object
 			(
-				base->getPosition() + Point(95, 45),
+				base->getPosition() + Point(80, 45),
 				Point(),
 				ObjectType::alien_turret2,
 				CollisionType::alien_turret2_col,
@@ -811,7 +811,7 @@ private:
 
 			object = new Object
 			(
-				base->getPosition() + Point(-80, -30),
+				base->getPosition() + Point(-95, -30),
 				Point(),
 				ObjectType::alien_turret2,
 				CollisionType::alien_turret2_col,
@@ -829,7 +829,7 @@ private:
 
 			object = new Object
 			(
-				base->getPosition() + Point(80, -30),
+				base->getPosition() + Point(95, -30),
 				Point(),
 				ObjectType::alien_turret2,
 				CollisionType::alien_turret2_col,
@@ -1009,19 +1009,7 @@ public:
 				outer_ring.push_back((*base->getAttached())[i]);
 				std::cout << ((*base->getAttached())[i]->getPosition() - base->getPosition()).getLength() << std::endl;
 			}
-			/*if ((*base->getAttached())[i]->getObjectType() == turret) {
-				outer_ring.push_back((*base->getAttached())[i]);
-			}
-			else {
-				inner_ring.push_back((*base->getAttached())[i]);
-			}*/
 		}
-		/*if (inner_ring.size() >= 7 && type != turret) {
-			return false;
-		}
-		if (outer_ring.size() >= 10 && type == turret) {
-			return false;
-		}*/
 		Object * object = nullptr;
 		if (outer_ring.size() >= 10 && inner_ring.size() >= 7) {
 			return false;
@@ -1051,7 +1039,6 @@ public:
 			object->setAutoOrigin();
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
-			//outer_ring.push_back(object);
 			break;
 		case dome:
 			object = new Object
@@ -1070,7 +1057,6 @@ public:
 			object->setAutoOrigin();
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
-			//inner_ring.push_back(object);
 			break;
 		case science:
 			object = new Object
@@ -1089,7 +1075,6 @@ public:
 			object->setAutoOrigin();
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
-			//inner_ring.push_back(object);
 			break;
 		case gold:
 			object = new Object
@@ -1108,7 +1093,6 @@ public:
 			object->setAutoOrigin();
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
-			//inner_ring.push_back(object);
 			break;
 		}
 		if (object == nullptr) {

@@ -117,6 +117,12 @@ struct Point {
 		y = rotated_point.y;
 	}
 
+	Point getRotated(double angle) {
+		Point normalized;
+		normalized = *this;
+		normalized.rotate(angle);
+		return normalized;
+	}
 };
 
 
