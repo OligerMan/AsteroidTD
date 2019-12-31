@@ -655,6 +655,8 @@ private:
 				cnt--;
 			}
 
+			Point new_pos = Point(x, y);
+
 			FactionList faction = null_faction;
 			int faction_score = rand() % 1000;
 			if (faction_score > 900) {
@@ -666,7 +668,53 @@ private:
 			if (faction_score > 966) {
 				//faction = aggressive_faction;
 			}
-			Point new_pos = Point(x,y);
+
+			static std::vector<std::vector<SpriteType>> tier_list{
+				{   // tier 0
+					asteroid_gold_interspersed_sprite,
+					asteroid_iron_interspersed_sprite,
+					asteroid_suspiciously_flat_sprite 
+				},
+				{   // tier 1
+					asteroid_strange_cracked_sprite,
+					asteroid_ordinary_wealthy_sprite,
+					asteroid_poor_mountainous_sprite,
+					asteroid_wealthy_cracked_sprite,
+					asteroid_ordinary_mountainous_sprite,
+					asteroid_strange_poor_sprite
+				},
+				{   // tier 2
+					asteroid_swampy_with_gold_mines_sprite,
+					asteroid_unstable_explosive_ore_sprite,
+					asteroid_old_laboratory_sprite,
+					asteroid_lava_surface_sprite
+				},
+				{   // tier 3
+					asteroid_drone_factory_sprite,
+					asteroid_rocket_launcher_sprite,
+					asteroid_ancient_laboratory_sprite,
+					asteroid_ancient_giant_gold_mine_sprite
+				}
+			};
+
+			SpriteType asteroid_type = asteroid_sprite;
+
+			int special_asteroid_chance = rand() % 1000;
+			if (special_asteroid_chance < 100) {
+				asteroid_type = tier_list[0][rand() % tier_list[0].size()];
+			}
+			int num = std::min((int)tier_list.size() - 1, std::max(0, (int)(new_pos.getLength() / consts.getTierRange())));
+
+			if (special_asteroid_chance < 50) {
+				asteroid_type = tier_list[std::max(0, num - 2)][rand() % tier_list[std::max(0, num - 2)].size()];
+			}
+			if (special_asteroid_chance < 100) {
+				asteroid_type = tier_list[std::max(0, num - 1)][rand() % tier_list[std::max(0, num - 1)].size()];
+			}
+			if (special_asteroid_chance < 150) {
+				asteroid_type = tier_list[num][rand() % tier_list[num].size()];
+			}
+
 			Object * object = new Object
 			(
 				new_pos, 
@@ -675,7 +723,7 @@ private:
 				CollisionType::asteroid_col, 
 				VisualInfo
 				(
-					SpriteType::asteroid_sprite, 
+					asteroid_type,
 					AnimationType::hold_anim, 
 					1000000000
 				)
@@ -862,19 +910,74 @@ private:
 					cnt++;
 				}
 			}
+			if (objects[landscape_layer][i]->getAttached()->size() >= 7) {
+				switch (objects[landscape_layer][i]->getObjectSpriteType()) {
+				case asteroid_old_laboratory_sprite:
+					resource_manager.addResearch(consts.getBaseResearchIncome() * 30 * consts.getFPSLock() / fps.getFPS());
+					break;
+				case asteroid_ancient_laboratory_sprite:
+					resource_manager.addResearch(consts.getBaseResearchIncome() * 50 * consts.getFPSLock() / fps.getFPS());
+					break;
+				case asteroid_ancient_giant_gold_mine_sprite:
+					resource_manager.addGold(consts.getBaseGoldIncome() * 50 * consts.getFPSLock() / fps.getFPS());
+					break;
+				}
+			}
 			for (int j = 0; j < attach->size(); j++) {
 				(*attach)[j]->getUnitInfo()->grantHeal(cnt * research_manager.getDomeLocalRegenCoef() * consts.getDomeHeal());
+				float gold_coef = 1, research_coef = 1;
+				switch (objects[landscape_layer][i]->getObjectSpriteType()) {
+				case asteroid:
+					break;
+				case asteroid_gold_interspersed_sprite:
+					gold_coef = 1.1;
+					break;
+				case asteroid_suspiciously_flat_sprite:
+					research_coef = 1.1;
+					break;
+				case asteroid_strange_cracked_sprite:
+					research_coef = 1.2;
+					break;
+				case asteroid_ordinary_wealthy_sprite:
+					gold_coef = 1.25;
+					research_coef = 0.8;
+					break;
+				case asteroid_poor_mountainous_sprite:
+					gold_coef = 0.75;
+					break;
+				case asteroid_wealthy_cracked_sprite:
+					gold_coef = 1.25;
+					break;
+				case asteroid_ordinary_mountainous_sprite:
+					research_coef = 0.8;
+					break;
+				case asteroid_strange_poor_sprite:
+					research_coef = 1.2;
+					gold_coef = 0.75;
+					break;
+				case asteroid_swampy_with_gold_mines_sprite:
+					gold_coef = 1.5;
+					break;
+				}
 				switch ((*attach)[j]->getObjectType()) {
 				case gold:
 					(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getGoldRegenCoef());
-					resource_manager.addGold(consts.getBaseGoldIncome() * (research_manager.getGoldIncomeCoef() + cnt * research_manager.getDomeLocalGoldIncomeCoef()) * consts.getFPSLock() / fps.getFPS());
+					resource_manager.addGold(
+						consts.getBaseGoldIncome() * 
+						(research_manager.getGoldIncomeCoef() + cnt * research_manager.getDomeLocalGoldIncomeCoef()) * 
+						gold_coef * 
+						consts.getFPSLock() / fps.getFPS());
 					break;
 				case science:
-					(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getScienceRegenCoef());
-					resource_manager.addResearch(consts.getBaseResearchIncome() * (research_manager.getScienceIncomeCoef() + cnt * research_manager.getDomeLocalResearchIncomeCoef()) * consts.getFPSLock() / fps.getFPS());
+					(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getScienceRegenCoef() * consts.getFPSLock() / fps.getFPS());
+					resource_manager.addResearch(
+						consts.getBaseResearchIncome() * 
+						(research_manager.getScienceIncomeCoef() + cnt * research_manager.getDomeLocalResearchIncomeCoef()) * 
+						research_coef *
+						consts.getFPSLock() / fps.getFPS());
 					break;
 				case turret:
-					(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getTurretRegenCoef());
+					(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getTurretRegenCoef() * consts.getFPSLock() / fps.getFPS());
 					break;
 				}
 			}
@@ -1011,7 +1114,15 @@ public:
 			}
 		}
 		Object * object = nullptr;
-		if (outer_ring.size() >= 10 && inner_ring.size() >= 7) {
+		if (inner_ring.size() >= 7 && 
+			(
+				outer_ring.size() >= 10 || 
+				base->getObjectSpriteType() == asteroid_old_laboratory_sprite || 
+				base->getObjectSpriteType() == asteroid_ancient_laboratory_sprite || 
+				base->getObjectSpriteType() == asteroid_ancient_giant_gold_mine_sprite || 
+				base->getObjectSpriteType() == asteroid_drone_factory_sprite || 
+				base->getObjectSpriteType() == asteroid_rocket_launcher_sprite)) {
+
 			return false;
 		}
 
@@ -1099,6 +1210,27 @@ public:
 			return false;
 		}
 		object->researchApply(dome_amount);
+		switch (base->getObjectSpriteType()) {
+		case asteroid_iron_interspersed_sprite:
+			object->getUnitInfo()->maxHealthRescale(1.1);
+			break;
+		case asteroid_strange_cracked_sprite:
+			object->getUnitInfo()->maxHealthRescale(0.75);
+			break;
+		case asteroid_poor_mountainous_sprite:
+			object->getUnitInfo()->maxHealthRescale(1.25);
+			break;
+		case asteroid_wealthy_cracked_sprite:
+			object->getUnitInfo()->maxHealthRescale(0.75);
+			break;
+		case asteroid_ordinary_mountainous_sprite:
+			object->getUnitInfo()->maxHealthRescale(1.25);
+			break;
+		case asteroid_unstable_explosive_ore_sprite:
+			object->getUnitInfo()->damageRescale(1.5);
+			break;
+		}
+
 		base->attachObject(object);
 		// rebuild structures list
 

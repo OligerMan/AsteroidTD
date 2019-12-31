@@ -20,7 +20,6 @@ enum XBOXGamepadButtons {
 	A,B,X,Y,LB,RB,BACK,START,LSTICK,RSTICK
 };
 
-
 void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController & visual_ctrl, GUIVisualController & gui_visual_ctrl, ResearchVisualController & res_visual_ctrl) {
 
 
@@ -215,7 +214,6 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 	while (window.isOpen())
 	{
-
 		frame_num++;
 		// FPS 
 		fps.processFrame(frame_num);
@@ -484,21 +482,60 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			if (!(game_status == game_strategic_mode)) {
 				Object * closest_asteroid = game_map1.getClosestAsteroid();
 				if (closest_asteroid != nullptr && game_frame_num > 1500) {
-					switch (closest_asteroid->getUnitInfo()->getFaction()) {
-					case null_faction:
-						gui_manager.setTopSign("Empty", 0.01);
+					switch (closest_asteroid->getObjectSpriteType()) {
+					case asteroid:
+						gui_manager.setTopSign("Just an asteroid", 0.01);
 						break;
-					case hero_faction:
-						gui_manager.setTopSign("Your", 0.01);
+					case asteroid_gold_interspersed_sprite:
+						gui_manager.setTopSign("Gold interspersed asteroid\n(+10% gold income)", 0.01);
 						break;
-					case friendly_faction:
-						gui_manager.setTopSign("Friendly", 0.01);
+					case asteroid_iron_interspersed_sprite:
+						gui_manager.setTopSign("Iron interspersed asteroid\n(+10% structures HP)", 0.01);
 						break;
-					case neutral_faction:
-						gui_manager.setTopSign("Neutral", 0.01);
+					case asteroid_suspiciously_flat_sprite:
+						gui_manager.setTopSign("Suspiciously flat asteroid\n(+10% research income)", 0.01);
 						break;
-					case aggressive_faction:
-						gui_manager.setTopSign("Aggressive", 0.01);
+					case asteroid_strange_cracked_sprite:
+						gui_manager.setTopSign("Strange cracked asteroid, structures may be fragile\n(-25% HP, +20% research income)", 0.01);
+						break;
+					case asteroid_ordinary_wealthy_sprite:
+						gui_manager.setTopSign("Absolutely not interesting asteroid with ore deposits\n(-20% research income, +20% gold income)", 0.01);
+						break;
+					case asteroid_poor_mountainous_sprite:
+						gui_manager.setTopSign("Mountainous asteroid with poor ore deposits\n(-25% gold income, +25% HP)", 0.01);
+						break;
+					case asteroid_wealthy_cracked_sprite:
+						gui_manager.setTopSign("Cracked asteroid with ore deposits\n(-25% HP, +25% gold income)", 0.01);
+						break;
+					case asteroid_ordinary_mountainous_sprite:
+						gui_manager.setTopSign("Absolutely not interesting mountainous asteroid\n(-20% research income, +25% HP)", 0.01);
+						break;
+					case asteroid_strange_poor_sprite:
+						gui_manager.setTopSign("Strange asteroid with poor ore deposits\n(-25% gold income, +20% research income)", 0.01);
+						break;
+					case asteroid_swampy_with_gold_mines_sprite:
+						gui_manager.setTopSign("Swampy asteroid with old mines\n(no moving structures a.k.a turrets, +50% gold income)", 0.01);
+						break;
+					case asteroid_unstable_explosive_ore_sprite:
+						gui_manager.setTopSign("Unstable asteroid with explosive ore\n(no gold mines, +50% damage)", 0.01);
+						break;
+					case asteroid_old_laboratory_sprite:
+						gui_manager.setTopSign("Old laboratory. To activate build 7 domes\n(after activation x30 research station equivalent income)", 0.01);
+						break;
+					case asteroid_lava_surface_sprite:
+						gui_manager.setTopSign("Lava asteroid\n(no structures allowed)", 0.01);
+						break;
+					case asteroid_drone_factory_sprite:
+						gui_manager.setTopSign("Old drone factory. To activate build 7 domes\n(after activation launches some drones)", 0.01);
+						break;
+					case asteroid_rocket_launcher_sprite:
+						gui_manager.setTopSign("Old fort with rocket launchers. To activate build 7 domes\n(after activation rocket launchers defend you)", 0.01);
+						break;
+					case asteroid_ancient_laboratory_sprite:
+						gui_manager.setTopSign("Ancient giant laboratory. To activate build 7 domes\n(after activation x50 research station equivalent income)", 0.01);
+						break;
+					case asteroid_ancient_giant_gold_mine_sprite:
+						gui_manager.setTopSign("Ancient giant gold mine. To activate build 7 domes\n(after activation x50 gold mine equivalent income)", 0.01);
 						break;
 					}
 				}
@@ -667,28 +704,31 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 						else {
 							// build dome(on your or empty asteroid), or start conversation with others
 							if (game_map1.getClosestAsteroid()) {
-								int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
-								switch (faction) {
-								case null_faction:
-								case hero_faction:
-									if (resource_manager.spendGold(consts.getBaseDomePrice())) {
-										if (!game_map1.addStructure(game_map1.getClosestAsteroid(), dome)) {
-											resource_manager.addGold(consts.getBaseDomePrice());
+								int type = game_map1.getClosestAsteroid()->getObjectSpriteType();
+								if (type != asteroid_lava_surface_sprite) {
+									int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
+									switch (faction) {
+									case null_faction:
+									case hero_faction:
+										if (resource_manager.spendGold(consts.getBaseDomePrice())) {
+											if (!game_map1.addStructure(game_map1.getClosestAsteroid(), dome)) {
+												resource_manager.addGold(consts.getBaseDomePrice());
+											}
+											game_map1.getClosestAsteroid()->setFaction(hero_faction);
+											if (tutorial.isWorkingOnStep(tutorial.build_mode_dome_tutorial)) {
+												tutorial.nextStep();
+											}
 										}
-										game_map1.getClosestAsteroid()->setFaction(hero_faction);
-										if (tutorial.isWorkingOnStep(tutorial.build_mode_dome_tutorial)) {
-											tutorial.nextStep();
-										}
-									}
 
-									break;
-								case friendly_faction:
-								case neutral_faction:
-								case aggressive_faction:
-									// start conversation
-									break;
+										break;
+									case friendly_faction:
+									case neutral_faction:
+									case aggressive_faction:
+										// start conversation
+										break;
+									}
+									last_build = frame_num;
 								}
-								last_build = frame_num;
 							}
 
 						}
@@ -707,21 +747,30 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 						}
 						else {
 							if (game_map1.getClosestAsteroid()) {
-								int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
-								switch (faction) {
-								case hero_faction:
-									if (resource_manager.spendGold(consts.getBaseTurretPrice())) {
-										if (!game_map1.addStructure(game_map1.getClosestAsteroid(), turret)) {
-											resource_manager.addGold(consts.getBaseTurretPrice());
+								int type = game_map1.getClosestAsteroid()->getObjectSpriteType();
+								if (type != asteroid_drone_factory_sprite && 
+									type != asteroid_swampy_with_gold_mines_sprite && 
+									type != asteroid_rocket_launcher_sprite && 
+									type != asteroid_old_laboratory_sprite && 
+									type != asteroid_ancient_laboratory_sprite && 
+									type != asteroid_ancient_giant_gold_mine_sprite) {
+
+									int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
+									switch (faction) {
+									case hero_faction:
+										if (resource_manager.spendGold(consts.getBaseTurretPrice())) {
+											if (!game_map1.addStructure(game_map1.getClosestAsteroid(), turret)) {
+												resource_manager.addGold(consts.getBaseTurretPrice());
+											}
+											game_map1.getClosestAsteroid()->setFaction(hero_faction);
+											if (tutorial.isWorkingOnStep(tutorial.build_mode_turret_tutorial)) {
+												tutorial.nextStep();
+											}
 										}
-										game_map1.getClosestAsteroid()->setFaction(hero_faction);
-										if (tutorial.isWorkingOnStep(tutorial.build_mode_turret_tutorial)) {
-											tutorial.nextStep();
-										}
+										break;
 									}
-									break;
+									last_build = frame_num;
 								}
-								last_build = frame_num;
 							}
 						}
 					}
@@ -741,21 +790,28 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 						}
 						else {
 							if (game_map1.getClosestAsteroid()) {
-								int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
-								switch (faction) {
-								case hero_faction:
-									if (resource_manager.spendGold(consts.getBaseGoldPrice())) {
-										if (!game_map1.addStructure(game_map1.getClosestAsteroid(), gold)) {
-											resource_manager.addGold(consts.getBaseGoldPrice());
+								int type = game_map1.getClosestAsteroid()->getObjectSpriteType();
+								if (type != asteroid_unstable_explosive_ore_sprite &&
+									type != asteroid_old_laboratory_sprite &&
+									type != asteroid_ancient_laboratory_sprite &&
+									type != asteroid_ancient_giant_gold_mine_sprite) {
+
+									int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
+									switch (faction) {
+									case hero_faction:
+										if (resource_manager.spendGold(consts.getBaseGoldPrice())) {
+											if (!game_map1.addStructure(game_map1.getClosestAsteroid(), gold)) {
+												resource_manager.addGold(consts.getBaseGoldPrice());
+											}
+											game_map1.getClosestAsteroid()->setFaction(hero_faction);
+											if (tutorial.isWorkingOnStep(tutorial.build_mode_gold_tutorial)) {
+												tutorial.nextStep();
+											}
 										}
-										game_map1.getClosestAsteroid()->setFaction(hero_faction);
-										if (tutorial.isWorkingOnStep(tutorial.build_mode_gold_tutorial)) {
-											tutorial.nextStep();
-										}
+										break;
 									}
-									break;
+									last_build = frame_num;
 								}
-								last_build = frame_num;
 							}
 						}
 					}

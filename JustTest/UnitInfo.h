@@ -476,28 +476,31 @@ public:
 		effects.push_back(effect);
 	}
 
+	void maxHealthRescale(float coef) {
+		if (coef > 0) {
+			max_hp *= coef;
+			hp *= coef;
+		}
+	}
+
 	void researchApply(ObjectType type, int dome_count) {
 		dome_cnt = dome_count;
 		switch (type) {
 		case turret:
-			max_hp *= (research_manager.getDomeLocalMaxHealthCoef() * dome_count + research_manager.getTurretMaxHealthCoef());
-			hp *= (research_manager.getDomeLocalMaxHealthCoef() * dome_count + research_manager.getTurretMaxHealthCoef());
+			maxHealthRescale(research_manager.getDomeLocalMaxHealthCoef() * dome_count + research_manager.getTurretMaxHealthCoef());
 			for (int i = 0; i < attack.size(); i++) {
 				attack[i].damage *= (research_manager.getTurretDamageCoef() + research_manager.getDomeLocalDamageBonusCoef() * dome_count);
 				attack[i].cooldown /= research_manager.getTurretAttackSpeedCoef();
 			}
 			break;
 		case dome:
-			max_hp *= (research_manager.getDomeLocalMaxHealthCoef() * dome_count + research_manager.getDomeMaxHealthCoef());
-			hp *= (research_manager.getDomeLocalMaxHealthCoef() * dome_count + research_manager.getDomeMaxHealthCoef());
+			maxHealthRescale(research_manager.getDomeLocalMaxHealthCoef() * dome_count + research_manager.getDomeMaxHealthCoef());
 			break;
 		case science:
-			max_hp *= (research_manager.getDomeLocalMaxHealthCoef() * dome_count + research_manager.getScienceMaxHealthCoef());
-			hp *= (research_manager.getDomeLocalMaxHealthCoef() * dome_count + research_manager.getScienceMaxHealthCoef());
+			maxHealthRescale(research_manager.getDomeLocalMaxHealthCoef() * dome_count + research_manager.getScienceMaxHealthCoef());
 			break;
 		case gold:
-			max_hp *= (research_manager.getDomeLocalMaxHealthCoef() * dome_count + research_manager.getGoldMaxHealthCoef());
-			hp *= (research_manager.getDomeLocalMaxHealthCoef() * dome_count + research_manager.getGoldMaxHealthCoef());
+			maxHealthRescale(research_manager.getDomeLocalMaxHealthCoef() * dome_count + research_manager.getGoldMaxHealthCoef());
 			break;
 		}
 	}
@@ -508,6 +511,12 @@ public:
 
 	float getMinimalFlightRange() {
 		return min_flight_range;
+	}
+
+	void damageRescale(float coef) {
+		for (int i = 0; i < attack.size(); i++) {
+			attack[i].damage *= coef;
+		}
 	}
 };
 

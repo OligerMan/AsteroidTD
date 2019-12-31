@@ -46,6 +46,8 @@ class Constants {
 	const float hero_view_scale = 2;
 	const float strategic_view_scale = 5;
 
+	const float tier_range = 10000;
+
 public:
 
 	const double getSpeedDamageThreshold() {
@@ -178,5 +180,9 @@ public:
 
 	const float getStrategicViewScale() {
 		return strategic_view_scale;
+	}
+
+	const float getTierRange() {
+		return tier_range;
 	}
 } consts;

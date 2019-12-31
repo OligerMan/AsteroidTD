@@ -18,6 +18,9 @@ enum CollisionType {
 	alien_turret1_col,
 	alien_gunship_col,
 	alien_turret2_col,
+	drone_col,
+	drone_turret_col,
+	rocket_col,
 
 	COUNT_COLLISION
 };
@@ -30,7 +33,7 @@ void collision_type_init() {
 
 	collision_type[null_col] = "null";
 	collision_type[stone_col] = "stone";
-	collision_type[unit_col] = "unit";
+	collision_type[unit_col] = "hero";
 	collision_type[asteroid_col] = "asteroid";
 	collision_type[redactor_back_col] = "redactor_back";
 	collision_type[turret_col] = "turret";
@@ -42,6 +45,9 @@ void collision_type_init() {
 	collision_type[alien_turret1_col] = "alien_turret1";
 	collision_type[alien_gunship_col] = "alien_gunship";
 	collision_type[alien_turret2_col] = "alien_turret2";
+	collision_type[drone_col] = "drone";
+	collision_type[drone_turret_col] = "drone_turret";
+	collision_type[rocket_col] = "rocket";
 }
 
 int is_collision_type_exists(std::string example) {
@@ -68,6 +74,9 @@ enum ObjectType {
 	alien_turret1,
 	alien_gunship,
 	alien_turret2,
+	drone,
+	drone_turret,
+	rocket,
 
 	COUNT_OBJECT
 };
@@ -91,7 +100,9 @@ void object_type_init() {
 	object_type[alien_turret1] = "alien_turret1";
 	object_type[alien_gunship] = "alien_gunship";
 	object_type[alien_turret2] = "alien_turret2";
-
+	object_type[drone] = "drone";
+	object_type[drone_turret] = "drone_turret";
+	object_type[rocket] = "rocket";
 }
 
 int is_object_type_exists(std::string example) {
@@ -118,4 +129,7 @@ std::vector<int> lifetime{
 	-1, // alien_turret1
 	-1, // alien_gunship1
 	-1, // alien_turret2
+	-1, // drone
+	-1, // drone_turret
+	-1, // rocket
 };

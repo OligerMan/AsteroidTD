@@ -1,0 +1,7 @@
+max_hp 300
+inf_hp 0
+default_speed 1.5
+
+anger_range 1000000
+
+unit_info_end
