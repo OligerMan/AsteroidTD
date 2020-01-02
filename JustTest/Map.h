@@ -350,14 +350,7 @@ private:
 					Object * enemy = (Object *)object1->getUnitInfo()->getEnemy();
 					Point vect = object1->getPosition() - enemy->getPosition();
 					float angle_diff = abs((object1->getAngle() + 90) / 180 * PI - (-atan2(vect.x, vect.y) + PI / 2));
-					if (angle_diff > 0.001) {
-						if (abs(angle_diff) > abs(angle_diff + PI * 2)) {
-							angle_diff += PI * 2;
-						}
-						if (abs(angle_diff) > abs(angle_diff - PI * 2)) {
-							angle_diff -= PI * 2;
-						}
-					}
+					angle_diff = fixAngle(angle_diff);
 					if (abs(angle_diff) < 0.05) {
 						if (object1->getUnitInfo()->attackReady(1)) {
 							Point bullet_pos = object1->getPosition() + Point(cos((object1->getAngle() - 90) / 180 * PI), sin((object1->getAngle() - 90) / 180 * PI)) * 95;
@@ -384,7 +377,6 @@ private:
 
 							object1->attachObject(object);
 						}
-						
 					}
 				}
 			}

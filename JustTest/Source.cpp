@@ -10,6 +10,7 @@
 #include "OnlineRank.h"
 #include "KeyboardBuffer.h"
 #include "MusicManager.h"
+#include "BackgroundGeneration.h"
 
 #include <chrono>
 #include <Windows.h>
@@ -371,7 +372,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			
 			if (is_game_cycle) {
 				// set background
-				window.draw(main_background_sprite);
+				//window.draw(main_background_sprite);
+				window.clear(sf::Color::Black);
+				background_manager.draw(window);
 
 				is_game_cycle = visual_ctrl.processFrame(&window, game_map1.getObjectsBuffer());
 				float hero_hp = hero_object->getUnitInfo()->getHealth() / hero_object->getUnitInfo()->getMaxHealth();
@@ -900,9 +903,6 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					hero_speed *= consts.getMoveSpeedBuffMultiplier();
 				}
 				new_speed = new_speed.getNormal() * hero_speed;
-				/*if (hero_speed == 0) {
-					std::cout << "kek";
-				}*/
 				if (!(tutorial.isWorkingOnStep(tutorial.movement_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_dome_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_turret_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_gold_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_science_tutorial))) {
 					new_speed = Point();
 				}
@@ -942,6 +942,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				view1.setCenter(view1.getCenter() + sf::Vector2f(diff.x, diff.y));
 				main_back_pos = main_back_pos + sf::Vector2f(diff.x * 0.95, diff.y * 0.95);
 
+				background_manager.processFrame(diff, hero_object->getPosition());
 			}
 
 			if (!(game_status == game_strategic_mode || game_status == pause)) {

@@ -123,6 +123,10 @@ struct Point {
 		normalized.rotate(angle);
 		return normalized;
 	}
+
+	float getAngle() {
+		return atan2(x, y);
+	}
 };
 
 
@@ -161,4 +165,16 @@ struct Circle {
 
 bool circleCollision(Circle c1, Point orig1, double ang1, Circle c2, Point orig2, double ang2) {
 	return c1.checkCollision(c2, orig1, ang1, orig2, ang2);
+}
+
+float fixAngle(float angle) {
+	if (angle > 0.001) {
+		if (abs(angle) > abs(angle + PI * 2)) {
+			angle += PI * 2;
+		}
+		if (abs(angle) > abs(angle - PI * 2)) {
+			angle -= PI * 2;
+		}
+	}
+	return angle;
 }
