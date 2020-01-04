@@ -124,22 +124,45 @@ private:
 
 		texture_buffer.resize(background_elem_names.size());
 		for (int obj_cnt = 0; obj_cnt < object_names->size(); obj_cnt++) {
-
-			//get animation set
+            if (settings.isSpriteDebugOutputEnabled()) {
+                std::cout << " --- Background sprite " << (path + "\\" + (*object_names)[obj_cnt]) << " loading -- " << std::endl;
+            }
 			std::vector<std::string> * textures_set = getFileList(path + "\\" + (*object_names)[obj_cnt]);
 			std::vector<sf::Texture> animation(textures_set->size());
 
+            if (settings.isSpriteDebugOutputEnabled()) {
+                std::cout << " --- sprite count " << textures_set->size() << " --- " << std::endl;
+            }
+
 			for (int i = 0; i < textures_set->size(); i++) {
 				std::string sprite_path = (path + "\\" + ((*object_names)[obj_cnt] + "\\" + (*textures_set)[i])).c_str();
+                if (settings.isSpriteDebugOutputEnabled()) {
+                    std::cout << " ---- sprite " << (path + "\\" + ((*object_names)[obj_cnt] + "\\" + (*textures_set)[i])) << " ---- " << std::endl;
+                }
 				animation[i].loadFromFile(sprite_path);
 			}
 
 			if (is_background_name((*object_names)[obj_cnt]) != -1) {
+                if (settings.isSpriteDebugOutputEnabled()) {
+                    std::cout << " --- animation attach for " << (*object_names)[obj_cnt] << " to number " << is_background_name((*object_names)[obj_cnt]) << " --- " << std::endl;
+                }
 				texture_buffer[is_background_name((*object_names)[obj_cnt])] = animation;
-			}
+            }
+            else {
+                if (settings.isErrorOutputEnabled()) {
+                    std::cout << "Wrond background element name" << std::endl;
+                }
+            }
 		}
 		if (settings.isSpriteDebugOutputEnabled()) {
 			std::cout << " -- Background sprites loading completed -- " << std::endl << std::endl;
+
+            std::cout << " - Summary:" << std::endl;
+            std::cout << " - Sprites amount: " << texture_buffer.size() << std::endl;
+            for (int i = 0; i < texture_buffer.size(); i++) {
+                std::cout << " -- " << texture_buffer[i].size() << std::endl;
+            }
+            std::cout << " - Summary end" << std::endl;
 		}
 		return;
 	}
@@ -268,7 +291,9 @@ public:
 
 	BackgroundManager() {
         backgroundInfoParser("background_config.cfg");
-
+        for (int i = 0; i < layers.size(); i++) {
+            std::cout << " >>> " << layers[i].
+        }
 		uploadTextures("background_components");
 		initSprites();
 	}
@@ -285,15 +310,13 @@ public:
 
 	void draw(sf::RenderWindow & window, Point center) {
 		for (int layer = 0; layer < layers.size(); layer++) {
-            if (texture_buffer[layer].size()) {
-                for (int i = 0; i < layers[layer].list.size(); i++) {
-                    Point pos = layers[layer].list[i].pos + center;
-                    sprite_buffer[layer].setTexture(texture_buffer[layer][(layers[layer].list[i].frame_shift / 24) % texture_buffer[layer].size()]);
-                    sprite_buffer[layer].setPosition(pos.x * window.getSize().x / 1920, pos.y * window.getSize().y / 1080);
+            for (int i = 0; i < layers[layer].list.size(); i++) {
+                Point pos = layers[layer].list[i].pos + center;
+                sprite_buffer[layer].setTexture(texture_buffer[layer][(layers[layer].list[i].frame_shift / 24) % texture_buffer[layer].size()]);
+                sprite_buffer[layer].setPosition(pos.x * window.getSize().x / 1920, pos.y * window.getSize().y / 1080);
 
-                    layers[layer].list[i].frame_shift++;
-                    window.draw(sprite_buffer[layer]);
-                }
+                layers[layer].list[i].frame_shift++;
+                window.draw(sprite_buffer[layer]);
             }
 		}
 	}

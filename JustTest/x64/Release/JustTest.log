@@ -210,8 +210,8 @@ e:\projects\asteroidtd\justtest\BackgroundGeneration.h(56): warning C4800: 'int'
 e:\projects\asteroidtd\justtest\BackgroundGeneration.h(59): warning C4305: 'return': truncation from 'int' to 'bool'
 e:\projects\asteroidtd\justtest\BackgroundGeneration.h(80): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\BackgroundGeneration.h(96): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\BackgroundGeneration.h(137): warning C4806: '!=': unsafe operation: no value of type 'bool' promoted to type 'int' can equal the given constant
-e:\projects\asteroidtd\justtest\BackgroundGeneration.h(292): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\BackgroundGeneration.h(145): warning C4806: '!=': unsafe operation: no value of type 'bool' promoted to type 'int' can equal the given constant
+e:\projects\asteroidtd\justtest\BackgroundGeneration.h(314): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 Source.cpp(35): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 Source.cpp(37): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 Source.cpp(42): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
@@ -325,9 +325,9 @@ C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): war
               _Other2=double &
           ]
   Generating code
-  172 of 4557 functions ( 3.8%) were compiled, the rest were copied from previous compilation.
+  168 of 4557 functions ( 3.7%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    14 functions had inline decision re-evaluated but remain unchanged
+    16 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.exe
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.pdb (Full PDB)
