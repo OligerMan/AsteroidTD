@@ -50,7 +50,7 @@ private:
 	std::vector<std::vector<sf::Texture>> texture_buffer;
 	std::vector<sf::Sprite> sprite_buffer;
 
-	bool is_background_name(std::string example) {
+	int is_background_name(std::string example) {
 		for (int i = 0; i < background_elem_names.size(); i++) {
 			if (background_elem_names[i] == example) {
 				return i;
@@ -291,17 +291,15 @@ public:
 
 	BackgroundManager() {
         backgroundInfoParser("background_config.cfg");
-        for (int i = 0; i < layers.size(); i++) {
-            std::cout << " >>> " << layers[i].
-        }
+
 		uploadTextures("background_components");
 		initSprites();
 	}
 
 	void processFrame(Point pos_shift, Point center) {
+		moveBackground(pos_shift);
         for (int layer = 0; layer < layers.size(); layer++) {
-            layers[layer].last_shift += pos_shift;
-            moveBackground(pos_shift);
+            layers[layer].last_shift += pos_shift * layers[layer].move_coef;
             if (layers[layer].last_shift.getLength() > layers[layer].shift_threshold) {
                 refreshMap(layer);
             }
@@ -323,11 +321,14 @@ public:
 
     void generateAroundCenter(Point center) {
         for (int layer = 0; layer < layers.size(); layer++) {
-            layers[layer].last_shift = Point(1, 0);
-            for (int i = 0; i < layers[layer].list.size(); i++) {
-                layers[layer].list[i].pos -= Point(layers[layer].shift_threshold, 0);
-            }
-            refreshMap(layer);
+			layers[layer].list.clear();
+			for (float pos_x = -generation_range * 2; pos_x < 0; pos_x += layers[layer].shift_threshold) {
+				layers[layer].last_shift = Point(1, 0);
+				for (int i = 0; i < layers[layer].list.size(); i++) {
+					layers[layer].list[i].pos -= Point(layers[layer].shift_threshold, 0);
+				}
+				refreshMap(layer);
+			}
         }
     }
 

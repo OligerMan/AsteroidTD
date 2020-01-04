@@ -157,6 +157,7 @@
     <ClInclude Include="VisualInfo.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="background_config.cfg" />
     <None Include="collision\asteroid.col" />
     <None Include="collision\dome.col" />
     <None Include="collision\null.col" />

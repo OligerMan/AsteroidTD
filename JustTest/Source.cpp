@@ -1212,7 +1212,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					last_menu_choice = frame_num;
 				}
 			}
-
+			window.clear(sf::Color::Black);
+			background_manager.draw(window, Point());
+			background_manager.processFrame(Point(1, 0), Point());
 			window.draw(game_over_background_sprite);
 			for (int i = retry; i <= menu; i++) {
 				window.draw(buttons[i].sprite);
@@ -1234,7 +1236,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
             research_background_sprite.setPosition(0, 0);
 
 			window.setView(view3);
-            window.clear(sf::Color::Black);
+            window.clear(sf::Color::Black); 
+			background_manager.draw(window, Point());
+			background_manager.processFrame(Point(1, 0), Point());
 
 			res_visual_ctrl.processFrame(&window, view3.getCenter(), cur_research_index);
 
@@ -1483,6 +1487,8 @@ int main() {
 	MusicManager music_manager("music");
 	music_manager.launchMusicWorker();
 
+	background_manager.generateAroundCenter(Point());
+
 	while (true) {
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -1632,7 +1638,9 @@ int main() {
 				if (!is_input_state) {
 					last_menu_choice = frame_num - fps.getFPS();
 				}
-
+				window.clear(sf::Color::Black);
+				background_manager.draw(window, Point());
+				background_manager.processFrame(Point(1, 0), Point());
 				window.draw(menu_background_sprite);
 				for (int i = 0; i < buttons.size(); i++) {
 					window.draw(buttons[i].sprite);
@@ -1641,6 +1649,9 @@ int main() {
 				window.display();
 			}
 			else if (game_status == settings_menu) {
+				window.clear(sf::Color::Black);
+				background_manager.draw(window, Point());
+				background_manager.processFrame(Point(1, 0), Point());
 				window.draw(menu_background_sprite);
 				for (int i = 0; i < settings_list.size(); i++) {
 					if (settings_list[i] == "nickname") {
@@ -1757,6 +1768,9 @@ int main() {
 				title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
 				nickname_title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
 
+				window.clear(sf::Color::Black);
+				background_manager.draw(window, Point());
+				background_manager.processFrame(Point(1, 0), Point());
 				window.draw(menu_background_sprite);
 				window.draw(title);
 				window.draw(nickname_title);

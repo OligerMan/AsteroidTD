@@ -192,6 +192,9 @@
     <None Include="PlayerStat.proto">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="background_config.cfg">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
