@@ -1,18 +1,16 @@
 #pragma once
 
-#include "Collision.h"
 #include "ObjectTypes.h"
 #include "VisualInfo.h"
-#include "UnitInfo.h"
+#include "AdditionalInfo.h"
 
 class Object {
 
-	CollisionModel * col_model = new CollisionModel();
 
 	CollisionType object_col_type = null_col;
 	VisualInfo vis_info;
-	UnitInfo * unit_info = nullptr;
 	ObjectType object_type_info;
+	AdditionalInfo add_info;
 
 	bool deleted = false;
 	std::vector<Object *> attached_objects;
@@ -21,18 +19,17 @@ class Object {
 public:
 
 	~Object() {
-		if (col_model) {
-			delete col_model;
+		if (add_info.getCollisionModel()) {
+			delete add_info.getCollisionModel();
 		}
-		if (unit_info) {
-			delete unit_info;
+		if (add_info.getUnitInfo()) {
+			delete add_info.getUnitInfo();
 		}
 		for (int i = 0; i < attached_objects.size(); i++) {
 			attached_objects[i]->deleteObject();
 		}
 		attached_objects.clear();
-		unit_info = nullptr;
-		col_model = nullptr;
+		add_info.clear();
 	}
 
 	Object() {}
@@ -40,24 +37,25 @@ public:
 	Object(
 		Point point
 	) {
-		col_model->setPosition(point);
-		col_model->addCircle(Point(), 0);
+		add_info.setCollisionModel(new CollisionModel());
+		add_info.getCollisionModel()->setPosition(point);
+		add_info.getCollisionModel()->addCircle(Point(), 0);
 		time_left = lifetime[object_type_info];
 	}
 
 	Object(
-		Point point, 
+		Point point,
 		Point origin
 	) : Object(
 		point
 	) {
-		col_model->setOrigin(origin);
+		add_info.getCollisionModel()->setOrigin(origin);
 		time_left = lifetime[object_type_info];
 	}
 
 	Object(
-		Point point, 
-		CollisionType obj_col_type, 
+		Point point,
+		CollisionType obj_col_type,
 		VisualInfo visual_info
 	) : Object(
 		point
@@ -68,12 +66,12 @@ public:
 	}
 
 	Object(
-		Point point, 
-		Point origin, 
-		CollisionType obj_col_type, 
+		Point point,
+		Point origin,
+		CollisionType obj_col_type,
 		VisualInfo visual_info
 	) : Object(
-		point, 
+		point,
 		origin
 	) {
 		object_col_type = obj_col_type;
@@ -82,54 +80,52 @@ public:
 	}
 
 	Object(
-		Point point, 
-		Point origin, 
-		ObjectType new_object_type, 
-		CollisionType obj_col_type, 
+		Point point,
+		Point origin,
+		ObjectType new_object_type,
+		CollisionType obj_col_type,
 		VisualInfo visual_info
 	) : Object(
-		point, 
-		origin, 
-		obj_col_type, 
+		point,
+		origin,
+		obj_col_type,
 		visual_info
 	) {
 		object_type_info = new_object_type;
 
-		delete col_model;
+		add_info.setCollisionModel(new CollisionModel(collision_info_set[new_object_type]));
+		add_info.getCollisionModel()->setPosition(point);
+		add_info.getCollisionModel()->setOrigin(origin);
 
-		col_model = new CollisionModel(collision_info_set[new_object_type]);
-		col_model->setPosition(point);
-		col_model->setOrigin(origin);
-		
-		unit_info = new UnitInfo(unit_info_set[new_object_type]);
+		add_info.setUnitInfo(new UnitInfo(unit_info_set[new_object_type]));
 
 		time_left = lifetime[object_type_info];
 	}
 
 	Object(
-		Point point, 
-		Point origin, 
-		ObjectType new_object_type, 
-		CollisionType obj_col_type, 
-		VisualInfo visual_info, 
-		float hp, 
-		float mana, 
+		Point point,
+		Point origin,
+		ObjectType new_object_type,
+		CollisionType obj_col_type,
+		VisualInfo visual_info,
+		float hp,
+		float mana,
 		float endurance
 	) : Object(
-		point, 
-		origin, 
-		new_object_type, 
-		obj_col_type, 
+		point,
+		origin,
+		new_object_type,
+		obj_col_type,
 		visual_info
 	) {
-		unit_info->setHealth(hp);
-		unit_info->setMana(mana);
-		unit_info->setEndurance(endurance);
+		add_info.getUnitInfo()->setHealth(hp);
+		add_info.getUnitInfo()->setMana(mana);
+		add_info.getUnitInfo()->setEndurance(endurance);
 		time_left = lifetime[object_type_info];
 	}
 
 	CollisionModel * getCollisionModel() {
-		return col_model;
+		return add_info.getCollisionModel();
 	}
 
 	CollisionType getObjectCollisionType() {
@@ -157,35 +153,35 @@ public:
 	}
 
 	Point getSpeed() {
-		if (isDeleted() || !col_model) {
+		if (isDeleted() || !add_info.getCollisionModel()) {
 			return Point();
 		}
-		return col_model->getSpeed();
+		return add_info.getCollisionModel()->getSpeed();
 	}
 
 	void setSpeed(Point speed) {
-		if (isDeleted() || !col_model) {
+		if (isDeleted() || !add_info.getCollisionModel()) {
 			return;
 		}
-		col_model->setSpeed(speed);
+		add_info.getCollisionModel()->setSpeed(speed);
 	}
 
 	void changeSpeed(Point difference) {
-		if (isDeleted() || !col_model) {
+		if (isDeleted() || !add_info.getCollisionModel()) {
 			return;
 		}
-		col_model->changeSpeed(difference);
+		add_info.getCollisionModel()->changeSpeed(difference);
 	}
 
 	Point getPosition() {
-		if (isDeleted() || !col_model) {
+		if (isDeleted() || !add_info.getCollisionModel()) {
 			return Point();
 		}
-		return col_model->getPosition();
+		return add_info.getCollisionModel()->getPosition();
 	}
 
 	void setPosition(Point origin) {
-		if (isDeleted() || !col_model) {
+		if (isDeleted() || !add_info.getCollisionModel()) {
 			return;
 		}
 		for (int i = 0; i < attached_objects.size(); i++) {
@@ -193,11 +189,11 @@ public:
 				attached_objects[i]->setPosition(origin + (getPosition() - attached_objects[i]->getPosition()));
 			}
 		}
-		col_model->setPosition(origin);
+		add_info.getCollisionModel()->setPosition(origin);
 	}
 
 	void changePosition(Point difference) {
-		if (isDeleted() || !col_model) {
+		if (isDeleted() || !add_info.getCollisionModel()) {
 			return;
 		}
 		for (int i = 0; i < attached_objects.size(); i++) {
@@ -205,11 +201,11 @@ public:
 				attached_objects[i]->changePosition(difference);
 			}
 		}
-		col_model->changePosition(difference);
+		add_info.getCollisionModel()->changePosition(difference);
 	}
 
 	void forceChangePosition(Point difference) {
-		if (isDeleted() || !col_model) {
+		if (isDeleted() || !add_info.getCollisionModel()) {
 			return;
 		}
 		for (int i = 0; i < attached_objects.size(); i++) {
@@ -217,53 +213,53 @@ public:
 				attached_objects[i]->forceChangePosition(difference);
 			}
 		}
-		col_model->forceChangePosition(difference);
+		add_info.getCollisionModel()->forceChangePosition(difference);
 	}
 
 	Point getOrigin() {
-		if (isDeleted() || !col_model) {
+		if (isDeleted() || !add_info.getCollisionModel()) {
 			return Point();
 		}
-		return col_model->getOrigin();
+		return add_info.getCollisionModel()->getOrigin();
 	}
 
 	void setOrigin(Point origin) {
-		if (isDeleted() || !col_model) {
+		if (isDeleted() || !add_info.getCollisionModel()) {
 			return;
 		}
-		col_model->setOrigin(origin);
+		add_info.getCollisionModel()->setOrigin(origin);
 	}
 
 	void changeOrigin(Point difference) {
-		if (isDeleted() || !col_model) {
+		if (isDeleted() || !add_info.getCollisionModel()) {
 			return;
 		}
-		col_model->changeOrigin(difference);
+		add_info.getCollisionModel()->changeOrigin(difference);
 	}
 
 	void setAutoOrigin() {
-		if (isDeleted() || !col_model) {
+		if (isDeleted() || !add_info.getCollisionModel()) {
 			return;
 		}
-		col_model->setAutoOrigin();
+		add_info.getCollisionModel()->setAutoOrigin();
 	}
 
 	double getAngle() {
-		if (isDeleted() || !col_model) {
+		if (isDeleted() || !add_info.getCollisionModel()) {
 			return 0;
 		}
-		return col_model->getAngle();
+		return add_info.getCollisionModel()->getAngle();
 	}
 
 	void setAngle(double angle) {
-		if (isDeleted() || !col_model) {
+		if (isDeleted() || !add_info.getCollisionModel()) {
 			return;
 		}
-		col_model->setAngle(angle);
+		add_info.getCollisionModel()->setAngle(angle);
 	}
 
 	void changeAngle(double difference) {
-		if (isDeleted() || !col_model) {
+		if (isDeleted() || !add_info.getCollisionModel()) {
 			return;
 		}
 		for (int i = 0; i < attached_objects.size(); i++) {
@@ -271,7 +267,7 @@ public:
 				attached_objects[i]->setPosition(this->getPosition() + (attached_objects[i]->getPosition() - this->getPosition()).getRotated(difference));
 			}
 		}
-		col_model->changeAngle(difference);
+		add_info.getCollisionModel()->changeAngle(difference);
 	}
 
 	ObjectType getObjectType() {
@@ -279,7 +275,7 @@ public:
 	}
 
 	UnitInfo * getUnitInfo() {
-		return unit_info;
+		return add_info.getUnitInfo();
 	}
 
 	void setAnimationType(AnimationType animation_type) {
@@ -298,19 +294,13 @@ public:
 	}
 
 	Point getSquareBorder() {
-		return col_model->getSquareBorder();
+		return add_info.getCollisionModel()->getSquareBorder();
 	}
 
 	bool canObjectAttack() {
 		if (getUnitInfo() == nullptr) {
 			return false;
 		}
-		/*if (unit_info->getEnemy() == nullptr) {
-			return false;
-		}*/
-		/*else if ((((Object *)unit_info->getEnemy())->getPosition() - this->getPosition()).getLength() > unit_info->getAttackRange(1)) {
-			return false;
-		}*/
 		return getUnitInfo()->canObjectAttack();
 	}
 
@@ -319,7 +309,7 @@ public:
 	}
 
 	bool garbageCollector() {   // returns true if something worked
-		time_left--;
+		time_left -= consts.getFPSLock() / fps.getFPS();
 		bool cleaned = false;
 		if (this->isDeleted() || this->getUnitInfo() == nullptr || this->getUnitInfo()->isDead()) {
 			this->deleteObject();
@@ -346,8 +336,8 @@ public:
 	}
 
 	void setFaction(int new_faction) {
-		if (unit_info) {
-			unit_info->setFaction(new_faction);
+		if (add_info.getUnitInfo()) {
+			add_info.getUnitInfo()->setFaction(new_faction);
 		}
 		for (int i = 0; i < attached_objects.size(); i++) {
 			if (attached_objects[i]->getObjectType() != bullet) {
@@ -357,15 +347,27 @@ public:
 	}
 
 	void setEffect(Effect effect) {
-		if (unit_info != nullptr) {
-			unit_info->setEffect(effect);
+		if (add_info.getUnitInfo() != nullptr) {
+			add_info.getUnitInfo()->setEffect(effect);
 		}
 	}
 
 	void researchApply(int dome_count) {
-		if (unit_info) {
-			unit_info->researchApply(object_type_info, dome_count);
+		if (add_info.getUnitInfo()) {
+			add_info.getUnitInfo()->researchApply(object_type_info, dome_count);
 		}
+	}
+
+	void setParent(void * parent) {
+		this->add_info.setParent(parent);
+	}
+
+	void * getParent() {
+		return add_info.getParent();
+	}
+
+	float getLifetime() { // 0 for infinite
+		return std::max(0, time_left);
 	}
 };
 
@@ -373,9 +375,5 @@ bool checkObjectCollision(Object * obj1, Object * obj2) {
 	if ((obj1->getCollisionModel()->getPosition() - obj2->getCollisionModel()->getPosition()).getLength() > (obj1->getCollisionModel()->getMaxRadius() + obj2->getCollisionModel()->getMaxRadius())) {
 		return false;
 	}
-	/*ObjectType type1 = obj1->getObjectType(), type2 = obj1->getObjectType();
-	if ((type2 != bullet && (type1 == dome || type1 == turret || type1 == science || type1 == gold)) || (type1 != bullet && (type2 == dome || type2 == turret || type2 == science || type2 == gold))){
-		return false;
-	}*/
 	return checkModelCollision(obj1->getCollisionModel(), obj2->getCollisionModel());
 }

@@ -275,7 +275,7 @@ private:
 				int faction1 = object1->getUnitInfo()->getFaction();
 
 				ObjectType type = object1->getObjectType();
-				if (type == bullet || type == dome || type == science || type == gold) {
+				if (type == dome || type == science || type == gold || object1->getObjectSpriteType() == bullet_sprite) {
 					continue;
 				}
 
@@ -291,12 +291,12 @@ private:
 
 								int faction2 = object2->getUnitInfo()->getFaction();
 
-								if (areEnemies((FactionList)faction1, (FactionList)faction2) && object1->getObjectType() != bullet && object2->getObjectType() != bullet) {
+								if (areEnemies((FactionList)faction1, (FactionList)faction2)) {
 
 									
 									if (!(object1->getObjectType() == ObjectType::hero) && (object1->canObjectAttack() || object1->getUnitInfo()->getDefaultSpeed() > 0.0001)) {
 										
-										if (object2->getObjectType() == asteroid) {
+										if (object2->getObjectType() == asteroid || object2->getObjectType() == bullet) {
 											continue;
 										}
 										Point vect = (object2->getPosition() - object1->getPosition()).getNormal();
@@ -326,7 +326,13 @@ private:
 												}
 												if (!object1->getCollisionModel()->isStatic() && (((Object *)object1->getUnitInfo()->getEnemy())->getPosition() - object1->getPosition()).getLength() > object1->getUnitInfo()->getMinimalFlightRange()) {
 													Point speed(-cos(object1->getAngle() / 180 * PI + PI / 2), -sin(object1->getAngle() / 180 * PI + PI / 2));
-													object1->setSpeed(speed.getNormal()*object1->getUnitInfo()->getDefaultSpeed());
+													if (object1->getObjectSpriteType() != rocket_sprite) {
+														object1->setSpeed(speed.getNormal()*object1->getUnitInfo()->getDefaultSpeed());
+													}
+													else {
+														object1->changeSpeed(speed.getNormal()*(object1->getUnitInfo()->getDefaultSpeed() + std::max(0.4f, sqrt(1 / object1->getLifetime() * 2))));
+														object1->setSpeed(object1->getSpeed().getNormal() * std::min(object1->getSpeed().getLength(), 15.0));
+													}
 												}
 												else if((((Object *)object1->getUnitInfo()->getEnemy())->getPosition() - object1->getPosition()).getLength() < object1->getUnitInfo()->getMinimalFlightRange()){
 													object1->setSpeed(Point());
@@ -354,6 +360,12 @@ private:
 					if (abs(angle_diff) < 0.05) {
 						if (object1->getUnitInfo()->attackReady(1)) {
 							Point bullet_pos = object1->getPosition() + Point(cos((object1->getAngle() - 90) / 180 * PI), sin((object1->getAngle() - 90) / 180 * PI)) * 95;
+							SpriteType bullet_type = bullet_sprite;
+							switch (object1->getObjectType()) {
+							case rocket_launcher:
+								bullet_type = rocket_sprite;
+								break;
+							}
 							Object * object = new Object
 							(
 								bullet_pos,
@@ -362,13 +374,13 @@ private:
 								CollisionType::bullet_col,
 								VisualInfo
 								(
-									SpriteType::bullet_sprite,
+									bullet_type,
 									AnimationType::hold_anim,
 									1000000000
 								)
 							);
 							object->getUnitInfo()->setFaction(object1->getUnitInfo()->getFaction());
-							object->getUnitInfo()->setEnemy(object1);     // to remember who is shooting
+							object->setParent(object1);     // to remember who is shooting
 							object->setAutoOrigin();
 							object->setAngle(object1->getAngle());
 							object->setSpeed(Point(cos((object1->getAngle() - 90) / 180 * PI), sin((object1->getAngle() - 90) / 180 * PI)) * 15);
@@ -474,8 +486,9 @@ private:
 				}
 				if (obj1->getObjectType() == ObjectType::bullet && obj2->getObjectType() != ObjectType::asteroid) {
 					if (unit1 && unit2) {
-						if ((((Object *)obj1->getUnitInfo()->getEnemy())->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
-							event_buffer.addEvent(EventType::attack, (Object *)obj1->getUnitInfo()->getEnemy(), obj2);
+						Object * parent1 = (Object *)obj1->getParent();
+						if ((parent1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
+							event_buffer.addEvent(EventType::attack, parent1, obj2);
 							obj1->deleteObject();
 						}
 					}
@@ -491,7 +504,7 @@ private:
 					obj2->deleteObject();
 					if (unit1 && unit2) {
 						if ((obj1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
-							event_buffer.addEvent(EventType::attack, (Object *)obj2->getUnitInfo()->getEnemy(), obj1);
+							event_buffer.addEvent(EventType::attack, (Object *)obj2->getParent(), obj1);
 						}
 					}
 					else {

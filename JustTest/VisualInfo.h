@@ -40,6 +40,7 @@ enum SpriteType {
 
 	drone_sprite,
 	drone_turret_sprite,
+	rocket_launcher_sprite,
 	rocket_sprite,
 
 	COUNT_SPRITE
@@ -83,6 +84,7 @@ void sprite_type_init() {
 	sprite_type[asteroid_ancient_giant_gold_mine_sprite] = "asteroid_ancient_giant_gold_mine";
 	sprite_type[drone_sprite] = "drone";
 	sprite_type[drone_turret_sprite] = "drone_turret";
+	sprite_type[rocket_launcher_sprite] = "rocket_launcher";
 	sprite_type[rocket_sprite] = "rocket";
 }
 
@@ -100,7 +102,6 @@ enum AnimationType {
 	hold_anim,
 	move_anim,
 	selected_anim,
-
 
 	COUNT_ANIMATION
 };

@@ -76,7 +76,7 @@ enum ObjectType {
 	alien_turret2,
 	drone,
 	drone_turret,
-	rocket,
+	rocket_launcher,
 
 	COUNT_OBJECT
 };
@@ -102,7 +102,6 @@ void object_type_init() {
 	object_type[alien_turret2] = "alien_turret2";
 	object_type[drone] = "drone";
 	object_type[drone_turret] = "drone_turret";
-	object_type[rocket] = "rocket";
 }
 
 int is_object_type_exists(std::string example) {
@@ -124,12 +123,11 @@ std::vector<int> lifetime{
 	-1, // dome
 	-1, // science
 	-1, // gold
-	480, // bullet
+	2400, // bullet
 	-1, // alien_fighter
 	-1, // alien_turret1
 	-1, // alien_gunship1
 	-1, // alien_turret2
 	-1, // drone
 	-1, // drone_turret
-	-1, // rocket
 };

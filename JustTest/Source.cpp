@@ -213,6 +213,32 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 		}
 	};
 
+	auto shoot_rocket = [&](Object * hero_object) {
+		Point bullet_pos = hero_object->getPosition() + Point(cos((hero_object->getAngle()) / 180 * PI), sin((hero_object->getAngle()) / 180 * PI)) * hero_object->getCollisionModel()->getMaxRadius();
+		Object * object = new Object
+		(
+			bullet_pos,
+			Point(),
+			ObjectType::bullet,
+			CollisionType::bullet_col,
+			VisualInfo
+			(
+				SpriteType::rocket_sprite,
+				AnimationType::hold_anim,
+				1000000000
+			)
+		);
+		object->getUnitInfo()->setFaction(hero_object->getUnitInfo()->getFaction());
+		object->setParent(hero_object);     // to remember who is shooting
+		object->setAutoOrigin();
+		object->setAngle(hero_object->getAngle() + 90);
+		object->setSpeed(Point(cos((hero_object->getAngle()) / 180 * PI), sin((hero_object->getAngle()) / 180 * PI)) * 5 + hero_object->getSpeed());
+
+		game_map1.addObject(object, game_map1.main_layer);
+
+		hero_object->attachObject(object);
+	};
+
     background_manager.generateAroundCenter(game_map1.getHero()->getPosition());
 
 	while (window.isOpen())
@@ -610,29 +636,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 							if (hero_object->getUnitInfo()->attackReady(1)) {
 								if (resource_manager.spendGold(consts.getAttackAbilityPrice())) {
 									// hero attack 1 (mb rocket launch)
-									Point bullet_pos = hero_object->getPosition() + Point(cos((hero_object->getAngle()) / 180 * PI), sin((hero_object->getAngle()) / 180 * PI)) * hero_object->getCollisionModel()->getMaxRadius();
-									Object * object = new Object
-									(
-										bullet_pos,
-										Point(),
-										ObjectType::bullet,
-										CollisionType::bullet_col,
-										VisualInfo
-										(
-											SpriteType::bullet_sprite,
-											AnimationType::hold_anim,
-											1000000000
-										)
-									);
-									object->getUnitInfo()->setFaction(hero_object->getUnitInfo()->getFaction());
-									object->getUnitInfo()->setEnemy(hero_object);     // to remember who is shooting
-									object->setAutoOrigin();
-									object->setAngle(hero_object->getAngle());
-									object->setSpeed(Point(cos((hero_object->getAngle()) / 180 * PI), sin((hero_object->getAngle()) / 180 * PI)) * 15);
-
-									game_map1.addObject(object, game_map1.main_layer);
-
-									hero_object->attachObject(object);
+									shoot_rocket(hero_object);
 
 									if (tutorial.isWorkingOnStep(tutorial.using_skills_rocket_tutorial)) {
 										tutorial.nextStep();
@@ -676,29 +680,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 							if (hero_object->getUnitInfo()->attackReady(1)) {
 								if (resource_manager.spendGold(consts.getAttackAbilityPrice())) {
 									// hero attack 1 (mb rocket launch)
-									Point bullet_pos = hero_object->getPosition() + Point(cos((hero_object->getAngle()) / 180 * PI), sin((hero_object->getAngle()) / 180 * PI)) * hero_object->getCollisionModel()->getMaxRadius();
-									Object * object = new Object
-									(
-										bullet_pos,
-										Point(),
-										ObjectType::bullet,
-										CollisionType::bullet_col,
-										VisualInfo
-										(
-											SpriteType::bullet_sprite,
-											AnimationType::hold_anim,
-											1000000000
-										)
-									);
-									object->getUnitInfo()->setFaction(hero_object->getUnitInfo()->getFaction());
-									object->getUnitInfo()->setEnemy(hero_object);     // to remember who is shooting
-									object->setAutoOrigin();
-									object->setAngle(hero_object->getAngle());
-									object->setSpeed(Point(cos((hero_object->getAngle()) / 180 * PI), sin((hero_object->getAngle()) / 180 * PI)) * 15);
-
-									game_map1.addObject(object, game_map1.main_layer);
-
-									hero_object->attachObject(object);
+									shoot_rocket(hero_object);
 
 									if (tutorial.isWorkingOnStep(tutorial.using_skills_rocket_tutorial)) {
 										tutorial.nextStep();
@@ -1232,9 +1214,6 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				}
             }
 
-            research_background_sprite.setScale(window.getSize().x / research_background_texture.getSize().x, window.getSize().y / research_background_texture.getSize().y);
-            research_background_sprite.setPosition(0, 0);
-
 			window.setView(view3);
             window.clear(sf::Color::Black); 
 			background_manager.draw(window, Point());
@@ -1350,7 +1329,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 int main() {
 
 	HWND console_hWnd = GetConsoleWindow();
-	//ShowWindow(console_hWnd, SW_HIDE);
+	ShowWindow(console_hWnd, SW_HIDE);
 
 	sf::ContextSettings context_settings;
 	context_settings.antialiasingLevel = 8;

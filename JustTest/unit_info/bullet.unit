@@ -1,1 +1,4 @@
+default_speed 0.05
+anger_range 1500
+min_flight_range 0
 unit_info_end

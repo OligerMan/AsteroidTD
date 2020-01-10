@@ -24,6 +24,9 @@ class MusicManager {
 		return ((track_num >= 0) && (track_num < playlist.size()));
 	}
 
+	bool working = true;
+	bool main_cycle_down = false;
+
 public:
 
 	MusicManager(std::string path) {
@@ -39,6 +42,13 @@ public:
 		}
 		generator = std::default_random_engine(r());
 		distribution = std::uniform_int_distribution<int>(1, playlist.size());
+	}
+
+	~MusicManager() {
+		working = false;
+		while (!main_cycle_down) {
+			Sleep(10);
+		}
 	}
 
 	bool isTrackPlaying(int track_num) {
@@ -69,7 +79,7 @@ public:
 
 	void launchMusicWorker() {
 		auto music_worker = [&]() {
-			while (true) {
+			while (working) {
 				if (play_state && !isPlaying() && playlist.size()) {
 					if (playlist.size()) {
 						int prev_track = current_track;
@@ -88,6 +98,7 @@ public:
 				}
 				Sleep(200);
 			}
+			main_cycle_down = true;
 		};
 
 		std::thread thread(music_worker);
