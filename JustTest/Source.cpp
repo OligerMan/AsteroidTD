@@ -11,6 +11,8 @@
 #include "KeyboardBuffer.h"
 #include "MusicManager.h"
 #include "BackgroundGeneration.h"
+#include "PhraseContainer.h"
+#include "NPCInfo.h"
 
 #include <chrono>
 #include <Windows.h>
@@ -1327,6 +1329,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 }
 
 int main() {
+	phrase_container.parseFromFile("dialog.cfg");
 
 	HWND console_hWnd = GetConsoleWindow();
 	ShowWindow(console_hWnd, SW_HIDE);

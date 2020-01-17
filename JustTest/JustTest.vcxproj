@@ -141,10 +141,12 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapParser.h" />
     <ClInclude Include="MusicManager.h" />
+    <ClInclude Include="NPCInfo.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectTypes.h" />
     <ClInclude Include="OnlineRank.h" />
     <ClInclude Include="ParserInput.h" />
+    <ClInclude Include="PhraseContainer.h" />
     <ClInclude Include="PlayerStat.pb.h" />
     <ClInclude Include="Research.h" />
     <ClInclude Include="ResearchVisualController.h" />
@@ -165,6 +167,7 @@
     <None Include="collision\turret.col" />
     <None Include="collision\unit.col" />
     <None Include="config.cfg" />
+    <None Include="dialog.cfg" />
     <None Include="packages.config" />
     <None Include="PlayerStat.proto" />
     <None Include="redactor_resources\object_templates.map" />

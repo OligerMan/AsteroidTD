@@ -46,7 +46,7 @@ class Constants {
 	const float hero_view_scale = 2;
 	const float strategic_view_scale = 5;
 
-	const float tier_range = 10000;
+	const float tier_range = 5000;
 
 public:
 

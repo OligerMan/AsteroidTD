@@ -141,6 +141,12 @@
     <ClInclude Include="BackgroundGeneration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="NPCInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhraseContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -193,6 +199,9 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="background_config.cfg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="dialog.cfg">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

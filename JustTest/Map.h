@@ -710,13 +710,13 @@ private:
 			}
 			int num = std::min((int)tier_list.size() - 1, std::max(0, (int)(new_pos.getLength() / consts.getTierRange())));
 
-			if (special_asteroid_chance < 50) {
+			if (special_asteroid_chance < 66) {
 				asteroid_type = tier_list[std::max(0, num - 2)][rand() % tier_list[std::max(0, num - 2)].size()];
 			}
-			if (special_asteroid_chance < 100) {
+			if (special_asteroid_chance < 133) {
 				asteroid_type = tier_list[std::max(0, num - 1)][rand() % tier_list[std::max(0, num - 1)].size()];
 			}
-			if (special_asteroid_chance < 150) {
+			if (special_asteroid_chance < 200) {
 				asteroid_type = tier_list[num][rand() % tier_list[num].size()];
 			}
 
