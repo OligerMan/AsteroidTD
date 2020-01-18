@@ -140,6 +140,7 @@
     <ClInclude Include="KeyboardBuffer.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapParser.h" />
+    <ClInclude Include="Mission.h" />
     <ClInclude Include="MusicManager.h" />
     <ClInclude Include="NPCInfo.h" />
     <ClInclude Include="Object.h" />
@@ -147,6 +148,7 @@
     <ClInclude Include="OnlineRank.h" />
     <ClInclude Include="ParserInput.h" />
     <ClInclude Include="PhraseContainer.h" />
+    <ClInclude Include="PlayerRPGProfile.h" />
     <ClInclude Include="PlayerStat.pb.h" />
     <ClInclude Include="Research.h" />
     <ClInclude Include="ResearchVisualController.h" />

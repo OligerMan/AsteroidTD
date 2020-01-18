@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PhraseContainer.h"
+#include "PlayerRPGProfile.h"
 
 struct DialogInfo {
 	bool is_player_turn = false;
@@ -42,6 +43,7 @@ class NPCInfo {
 
 	ConversationStage current_stage = dialog_start;
 	DialogInfo current_dialog_info;
+	WorldFactionList faction = WORLD_FACTIONS_COUNT;
 
 	std::string start_description_string;
 
@@ -55,6 +57,8 @@ public:
 	NPCInfo() {
 		politeness = rand() * 200 / RAND_MAX - 100;
 		prejudices = rand() * 200 / RAND_MAX - 100;
+
+		faction = WorldFactionList(rand() % WORLD_FACTIONS_COUNT);
 
 		std::vector<std::string> buffer = phrase_container.getPhraseBuffer(PhraseContainer::start_description, politeness);
 		start_description_string = buffer[rand() * buffer.size() / RAND_MAX];
@@ -117,7 +121,7 @@ public:
 		int rand_coef = 0, joke_mark = 0;
 		switch (current_stage) {
 		case dialog_start:
-			if (prejudices/*+faction fame + global fame*/ < -150) {      // TODO: fame indicator
+			if (prejudices + rpg_profile.getFactionFame(faction) + rpg_profile.getGlobalFame() < -150) {      // TODO: fame indicator
 				current_stage = conversation_refuse;
 				addMainText(PhraseContainer::conversation_refuse_npc);
 				current_dialog_info.answers.clear();
@@ -241,7 +245,7 @@ public:
 				}
 			}
 			else if ((answer_num == 1 && (jobAvailable() || specialJobAvailable()) && rumorsAvaliable()) || answer_num == 0) {
-				if (prejudices/*+faction fame + global fame*/ < 0) {      // TODO: fame indicator
+				if (prejudices + rpg_profile.getFactionFame(faction) + rpg_profile.getGlobalFame() < 0) {      // TODO: fame indicator
 					current_stage = rumors_refuse;
 					addMainText(PhraseContainer::rumors_refuse_npc);
 					current_dialog_info.answers.clear();
@@ -327,7 +331,7 @@ public:
 			}
 			else if (answer_num == 1 && !special_job_question_passed) {
 
-				if (special_job_available || prejudices/*+faction fame + global fame*/ > 150) {
+				if (special_job_available || prejudices + rpg_profile.getFactionFame(faction) + rpg_profile.getGlobalFame() > 150) {
 					current_stage = special_job_offer;
 
 					current_dialog_info.main_text = "I have some special job";   // TODO: job generator

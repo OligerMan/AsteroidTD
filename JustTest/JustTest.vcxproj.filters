@@ -147,6 +147,12 @@
     <ClInclude Include="PhraseContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerRPGProfile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mission.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

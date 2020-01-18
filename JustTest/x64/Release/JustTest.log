@@ -298,19 +298,19 @@ Source.cpp(1094): warning C4244: 'argument': conversion from 'unsigned int' to '
 Source.cpp(1095): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 Source.cpp(1297): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 Source.cpp(1311): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(1380): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-Source.cpp(1380): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(1383): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-Source.cpp(1395): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-Source.cpp(1427): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-Source.cpp(1430): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(1535): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(1536): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(1659): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-Source.cpp(1696): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-Source.cpp(1762): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-Source.cpp(1764): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-Source.cpp(1803): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(1342): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+Source.cpp(1342): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(1345): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+Source.cpp(1357): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+Source.cpp(1389): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+Source.cpp(1392): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(1497): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(1498): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(1621): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(1658): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+Source.cpp(1724): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(1726): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+Source.cpp(1765): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   e:\projects\asteroidtd\justtest\AStarAlgorithm.h(49): note: see reference to function template instantiation 'std::pair<Point,int>::pair<Point,double&,void,0>(_Other1 &&,_Other2) noexcept' being compiled
           with
@@ -325,9 +325,9 @@ C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): war
               _Other2=double &
           ]
   Generating code
-  167 of 4834 functions ( 3.5%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    16 functions had inline decision re-evaluated but remain unchanged
+  175 of 4964 functions ( 3.5%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    20 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.exe
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.pdb (Full PDB)
