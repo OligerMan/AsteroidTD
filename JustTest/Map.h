@@ -112,6 +112,7 @@ private:
 
 	Object * hero_object = nullptr;
 	Object * closest_asteroid = nullptr;
+	std::vector<Object *> discovered_asteroid_list;
 
 	EventBuffer event_buffer;
 
@@ -617,6 +618,10 @@ private:
 			object->getUnitInfo()->setFaction(faction);
 			addObject(object, landscape_layer);
 
+			object->initNPCInfo(WorldFactionList::Alliance_of_Ancient_Knowledge);
+			object->getNPCInfo()->changeBaseMission(createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, Mission::Type::courier, 1));
+			object->getNPCInfo()->changeSpecialMission(createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, Mission::Type::courier, 5));
+
 			std::vector<Object *> struct_arr = getRandomStructureSet(new_pos, object->getCollisionModel()->getModelElem(0)->collision_radius, struct_set, faction);
 			for (int i = 0; i < struct_arr.size(); i++) {
 				angle = rand() / (float)RAND_MAX * PI;
@@ -989,6 +994,44 @@ private:
 		}
 	}
 
+	void processDiscovery(Point center) {
+		for (int layer = 0; layer < objects.size(); layer++) {
+			for (int i = 0; i < objects[layer].size(); i++) {
+				if ((center - objects[layer][i]->getPosition()).getLength() < consts.getDiscoveryRange()) {
+					objects[layer][i]->setDiscovered();
+				}
+			}
+		}
+		discovered_asteroid_list.clear();
+		for (int i = 0; i < objects[landscape_layer].size(); i++) {
+			if (!objects[landscape_layer][i]->isDiscovered()) {
+				discovered_asteroid_list.push_back(objects[landscape_layer][i]);
+			}
+		}
+	}
+
+	Object * randomDiscoveredAsteroid() {
+		if (discovered_asteroid_list.size()) {
+			return discovered_asteroid_list[rand() * discovered_asteroid_list.size() / RAND_MAX];
+		}
+		return objects[landscape_layer][1];
+	}
+
+	Mission createMission(WorldFactionList faction, Mission::Type type, int mission_lvl) {
+		Mission output;
+		output.type = type;
+		output.price = (int)consts.getMinimalMissionPrice() + (int)(consts.getMaxRandomMissionPriceAddition() * (1 - pow(consts.getMissionPriceChangeCoef(), mission_lvl))) / 5 * 5;
+		
+		switch (type) {
+		case Mission::Type::courier:
+			std::vector<void *> objectives_list = { randomDiscoveredAsteroid() };
+			CourierMission * mission = new CourierMission(objectives_list);
+			output.missionExpansion = mission;
+			break;
+		}
+		return output;
+	}
+
 public:
 
 	Map() {}
@@ -1050,6 +1093,7 @@ public:
 		processUnitAI();
 		processEventBuffer();
 		garbageCollector();
+		processDiscovery(view_pos);
 
 		if (hero_object == nullptr) {
 			return;

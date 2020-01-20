@@ -130,6 +130,8 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	title.setCharacterSize(50 * window.getView().getSize().y / 1080);
 	title.setFont(base_font);
 
+	SkillsMode prev_skills_mode = set1;
+
 	struct Button {
 		Point pos;
 		sf::Texture texture_default, texture_selected;
@@ -294,6 +296,17 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 			gui_manager.setText("Gold: " + std::to_string((int)resource_manager.getGold()), 0.01, gold_sign, Point(-(int)window.getView().getSize().x / 2 / 1.2, -(int)window.getView().getSize().y / 2 / 1.2), 35);
 			gui_manager.setText("Research: " + std::to_string((int)resource_manager.getResearch()), 0.01, research_sign, Point(-(int)window.getView().getSize().x / 2 / 1.2, -(int)window.getView().getSize().y / 2 / 1.2 + 55 * window.getView().getSize().y / 1080), 35);
+
+			if (game_map1.getClosestAsteroid() && game_map1.getClosestAsteroid()->getNPCInfo()) {
+				if (skills_mode != npc_dialog) {
+					prev_skills_mode = skills_mode;
+				}
+				skills_mode = SkillsMode::npc_dialog;
+			}
+			else if(prev_skills_mode != npc_dialog){
+				skills_mode = prev_skills_mode;
+				prev_skills_mode = SkillsMode::npc_dialog;
+			}
 
 			if (skills_mode == set1) {
 				gui_manager.setText("Ability Mode", 0.01, skill_status_sign, Point(window.getView().getSize().x / 2 / 1.2 - 150 * window.getView().getSize().x / 1920, -(int)window.getView().getSize().y / 2 / 1.2), 50);
@@ -670,7 +683,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 							skills_mode = set2;
 							switching_modes_counter--;
 						}
-						else {
+						else if(skills_mode == set2){
 							skills_mode = set1;
 							switching_modes_counter--;
 						}
@@ -734,7 +747,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 								}
 							}
 						}
-						else {
+						else if (skills_mode == set2) {
 							if (game_map1.getClosestAsteroid()) {
 								int type = game_map1.getClosestAsteroid()->getObjectSpriteType();
 								if (type != asteroid_drone_factory_sprite && 
@@ -777,7 +790,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 								}
 							}
 						}
-						else {
+						else if (skills_mode == set2) {
 							if (game_map1.getClosestAsteroid()) {
 								int type = game_map1.getClosestAsteroid()->getObjectSpriteType();
 								if (type != asteroid_unstable_explosive_ore_sprite &&
@@ -820,7 +833,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 							hero_object->setEffect(Effect(1200, regen_buff));
 							last_build = frame_num + consts.getFPSLock();
 						}
-						else {
+						else if (skills_mode == set2) {
 							if (game_map1.getClosestAsteroid()) {
 								int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
 								switch (faction) {

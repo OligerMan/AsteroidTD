@@ -8,6 +8,7 @@
 #include "GameConstants.h"
 #include "FPS.h"
 #include "Research.h"
+#include "PlayerRPGProfile.h"
 
 enum FactionList {
 	null_faction,
@@ -15,6 +16,13 @@ enum FactionList {
 	friendly_faction,
 	neutral_faction,
 	aggressive_faction,
+
+	alliance_of_ancient_knowledge,
+	trade_federation,
+	church_of_holy_asteroid,
+	space_empire,
+	travellers_guild,
+	scientists_union,
 
 	FACTION_COUNT
 };
@@ -31,6 +39,13 @@ void faction_type_init() {
 	faction_type[friendly_faction] = "friendly";
 	faction_type[neutral_faction] = "neutral";
 	faction_type[aggressive_faction] = "aggressive";
+
+	faction_type[alliance_of_ancient_knowledge] = "alliance_of_ancient_knowledge";
+	faction_type[trade_federation] = "trade_federation";
+	faction_type[church_of_holy_asteroid] = "church_of_holy_asteroid";
+	faction_type[space_empire] = "space_empire";
+	faction_type[travellers_guild] = "travellers_guild";
+	faction_type[scientists_union] = "scientists_union";
 }
 
 int is_faction_type_exists(std::string example) {
@@ -49,18 +64,18 @@ bool areEnemies(FactionList fact1, FactionList fact2) {
 		fact2 = tmp;
 	}
 
-	if (fact1 == FactionList::aggressive_faction) {
-		return 0;
-	}
-
 	if (fact1 == FactionList::null_faction) {
 		return 0;
 	}
-
-	if (fact2 == FactionList::aggressive_faction) {
+	if (fact1 == FactionList::aggressive_faction && fact2 != fact1) {
 		return 1;
 	}
-
+	if (fact2 == FactionList::aggressive_faction && fact1 != fact2) {
+		return 1;
+	}
+	if (fact1 == FactionList::hero_faction && fact2 >= alliance_of_ancient_knowledge) {
+		return (rpg_profile.getFactionFame(WorldFactionList((int)fact2 - (int)alliance_of_ancient_knowledge)) + rpg_profile.getGlobalFame()) < -80;
+	}
 	//otherwise
 	return 0;
 }

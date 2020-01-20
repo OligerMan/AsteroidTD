@@ -14,7 +14,8 @@ enum GameStatus {
 
 enum SkillsMode {
 	set1,
-	set2
+	set2,
+	npc_dialog,
 };
 
 GameStatus game_status;

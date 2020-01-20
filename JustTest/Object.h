@@ -13,6 +13,7 @@ class Object {
 	AdditionalInfo add_info;
 
 	bool deleted = false;
+	bool discovered = false;
 	std::vector<Object *> attached_objects;
 	int time_left = -1;
 
@@ -366,8 +367,30 @@ public:
 		return add_info.getParent();
 	}
 
+	void createNPCInfo(WorldFactionList faction) {
+		add_info.setNPCInfo(new NPCInfo(faction));
+	}
+
 	float getLifetime() { // 0 for infinite
 		return std::max(0, time_left);
+	}
+
+	void setDiscovered() {
+		discovered = true;
+	}
+
+	bool isDiscovered() {
+		return discovered;
+	}
+
+	void initNPCInfo(WorldFactionList faction) {
+		if (!add_info.getNPCInfo()) {
+			add_info.setNPCInfo(new NPCInfo(faction));
+		}
+	}
+
+	NPCInfo * getNPCInfo() {
+		return add_info.getNPCInfo();
 	}
 };
 

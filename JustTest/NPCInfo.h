@@ -45,6 +45,9 @@ class NPCInfo {
 	DialogInfo current_dialog_info;
 	WorldFactionList faction = WORLD_FACTIONS_COUNT;
 
+	Mission base_mission_info;
+	Mission special_mission_info;
+
 	std::string start_description_string;
 
 	// personal qualities(from -100 to 100)
@@ -54,7 +57,7 @@ class NPCInfo {
 
 public:
 
-	NPCInfo() {
+	NPCInfo(WorldFactionList faction) : faction(faction) {
 		politeness = rand() * 200 / RAND_MAX - 100;
 		prejudices = rand() * 200 / RAND_MAX - 100;
 
@@ -121,7 +124,7 @@ public:
 		int rand_coef = 0, joke_mark = 0;
 		switch (current_stage) {
 		case dialog_start:
-			if (prejudices + rpg_profile.getFactionFame(faction) + rpg_profile.getGlobalFame() < -150) {      // TODO: fame indicator
+			if (prejudices + rpg_profile.getFactionFame(faction) + rpg_profile.getGlobalFame() < -150) {
 				current_stage = conversation_refuse;
 				addMainText(PhraseContainer::conversation_refuse_npc);
 				current_dialog_info.answers.clear();
@@ -222,7 +225,7 @@ public:
 					if (!job_question_passed && base_job_available) {
 						current_stage = job_selection;
 
-						current_dialog_info.main_text = "I have some common job";   // TODO: job generator
+						current_dialog_info.main_text = base_mission_info.getShortDescription();
 
 						current_dialog_info.answers.clear();
 						addAnswer(PhraseContainer::job_accept_player); 
@@ -234,7 +237,7 @@ public:
 					else {
 						current_stage = special_job_offer;
 
-						current_dialog_info.main_text = "I have some special job";   // TODO: job generator
+						current_dialog_info.main_text = special_mission_info.getBroadDescription();
 
 
 						current_dialog_info.answers.clear();
@@ -245,7 +248,7 @@ public:
 				}
 			}
 			else if ((answer_num == 1 && (jobAvailable() || specialJobAvailable()) && rumorsAvaliable()) || answer_num == 0) {
-				if (prejudices + rpg_profile.getFactionFame(faction) + rpg_profile.getGlobalFame() < 0) {      // TODO: fame indicator
+				if (prejudices + rpg_profile.getFactionFame(faction) + rpg_profile.getGlobalFame() < 0) {
 					current_stage = rumors_refuse;
 					addMainText(PhraseContainer::rumors_refuse_npc);
 					current_dialog_info.answers.clear();
@@ -322,7 +325,7 @@ public:
 			if (answer_num == 0) {
 				current_stage = standart_job;
 
-				current_dialog_info.main_text = "<Blah-blah-blah about a job>";   // TODO: job generation
+				current_dialog_info.main_text = base_mission_info.getBroadDescription();
 
 				current_dialog_info.answers.clear();
 				addAnswer(PhraseContainer::job_accept_player);
@@ -334,7 +337,7 @@ public:
 				if (special_job_available || prejudices + rpg_profile.getFactionFame(faction) + rpg_profile.getGlobalFame() > 150) {
 					current_stage = special_job_offer;
 
-					current_dialog_info.main_text = "I have some special job";   // TODO: job generator
+					current_dialog_info.main_text = special_mission_info.getShortDescription();
 
 					current_dialog_info.answers.clear();
 					addAnswer(PhraseContainer::job_accept_player);
@@ -357,7 +360,7 @@ public:
 			if (answer_num == 0) {
 				current_stage = special_job;
 
-				current_dialog_info.main_text = "<Blah-blah-blah about a job>";   // TODO: job generation
+				current_dialog_info.main_text = special_mission_info.getBroadDescription();
 
 				current_dialog_info.answers.clear();
 				addAnswer(PhraseContainer::job_accept_player);
@@ -371,24 +374,22 @@ public:
 		case standart_job:
 			job_question_passed = true;
 			if (answer_num == 0) {
-				// TODO: job generation
+				rpg_profile.addMission(base_mission_info);
 
 				backToStandartQuestion();
 			}
 			else {
-				// TODO: job generation
 				backToStandartQuestion();
 			}
 			break;
 		case special_job:
 			special_job_question_passed = true;
 			if (answer_num == 0) {
-				// TODO: job generation
+				rpg_profile.addMission(special_mission_info);
 
 				backToStandartQuestion();
 			}
 			else {
-				// TODO: job generation
 				backToStandartQuestion();
 			}
 			break;
@@ -415,6 +416,16 @@ public:
 
 	DialogInfo getDialogInfo() {
 		return current_dialog_info;
+	}
+
+	void changeBaseMission(Mission new_base_mission) {
+		base_mission_info.clear();
+		base_mission_info = new_base_mission;
+	}
+
+	void changeSpecialMission(Mission new_special_mission) {
+		special_mission_info.clear();
+		special_mission_info = new_special_mission;
 	}
 
 };

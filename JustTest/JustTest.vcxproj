@@ -120,6 +120,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AdditionalInfo.h" />
     <ClInclude Include="AStarAlgorithm.h" />
     <ClInclude Include="BackgroundGeneration.h" />
     <ClInclude Include="Collision.h" />

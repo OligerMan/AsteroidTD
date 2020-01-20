@@ -5,12 +5,14 @@
 #include "Collision.h"
 #include "UnitInfo.h"
 #include "Object.h"
+#include "NPCInfo.h"
 
 class AdditionalInfo {
 	enum Type {
 		collision_model,
 		unit_info,
 		parent_info,
+		npc_info,
 
 		INFO_TYPES_COUNT
 	};
@@ -18,6 +20,14 @@ class AdditionalInfo {
 	std::vector<void *> info_list;
 
 public:
+
+	~AdditionalInfo() {
+		for (int i = 0; i < info_list.size(); i++) {
+			if (info_list[i]) {
+				delete info_list[i];
+			}
+		}
+	}
 
 	CollisionModel * getCollisionModel() {
 		if (info_list.size() > collision_model) {
@@ -29,6 +39,9 @@ public:
 	void setCollisionModel(void * new_col_model) {
 		if (info_list.size() <= collision_model) {
 			info_list.resize(collision_model + 1);
+		}
+		if (info_list[collision_model]) {
+			delete info_list[collision_model];
 		}
 		info_list[collision_model] = new_col_model;
 	}
@@ -44,6 +57,9 @@ public:
 		if (info_list.size() <= unit_info) {
 			info_list.resize(unit_info + 1);
 		}
+		if (info_list[unit_info]) {
+			delete info_list[unit_info];
+		}
 		info_list[unit_info] = new_unit_info;
 	}
 
@@ -58,7 +74,27 @@ public:
 		if (info_list.size() <= parent_info) {
 			info_list.resize(parent_info + 1);
 		}
+		if (info_list[parent_info]) {
+			delete info_list[parent_info];
+		}
 		info_list[parent_info] = parent;
+	}
+
+	NPCInfo * getNPCInfo() {
+		if (info_list.size() > npc_info) {
+			return static_cast<NPCInfo *>(info_list[npc_info]);
+		}
+		return nullptr;
+	}
+
+	void setNPCInfo(void * parent) {
+		if (info_list.size() <= npc_info) {
+			info_list.resize(npc_info + 1);
+		}
+		if (info_list[npc_info]) {
+			delete info_list[npc_info];
+		}
+		info_list[npc_info] = parent;
 	}
 
 	void clear() {

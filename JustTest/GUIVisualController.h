@@ -35,6 +35,8 @@ class GUIVisualController{
 		heal_skill,
 		speed_boost_skill,
 
+		dialog_start,
+
 		SKILL_AMOUNT
 	};
 
@@ -111,6 +113,8 @@ class GUIVisualController{
 		skills_texture[attack_buff_skill][not_enough_money].loadFromFile("skill_sprite\\attack\\notready.png");
 		skills_texture[heal_skill][ready].loadFromFile("skill_sprite\\heal\\ready.png");
 		skills_texture[heal_skill][not_enough_money].loadFromFile("skill_sprite\\heal\\notready.png");
+		skills_texture[dialog_start][ready].loadFromFile("skill_sprite\\dialog_start\\ready.png");
+		skills_texture[dialog_start][not_enough_money].loadFromFile("skill_sprite\\dialog_start\\ready.png");
 
 		for (int i = 0; i < SKILL_AMOUNT; i++) {
 			for (int j = 0; j < SKILL_STATE_AMOUNT; j++) {
@@ -132,16 +136,19 @@ class GUIVisualController{
 
 	void setSkillsIconPosition(sf::RenderWindow * window) {
 		for (int i = 0; i < skills_texture.size(); i++) {
-			//Point center = Point(window->getSize().x / 2 - consts.getSkillsIconBorder() - (consts.getSkillsIconShiftRadius() + consts.getSkillsIconSize() / 2) * window->getView().getSize().x / 1920, window->getSize().y / 2 - consts.getSkillsIconBorder() - (consts.getSkillsIconShiftRadius() + consts.getSkillsIconSize() / 2) * window->getView().getSize().y / 1080);
 			Point center = Point(window->getView().getSize().x / 2 - (consts.getSkillsIconSize() + consts.getSkillsIconShiftRadius() + consts.getSkillsIconBorder()) * window->getView().getSize().x / 1920, window->getView().getSize().y / 2 - (consts.getSkillsIconSize() + consts.getSkillsIconShiftRadius() + consts.getSkillsIconBorder()) * window->getView().getSize().y / 1080);
 			for (int j = 0; j < skills_texture[0].size(); j++) {
 				skills_sprite[i][j].setTexture(skills_texture[i][j]);
 				sf::Vector2u v = skills_texture[i][j].getSize();
 				float coef = consts.getSkillsIconSize();
+				
 				if (v.x != 0 && v.y != 0) {
 					skills_sprite[i][j].setScale(coef / v.x, coef / v.y);
 				}
 				Point pos = center + Point(cos((float)(i % 4) / 4.0 * PI * 2 - PI / 2), sin((float)(i % 4) / 4.0 * PI * 2 - PI / 2)) * consts.getSkillsIconShiftRadius() * window->getView().getSize().y / 1080;
+				if (i == dialog_start) {
+					pos = center - Point(1, 1) * consts.getSkillsIconSize();
+				}
 				skills_sprite[i][j].setPosition(sf::Vector2f(pos.x, pos.y));
 			}
 		}
@@ -236,10 +243,10 @@ public:
 		setSkillsIconPosition(window);
 		for (int i = 0; i < SKILL_AMOUNT; i++) {
 			for (int j = 0; j < SKILL_STATE_AMOUNT; j++) {
-				skills_sprite[i][j].setScale(sf::Vector2f(consts.getSkillsIconSize() / skills_texture[i][j].getSize().x * window->getView().getSize().x / 1920, consts.getSkillsIconSize() / skills_texture[i][j].getSize().y * window->getView().getSize().y / 1080));
+				float coef = (i == dialog_start) ? 2 : 1;
+				skills_sprite[i][j].setScale(sf::Vector2f(consts.getSkillsIconSize() / skills_texture[i][j].getSize().x * window->getView().getSize().x / 1920 * coef, consts.getSkillsIconSize() / skills_texture[i][j].getSize().y * window->getView().getSize().y / 1080 * coef));
 
 				sf::Vector2f v = skills_sprite[i][j].getScale();
-				//skills_sprite[i][j].setOrigin(-viewport_pos.x * v.x, -viewport_pos.y * v.y);
 				skills_sprite[i][j].setOrigin(-window->getView().getCenter().x / v.x, -window->getView().getCenter().y / v.y);
 			}
 		}
@@ -272,7 +279,7 @@ public:
                     window->draw(skills_sprite[heal_skill][not_enough_money]);
                 }
             }
-            else {
+            else if (skills_mode == SkillsMode::set2) {
                 if (resource_manager.isEnoughGold(consts.getBaseDomePrice())) {
                     window->draw(skills_sprite[dome_struct][ready]);
                 }
@@ -297,7 +304,10 @@ public:
                 else {
                     window->draw(skills_sprite[turret_struct][not_enough_money]);
                 }
-            }
+			}
+			else {
+				window->draw(skills_sprite[dialog_start][ready]);
+			}
         }
 
 		// hero HP draw

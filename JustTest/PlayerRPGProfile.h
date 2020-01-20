@@ -62,4 +62,8 @@ public:
 	float getGlobalFame() {
 		return global_fame;
 	}
+
+	void addMission(Mission new_mission) {
+		mission_list.push_back(new_mission);
+	}
 } rpg_profile;

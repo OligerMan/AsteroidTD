@@ -153,6 +153,9 @@
     <ClInclude Include="Mission.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AdditionalInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

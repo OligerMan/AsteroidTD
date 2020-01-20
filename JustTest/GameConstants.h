@@ -47,6 +47,11 @@ class Constants {
 	const float strategic_view_scale = 5;
 
 	const float tier_range = 5000;
+	const float discovery_range = 10000;
+
+	const float minimal_mission_price = 100;
+	const float max_random_mission_price_addition = 500;
+	const float mission_price_change_coef = 0.975;
 
 public:
 
@@ -184,5 +189,21 @@ public:
 
 	const float getTierRange() {
 		return tier_range;
+	}
+
+	const float getDiscoveryRange() {
+		return discovery_range;
+	}
+
+	const float getMinimalMissionPrice() {
+		return minimal_mission_price;
+	}
+
+	const float getMaxRandomMissionPriceAddition() {
+		return max_random_mission_price_addition;
+	}
+
+	const float getMissionPriceChangeCoef() {
+		return mission_price_change_coef;
 	}
 } consts;
