@@ -7,6 +7,7 @@ enum GameStatus {
 	game_strategic_mode,
 	research,
 	pause,
+    dialog,
 	game_over,
 	settings_menu,
 	exit_to_desktop

@@ -13,6 +13,7 @@
 #include "BackgroundGeneration.h"
 #include "PhraseContainer.h"
 #include "NPCInfo.h"
+#include "DialogVisualController.h"
 
 #include <chrono>
 #include <Windows.h>
@@ -74,6 +75,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	int cur_research_index = 0;
 
 	GUIManager gui_manager;
+    DialogVisualController dialog_visual_ctrl(window);
 
 	sf::Vector2f strategic_back_pos, main_back_pos;
 
@@ -181,7 +183,8 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	buttons[pause_to_desktop].sprite.setTexture(buttons[pause_to_desktop].texture_default);
 	buttons[pause_to_desktop].advice_string = "go to desktop";
 
-	int chosen_button = retry;
+	int chosen_button = retry;  // in game over menu
+    int chosen_answer = 0;   // for dialogs
 
 	auto pause_game = [&]() {
 		if (game_status != pause) {
@@ -703,7 +706,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 								}
 							}
 						}
-						else {
+						else if (skills_mode == set2) {
 							// build dome(on your or empty asteroid), or start conversation with others
 							if (game_map1.getClosestAsteroid()) {
 								int type = game_map1.getClosestAsteroid()->getObjectSpriteType();
@@ -733,7 +736,10 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 								}
 							}
 
-						}
+                        }
+                        else {
+                            game_status = dialog;
+                        }
 
 					}
 					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) || sf::Joystick::isButtonPressed(0, X)) && (frame_num - last_build) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */ && (tutorial.isWorkingOnStep(tutorial.build_mode_turret_tutorial) || tutorial.isWorkingOnStep(tutorial.using_skills_speed_tutorial))) {
@@ -1323,7 +1329,28 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			Point diff = (research_pos - Point(view3.getCenter())) * view_speed_coef * consts.getFPSLock() / fps.getFPS();
 			view3.setCenter(view3.getCenter() + sf::Vector2f(diff.x, diff.y));
         }
+        if (game_status == dialog) {
+            window.setView(view4);
+            window.clear(sf::Color::Black);
+            background_manager.draw(window, Point());
+            background_manager.processFrame(Point(1, 0), Point());
 
+            NPCInfo * npc = nullptr;
+            if (game_map1.getClosestAsteroid()) {
+                npc = game_map1.getClosestAsteroid()->getNPCInfo();
+                dialog_visual_ctrl.processDialog(npc->getDialogInfo(), window, chosen_answer);
+
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+                    npc->nextTurn(chosen_answer);
+                }
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||)
+            }
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::G)) {
+                game_status = game_hero_mode;
+            }
+        }
 		vibration_time--;
 		window.display();
 

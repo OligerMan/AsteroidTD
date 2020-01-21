@@ -126,6 +126,7 @@
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionParser.h" />
     <ClInclude Include="ConvexHull.h" />
+    <ClInclude Include="DialogVisualController.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="EventBuffer.h" />
