@@ -10,6 +10,7 @@ struct DialogInfo {
 };
 
 class NPCInfo {
+public:
 	enum ConversationStage {
 		dialog_start,
 		conversation_refuse,
@@ -31,6 +32,7 @@ class NPCInfo {
 		farewell,
 		dialog_end
 	};
+private:
 
 	// dialog state info
 
@@ -82,6 +84,15 @@ public:
 		}
 		std::vector<std::string> buffer;
 
+		auto jobAvailable = [&]() {
+			return (!job_question_passed && base_job_available);
+		};
+		auto specialJobAvailable = [&]() {
+			return (!special_job_question_passed && special_job_available);
+		};
+		auto rumorsAvaliable = [&]() {
+			return (!rumors_question_passed && rumors_available);
+		};
 		auto addAnswer = [&](PhraseContainer::PhraseType phrase) {
 			buffer = phrase_container.getPhraseBuffer(phrase, politeness);
 			current_dialog_info.answers.push_back(buffer[rand() * buffer.size() / RAND_MAX]);
@@ -95,24 +106,15 @@ public:
 			current_stage = standart_question;
 			addMainText(PhraseContainer::standart_question_npñ);
 			current_dialog_info.answers.clear();
-			if ((!job_question_passed && base_job_available) || (!special_job_question_passed && special_job_available)) {
+			if ((jobAvailable() || specialJobAvailable())) {
 				addAnswer(PhraseContainer::job_question_player);
 			}
-			if (!rumors_question_passed) {
+			if (rumorsAvaliable()) {
 				addAnswer(PhraseContainer::rumors_question_player);
 			}
 			current_dialog_info.answers.push_back("(Random joke)");
 			addAnswer(PhraseContainer::farewell_player);
 			current_dialog_info.is_player_turn = false;
-		};
-		auto jobAvailable = [&]() {
-			return (!job_question_passed && base_job_available);
-		};
-		auto specialJobAvailable = [&]() {
-			return (!special_job_question_passed && special_job_available);
-		};
-		auto rumorsAvaliable = [&]() {
-			return (!rumors_question_passed && rumors_available);
 		};
 		auto goEnd = [&]() {
 			current_stage = dialog_end;

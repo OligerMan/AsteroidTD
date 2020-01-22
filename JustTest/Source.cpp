@@ -59,6 +59,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
     int last_research_open = 0; // number of frame when you opened research list last time
 	int last_research_choice = 0; // number of frame when you chose another research last time
 	int last_menu_choice = 0;
+	int last_dialog_choice = 0;
 	int last_tutorial = 0;
 
 	int last_shot = 0;
@@ -737,9 +738,6 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 							}
 
                         }
-                        else {
-                            game_status = dialog;
-                        }
 
 					}
 					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) || sf::Joystick::isButtonPressed(0, X)) && (frame_num - last_build) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */ && (tutorial.isWorkingOnStep(tutorial.build_mode_turret_tutorial) || tutorial.isWorkingOnStep(tutorial.using_skills_speed_tutorial))) {
@@ -857,6 +855,10 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 								}
 								last_build = frame_num;
 							}
+						}
+						else if(game_map1.getClosestAsteroid()->getNPCInfo()){
+							game_status = dialog;
+							last_dialog_choice = frame_num;
 						}
 					}
 					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::F) || sf::Joystick::isButtonPressed(0, BACK)) && (frame_num - last_research_open) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */ && tutorial.isWorkingOnStep(tutorial.research_tutorial)) {
@@ -1340,14 +1342,96 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
                 npc = game_map1.getClosestAsteroid()->getNPCInfo();
                 dialog_visual_ctrl.processDialog(npc->getDialogInfo(), window, chosen_answer);
 
+				bool is_input_state = false;
+				bool is_keyboard_input = false;
+				Point move_vector;
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
+					sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
+					sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
+					sf::Keyboard::isKeyPressed(sf::Keyboard::D) || 
+					sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
 
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-                    npc->nextTurn(chosen_answer);
-                }
-                if(sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||)
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+						move_vector += Point(0, -1);
+					}
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+						move_vector += Point(-1, 0);
+					}
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+						move_vector += Point(0, 1);
+					}
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+						move_vector += Point(1, 0);
+					}
+					is_keyboard_input = true;
+				}
+				else if (sf::Joystick::isConnected(0)) {         // gamepad input
+
+					move_vector = Point(
+						sf::Joystick::getAxisPosition(0, sf::Joystick::X),
+						sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
+
+					if (abs(move_vector.x) < 5 && abs(move_vector.y) < 5) {
+						move_vector = Point();
+					}
+				}
+				move_vector.normalize();
+
+				if (move_vector.x != 0 || move_vector.y != 0) {
+
+					is_input_state = true;
+
+					int next_dialog_index = -1;
+					double min_distance = 1500;
+
+					for (int i = 0; i < npc->getDialogInfo().answers.size(); i++) {
+						double angle_diff =
+							(std::atan2(move_vector.x, move_vector.y) -
+								std::atan2(
+									0,
+									i - chosen_answer));
+
+						if (abs(angle_diff) > 0.000001) {     // angle_diff is not close to zero
+							if (abs(angle_diff) > abs(angle_diff + 2 * PI)) {
+								angle_diff += 2 * PI;
+							}
+							if (abs(angle_diff) > abs(angle_diff - 2 * PI)) {
+								angle_diff -= 2 * PI;
+							}
+						}
+						if (abs(angle_diff) <= PI / (is_keyboard_input ? 3.0 : 6.0)) {
+							if ((next_dialog_index == -1 || ((Point(0, i) - Point(0, chosen_answer)).getLength() < (Point(0, next_dialog_index) - Point(0, chosen_answer)).getLength())) && (min_distance > (Point(0, i) - Point(0, chosen_answer)).getLength()) && (Point(0, i) - Point(0, chosen_answer)).getLength() > 0.01 /*not close to zero*/) {
+								next_dialog_index = i;
+								min_distance = (Point(0, i) - Point(0, chosen_answer)).getLength();
+							}
+						}
+					}
+
+
+					if (next_dialog_index != -1 && ((frame_num - last_dialog_choice) > fps.getFPS() / 2)) {
+						chosen_answer = next_dialog_index;
+						last_dialog_choice = frame_num;
+					}
+				}
+				if (!is_input_state && !(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, A))) {
+					last_dialog_choice = frame_num - fps.getFPS() - 1;
+				}
+
+				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, A)) && ((frame_num - last_dialog_choice) > fps.getFPS())) {
+					if (npc->getCurrentStage() != NPCInfo::ConversationStage::dialog_end) {
+						npc->nextTurn(chosen_answer);
+					}
+					else {
+						game_status = game_hero_mode;
+						last_build = frame_num;
+						npc->nextTurn(0);
+					}
+					last_dialog_choice = frame_num+120;
+					chosen_answer = 0;
+				}
             }
 
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::G)) {
+            if (!game_map1.getClosestAsteroid() || !game_map1.getClosestAsteroid()->getNPCInfo()) {
                 game_status = game_hero_mode;
             }
         }
