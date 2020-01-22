@@ -216,13 +216,14 @@ e:\projects\asteroidtd\justtest\BackgroundGeneration.h(46): warning C4305: 'init
 e:\projects\asteroidtd\justtest\BackgroundGeneration.h(80): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\BackgroundGeneration.h(96): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\BackgroundGeneration.h(314): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\DialogVisualController.h(48): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-e:\projects\asteroidtd\justtest\DialogVisualController.h(55): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-e:\projects\asteroidtd\justtest\DialogVisualController.h(60): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\DialogVisualController.h(64): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\DialogVisualController.h(39): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+e:\projects\asteroidtd\justtest\DialogVisualController.h(54): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+e:\projects\asteroidtd\justtest\DialogVisualController.h(61): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
 e:\projects\asteroidtd\justtest\DialogVisualController.h(66): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\DialogVisualController.h(76): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\DialogVisualController.h(77): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\DialogVisualController.h(70): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\DialogVisualController.h(72): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\DialogVisualController.h(82): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\DialogVisualController.h(83): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
 Source.cpp(38): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 Source.cpp(40): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 Source.cpp(45): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
@@ -336,9 +337,9 @@ C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): war
               _Other2=double &
           ]
   Generating code
-  117 of 5096 functions ( 2.3%) were compiled, the rest were copied from previous compilation.
+  182 of 5096 functions ( 3.6%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    8 functions had inline decision re-evaluated but remain unchanged
+    15 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.exe
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.pdb (Full PDB)
