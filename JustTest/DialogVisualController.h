@@ -27,7 +27,7 @@ class DialogVisualController {
                 i++;
             }
             test_text.setString(output + " " + word);
-            if (test_text.getGlobalBounds().width < width) {
+            if (test_text.getGlobalBounds().width < width * window.getView().getSize().y / 1080) {
                 output.append(" " + word);
             }
             else {
@@ -37,7 +37,7 @@ class DialogVisualController {
 
         test_text.setString(output);
 		test_text.setCharacterSize(base_character_size * window.getView().getSize().y / 1080);
-		while (test_text.getGlobalBounds().height > height && test_text.getCharacterSize() > 10) {
+		while (test_text.getGlobalBounds().height > height * window.getView().getSize().y / 1080 && test_text.getCharacterSize() > 10) {
 			test_text.setCharacterSize(test_text.getCharacterSize() - 1);
 		}
     }

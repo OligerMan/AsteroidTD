@@ -110,7 +110,7 @@ struct Point {
 
 	void rotate(double angle) {
 		angle = angle * PI / 180;
-		Point rotated_point = Point(x, y);
+		Point rotated_point(x, y);
 		rotated_point.x = x * cos(angle) - y * sin(angle);
 		rotated_point.y = x * sin(angle) + y * cos(angle);
 		x = rotated_point.x;
@@ -118,8 +118,7 @@ struct Point {
 	}
 
 	Point getRotated(double angle) {
-		Point normalized;
-		normalized = *this;
+		Point normalized(x, y);
 		normalized.rotate(angle);
 		return normalized;
 	}

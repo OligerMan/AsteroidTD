@@ -140,6 +140,7 @@ public:
 	}
 
 	bool processFrame(sf::RenderWindow * window, std::vector<std::vector<Object *>> * objects) {
+		std::vector<Point> enemy_signs;
 
 		for (int layer = 0; layer < objects->size(); layer++) {
 			for (int i = 0; i < (*objects)[layer].size(); i++) {
@@ -147,6 +148,10 @@ public:
 				double radius = object->getCollisionModel()->getMaxRadius() * window->getSize().y / 1080;
 				float hp = (float)object->getUnitInfo()->getHealth();
 				float max_hp = (float)object->getUnitInfo()->getMaxHealth();
+
+				if (object->getUnitInfo()->getFaction() == aggressive_faction && object->getObjectType() != bullet) {
+					enemy_signs.push_back(object->getPosition());
+				}
 
 				drawObject(object, window);
 
@@ -162,7 +167,7 @@ public:
 
 					return sf::Color(color_min.r + ratio * (color_max.r - color_min.r), color_min.g + ratio * (color_max.g - color_min.g), color_min.b + ratio * (color_max.b - color_min.b));
 				};
-				sf::Vertex line[] =
+				sf::Vertex hp_circle[] =
 				{
 					sf::Vertex(sf::Vector2f(pos.x + sin(0) * radius, pos.y + cos(0) * radius)),
 					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12) * radius, pos.y + cos(PI * 2 / 12) * radius)),
@@ -190,12 +195,36 @@ public:
 					sf::Vertex(sf::Vector2f(pos.x + sin(0) * radius, pos.y + cos(0) * radius)),
 				};
 				for (int i = 0; i < 24; i++) {
-					line[i].color = getColor(hp / max_hp);
+					hp_circle[i].color = getColor(hp / max_hp);
 				}
 				if (object->getObjectType() != hero && object->getObjectType() != alien_turret1 && object->getObjectType() != alien_turret2) {
 					window->draw(hp_sign);
-					window->draw(line, ceil(24.0 * hp / max_hp), sf::Lines);
+					window->draw(hp_circle, ceil(24.0 * hp / max_hp), sf::Lines);
 				}
+			}
+		}
+
+		for (int i = 0; i < enemy_signs.size(); i++) {
+			float distance = 500, extra_distance = 35, max_distance = 5000;
+			float length = (enemy_signs[i] - Point(window->getView().getCenter())).getLength() / window->getView().getSize().y * 1080;
+			if (length > (distance + 25) && length < max_distance) {
+				float angle = -((enemy_signs[i] - Point(window->getView().getCenter()))).getAngle();
+				Point center = Point(window->getView().getCenter()) + Point(sin(-angle), cos(angle)) * distance * window->getView().getSize().y / 1080;
+				Point v1 = Point() + center;
+				Point v2 = (Point(-10, -10) * window->getView().getSize().y / 1080).getRotated(angle * 180 / PI) + center;
+				Point v3 = (Point(0, 10) * window->getView().getSize().y / 1080).getRotated(angle * 180 / PI) + center;
+				Point v4 = (Point(10, -10) * window->getView().getSize().y / 1080).getRotated(angle * 180 / PI) + center;
+				sf::Vertex arrow[] = {
+					sf::Vertex(sf::Vector2f(v1.x,v1.y)),
+					sf::Vertex(sf::Vector2f(v2.x,v2.y)),
+					sf::Vertex(sf::Vector2f(v2.x,v2.y)),
+					sf::Vertex(sf::Vector2f(v3.x,v3.y)),
+					sf::Vertex(sf::Vector2f(v3.x,v3.y)),
+					sf::Vertex(sf::Vector2f(v4.x,v4.y)),
+					sf::Vertex(sf::Vector2f(v4.x,v4.y)),
+					sf::Vertex(sf::Vector2f(v1.x,v1.y))
+				};
+				window->draw(arrow, 8, sf::Lines);
 			}
 		}
 

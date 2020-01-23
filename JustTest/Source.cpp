@@ -330,7 +330,6 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					}
 					gui_manager.forceSetTopSign("New Wave(" + std::to_string(wave_count) + ")", 5);
 					last_wave = std::chrono::steady_clock::now();
-					//wave_delay += 1;
 				}
 			}
 
@@ -415,11 +414,8 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				}
 			}
 			
-
-			
 			if (is_game_cycle) {
 				// set background
-				//window.draw(main_background_sprite);
 				window.clear(sf::Color::Black);
 				background_manager.draw(window, window.getView().getCenter());
 
@@ -524,9 +520,6 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			}
 
 			double hero_speed = hero_object->getUnitInfo()->getDefaultSpeed();
-			if (hero_speed == 0) {
-				std::cout << "kek";
-			}
 			Point new_speed;
 
 			if (!(game_status == game_strategic_mode)) {
@@ -988,7 +981,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					Point cursor_pos;
 					sf::Vector2i mouse_pos = sf::Mouse::getPosition();
 					sf::Vector2i window_pos = window.getPosition();
-					cursor_pos = Point(mouse_pos.x/* - window.getSize().x / 2*/ - window.getPosition().x, mouse_pos.y/* - window.getSize().y / 2*/ - window.getPosition().y);
+					cursor_pos = Point(mouse_pos.x - window.getPosition().x, mouse_pos.y - window.getPosition().y);
 					for (int i = pause_continue; i <= pause_to_desktop; i++) {
 						if ((cursor_pos - buttons[i].pos).getLength() <= buttons[i].radius) {
 							if (i == pause_continue) {
@@ -1236,6 +1229,15 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					round_start = std::chrono::steady_clock::now();
 				}
             }
+			if ((sf::Joystick::isButtonPressed(0, LB) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) && ((frame_num - last_menu_choice) > fps.getFPS() / 2)) {
+				game_status = mission_menu;
+				last_menu_choice = frame_num;
+			}
+
+			if ((sf::Joystick::isButtonPressed(0, RB) || sf::Keyboard::isKeyPressed(sf::Keyboard::E)) && ((frame_num - last_menu_choice) > fps.getFPS() / 2)) {
+				game_status = mission_menu;
+				last_menu_choice = frame_num;
+			}
 
 			window.setView(view3);
             window.clear(sf::Color::Black); 
@@ -1435,6 +1437,29 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
                 game_status = game_hero_mode;
             }
         }
+		if (game_status == mission_menu) {
+			window.setView(view4);
+			window.clear(sf::Color::Black);
+			background_manager.draw(window, Point());
+			background_manager.processFrame(Point(1, 0), Point());
+
+			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::F) || sf::Joystick::isButtonPressed(0, BACK)) && (frame_num - last_research_open) > consts.getFPSLock() / 4) {
+				
+				last_research_open = frame_num;
+				game_status = prev_game_status;
+				round_start = std::chrono::steady_clock::now();
+			}
+
+			if ((sf::Joystick::isButtonPressed(0, LB) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) && ((frame_num - last_menu_choice) > fps.getFPS() / 2)) {
+				game_status = research;
+				last_menu_choice = frame_num;
+			}
+
+			if ((sf::Joystick::isButtonPressed(0, RB) || sf::Keyboard::isKeyPressed(sf::Keyboard::E)) && ((frame_num - last_menu_choice) > fps.getFPS() / 2)) {
+				game_status = research;
+				last_menu_choice = frame_num;
+			}
+		}
 		vibration_time--;
 		window.display();
 
