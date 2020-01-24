@@ -1020,7 +1020,7 @@ private:
 	Mission createMission(WorldFactionList faction, Mission::Type type, int mission_lvl) {
 		Mission output;
 		output.type = type;
-		output.price = (int)consts.getMinimalMissionPrice() + (int)(consts.getMaxRandomMissionPriceAddition() * (1 - pow(consts.getMissionPriceChangeCoef(), mission_lvl))) / 5 * 5;
+		output.reward = (int)consts.getMinimalMissionPrice() + (int)(consts.getMaxRandomMissionPriceAddition() * (1 - pow(consts.getMissionPriceChangeCoef(), mission_lvl))) / 5 * 5;
 		
 		switch (type) {
 		case Mission::Type::courier:

@@ -159,6 +159,15 @@
     <ClInclude Include="DialogVisualController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SetFormatString.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MissionVisualController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonSelector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

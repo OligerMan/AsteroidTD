@@ -3,6 +3,7 @@
 #include "ResourceManager.h"
 #include "GeometryComponents.h"
 #include "ParserInput.h"
+#include "ButtonSelector.h"
 
 #include <vector>
 #include <string>

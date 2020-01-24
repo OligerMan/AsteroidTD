@@ -66,4 +66,8 @@ public:
 	void addMission(Mission new_mission) {
 		mission_list.push_back(new_mission);
 	}
+
+	std::vector<Mission> getMissionList() {
+		return mission_list;
+	}
 } rpg_profile;

@@ -123,6 +123,7 @@
     <ClInclude Include="AdditionalInfo.h" />
     <ClInclude Include="AStarAlgorithm.h" />
     <ClInclude Include="BackgroundGeneration.h" />
+    <ClInclude Include="ButtonSelector.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionParser.h" />
     <ClInclude Include="ConvexHull.h" />
@@ -143,6 +144,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapParser.h" />
     <ClInclude Include="Mission.h" />
+    <ClInclude Include="MissionVisualController.h" />
     <ClInclude Include="MusicManager.h" />
     <ClInclude Include="NPCInfo.h" />
     <ClInclude Include="Object.h" />
@@ -155,6 +157,7 @@
     <ClInclude Include="Research.h" />
     <ClInclude Include="ResearchVisualController.h" />
     <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="SetFormatString.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="StructureSetGeneration.h" />
     <ClInclude Include="Tutorial.h" />

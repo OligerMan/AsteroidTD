@@ -4,6 +4,8 @@
 
 #include "NPCInfo.h"
 
+#include "SetFormatString.h"
+
 class DialogVisualController {
     sf::Font main_font;
     sf::Text main_text;
@@ -16,31 +18,6 @@ class DialogVisualController {
     int border_width = 100;
     int answer_border_top = 25;
     int answer_border = 50;
-
-    void setFormatString(std::string raw_string, sf::Text & test_text, unsigned int width, unsigned int height, sf::RenderWindow & window) {
-        std::string output;
-
-        for (int i = 0; i < raw_string.size(); i++) {
-            std::string word;
-            while (i < raw_string.size() && raw_string[i] != ' ') {
-                word.push_back(raw_string[i]);
-                i++;
-            }
-            test_text.setString(output + " " + word);
-            if (test_text.getGlobalBounds().width < width * window.getView().getSize().y / 1080) {
-                output.append(" " + word);
-            }
-            else {
-                output.append("\n" + word);
-            }
-        }
-
-        test_text.setString(output);
-		test_text.setCharacterSize(base_character_size * window.getView().getSize().y / 1080);
-		while (test_text.getGlobalBounds().height > height * window.getView().getSize().y / 1080 && test_text.getCharacterSize() > 10) {
-			test_text.setCharacterSize(test_text.getCharacterSize() - 1);
-		}
-    }
 
 public:
 
@@ -70,15 +47,14 @@ public:
         sf::Vector2f dialog_window_shift = -sf::Vector2f((max_dialog_window_width) / 2, (max_dialog_window_height) / 2);
 
         dialog_back.setPosition(view_center - sf::Vector2f((border_width) / 2, (border_width) / 2) + dialog_window_shift);
-        //window.draw(dialog_back);
 
-        setFormatString(info.main_text, main_text, max_dialog_window_width, max_dialog_window_height - answer_border * 2, window);
+        setFormatString(info.main_text, main_text, max_dialog_window_width, max_dialog_window_height - answer_border * 2, base_character_size, window);
         main_text.setPosition(view_center + dialog_window_shift);
         window.draw(main_text);
 
         int answer_shift = 0;
         for (int i = 0; i < info.answers.size(); i++) {
-            setFormatString((i == selected_answer ? "> " : "") + info.answers[i], answer_text, max_dialog_window_width - 2 * answer_border, answer_border * 2, window);
+            setFormatString((i == selected_answer ? "> " : "") + info.answers[i], answer_text, max_dialog_window_width - 2 * answer_border, answer_border * 2, base_character_size, window);
             answer_text.setPosition(sf::Vector2f(answer_border, main_text.getGlobalBounds().height + answer_border_top + answer_border + answer_shift) + dialog_window_shift + view_center);
             answer_shift += answer_text.getGlobalBounds().height + answer_border_top;
             window.draw(answer_text);

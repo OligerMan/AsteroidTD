@@ -62,7 +62,7 @@ struct Mission {
 
 		TYPE_COUNT
 	};
-	float price = 0;
+	float reward = 0;
 	Type type = null;
 
 	void * missionExpansion = nullptr;

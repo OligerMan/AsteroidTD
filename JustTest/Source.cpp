@@ -14,6 +14,8 @@
 #include "PhraseContainer.h"
 #include "NPCInfo.h"
 #include "DialogVisualController.h"
+#include "MissionVisualController.h"
+#include "ButtonSelector.h"
 
 #include <chrono>
 #include <Windows.h>
@@ -61,6 +63,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	int last_menu_choice = 0;
 	int last_dialog_choice = 0;
 	int last_tutorial = 0;
+	int current_mission = 0;
 
 	int last_shot = 0;
 
@@ -71,12 +74,19 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	resource_manager.clear(settings.getStartGold(), 5);
     research_manager.initResearch("research.cfg");
 	research_manager.setGraphSize();
+
+	std::vector<Point> research_pos;
+	for (int i = 0; i < research_manager.getResearchAmount(); i++) {
+		research_pos.push_back(research_manager.getResearchNode(i)->pos);
+	}
+	button_selector.initButtonList(ButtonSelector::research, 300, PI / 3, research_pos);
 	std::vector<Research *> research_list = research_manager.getResearchArray();
 	std::vector<ResearchNode *> research_graph = research_manager.getResearchGraph();
 	int cur_research_index = 0;
 
 	GUIManager gui_manager;
     DialogVisualController dialog_visual_ctrl(window);
+	MissionVisualController mission_visual_ctrl(window);
 
 	sf::Vector2f strategic_back_pos, main_back_pos;
 
@@ -165,6 +175,12 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	buttons[menu].texture_selected.loadFromFile("menu_buttons\\menu_selected.png");
 	buttons[menu].sprite.setTexture(buttons[menu].texture_default);
 	buttons[menu].advice_string = "go back to menu";
+
+	std::vector<Point> game_over_buttons_pos = {
+		buttons[retry].pos,
+		buttons[menu].pos
+	};
+	button_selector.initButtonList(ButtonSelector::game_over, 500, PI / 3, game_over_buttons_pos);
 
 	buttons[pause_continue].pos = Point(0, -250);
 	buttons[pause_continue].texture_default.loadFromFile("menu_buttons\\pause_continue.png");
@@ -1145,71 +1161,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				}
 			}
 
-			Point move_vector;
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
-				sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
-				sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
-				sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+			button_selector.processButtonBuffer(ButtonSelector::game_over);
+			chosen_button = button_selector.getButtonList(ButtonSelector::game_over).cur_index;
 
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-					move_vector += Point(0, -1);
-				}
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-					move_vector += Point(-1, 0);
-				}
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-					move_vector += Point(0, 1);
-				}
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-					move_vector += Point(1, 0);
-				}
-			}
-			else if (sf::Joystick::isConnected(0)) {         // gamepad input
-
-				move_vector = Point(
-					sf::Joystick::getAxisPosition(0, sf::Joystick::X),
-					sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
-
-				if (abs(move_vector.x) < 5 && abs(move_vector.y) < 5) {
-					move_vector = Point();
-				}
-			}
-			move_vector.normalize();
-
-			if (move_vector.x != 0 || move_vector.y != 0) {
-
-				int next_menu_button = -1;
-				double min_distance = 1e9;
-
-				for (int i = retry; i <= menu; i++) {
-					double angle_diff =
-						(std::atan2(move_vector.x, move_vector.y) -
-							std::atan2(
-								buttons[i].pos.x - buttons[chosen_button].pos.x,
-								buttons[i].pos.y - buttons[chosen_button].pos.y));
-
-					if (abs(angle_diff) > 0.000001) {     // angle_diff is not close to zero
-						if (abs(angle_diff) > abs(angle_diff + 2 * PI)) {
-							angle_diff += 2 * PI;
-						}
-						if (abs(angle_diff) > abs(angle_diff - 2 * PI)) {
-							angle_diff -= 2 * PI;
-						}
-					}
-					if (abs(angle_diff) <= PI / 8.0) {
-						if (min_distance > (buttons[i].pos - buttons[chosen_button].pos).getLength() && (buttons[i].pos - buttons[chosen_button].pos).getLength() > 0.01 /*not close to zero*/) {
-							next_menu_button = i;
-							min_distance = (buttons[i].pos - buttons[chosen_button].pos).getLength();
-						}
-					}
-				}
-
-
-				if ((next_menu_button != -1) && ((frame_num - last_menu_choice) > fps.getFPS() / 2)) {
-					chosen_button = next_menu_button;
-					last_menu_choice = frame_num;
-				}
-			}
 			window.clear(sf::Color::Black);
 			background_manager.draw(window, Point());
 			background_manager.processFrame(Point(1, 0), Point());
@@ -1246,79 +1200,8 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 			res_visual_ctrl.processFrame(&window, view3.getCenter(), cur_research_index);
 
-			bool is_input_state = false;
-			bool is_keyboard_input = false;
-			Point move_vector;
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || 
-				sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
-				sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
-				sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-					move_vector += Point(0, -1);
-				}
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-					move_vector += Point(-1, 0);
-				}
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-					move_vector += Point(0, 1);
-				}
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-					move_vector += Point(1, 0);
-				}
-				is_keyboard_input = true;
-			}
-			else if (sf::Joystick::isConnected(0)) {         // gamepad input
-
-				move_vector = Point(
-					sf::Joystick::getAxisPosition(0, sf::Joystick::X),
-					sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
-
-				if (abs(move_vector.x) < 5 && abs(move_vector.y) < 5) {
-					move_vector = Point();
-				}
-			}
-			move_vector.normalize();
-
-			if (move_vector.x != 0 || move_vector.y != 0) {
-
-				is_input_state = true;
-
-				int next_research_index = -1;
-				double min_distance = 1500;
-
-				for (int i = 0; i < research_graph.size(); i++) {
-					double angle_diff =
-						(std::atan2(move_vector.x, move_vector.y) -
-							std::atan2(
-								research_graph[i]->pos.x - research_graph[cur_research_index]->pos.x,
-								research_graph[i]->pos.y - research_graph[cur_research_index]->pos.y));
-
-					if (abs(angle_diff) > 0.000001) {     // angle_diff is not close to zero
-						if (abs(angle_diff) > abs(angle_diff + 2 * PI)) {
-							angle_diff += 2 * PI;
-						}
-						if (abs(angle_diff) > abs(angle_diff - 2 * PI)) {
-							angle_diff -= 2 * PI;
-						}
-					}
-					if (abs(angle_diff) <= PI / (is_keyboard_input ? 3.0 : 6.0)) {
-						if ((next_research_index == -1 || ((research_graph[i]->pos - research_graph[cur_research_index]->pos).getLength() < (research_graph[next_research_index]->pos - research_graph[cur_research_index]->pos).getLength())) && (min_distance > (research_graph[i]->pos - research_graph[cur_research_index]->pos).getLength()) && (research_graph[i]->pos - research_graph[cur_research_index]->pos).getLength() > 0.01 /*not close to zero*/) {
-							next_research_index = i;
-							min_distance = (research_graph[i]->pos - research_graph[cur_research_index]->pos).getLength();
-						}
-					}
-				}
-
-
-				if (next_research_index != -1 && ((frame_num - last_research_choice) > fps.getFPS() / 2)) {
-					cur_research_index = next_research_index;
-					last_research_choice = frame_num;
-				}
-			}
-			if (!is_input_state) {
-				last_research_choice = frame_num - fps.getFPS();
-			}
+			button_selector.processButtonBuffer(ButtonSelector::research);
+			cur_research_index = button_selector.getButtonList(ButtonSelector::research).cur_index;
 			
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, A)) {
 				if (!research_list[cur_research_index]->unlocked && research_manager.isResearchActive(cur_research_index)) {
@@ -1459,6 +1342,8 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				game_status = research;
 				last_menu_choice = frame_num;
 			}
+
+			mission_visual_ctrl.processMissionList(window, 0);
 		}
 		vibration_time--;
 		window.display();
@@ -1478,10 +1363,10 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 }
 
 int main() {
-	phrase_container.parseFromFile("dialog.cfg");
-
 	HWND console_hWnd = GetConsoleWindow();
 	ShowWindow(console_hWnd, SW_HIDE);
+
+	phrase_container.parseFromFile("dialog.cfg");
 
 	sf::ContextSettings context_settings;
 	context_settings.antialiasingLevel = 8;
@@ -1549,7 +1434,7 @@ int main() {
 	game_status = main_menu;
 
 	// main menu
-	struct Button {
+	struct MenuButton {
 		Point pos;
 		sf::Texture texture_default, texture_selected;
 		sf::Sprite sprite;
@@ -1563,24 +1448,24 @@ int main() {
 
 		BUTTONS_NAME_LIST_SIZE
 	};
-	std::vector<Button> buttons;
+	std::vector<MenuButton> buttons;
 	buttons.resize(BUTTONS_NAME_LIST_SIZE);
 
-	buttons[infinity_mode_button].pos = Point(window.getView().getSize().x / 2 - 150 * window.getView().getSize().x / 1920, 350 * window.getView().getSize().y / 1080);
+	buttons[infinity_mode_button].pos = Point(window.getView().getSize().x / 2 - 200 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
 	buttons[infinity_mode_button].texture_default.loadFromFile("menu_buttons\\inf_mode.png");
 	buttons[infinity_mode_button].texture_selected.loadFromFile("menu_buttons\\inf_mode_selected.png");
 	buttons[infinity_mode_button].sprite.setTexture(buttons[infinity_mode_button].texture_default);
 	buttons[infinity_mode_button].radius = 75 * window.getView().getSize().y / 1080;
 	buttons[infinity_mode_button].advice_string = "start infinity mode";
 
-	buttons[settings_button].pos = Point(window.getView().getSize().x / 2 + 150 * window.getView().getSize().x / 1920, 350 * window.getView().getSize().y / 1080);
+	buttons[settings_button].pos = Point(window.getView().getSize().x / 2, 400 * window.getView().getSize().y / 1080);
 	buttons[settings_button].texture_default.loadFromFile("menu_buttons\\settings.png");
 	buttons[settings_button].texture_selected.loadFromFile("menu_buttons\\settings_selected.png");
 	buttons[settings_button].sprite.setTexture(buttons[settings_button].texture_default);
 	buttons[settings_button].radius = 75 * window.getView().getSize().y / 1080;
 	buttons[settings_button].advice_string = "open settings";
 
-	buttons[shutdown_button].pos = Point(window.getView().getSize().x / 2, 550 * window.getView().getSize().y / 1080);
+	buttons[shutdown_button].pos = Point(window.getView().getSize().x / 2 + 200 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
 	buttons[shutdown_button].texture_default.loadFromFile("menu_buttons\\shutdown.png");
 	buttons[shutdown_button].texture_selected.loadFromFile("menu_buttons\\shutdown_selected.png");
 	buttons[shutdown_button].sprite.setTexture(buttons[shutdown_button].texture_default);
@@ -1617,6 +1502,12 @@ int main() {
 
 	MusicManager music_manager("music");
 	music_manager.launchMusicWorker();
+
+	std::vector<Point> buttons_pos;
+	for (int i = 0; i < buttons.size(); i++) {
+		buttons_pos.push_back(buttons[i].pos);
+	}
+	button_selector.initButtonList(ButtonSelector::main_menu, 1000, PI / 4, buttons_pos);
 
 	background_manager.generateAroundCenter(Point());
 
@@ -1697,78 +1588,9 @@ int main() {
 					is_input_state = true;
 				}
 
-				bool is_keyboard_input = false;
-				Point move_vector;
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
-					sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
-					sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
-					sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+				button_selector.processButtonBuffer(ButtonSelector::main_menu);
+				chosen_button = button_selector.getButtonList(ButtonSelector::main_menu).cur_index;
 
-					if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-						move_vector += Point(0, -1);
-					}
-					if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-						move_vector += Point(-1, 0);
-					}
-					if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-						move_vector += Point(0, 1);
-					}
-					if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-						move_vector += Point(1, 0);
-					}
-					is_keyboard_input = true;
-				}
-				else if (sf::Joystick::isConnected(0)) {         // gamepad input
-
-					move_vector = Point(
-						sf::Joystick::getAxisPosition(0, sf::Joystick::X),
-						sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
-
-					if (abs(move_vector.x) < 5 && abs(move_vector.y) < 5) {
-						move_vector = Point();
-					}
-				}
-				move_vector.normalize();
-
-				if (move_vector.x != 0 || move_vector.y != 0) {
-
-					int next_menu_button = -1;
-					double min_distance = 1e9;
-
-					for (int i = 0; i < buttons.size(); i++) {
-						double angle_diff =
-							(std::atan2(move_vector.x, move_vector.y) -
-								std::atan2(
-									buttons[i].pos.x - buttons[chosen_button].pos.x,
-									buttons[i].pos.y - buttons[chosen_button].pos.y));
-
-						if (abs(angle_diff) > 0.000001) {     // angle_diff is not close to zero
-							if (abs(angle_diff) > abs(angle_diff + 2 * PI)) {
-								angle_diff += 2 * PI;
-							}
-							if (abs(angle_diff) > abs(angle_diff - 2 * PI)) {
-								angle_diff -= 2 * PI;
-							}
-						}
-						if (abs(angle_diff) <= PI / (is_keyboard_input ? 3.0 : 6.0)) {
-							if (min_distance > (buttons[i].pos - buttons[chosen_button].pos).getLength() && (buttons[i].pos - buttons[chosen_button].pos).getLength() > 0.01 /*not close to zero*/) {
-								next_menu_button = i;
-								min_distance = (buttons[i].pos - buttons[chosen_button].pos).getLength();
-							}
-						}
-					}
-
-
-					if ((next_menu_button != -1) && ((frame_num - last_menu_choice) > consts.getFPSLock() / 2)) {
-						chosen_button = next_menu_button;
-						last_menu_choice = frame_num;
-						is_input_state = true;
-					}
-				}
-
-				if (!is_input_state) {
-					last_menu_choice = frame_num - fps.getFPS();
-				}
 				window.clear(sf::Color::Black);
 				background_manager.draw(window, Point());
 				background_manager.processFrame(Point(1, 0), Point());
