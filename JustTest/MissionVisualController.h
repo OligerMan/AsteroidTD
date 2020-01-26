@@ -52,10 +52,15 @@ public:
 			return;
 		}
 
-
 		for (int i = 0; i < mission_list.size(); i++) {
-			setFormatString(mission_list[i].getShortDescription(), name_text, mission_list_width, mission_list_textbox_height, base_character_size, window);
+			setFormatString((i == selected_mission ? ">" : "") + mission_list[i].getShortDescription(), name_text, mission_list_width, mission_list_textbox_height, base_character_size, window);
 			name_text.setPosition(window.getView().getCenter() - view_center + sf::Vector2f(mission_list_border, mission_list_border + i * mission_list_textbox_height));
+			if (rpg_profile.getCurrentMission() == i) {
+				name_text.setFillColor(sf::Color(120, 100, 255));
+			}
+			else {
+				name_text.setFillColor(sf::Color::White);
+			}
 			window.draw(name_text);
 		}
 

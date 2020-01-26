@@ -1,5 +1,8 @@
 #pragma once
 
+#include <vector>
+#include <string>
+
 struct PointObjective {
 	void * object_ptr;
 

@@ -132,6 +132,7 @@
     <ClInclude Include="Event.h" />
     <ClInclude Include="EventBuffer.h" />
     <ClInclude Include="EventTypes.h" />
+    <ClInclude Include="FameInfo.h" />
     <ClInclude Include="FileSearch.h" />
     <ClInclude Include="FPS.h" />
     <ClInclude Include="GameConstants.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="UnitInfo.h" />
     <ClInclude Include="VisualController.h" />
     <ClInclude Include="VisualInfo.h" />
+    <ClInclude Include="WorldFactions.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="background_config.cfg" />

@@ -4,70 +4,70 @@
 #include <algorithm>
 
 #include "Mission.h"
-
-enum WorldFactionList {
-	Alliance_of_Ancient_Knowledge,
-	Trade_Federation,
-	Church_of_Holy_Asteroid,
-	Space_Empire,
-	Travellers_Guild,
-	Scientists_Union,
-
-	WORLD_FACTIONS_COUNT
-};
+#include "Object.h"
+#include "FameInfo.h"
 
 class PlayerRPGProfile {
-	std::vector<std::vector<float>> relations_graph = {
-		{  1.0f, -0.2f, -0.3f, -0.3f, -0.2f,  0.0f },
-		{ -0.2f,  1.0f, -0.1f, -0.6f,  0.2f, -0.3f },
-		{ -0.3f, -0.1f,  1.0f,  0.8f, -0.6f, -0.8f },
-		{ -0.3f, -0.6f,  0.8f,  1.0f, -0.7f, -0.2f },
-		{ -0.2f,  0.2f, -0.6f, -0.7f,  1.0f,  0.3f },
-		{  0.0f, -0.3f, -0.8f, -0.2f,  0.3f,  1.0f }
-	};
 
-	std::vector<float> faction_fame_list = { 0, 0, 0, 0, 0, 0 };
-	float global_fame = 0;
+	
 	std::vector<Mission> mission_list;
+	int current_mission = 0;
 
 public:
 
 	void changeFactionFame(WorldFactionList fact, float shift) {
-		if (fact < 0 || fact >= WORLD_FACTIONS_COUNT) {
-			return;
-		}
-		for (int i = 0; i < WORLD_FACTIONS_COUNT; i++) {
-			faction_fame_list[i] = std::max(-100.0f, std::min(100.0f, faction_fame_list[i] - shift * relations_graph[i][fact]));
-		}
+		fame_info.changeFactionFame(fact, shift);
 	}
 
 	void changeGlobalFame(float shift) {
-		global_fame = std::max(-100.0f, std::min(100.0f, global_fame - shift));
-	}
-
-	float getRelations(int fact1, int fact2) {
-		if (fact1 < 0 || fact1 >= WORLD_FACTIONS_COUNT || fact2 < 0 || fact2 >= WORLD_FACTIONS_COUNT) {
-			return 0;
-		}
-		return relations_graph[fact1][fact2];
+		fame_info.changeGlobalFame(shift);
 	}
 
 	float getFactionFame(WorldFactionList fact) {
-		if (fact < 0 || fact >= WORLD_FACTIONS_COUNT) {
-			return 0;
-		}
-		return faction_fame_list[fact];
+		return fame_info.getFactionFame(fact);
 	}
 
 	float getGlobalFame() {
-		return global_fame;
+		return fame_info.getGlobalFame();
 	}
 
 	void addMission(Mission new_mission) {
 		mission_list.push_back(new_mission);
+
+		std::vector<Point> pos_buffer;
+		for (int i = 0; i < mission_list.size(); i++) {
+			pos_buffer.push_back(Point(0, i));
+		}
+		button_selector.initButtonList(ButtonSelector::mission_list, 300, PI / 3, pos_buffer);
 	}
 
 	std::vector<Mission> getMissionList() {
 		return mission_list;
 	}
+
+	std::vector<Point> getCurrentCoordinatesList() {
+		std::vector<Point> output;
+		if (current_mission >= 0 && current_mission < mission_list.size()) {
+			switch (mission_list[current_mission].type) {
+			case Mission::courier:
+				Objective objective = mission_list[current_mission].getObjective();
+				Object * obj_ptr = (Object *)((PointObjective *)objective.objectiveExpansion)->object_ptr;
+				output.push_back(obj_ptr->getPosition());
+				break;
+			};
+		}
+		return output;
+	}
+
+	int getCurrentMission() {
+		return current_mission;
+	}
+
+	void setCurrentMission(int new_current_mission) {
+		if (new_current_mission < 0 || new_current_mission >= mission_list.size()) {
+			return;
+		}
+		current_mission = new_current_mission;
+	}
+
 } rpg_profile;

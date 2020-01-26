@@ -26,6 +26,7 @@ public:
 		main_menu,
 		research,
 		game_over,
+		mission_list
 	};
 
 	void processButtonBuffer(int buf_num) {
@@ -105,6 +106,9 @@ public:
 	}
 
 	ButtonList getButtonList(int buf_num) {
+		if (buf_num < 0 || buf_num >= buffer.size()) {
+			return ButtonList();
+		}
 		return buffer[buf_num];
 	}
 

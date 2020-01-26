@@ -367,8 +367,8 @@ public:
 		return add_info.getParent();
 	}
 
-	void createNPCInfo(WorldFactionList faction) {
-		add_info.setNPCInfo(new NPCInfo(faction));
+	void createNPCInfo(void * new_npc_info) {
+		add_info.setNPCInfo(new_npc_info);
 	}
 
 	float getLifetime() { // 0 for infinite
@@ -383,13 +383,13 @@ public:
 		return discovered;
 	}
 
-	void initNPCInfo(WorldFactionList faction) {
+	void initNPCInfo(void * new_npc_info) {
 		if (!add_info.getNPCInfo()) {
-			add_info.setNPCInfo(new NPCInfo(faction));
+			add_info.setNPCInfo(new_npc_info);
 		}
 	}
 
-	NPCInfo * getNPCInfo() {
+	void * getNPCInfo() {
 		return add_info.getNPCInfo();
 	}
 };
@@ -400,3 +400,7 @@ bool checkObjectCollision(Object * obj1, Object * obj2) {
 	}
 	return checkModelCollision(obj1->getCollisionModel(), obj2->getCollisionModel());
 }
+
+struct TestKek {
+	int kek = 0;
+};

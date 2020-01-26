@@ -4,8 +4,6 @@
 
 #include "Collision.h"
 #include "UnitInfo.h"
-#include "Object.h"
-#include "NPCInfo.h"
 
 class AdditionalInfo {
 	enum Type {
@@ -80,9 +78,9 @@ public:
 		info_list[parent_info] = parent;
 	}
 
-	NPCInfo * getNPCInfo() {
+	void * getNPCInfo() {
 		if (info_list.size() > npc_info) {
-			return static_cast<NPCInfo *>(info_list[npc_info]);
+			return info_list[npc_info];
 		}
 		return nullptr;
 	}

@@ -228,6 +228,33 @@ public:
 			}
 		}
 
+		std::vector<Point> mission_objectives = rpg_profile.getCurrentCoordinatesList();
+
+		for (int i = 0; i < mission_objectives.size(); i++) {
+			float distance = 500, extra_distance = 35, max_distance = 5000;
+			float length = (mission_objectives[i] - Point(window->getView().getCenter())).getLength() / window->getView().getSize().y * 1080;
+			if (length > (distance + 25)) {
+				float angle = -((mission_objectives[i] - Point(window->getView().getCenter()))).getAngle();
+				Point center = Point(window->getView().getCenter()) + Point(sin(-angle), cos(angle)) * distance * window->getView().getSize().y / 1080;
+				Point v1 = Point() + center;
+				Point v2 = (Point(-15, -15) * window->getView().getSize().y / 1080).getRotated(angle * 180 / PI) + center;
+				Point v3 = (Point(0, 15) * window->getView().getSize().y / 1080).getRotated(angle * 180 / PI) + center;
+				Point v4 = (Point(15, -15) * window->getView().getSize().y / 1080).getRotated(angle * 180 / PI) + center;
+				sf::Vertex arrow[] = {
+					sf::Vertex(sf::Vector2f(v1.x,v1.y)),
+					sf::Vertex(sf::Vector2f(v2.x,v2.y)),
+					sf::Vertex(sf::Vector2f(v2.x,v2.y)),
+					sf::Vertex(sf::Vector2f(v3.x,v3.y)),
+					sf::Vertex(sf::Vector2f(v3.x,v3.y)),
+					sf::Vertex(sf::Vector2f(v4.x,v4.y)),
+					sf::Vertex(sf::Vector2f(v4.x,v4.y)),
+					sf::Vertex(sf::Vector2f(v1.x,v1.y))
+				};
+				arrow->color = sf::Color(120, 100, 255);
+				window->draw(arrow, 8, sf::Lines);
+			}
+		}
+
 		return is_active;
 	}
 

@@ -168,6 +168,12 @@
     <ClInclude Include="ButtonSelector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WorldFactions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FameInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

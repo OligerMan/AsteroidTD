@@ -2,7 +2,6 @@
 
 #include <vector>
 
-#include "GeometryComponents.h"
 #include "CollisionParser.h"
 #include "ObjectTypes.h"
 

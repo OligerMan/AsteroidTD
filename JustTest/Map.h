@@ -10,6 +10,8 @@
 #include "FPS.h"
 #include "ResourceManager.h"
 #include "OnlineRank.h"
+#include "Mission.h"
+#include "NPCInfo.h"
 
 void fixCollision(Object * obj1, Object * obj2) {
 
@@ -618,9 +620,6 @@ private:
 			object->getUnitInfo()->setFaction(faction);
 			addObject(object, landscape_layer);
 
-			object->initNPCInfo(WorldFactionList::Alliance_of_Ancient_Knowledge);
-			object->getNPCInfo()->changeBaseMission(createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, Mission::Type::courier, 1));
-			object->getNPCInfo()->changeSpecialMission(createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, Mission::Type::courier, 5));
 
 			std::vector<Object *> struct_arr = getRandomStructureSet(new_pos, object->getCollisionModel()->getModelElem(0)->collision_radius, struct_set, faction);
 			for (int i = 0; i < struct_arr.size(); i++) {
@@ -710,20 +709,27 @@ private:
 			SpriteType asteroid_type = asteroid_sprite;
 
 			int special_asteroid_chance = rand() % 1000;
-			if (special_asteroid_chance < 100) {
-				asteroid_type = tier_list[0][rand() % tier_list[0].size()];
+			bool npc_asteroid_chance = (rand() % 1000) < 25;
+			if (npc_asteroid_chance) {
+				faction = neutral_faction;
 			}
-			int num = std::min((int)tier_list.size() - 1, std::max(0, (int)(new_pos.getLength() / consts.getTierRange())));
+			else {
+				if (special_asteroid_chance < 100) {
+					asteroid_type = tier_list[0][rand() % tier_list[0].size()];
+				}
+				int num = std::min((int)tier_list.size() - 1, std::max(0, (int)(new_pos.getLength() / consts.getTierRange())));
 
-			if (special_asteroid_chance < 66) {
-				asteroid_type = tier_list[std::max(0, num - 2)][rand() % tier_list[std::max(0, num - 2)].size()];
+				if (special_asteroid_chance < 66) {
+					asteroid_type = tier_list[std::max(0, num - 2)][rand() % tier_list[std::max(0, num - 2)].size()];
+				}
+				if (special_asteroid_chance < 133) {
+					asteroid_type = tier_list[std::max(0, num - 1)][rand() % tier_list[std::max(0, num - 1)].size()];
+				}
+				if (special_asteroid_chance < 200) {
+					asteroid_type = tier_list[num][rand() % tier_list[num].size()];
+				}
 			}
-			if (special_asteroid_chance < 133) {
-				asteroid_type = tier_list[std::max(0, num - 1)][rand() % tier_list[std::max(0, num - 1)].size()];
-			}
-			if (special_asteroid_chance < 200) {
-				asteroid_type = tier_list[num][rand() % tier_list[num].size()];
-			}
+			
 
 			Object * object = new Object
 			(
@@ -745,14 +751,17 @@ private:
 			object->setSpeed(Point(x,y));
 			object->getUnitInfo()->setFaction(faction);
 			addObject(object, landscape_layer);
+
+			if (npc_asteroid_chance) {
+				object->initNPCInfo(new NPCInfo(WorldFactionList::Alliance_of_Ancient_Knowledge));
+				static_cast<NPCInfo *>(object->getNPCInfo())->changeBaseMission(createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, Mission::Type::courier, 1));
+				static_cast<NPCInfo *>(object->getNPCInfo())->changeSpecialMission(createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, Mission::Type::courier, 5));
+			}
 			
 
 			std::vector<Object *> struct_arr = getRandomStructureSet(new_pos, object->getCollisionModel()->getModelElem(0)->collision_radius, struct_set, faction);
 			for (int i = 0; i < struct_arr.size(); i++) {
-				angle = rand() / (float)RAND_MAX * PI;
-				range = asteroid_speed;
-				x = cos(angle)*range, y = sin(angle)*range;
-				struct_arr[i]->setSpeed(Point(x, y));
+				struct_arr[i]->setSpeed(object->getSpeed());
 				addObject(struct_arr[i], landscape_layer);
 				object->attachObject(struct_arr[i]);
 			}

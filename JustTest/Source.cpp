@@ -1224,7 +1224,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
             NPCInfo * npc = nullptr;
             if (game_map1.getClosestAsteroid()) {
-                npc = game_map1.getClosestAsteroid()->getNPCInfo();
+                npc = static_cast<NPCInfo *>(game_map1.getClosestAsteroid()->getNPCInfo());
                 dialog_visual_ctrl.processDialog(npc->getDialogInfo(), window, chosen_answer);
 
 				bool is_input_state = false;
@@ -1342,8 +1342,10 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				game_status = research;
 				last_menu_choice = frame_num;
 			}
-
-			mission_visual_ctrl.processMissionList(window, 0);
+			int chosen_menu = 0;
+			button_selector.processButtonBuffer(ButtonSelector::mission_list);
+			chosen_menu = button_selector.getButtonList(ButtonSelector::mission_list).cur_index;
+			mission_visual_ctrl.processMissionList(window, chosen_menu);
 		}
 		vibration_time--;
 		window.display();

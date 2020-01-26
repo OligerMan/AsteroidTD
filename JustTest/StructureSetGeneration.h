@@ -3,10 +3,10 @@
 #include <vector>
 #include <math.h>
 
-#include "Object.h"
+//#include "Object.h"
 
 struct structureSetSettings {
-	int turret_min = 2;
+	int turret_min = 4;
 	int gold_min = 0;
 	int dome_min = 1;
 	int factory_min = 0;

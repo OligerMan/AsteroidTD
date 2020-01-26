@@ -8,7 +8,7 @@
 #include "GameConstants.h"
 #include "FPS.h"
 #include "Research.h"
-#include "PlayerRPGProfile.h"
+#include "FameInfo.h"
 
 enum FactionList {
 	null_faction,
@@ -74,7 +74,7 @@ bool areEnemies(FactionList fact1, FactionList fact2) {
 		return 1;
 	}
 	if (fact1 == FactionList::hero_faction && fact2 >= alliance_of_ancient_knowledge) {
-		return (rpg_profile.getFactionFame(WorldFactionList((int)fact2 - (int)alliance_of_ancient_knowledge)) + rpg_profile.getGlobalFame()) < -80;
+		return (fame_info.getFactionFame(WorldFactionList((int)fact2 - (int)alliance_of_ancient_knowledge)) + fame_info.getGlobalFame()) < -80;
 	}
 	//otherwise
 	return 0;

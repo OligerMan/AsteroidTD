@@ -85,10 +85,10 @@ public:
 		std::vector<std::string> buffer;
 
 		auto jobAvailable = [&]() {
-			return (!job_question_passed && base_job_available);
+			return (!job_question_passed && base_job_available && base_mission_info.type != Mission::null);
 		};
 		auto specialJobAvailable = [&]() {
-			return (!special_job_question_passed && special_job_available);
+			return (!special_job_question_passed && special_job_available && special_mission_info.type != Mission::null);
 		};
 		auto rumorsAvaliable = [&]() {
 			return (!rumors_question_passed && rumors_available);
