@@ -70,7 +70,7 @@ bool areEnemies(FactionList fact1, FactionList fact2) {
 	if (fact1 == FactionList::aggressive_faction && fact2 != fact1) {
 		return 1;
 	}
-	if (fact2 == FactionList::aggressive_faction && fact1 != fact2) {
+	if (fact2 == FactionList::aggressive_faction && fact1 != fact2 && fact1 != neutral_faction) {
 		return 1;
 	}
 	if (fact1 == FactionList::hero_faction && fact2 >= alliance_of_ancient_knowledge) {

@@ -22,6 +22,8 @@ struct Objective {
 struct CourierMission {
 	std::vector<void *> objectives;   // expected to contain asteroid objects pointers
 
+	std::string current_description, short_description, broad_description;
+
 	CourierMission(std::vector<void *> courier_objectives) {
 		for (int i = 0; i < courier_objectives.size(); i++) {
 			objectives.push_back(courier_objectives[i]);
@@ -38,19 +40,28 @@ struct CourierMission {
 			output.type = Objective::Type::point;
 			output.objectiveExpansion = new PointObjective(objectives[0]);
 		}
+		current_description = "Just deliver your cargo to the point";
+		short_description = "Standart courier mission";
+		broad_description = "You need to deliver this standard box to special point. Coordinates will be sent further";
 		return output;
 	}
 
+	void setObjectiveCompleted() {
+		if (objectives.size()) {
+			objectives.erase(objectives.begin());
+		}
+	}
+
 	std::string getCurrentDescription() {
-		return "Just deliver your cargo to the point";
+		return current_description;
 	}
 
 	std::string getShortDescription() {
-		return "Standart courier mission";
+		return short_description;
 	}
 
 	std::string getBroadDescription() {
-		return "You need to deliver this standard box to special point. Coordinates will be sent further";
+		return broad_description;
 	}
 
 	bool completed() {
@@ -66,6 +77,7 @@ struct Mission {
 		TYPE_COUNT
 	};
 	float reward = 0;
+	bool failed = false;
 	Type type = null;
 
 	void * missionExpansion = nullptr;
@@ -79,6 +91,14 @@ struct Mission {
 			break;
 		};
 		return Objective();
+	}
+
+	void setObjectiveCompleted() {
+		switch (type) {
+		case courier:
+			(static_cast<CourierMission *>(missionExpansion))->setObjectiveCompleted();
+			break;
+		};
 	}
 
 	std::string getCurrentDescription() {

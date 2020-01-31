@@ -51,6 +51,7 @@ private:
 	Mission special_mission_info;
 
 	std::string start_description_string;
+	std::string personal_id;
 
 	// personal qualities(from -100 to 100)
 
@@ -65,13 +66,37 @@ public:
 
 		faction = WorldFactionList(rand() % WORLD_FACTIONS_COUNT);
 
-		std::vector<std::string> buffer = phrase_container.getPhraseBuffer(PhraseContainer::start_description, politeness);
+		std::vector<std::string> buffer;
+
+		buffer = phrase_container.getPersonalIdList();
+		personal_id = buffer[rand() * buffer.size() / RAND_MAX];
+
+		buffer = phrase_container.getPhraseBuffer(PhraseContainer::start_description, politeness, personal_id);
 		start_description_string = buffer[rand() * buffer.size() / RAND_MAX];
 		current_dialog_info.main_text.clear();
 		current_dialog_info.main_text = start_description_string;
 		current_dialog_info.answers.clear();
 		current_dialog_info.answers.push_back("<Continue>");
 		current_dialog_info.is_player_turn = false;
+
+	}
+
+	NPCInfo(WorldFactionList faction, std::string personal_id) : faction(faction), personal_id(personal_id) {
+		politeness = rand() * 200 / RAND_MAX - 100;
+		prejudices = rand() * 200 / RAND_MAX - 100;
+
+		faction = WorldFactionList(rand() % WORLD_FACTIONS_COUNT);
+
+		std::vector<std::string> buffer;
+
+		buffer = phrase_container.getPhraseBuffer(PhraseContainer::start_description, politeness, personal_id);
+		start_description_string = buffer[rand() * buffer.size() / RAND_MAX];
+		current_dialog_info.main_text.clear();
+		current_dialog_info.main_text = start_description_string;
+		current_dialog_info.answers.clear();
+		current_dialog_info.answers.push_back("<Continue>");
+		current_dialog_info.is_player_turn = false;
+
 	}
 
 	ConversationStage getCurrentStage() {
@@ -94,12 +119,12 @@ public:
 			return (!rumors_question_passed && rumors_available);
 		};
 		auto addAnswer = [&](PhraseContainer::PhraseType phrase) {
-			buffer = phrase_container.getPhraseBuffer(phrase, politeness);
+			buffer = phrase_container.getPhraseBuffer(phrase, politeness, personal_id);
 			current_dialog_info.answers.push_back(buffer[rand() * buffer.size() / RAND_MAX]);
 		};
 		auto addMainText = [&](PhraseContainer::PhraseType phrase) {
 			current_dialog_info.main_text.clear();
-			buffer = phrase_container.getPhraseBuffer(phrase, politeness);
+			buffer = phrase_container.getPhraseBuffer(phrase, politeness, personal_id);
 			current_dialog_info.main_text = buffer[rand() * buffer.size() / RAND_MAX];
 		};
 		auto backToStandartQuestion = [&]() {

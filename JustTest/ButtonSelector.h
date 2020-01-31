@@ -26,7 +26,8 @@ public:
 		main_menu,
 		research,
 		game_over,
-		mission_list
+		mission_list,
+		completed_mission_list,
 	};
 
 	void processButtonBuffer(int buf_num) {
@@ -125,5 +126,29 @@ public:
 		buffer[buf_num].delay = new_delay;
 		buffer[buf_num].angle = new_angle;
 		buffer[buf_num].last_choice = std::chrono::steady_clock::now();
+	}
+
+	void resetButtonList(int buf_num, std::vector<Point> positions) {
+		if (buf_num < 0) {
+			return;
+		}
+		if (buf_num >= buffer.size()) {
+			buffer.resize(buf_num + 1);
+		}
+		buffer[buf_num].button_list = positions;
+		if (buffer[buf_num].cur_index >= buffer.size()) {
+			if (buffer[buf_num].button_list.size()) {
+				buffer[buf_num].cur_index = buffer[buf_num].button_list.size() - 1;
+			}
+		}
+	}
+
+	void deleteButton(int buf_num, int button_num) {
+		buffer[buf_num].button_list.erase(buffer[buf_num].button_list.begin() + button_num);
+		if (buffer[buf_num].cur_index == buffer[buf_num].button_list.size()) {
+			if (buffer[buf_num].button_list.size()) {
+				buffer[buf_num].cur_index = buffer[buf_num].button_list.size() - 1;
+			}
+		}
 	}
 } button_selector;

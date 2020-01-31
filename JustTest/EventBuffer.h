@@ -10,12 +10,7 @@ class EventBuffer {
 
 public:
 
-	void addEvent(Object * object1, Object * object2) {
-		EventType event_type = getEventType(object1->getObjectCollisionType(), object2->getObjectCollisionType());
-		event_buffer.push_back(Event(object1, object2, event_type));
-	}
-
-	void addEvent(EventType event_type, Object * object1, Object * object2) {
+	void addEvent(EventType event_type, void * object1, void * object2) {
 		event_buffer.push_back(Event(object1, object2, event_type));
 	}
 
@@ -31,3 +26,5 @@ public:
 	}
 
 };
+
+std::vector<Event> global_event_buffer;

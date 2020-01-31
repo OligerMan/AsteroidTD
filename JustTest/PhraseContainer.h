@@ -54,6 +54,8 @@ public:
 
 		dialog_end_npc,
 
+		courier_mission_completed_npc,
+
 		PHRASE_TYPE_COUNT
 	};
 
@@ -61,10 +63,20 @@ private:
 
 	std::vector<std::vector<Phrase>> phrase_buffer;
 	std::vector<std::string> phrase_type_strings;
+	std::vector<std::string> personal_id_list;
 
 	int is_phrase_type_exists(std::string example) {
 		for (int i = 0; i < PHRASE_TYPE_COUNT; i++) {
 			if (phrase_type_strings[i] == example) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	int is_personal_id_exists(std::string example) {
+		for (int i = 0; i < personal_id_list.size(); i++) {
+			if (personal_id_list[i] == example) {
 				return i;
 			}
 		}
@@ -113,6 +125,8 @@ public:
 		phrase_type_strings[farewell_npc] = "farewell_npc";
 
 		phrase_type_strings[dialog_end_npc] = "dialog_end";
+
+		phrase_type_strings[courier_mission_completed_npc] = "courier_mission_completed_npc";
 	}
 
 	/* 
@@ -242,6 +256,9 @@ public:
 			int type = is_phrase_type_exists(input);
 			if (type != -1) {
 				phrase_buffer[type].push_back(new_phrase);
+				if (is_personal_id_exists(new_phrase.id) == -1) {
+					personal_id_list.push_back(new_phrase.id);
+				}
 			}
 
 			dialog_file >> input;
@@ -255,15 +272,21 @@ public:
 		}
 	}
 
-	std::vector<std::string> getPhraseBuffer(PhraseType type, int politeness) {
+	std::vector<std::string> getPhraseBuffer(PhraseType type, int politeness, std::string id = "") {
 		std::vector<std::string> output;
 		if (phrase_buffer.size() >= type) {
 			for (int i = 0; i < phrase_buffer[type].size(); i++) {
 				if (politeness >= phrase_buffer[type][i].min_politeness && politeness <= phrase_buffer[type][i].max_politeness) {
-					output.push_back(phrase_buffer[type][i].phrase);
+					if (id.empty() || id == "common" || id == phrase_buffer[type][i].id || phrase_buffer[type][i].id == "common") {
+						output.push_back(phrase_buffer[type][i].phrase);
+					}
 				}
 			}
 		}
 		return output;
+	}
+
+	std::vector<std::string> getPersonalIdList() {
+		return personal_id_list;
 	}
 } phrase_container;

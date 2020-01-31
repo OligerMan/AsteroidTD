@@ -12,6 +12,7 @@
 #include "OnlineRank.h"
 #include "Mission.h"
 #include "NPCInfo.h"
+#include "PhraseContainer.h"
 
 void fixCollision(Object * obj1, Object * obj2) {
 
@@ -115,6 +116,7 @@ private:
 	Object * hero_object = nullptr;
 	Object * closest_asteroid = nullptr;
 	std::vector<Object *> discovered_asteroid_list;
+	std::vector<Object *> npc_list;
 
 	EventBuffer event_buffer;
 
@@ -470,18 +472,18 @@ private:
 		while (true) {
 			Event buffer_elem = event_buffer.getEvent();
 
-			if (buffer_elem.getFirstObject() == nullptr) {
+			if (buffer_elem.getData(0) == nullptr) {
 				break;
 			}
 			Object
-				* obj1 = buffer_elem.getFirstObject(),
-				* obj2 = buffer_elem.getSecondObject();
+				* obj1 = static_cast<Object *>(buffer_elem.getData(0)),
+				* obj2 = static_cast<Object *>(buffer_elem.getData(1));
 			double thresh = consts.getSpeedDamageThreshold();
 			double coef = consts.getSpeedDamageCoef();
 
 			UnitInfo * unit1 = obj1 ? obj1->getUnitInfo() : nullptr, * unit2 = obj2 ? obj2->getUnitInfo() : nullptr;
 			switch (buffer_elem.getEventType()) {
-			case null:
+			case null_event:
 				break;
 			case default_collision:
 				if (obj1->getObjectType() == ObjectType::bullet && obj2->getObjectType() == ObjectType::bullet) {
@@ -709,7 +711,7 @@ private:
 			SpriteType asteroid_type = asteroid_sprite;
 
 			int special_asteroid_chance = rand() % 1000;
-			bool npc_asteroid_chance = (rand() % 1000) < 25;
+			bool npc_asteroid_chance = (rand() % 1000) < 100;
 			if (npc_asteroid_chance) {
 				faction = neutral_faction;
 			}
@@ -754,10 +756,18 @@ private:
 
 			if (npc_asteroid_chance) {
 				object->initNPCInfo(new NPCInfo(WorldFactionList::Alliance_of_Ancient_Knowledge));
-				static_cast<NPCInfo *>(object->getNPCInfo())->changeBaseMission(createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, Mission::Type::courier, 1));
-				static_cast<NPCInfo *>(object->getNPCInfo())->changeSpecialMission(createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, Mission::Type::courier, 5));
+				int base_npc_lvl = 100 * rand() / RAND_MAX * rand() / RAND_MAX * rand() / RAND_MAX * rand() / RAND_MAX * rand() / RAND_MAX;
+				int special_mission_lvl_dif = 10 * rand() / RAND_MAX;
+				Mission base_mission = createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, Mission::Type::courier, base_npc_lvl);
+				Mission special_mission = createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, Mission::Type::courier, base_npc_lvl + special_mission_lvl_dif);
+				if (base_mission.type) {
+					static_cast<NPCInfo *>(object->getNPCInfo())->changeBaseMission(base_mission);
+				}
+				if (special_mission.type) {
+					static_cast<NPCInfo *>(object->getNPCInfo())->changeSpecialMission(special_mission);
+				}
+				npc_list.push_back(object);
 			}
-			
 
 			std::vector<Object *> struct_arr = getRandomStructureSet(new_pos, object->getCollisionModel()->getModelElem(0)->collision_radius, struct_set, faction);
 			for (int i = 0; i < struct_arr.size(); i++) {
@@ -929,75 +939,77 @@ private:
 					cnt++;
 				}
 			}
-			if (objects[landscape_layer][i]->getAttached()->size() >= 7) {
-				switch (objects[landscape_layer][i]->getObjectSpriteType()) {
-				case asteroid_old_laboratory_sprite:
-					resource_manager.addResearch(consts.getBaseResearchIncome() * 30 * consts.getFPSLock() / fps.getFPS());
-					break;
-				case asteroid_ancient_laboratory_sprite:
-					resource_manager.addResearch(consts.getBaseResearchIncome() * 50 * consts.getFPSLock() / fps.getFPS());
-					break;
-				case asteroid_ancient_giant_gold_mine_sprite:
-					resource_manager.addGold(consts.getBaseGoldIncome() * 50 * consts.getFPSLock() / fps.getFPS());
-					break;
+			if (objects[landscape_layer][i]->getUnitInfo() && objects[landscape_layer][i]->getUnitInfo()->getFaction() == hero_faction) {
+				if (objects[landscape_layer][i]->getAttached()->size() >= 7) {
+					switch (objects[landscape_layer][i]->getObjectSpriteType()) {
+					case asteroid_old_laboratory_sprite:
+						resource_manager.addResearch(consts.getBaseResearchIncome() * 30 * consts.getFPSLock() / fps.getFPS());
+						break;
+					case asteroid_ancient_laboratory_sprite:
+						resource_manager.addResearch(consts.getBaseResearchIncome() * 50 * consts.getFPSLock() / fps.getFPS());
+						break;
+					case asteroid_ancient_giant_gold_mine_sprite:
+						resource_manager.addGold(consts.getBaseGoldIncome() * 50 * consts.getFPSLock() / fps.getFPS());
+						break;
+					}
 				}
-			}
-			for (int j = 0; j < attach->size(); j++) {
-				(*attach)[j]->getUnitInfo()->grantHeal(cnt * research_manager.getDomeLocalRegenCoef() * consts.getDomeHeal());
-				float gold_coef = 1, research_coef = 1;
-				switch (objects[landscape_layer][i]->getObjectSpriteType()) {
-				case asteroid:
-					break;
-				case asteroid_gold_interspersed_sprite:
-					gold_coef = 1.1;
-					break;
-				case asteroid_suspiciously_flat_sprite:
-					research_coef = 1.1;
-					break;
-				case asteroid_strange_cracked_sprite:
-					research_coef = 1.2;
-					break;
-				case asteroid_ordinary_wealthy_sprite:
-					gold_coef = 1.25;
-					research_coef = 0.8;
-					break;
-				case asteroid_poor_mountainous_sprite:
-					gold_coef = 0.75;
-					break;
-				case asteroid_wealthy_cracked_sprite:
-					gold_coef = 1.25;
-					break;
-				case asteroid_ordinary_mountainous_sprite:
-					research_coef = 0.8;
-					break;
-				case asteroid_strange_poor_sprite:
-					research_coef = 1.2;
-					gold_coef = 0.75;
-					break;
-				case asteroid_swampy_with_gold_mines_sprite:
-					gold_coef = 1.5;
-					break;
-				}
-				switch ((*attach)[j]->getObjectType()) {
-				case gold:
-					(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getGoldRegenCoef());
-					resource_manager.addGold(
-						consts.getBaseGoldIncome() * 
-						(research_manager.getGoldIncomeCoef() + cnt * research_manager.getDomeLocalGoldIncomeCoef()) * 
-						gold_coef * 
-						consts.getFPSLock() / fps.getFPS());
-					break;
-				case science:
-					(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getScienceRegenCoef() * consts.getFPSLock() / fps.getFPS());
-					resource_manager.addResearch(
-						consts.getBaseResearchIncome() * 
-						(research_manager.getScienceIncomeCoef() + cnt * research_manager.getDomeLocalResearchIncomeCoef()) * 
-						research_coef *
-						consts.getFPSLock() / fps.getFPS());
-					break;
-				case turret:
-					(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getTurretRegenCoef() * consts.getFPSLock() / fps.getFPS());
-					break;
+				for (int j = 0; j < attach->size(); j++) {
+					(*attach)[j]->getUnitInfo()->grantHeal(cnt * research_manager.getDomeLocalRegenCoef() * consts.getDomeHeal());
+					float gold_coef = 1, research_coef = 1;
+					switch (objects[landscape_layer][i]->getObjectSpriteType()) {
+					case asteroid:
+						break;
+					case asteroid_gold_interspersed_sprite:
+						gold_coef = 1.1;
+						break;
+					case asteroid_suspiciously_flat_sprite:
+						research_coef = 1.1;
+						break;
+					case asteroid_strange_cracked_sprite:
+						research_coef = 1.2;
+						break;
+					case asteroid_ordinary_wealthy_sprite:
+						gold_coef = 1.25;
+						research_coef = 0.8;
+						break;
+					case asteroid_poor_mountainous_sprite:
+						gold_coef = 0.75;
+						break;
+					case asteroid_wealthy_cracked_sprite:
+						gold_coef = 1.25;
+						break;
+					case asteroid_ordinary_mountainous_sprite:
+						research_coef = 0.8;
+						break;
+					case asteroid_strange_poor_sprite:
+						research_coef = 1.2;
+						gold_coef = 0.75;
+						break;
+					case asteroid_swampy_with_gold_mines_sprite:
+						gold_coef = 1.5;
+						break;
+					}
+					switch ((*attach)[j]->getObjectType()) {
+					case gold:
+						(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getGoldRegenCoef());
+						resource_manager.addGold(
+							consts.getBaseGoldIncome() *
+							(research_manager.getGoldIncomeCoef() + cnt * research_manager.getDomeLocalGoldIncomeCoef()) *
+							gold_coef *
+							consts.getFPSLock() / fps.getFPS());
+						break;
+					case science:
+						(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getScienceRegenCoef() * consts.getFPSLock() / fps.getFPS());
+						resource_manager.addResearch(
+							consts.getBaseResearchIncome() *
+							(research_manager.getScienceIncomeCoef() + cnt * research_manager.getDomeLocalResearchIncomeCoef()) *
+							research_coef *
+							consts.getFPSLock() / fps.getFPS());
+						break;
+					case turret:
+						(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getTurretRegenCoef() * consts.getFPSLock() / fps.getFPS());
+						break;
+					}
 				}
 			}
 		}
@@ -1026,6 +1038,13 @@ private:
 		return objects[landscape_layer][1];
 	}
 
+	Object * randomNPCAsteroid() {
+		if (npc_list.size()) {
+			return npc_list[rand() * npc_list.size() / RAND_MAX];
+		}
+		return nullptr;
+	}
+
 	Mission createMission(WorldFactionList faction, Mission::Type type, int mission_lvl) {
 		Mission output;
 		output.type = type;
@@ -1033,12 +1052,42 @@ private:
 		
 		switch (type) {
 		case Mission::Type::courier:
-			std::vector<void *> objectives_list = { randomDiscoveredAsteroid() };
-			CourierMission * mission = new CourierMission(objectives_list);
-			output.missionExpansion = mission;
+			Object * objective = randomNPCAsteroid();
+			if (objective) {
+				std::vector<void *> objectives_list = { randomNPCAsteroid() };
+				CourierMission * mission = new CourierMission(objectives_list);
+				output.missionExpansion = mission;
+			}
+			else {
+				output.type = Mission::null;
+			}
 			break;
 		}
 		return output;
+	}
+
+	void checkObjective() {
+		if (!rpg_profile.getCurrentMission().completed()) {
+			Objective objective = rpg_profile.getCurrentMission().getObjective();
+			switch (objective.type) {
+			case Objective::point:
+				if (hero_object && (hero_object->getPosition() - static_cast<Object *>(static_cast<PointObjective *>(objective.objectiveExpansion)->object_ptr)->getPosition()).getLength() < consts.getInteractionDistance()) {
+					rpg_profile.getCurrentMission().setObjectiveCompleted();
+					if (rpg_profile.getCurrentMission().completed()) {
+						std::string message_string;
+						switch (rpg_profile.getCurrentMission().type) {
+						case Mission::courier:
+							std::vector<std::string> buffer = phrase_container.getPhraseBuffer(PhraseContainer::courier_mission_completed_npc, 0);
+							message_string = buffer[rand() * buffer.size() / RAND_MAX];
+							break;
+						}
+						global_event_buffer.push_back(Event(new float(rpg_profile.getCurrentMission().reward), reward));
+						global_event_buffer.push_back(Event(new std::string(message_string), message));
+					}
+				}
+				break;
+			}
+		}
 	}
 
 public:
@@ -1103,6 +1152,8 @@ public:
 		processEventBuffer();
 		garbageCollector();
 		processDiscovery(view_pos);
+		checkObjective();
+		rpg_profile.processCompletedMissions();
 
 		if (hero_object == nullptr) {
 			return;

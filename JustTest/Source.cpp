@@ -271,6 +271,19 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 		// FPS 
 		fps.processFrame(frame_num);
 
+		for (int i = 0; i < global_event_buffer.size(); i++) {
+			switch (global_event_buffer[i].getEventType()) {
+			case EventType::reward:
+				resource_manager.addGold(*static_cast<float *>(global_event_buffer[i].getData(0)));
+				global_event_buffer.erase(global_event_buffer.begin() + i);
+				break;
+			case EventType::message:
+				gui_manager.forceSetTopSign("Message: " + *static_cast<std::string *>(global_event_buffer[i].getData(0)), 5);
+				global_event_buffer.erase(global_event_buffer.begin() + i);
+				break;
+			}
+		}
+
 		if (game_status == game_hero_mode || game_status == game_strategic_mode || game_status == pause) {
 			
 			if (tutorial.isWorkingOnStep(tutorial.no_tutorial)) {
@@ -525,10 +538,10 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			}
 
 			Event gui_event = gui_manager.getEvent();
-			if (gui_event.getFirstObject() != nullptr) {
+			if (gui_event.getData(0) != nullptr) {
 				switch (gui_event.getEventType()) {
 				case create_new:
-					game_map1.addObject(gui_event.getFirstObject(), 0);
+					game_map1.addObject(static_cast<Object *>(gui_event.getData(0)), 0);
 					break;
 				default:
 					break;
@@ -1184,7 +1197,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				}
             }
 			if ((sf::Joystick::isButtonPressed(0, LB) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) && ((frame_num - last_menu_choice) > fps.getFPS() / 2)) {
-				game_status = mission_menu;
+				game_status = completed_mission_menu;
 				last_menu_choice = frame_num;
 			}
 
@@ -1339,13 +1352,45 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			}
 
 			if ((sf::Joystick::isButtonPressed(0, RB) || sf::Keyboard::isKeyPressed(sf::Keyboard::E)) && ((frame_num - last_menu_choice) > fps.getFPS() / 2)) {
+				game_status = completed_mission_menu;
+				last_menu_choice = frame_num;
+			}
+			int chosen_menu = 0;
+
+			button_selector.processButtonBuffer(ButtonSelector::mission_list);
+			chosen_menu = button_selector.getButtonList(ButtonSelector::mission_list).cur_index;
+			mission_visual_ctrl.processMissionList(window, chosen_menu);
+
+			if ((sf::Joystick::isButtonPressed(0, A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) && ((frame_num - last_menu_choice) > fps.getFPS() / 2)) {
+				rpg_profile.setCurrentMission(chosen_menu);
+			}
+		}
+		if (game_status == completed_mission_menu) {
+			window.setView(view4);
+			window.clear(sf::Color::Black);
+			background_manager.draw(window, Point());
+			background_manager.processFrame(Point(1, 0), Point());
+
+			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::F) || sf::Joystick::isButtonPressed(0, BACK)) && (frame_num - last_research_open) > consts.getFPSLock() / 4) {
+
+				last_research_open = frame_num;
+				game_status = prev_game_status;
+				round_start = std::chrono::steady_clock::now();
+			}
+
+			if ((sf::Joystick::isButtonPressed(0, LB) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) && ((frame_num - last_menu_choice) > fps.getFPS() / 2)) {
+				game_status = mission_menu;
+				last_menu_choice = frame_num;
+			}
+
+			if ((sf::Joystick::isButtonPressed(0, RB) || sf::Keyboard::isKeyPressed(sf::Keyboard::E)) && ((frame_num - last_menu_choice) > fps.getFPS() / 2)) {
 				game_status = research;
 				last_menu_choice = frame_num;
 			}
 			int chosen_menu = 0;
-			button_selector.processButtonBuffer(ButtonSelector::mission_list);
-			chosen_menu = button_selector.getButtonList(ButtonSelector::mission_list).cur_index;
-			mission_visual_ctrl.processMissionList(window, chosen_menu);
+			button_selector.processButtonBuffer(ButtonSelector::completed_mission_list);
+			chosen_menu = button_selector.getButtonList(ButtonSelector::completed_mission_list).cur_index;
+			mission_visual_ctrl.processCompletedMissionList(window, chosen_menu);
 		}
 		vibration_time--;
 		window.display();
@@ -1365,8 +1410,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 }
 
 int main() {
+
 	HWND console_hWnd = GetConsoleWindow();
-	ShowWindow(console_hWnd, SW_HIDE);
+	//ShowWindow(console_hWnd, SW_HIDE);
 
 	phrase_container.parseFromFile("dialog.cfg");
 

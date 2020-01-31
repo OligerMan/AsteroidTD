@@ -9,6 +9,7 @@ enum GameStatus {
 	pause,
     dialog,
 	mission_menu,
+	completed_mission_menu,
 	game_over,
 	settings_menu,
 	exit_to_desktop

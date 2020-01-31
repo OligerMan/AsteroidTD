@@ -58,20 +58,20 @@ class GUIManager {
 						if (gui_elements[layer][i] != last_clicked_object) {
 
 							gui_event_buffer.addEvent(clicked, gui_elements[layer][i], nullptr);
-							std::cout << "Click" << std::endl;
+							//std::cout << "Click" << std::endl;
 
 							last_clicked_object = gui_elements[layer][i];
 						}
 						else {
 							gui_event_buffer.addEvent(pressed, gui_elements[layer][i], nullptr);
-							std::cout << "Press" << std::endl;
+							//std::cout << "Press" << std::endl;
 						}
 						delete cursor;
 						return true;
 					}
 					else if (last_clicked_object == gui_elements[layer][i]) {
 						gui_event_buffer.addEvent(released, gui_elements[layer][i], nullptr);
-						std::cout << "Release" << std::endl;
+						//std::cout << "Release" << std::endl;
 
 						last_clicked_object = nullptr;
 					}
@@ -85,11 +85,11 @@ class GUIManager {
 	void processEventBuffer() {
 		Event cur_event = gui_event_buffer.getEvent();
 		if (cur_event.getEventType() != null_event) {
-			if (cur_event.getEventType() == clicked && cur_event.getFirstObject()->getObjectType() != redactor_back) {
+			if (cur_event.getEventType() == clicked && static_cast<Object *>(cur_event.getData(0))->getObjectType() != redactor_back) {
 				if (selected_object) {
 					delete selected_object;
 				}
-				selected_object = new Object(*cur_event.getFirstObject());
+				selected_object = new Object(*static_cast<Object *>(cur_event.getData(0)));
 				selected_object->setAutoOrigin();
 			}
 		}
