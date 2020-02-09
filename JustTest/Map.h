@@ -101,7 +101,6 @@ void fixCollision(Object * obj1, Object * obj2) {
 
 class Map {
 	std::vector<std::vector<Object *>> objects;                // vector of objects layers, it is defining order for render and reducing amount of collisions
-	std::vector<std::string> animation_type;
 
 public:
 	int landscape_layer = 0;
@@ -1445,5 +1444,10 @@ public:
 		for (int i = 0; i < attached->size(); i++) {
 			(*attached)[i]->setEffect(effect);
 		}
+	}
+
+	void saveToFile(std::string path) {
+		std::ifstream save(path);
+
 	}
 };

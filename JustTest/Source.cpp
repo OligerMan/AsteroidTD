@@ -28,10 +28,8 @@ enum XBOXGamepadButtons {
 
 void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController & visual_ctrl, GUIVisualController & gui_visual_ctrl, ResearchVisualController & res_visual_ctrl) {
 
-
 	sf::Texture main_background_texture, research_background_texture, game_over_background_texture;
 	sf::Sprite main_background_sprite, research_background_sprite, game_over_background_sprite;
-
 
 	main_background_texture.loadFromFile("background/main_background.png");
 	research_background_texture.loadFromFile("background/research_background.png");
@@ -107,7 +105,6 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 	rank.resetUserInfo();
 	std::chrono::time_point<std::chrono::steady_clock> round_start = std::chrono::steady_clock::now();
-
 
 	auto time_check = [&round_start]() {
 		while (true) {
@@ -1477,7 +1474,6 @@ int main() {
 	nickname_title.setOutlineThickness(1);
 	nickname_title.setCharacterSize(50);
 	nickname_title.setFont(base_font);
-
 
 	game_status = main_menu;
 
