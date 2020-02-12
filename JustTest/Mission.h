@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 
+#include "IDGenerator.h"
+
 struct PointObjective {
 	void * object_ptr;
 
@@ -28,6 +30,7 @@ struct Objective {
 		asteroid,
 		wave_level,
 		wave_delay,
+        wave_active,
 	};
 
 	Type type = null;
@@ -92,11 +95,15 @@ struct DefenceMission {
 		finished
 	} state;
 
-	std::string current_description, short_description, broad_description;
+    std::string short_description, broad_description, cur_desc_search, cur_desc_ready, cur_desc_wave_start, cur_desc_wave_active, cur_desc_finished;
 
 	DefenceMission(void * objective, int wave_amount, int wave_level) : objective(objective), wave_amount(wave_amount), level(wave_level) {
 
-		current_description = "Defence object from enemies";
+        cur_desc_search = "Find object what you need to defend";
+        cur_desc_ready = "Get ready!";
+        cur_desc_wave_start = "Wave started";
+        cur_desc_wave_active = "Kill all enemies";
+        cur_desc_finished = "Thanks for completed mission";
 		short_description = "Standart defence mission";
 		broad_description = "You need to defend asteroid from enemy waves. Coordinates will be sent further";
 	}
@@ -147,7 +154,25 @@ struct DefenceMission {
 	}
 
 	std::string getCurrentDescription() {
-		return current_description;
+        std::string output;
+        switch (state) {
+        case object_search:
+            output = cur_desc_search;
+            break;
+        case get_ready:
+            output = cur_desc_ready;
+            break;
+        case wave_start:
+            output = cur_desc_wave_start;
+            break;
+        case wave_active:
+            output = cur_desc_wave_active;
+            break;
+        case finished:
+            output = cur_desc_finished;
+            break;
+        }
+        return output;
 	}
 
 	std::string getShortDescription() {
@@ -167,12 +192,14 @@ struct Mission {
 	enum Type {
 		null,
 		courier,
+        defence,
 
 		TYPE_COUNT
 	};
 	float reward = 0;
 	bool failed = false;
 	Type type = null;
+    unsigned long long id = id_generator.getID();
 
 	void * missionExpansion = nullptr;
 

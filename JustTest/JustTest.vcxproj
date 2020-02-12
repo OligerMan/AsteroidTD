@@ -141,6 +141,7 @@
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="GUIParser.h" />
     <ClInclude Include="GUIVisualController.h" />
+    <ClInclude Include="IDGenerator.h" />
     <ClInclude Include="KeyboardBuffer.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapParser.h" />

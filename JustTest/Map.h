@@ -1,5 +1,7 @@
 #pragma once
 
+#include <map>
+
 #include "Object.h"
 #include "EventBuffer.h"
 #include "MapParser.h"
@@ -101,7 +103,7 @@ void fixCollision(Object * obj1, Object * obj2) {
 
 class Map {
 	std::vector<std::vector<Object *>> objects;                // vector of objects layers, it is defining order for render and reducing amount of collisions
-
+    std::map<unsigned long long, void *> mission_info;
 public:
 	int landscape_layer = 0;
 	int main_layer = 1;
@@ -1067,25 +1069,50 @@ private:
 
 	void checkObjective() {
 		if (!rpg_profile.getCurrentMission().completed()) {
-			Objective objective = rpg_profile.getCurrentMission().getObjective();
-			switch (objective.type) {
-			case Objective::point:
-				if (hero_object && (hero_object->getPosition() - static_cast<Object *>(static_cast<PointObjective *>(objective.objectiveExpansion)->object_ptr)->getPosition()).getLength() < consts.getInteractionDistance()) {
-					rpg_profile.getCurrentMission().setObjectiveCompleted();
-					if (rpg_profile.getCurrentMission().completed()) {
-						std::string message_string;
-						switch (rpg_profile.getCurrentMission().type) {
-						case Mission::courier:
-							std::vector<std::string> buffer = phrase_container.getPhraseBuffer(PhraseContainer::courier_mission_completed_npc, 0);
-							message_string = buffer[rand() * buffer.size() / RAND_MAX];
-							break;
-						}
-						global_event_buffer.push_back(Event(new float(rpg_profile.getCurrentMission().reward), reward));
-						global_event_buffer.push_back(Event(new std::string(message_string), message));
-					}
-				}
-				break;
-			}
+            Mission cur_miss = rpg_profile.getCurrentMission();
+			Objective objective = cur_miss.getObjective();
+            switch (cur_miss.type) {
+            case Mission::courier:
+                switch (objective.type) {
+                case Objective::point:
+                    if (hero_object && (hero_object->getPosition() - static_cast<Object *>(static_cast<PointObjective *>(objective.objectiveExpansion)->object_ptr)->getPosition()).getLength() < consts.getInteractionDistance()) {
+                        rpg_profile.getCurrentMission().setObjectiveCompleted();
+                        if (rpg_profile.getCurrentMission().completed()) {
+                            std::string message_string;
+                            switch (rpg_profile.getCurrentMission().type) {
+                            case Mission::courier:
+                                std::vector<std::string> buffer = phrase_container.getPhraseBuffer(PhraseContainer::courier_mission_completed_npc, 0);
+                                message_string = buffer[rand() * buffer.size() / RAND_MAX];
+                                break;
+                            }
+                            global_event_buffer.push_back(Event(new float(rpg_profile.getCurrentMission().reward), reward));
+                            global_event_buffer.push_back(Event(new std::string(message_string), message));
+                        }
+                    }
+                    break;
+                }
+                break;
+            case Mission::defence:
+                switch (objective.type) {
+                case Objective::asteroid:
+                    if (hero_object && (hero_object->getPosition() - static_cast<Object *>(static_cast<PointObjective *>(objective.objectiveExpansion)->object_ptr)->getPosition()).getLength() < consts.getInteractionDistance()) {
+                        rpg_profile.getCurrentMission().setObjectiveCompleted();
+                    }
+                    break;
+                case Objective::wave_delay:
+                    if (mission_info.count(cur_miss.id)) {
+
+                    }
+                    else {
+                        mission_info.insert(std::pair<unsigned long long, void *>(cur_miss.id, (void *)new std::chrono::time_point<std::chrono::steady_clock>(std::chrono::steady_clock::now())));
+                    }
+                    break;
+                case Objective::wave_level:
+                    break;
+                }
+                break;
+            }
+			
 		}
 	}
 
