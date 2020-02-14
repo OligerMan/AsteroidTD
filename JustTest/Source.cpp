@@ -1407,7 +1407,6 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 }
 
 int main() {
-
 	HWND console_hWnd = GetConsoleWindow();
 	//ShowWindow(console_hWnd, SW_HIDE);
 
@@ -1786,6 +1785,5 @@ int main() {
 		}
 		
 	}
-
 	return 0;
 }

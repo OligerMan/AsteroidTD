@@ -453,22 +453,6 @@ private:
 		}
 	}
 
-	void garbageCollectorTest() {
-		for (int layer = 0; layer < objects.size(); layer++) {
-			for (int i = 0; i < objects[layer].size(); i++) {
-				if (objects[layer][i]->isDeleted() || objects[layer][i]->getUnitInfo() == nullptr || objects[layer][i]->getUnitInfo()->isDead()) {
-					
-					std::cout << "Wrong" << std::endl;
-					if (objects[layer][i]->getObjectType() == bullet) {
-						std::cout << "Bullet" << std::endl;
-					}
-					//delete objects[layer][i];
-					objects[layer].erase(objects[layer].begin() + i);
-				}
-			}
-		}
-	}
-
 	void processEventBuffer() {
 		while (true) {
 			Event buffer_elem = event_buffer.getEvent();
@@ -1076,7 +1060,7 @@ private:
                 switch (objective.type) {
                 case Objective::point:
                     if (hero_object && (hero_object->getPosition() - static_cast<Object *>(static_cast<PointObjective *>(objective.objectiveExpansion)->object_ptr)->getPosition()).getLength() < consts.getInteractionDistance()) {
-                        rpg_profile.getCurrentMission().setObjectiveCompleted();
+                        cur_miss.setObjectiveCompleted();
                         if (rpg_profile.getCurrentMission().completed()) {
                             std::string message_string;
                             switch (rpg_profile.getCurrentMission().type) {
@@ -1096,18 +1080,35 @@ private:
                 switch (objective.type) {
                 case Objective::asteroid:
                     if (hero_object && (hero_object->getPosition() - static_cast<Object *>(static_cast<PointObjective *>(objective.objectiveExpansion)->object_ptr)->getPosition()).getLength() < consts.getInteractionDistance()) {
-                        rpg_profile.getCurrentMission().setObjectiveCompleted();
+                        cur_miss.setObjectiveCompleted();
                     }
                     break;
                 case Objective::wave_delay:
+					float delay = static_cast<FloatObjective *>(objective.objectiveExpansion)->value;
                     if (mission_info.count(cur_miss.id)) {
-
+						auto iter = mission_info.find(cur_miss.id);
+						auto time_dif = std::chrono::steady_clock::now() - *(std::chrono::time_point<std::chrono::steady_clock> *)(iter->second);
+						if (std::chrono::duration_cast<std::chrono::seconds>(time_dif).count() > delay) {
+							mission_info.erase(iter);
+							cur_miss.setObjectiveCompleted();
+						}
                     }
                     else {
                         mission_info.insert(std::pair<unsigned long long, void *>(cur_miss.id, (void *)new std::chrono::time_point<std::chrono::steady_clock>(std::chrono::steady_clock::now())));
                     }
                     break;
                 case Objective::wave_level:
+					if (mission_info.count(cur_miss.id)) {
+						auto iter = mission_info.find(cur_miss.id);
+						auto time_dif = std::chrono::steady_clock::now() - *(std::chrono::time_point<std::chrono::steady_clock> *)(iter->second);
+						if (std::chrono::duration_cast<std::chrono::seconds>(time_dif).count() > delay) {
+							mission_info.erase(iter);
+							cur_miss.setObjectiveCompleted();
+						}
+					}
+					else {
+						mission_info.insert(std::pair<unsigned long long, void *>(cur_miss.id, (void *)(new std::vector<Object *>)));
+					}
                     break;
                 }
                 break;

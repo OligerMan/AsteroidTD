@@ -5,7 +5,7 @@
 
 #include "IDGenerator.h"
 
-struct PointObjective {
+struct PointObjective {     // contains Object pointer to know it's position
 	void * object_ptr;
 
 	PointObjective(void * point_objective) : object_ptr(point_objective) {}
@@ -15,12 +15,6 @@ struct FloatObjective {
 	float value;
 
 	FloatObjective(float value) : value(value) {}
-};
-
-struct AsteroidObjective {
-	void * object_ptr;
-
-	AsteroidObjective(void * asteroid_objective) : object_ptr(asteroid_objective) {}
 };
 
 struct Objective {
@@ -113,7 +107,7 @@ struct DefenceMission {
 		switch (state) {
 		case object_search:
 			output.type = Objective::asteroid;
-			output.objectiveExpansion = new AsteroidObjective(objective);
+			output.objectiveExpansion = new PointObjective(objective);
 			break;
 		case get_ready:
 			output.type = Objective::wave_delay;
