@@ -118,6 +118,7 @@ private:
 	Object * closest_asteroid = nullptr;
 	std::vector<Object *> discovered_asteroid_list;
 	std::vector<Object *> npc_list;
+    std::map<unsigned int, std::vector<Object *>> enemy_wave_list;
 
 	EventBuffer event_buffer;
 
@@ -697,6 +698,7 @@ private:
 
 			int special_asteroid_chance = rand() % 1000;
 			bool npc_asteroid_chance = (rand() % 1000) < 100;
+            npc_asteroid_chance = npc_asteroid_chance && game_mode == GameMode::adventure_mode;
 			if (npc_asteroid_chance) {
 				faction = neutral_faction;
 			}
@@ -1055,6 +1057,7 @@ private:
 		if (!rpg_profile.getCurrentMission().completed()) {
             Mission cur_miss = rpg_profile.getCurrentMission();
 			Objective objective = cur_miss.getObjective();
+            float delay;
             switch (cur_miss.type) {
             case Mission::courier:
                 switch (objective.type) {
@@ -1084,7 +1087,7 @@ private:
                     }
                     break;
                 case Objective::wave_delay:
-					float delay = static_cast<FloatObjective *>(objective.objectiveExpansion)->value;
+					delay = static_cast<FloatObjective *>(objective.objectiveExpansion)->value;
                     if (mission_info.count(cur_miss.id)) {
 						auto iter = mission_info.find(cur_miss.id);
 						auto time_dif = std::chrono::steady_clock::now() - *(std::chrono::time_point<std::chrono::steady_clock> *)(iter->second);
@@ -1099,15 +1102,11 @@ private:
                     break;
                 case Objective::wave_level:
 					if (mission_info.count(cur_miss.id)) {
-						auto iter = mission_info.find(cur_miss.id);
-						auto time_dif = std::chrono::steady_clock::now() - *(std::chrono::time_point<std::chrono::steady_clock> *)(iter->second);
-						if (std::chrono::duration_cast<std::chrono::seconds>(time_dif).count() > delay) {
-							mission_info.erase(iter);
-							cur_miss.setObjectiveCompleted();
-						}
+
 					}
 					else {
-						mission_info.insert(std::pair<unsigned long long, void *>(cur_miss.id, (void *)(new std::vector<Object *>)));
+
+						mission_info.insert(std::pair<unsigned long long, void *>(cur_miss.id, (void *)(new int(0))));
 					}
                     break;
                 }

@@ -21,5 +21,11 @@ enum SkillsMode {
 	npc_dialog,
 };
 
+enum GameMode {
+    infinity_mode,
+    adventure_mode
+};
+
 GameStatus game_status;
 SkillsMode skills_mode;
+GameMode game_mode;

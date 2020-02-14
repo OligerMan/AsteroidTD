@@ -345,7 +345,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				gui_manager.setText("Build Mode", 0.01, skill_status_sign, Point(window.getView().getSize().x / 2 / 1.2 - 150 * window.getView().getSize().x / 1920, -(int)window.getView().getSize().y / 2 / 1.2), 50);
 			}
 
-			if (game_status != pause && tutorial.isWorkingOnStep(tutorial.no_tutorial)) {
+			if (game_status != pause && tutorial.isWorkingOnStep(tutorial.no_tutorial) && game_mode == GameMode::infinity_mode) {
 				if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - last_wave).count() > wave_delay) {
 					wave_count++;
 					if (!(game_status == game_strategic_mode)) {
@@ -933,11 +933,11 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					new_speed = Point();
 				}
 				if (hero_object != nullptr) {
-					hero_object->changeSpeed(new_speed);
-					hero_object->setSpeed(hero_object->getSpeed() * 0.99);
+					hero_object->changeSpeed(new_speed * consts.getFPSLock() / fps.getFPS());
+					hero_object->setSpeed(hero_object->getSpeed() * std::pow(0.99, consts.getFPSLock() / fps.getFPS()));
 					Point speed = hero_object->getSpeed();
 					if (speed.getLength() > consts.getMaxHeroSpeed()) {
-						hero_object->setSpeed(hero_object->getSpeed().getNormal() * consts.getMaxHeroSpeed());
+						hero_object->setSpeed(speed.getNormal() * consts.getMaxHeroSpeed());
 					}
 					hero_object->setAngle(atan2(speed.y, speed.x) / PI * 180);
 				}
@@ -1122,6 +1122,13 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			
 		}
 		if (game_status == game_over) {
+
+            XINPUT_VIBRATION vibration;
+            ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+            vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
+            vibration.wRightMotorSpeed = 0; // use any value between 0-65535 here
+            XInputSetState(0, &vibration);
+
 			window.setView(view4);
 			for (int i = retry; i <= menu; i++) {
 				if (i == chosen_button) {
@@ -1193,12 +1200,12 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					round_start = std::chrono::steady_clock::now();
 				}
             }
-			if ((sf::Joystick::isButtonPressed(0, LB) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) && ((frame_num - last_menu_choice) > fps.getFPS() / 2)) {
+			if ((sf::Joystick::isButtonPressed(0, LB) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) && ((frame_num - last_menu_choice) > fps.getFPS() / 2) && game_mode == adventure_mode) {
 				game_status = completed_mission_menu;
 				last_menu_choice = frame_num;
 			}
 
-			if ((sf::Joystick::isButtonPressed(0, RB) || sf::Keyboard::isKeyPressed(sf::Keyboard::E)) && ((frame_num - last_menu_choice) > fps.getFPS() / 2)) {
+			if ((sf::Joystick::isButtonPressed(0, RB) || sf::Keyboard::isKeyPressed(sf::Keyboard::E)) && ((frame_num - last_menu_choice) > fps.getFPS() / 2) && game_mode == adventure_mode) {
 				game_status = mission_menu;
 				last_menu_choice = frame_num;
 			}
@@ -1486,6 +1493,7 @@ int main() {
 	};
 	enum buttons_name {
 		infinity_mode_button,
+        adventure_mode_button,
 		settings_button,
 		shutdown_button,
 
@@ -1494,21 +1502,28 @@ int main() {
 	std::vector<MenuButton> buttons;
 	buttons.resize(BUTTONS_NAME_LIST_SIZE);
 
-	buttons[infinity_mode_button].pos = Point(window.getView().getSize().x / 2 - 200 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
+	buttons[infinity_mode_button].pos = Point(window.getView().getSize().x / 2 - 300 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
 	buttons[infinity_mode_button].texture_default.loadFromFile("menu_buttons\\inf_mode.png");
 	buttons[infinity_mode_button].texture_selected.loadFromFile("menu_buttons\\inf_mode_selected.png");
 	buttons[infinity_mode_button].sprite.setTexture(buttons[infinity_mode_button].texture_default);
 	buttons[infinity_mode_button].radius = 75 * window.getView().getSize().y / 1080;
 	buttons[infinity_mode_button].advice_string = "start infinity mode";
 
-	buttons[settings_button].pos = Point(window.getView().getSize().x / 2, 400 * window.getView().getSize().y / 1080);
+    buttons[adventure_mode_button].pos = Point(window.getView().getSize().x / 2 - 100 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
+    buttons[adventure_mode_button].texture_default.loadFromFile("menu_buttons\\adv_mode.png");
+    buttons[adventure_mode_button].texture_selected.loadFromFile("menu_buttons\\adv_mode_selected.png");
+    buttons[adventure_mode_button].sprite.setTexture(buttons[adventure_mode_button].texture_default);
+    buttons[adventure_mode_button].radius = 75 * window.getView().getSize().y / 1080;
+    buttons[adventure_mode_button].advice_string = "start adventure mode";
+
+	buttons[settings_button].pos = Point(window.getView().getSize().x / 2 + 100 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
 	buttons[settings_button].texture_default.loadFromFile("menu_buttons\\settings.png");
 	buttons[settings_button].texture_selected.loadFromFile("menu_buttons\\settings_selected.png");
 	buttons[settings_button].sprite.setTexture(buttons[settings_button].texture_default);
 	buttons[settings_button].radius = 75 * window.getView().getSize().y / 1080;
 	buttons[settings_button].advice_string = "open settings";
 
-	buttons[shutdown_button].pos = Point(window.getView().getSize().x / 2 + 200 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
+	buttons[shutdown_button].pos = Point(window.getView().getSize().x / 2 + 300 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
 	buttons[shutdown_button].texture_default.loadFromFile("menu_buttons\\shutdown.png");
 	buttons[shutdown_button].texture_selected.loadFromFile("menu_buttons\\shutdown_selected.png");
 	buttons[shutdown_button].sprite.setTexture(buttons[shutdown_button].texture_default);
@@ -1567,6 +1582,13 @@ int main() {
 		frame_num++;
 
 		window.setView(main_view);
+
+        XINPUT_VIBRATION vibration;
+        ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+        vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
+        vibration.wRightMotorSpeed = 0; // use any value between 0-65535 here
+        XInputSetState(0, &vibration);
+
 		if (window.hasFocus()) {
 			if (game_status == main_menu) {
 				for (int i = 0; i < buttons.size(); i++) {
@@ -1598,8 +1620,14 @@ int main() {
 						if ((cursor_pos - buttons[i].pos).getLength() <= buttons[i].radius) {
 							if (i == infinity_mode_button) {
 								game_status = game_hero_mode;
+                                game_mode = GameMode::infinity_mode;
 								is_input_state = true;
 							}
+                            if (i == adventure_mode_button) {
+                                game_status = game_hero_mode;
+                                game_mode = GameMode::adventure_mode;
+                                is_input_state = true;
+                            }
 							if (i == settings_button) {
 								game_status = settings_menu;
 								is_input_state = true;
