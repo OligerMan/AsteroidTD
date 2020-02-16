@@ -361,6 +361,7 @@ Source.cpp(1430): warning C4244: 'argument': conversion from 'float' to 'unsigne
 Source.cpp(1442): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 Source.cpp(1474): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
 Source.cpp(1477): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(1481): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
 Source.cpp(1572): warning C4305: 'argument': truncation from 'double' to 'float'
 Source.cpp(1606): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
 Source.cpp(1607): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
@@ -383,9 +384,9 @@ C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): war
           ]
   Generating code
 e:\projects\asteroidtd\justtest\playerrpgprofile.h(102): warning C4172: returning address of local variable or temporary: output
-  255 of 6080 functions ( 4.2%) were compiled, the rest were copied from previous compilation.
-    19 functions were new in current compilation
-    140 functions had inline decision re-evaluated but remain unchanged
+  204 of 6080 functions ( 3.4%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    23 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.exe
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.pdb (Full PDB)

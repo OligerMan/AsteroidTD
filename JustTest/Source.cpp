@@ -1415,7 +1415,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 int main() {
 	HWND console_hWnd = GetConsoleWindow();
-	//ShowWindow(console_hWnd, SW_HIDE);
+	ShowWindow(console_hWnd, SW_HIDE);
     //setlocale(LC_ALL, "rus");
 	phrase_container.parseFromFile(settings.getLocalisationFile());
 
@@ -1471,14 +1471,14 @@ int main() {
 	title.setFillColor(sf::Color::White);
 	title.setOutlineColor(sf::Color::Black);
 	title.setOutlineThickness(1);
-	title.setCharacterSize(50 * window.getView().getSize().y / 1080);
+	title.setCharacterSize(40 * window.getView().getSize().y / 1080);
 	title.setFont(base_font);
 
-	nickname_title.setPosition(sf::Vector2f(window.getSize().x / 2 - 75, window.getSize().y / 2 - 200));
+	nickname_title.setPosition(sf::Vector2f(window.getSize().x / 2 - 25, window.getSize().y / 2 - 200));
 	nickname_title.setFillColor(sf::Color::White);
 	nickname_title.setOutlineColor(sf::Color::Black);
 	nickname_title.setOutlineThickness(1);
-	nickname_title.setCharacterSize(50);
+	nickname_title.setCharacterSize(40 * window.getView().getSize().y / 1080);
 	nickname_title.setFont(base_font);
 
 	game_status = main_menu;
@@ -1801,7 +1801,7 @@ int main() {
                 title.setString(buffer[rand() * buffer.size() / RAND_MAX]);
 
 				if (sf::Joystick::isConnected(0)) {
-                    buffer = phrase_container.getPhraseBuffer(PhraseContainer::keyboard_nickname_title_GUI, 0);
+                    buffer = phrase_container.getPhraseBuffer(PhraseContainer::gamepad_nickname_title_GUI, 0);
                     title.setString(buffer[rand() * buffer.size() / RAND_MAX]);
 				}
 
@@ -1812,7 +1812,7 @@ int main() {
 					game_status = main_menu;
 					continue;
 				}
-                buffer = phrase_container.getPhraseBuffer(PhraseContainer::keyboard_nickname_title_GUI, 0);
+                buffer = phrase_container.getPhraseBuffer(PhraseContainer::nickname_enter_title_GUI, 0);
                 std::string kbrd_buf = keyboard_buffer.getBuffer();
 				nickname_title.setString(buffer[rand() * buffer.size() / RAND_MAX] + std::wstring(kbrd_buf.begin(), kbrd_buf.end()));
 				title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
