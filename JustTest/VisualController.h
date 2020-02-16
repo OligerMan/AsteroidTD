@@ -89,7 +89,7 @@ public:
 		uploadTextures(texture_path);
 		initSprites();
 
-		base_font.loadFromFile("a_Alterna.ttf");
+		base_font.loadFromFile(consts.getDefaultFontPath());
 
 		hp_sign.setFillColor(sf::Color::White);
 		hp_sign.setOutlineColor(sf::Color::Black);
@@ -224,6 +224,9 @@ public:
 					sf::Vertex(sf::Vector2f(v4.x,v4.y)),
 					sf::Vertex(sf::Vector2f(v1.x,v1.y))
 				};
+                for (int i = 0; i < 8; i++) {
+                    arrow[i].color = sf::Color::Red;
+                }
 				window->draw(arrow, 8, sf::Lines);
 			}
 		}
@@ -250,7 +253,9 @@ public:
 					sf::Vertex(sf::Vector2f(v4.x,v4.y)),
 					sf::Vertex(sf::Vector2f(v1.x,v1.y))
 				};
-				arrow->color = sf::Color(120, 100, 255);
+                for (int i = 0; i < 8; i++) {
+                    arrow[i].color = sf::Color(120, 100, 255);
+                }
 				window->draw(arrow, 8, sf::Lines);
 			}
 		}

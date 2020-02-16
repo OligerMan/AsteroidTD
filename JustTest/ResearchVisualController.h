@@ -80,7 +80,7 @@ public:
 		uploadTextures(texture_path);
 		initSprites();
 
-		font.loadFromFile("a_Alterna.ttf");
+		font.loadFromFile(consts.getDefaultFontPath());
 
 		cost_sign.setPosition(sf::Vector2f(-(int)window->getSize().x / 2 + 100, -(int)window->getSize().y / 2 + 100));
 		cost_sign.setFillColor(sf::Color::White);

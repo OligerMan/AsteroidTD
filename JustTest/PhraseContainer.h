@@ -4,12 +4,14 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <codecvt>
+#include <locale>
 
 #include "Settings.h"
 #include "ParserInput.h"
 
 struct Phrase {
-	std::string phrase, id;
+	std::wstring phrase, id;
 	int min_politeness = -100;
 	int max_politeness = 100;
 };
@@ -30,7 +32,7 @@ public:
 		neutral_greetings_reaction_npc,
 		negative_greetings_reaction_npc,
 
-		standart_question_npñ,
+		standart_question_npc,
 
 		job_question_player,
 		rumors_question_player,
@@ -54,7 +56,28 @@ public:
 
 		dialog_end_npc,
 
-		courier_mission_completed_npc,
+        courier_mission_completed_npc,
+        defence_mission_completed_npc,
+
+        continue_phrase_GUI,
+        reroll_phrase_GUI,
+        joke_phrase_GUI,
+        start_inf_mode_GUI,
+        start_adv_mode_GUI,
+        settings_menu_GUI,
+        shutdown_GUI,
+        keyboard_mainmenu_title_GUI,
+        gamepad_mainmenu_title_GUI,
+        setting_nickname_title_GUI,
+        setting_ranking_title_GUI,
+        setting_win_width_title_GUI,
+        setting_win_height_title_GUI,
+        setting_local_file_title_GUI,
+        setting_exit_title_GUI,
+        setting_discard_title_GUI,
+        keyboard_nickname_title_GUI,
+        gamepad_nickname_title_GUI,
+        nickname_enter_title_GUI,
 
 		PHRASE_TYPE_COUNT
 	};
@@ -62,10 +85,10 @@ public:
 private:
 
 	std::vector<std::vector<Phrase>> phrase_buffer;
-	std::vector<std::string> phrase_type_strings;
-	std::vector<std::string> personal_id_list;
+	std::vector<std::wstring> phrase_type_strings;
+	std::vector<std::wstring> personal_id_list;
 
-	int is_phrase_type_exists(std::string example) {
+	int is_phrase_type_exists(std::wstring example) {
 		for (int i = 0; i < PHRASE_TYPE_COUNT; i++) {
 			if (phrase_type_strings[i] == example) {
 				return i;
@@ -74,7 +97,7 @@ private:
 		return -1;
 	}
 
-	int is_personal_id_exists(std::string example) {
+	int is_personal_id_exists(std::wstring example) {
 		for (int i = 0; i < personal_id_list.size(); i++) {
 			if (personal_id_list[i] == example) {
 				return i;
@@ -89,44 +112,65 @@ public:
 		phrase_type_strings.resize(PHRASE_TYPE_COUNT);
 		phrase_buffer.resize(PHRASE_TYPE_COUNT);
 
-		phrase_type_strings[start_description] = "start_description";
-		phrase_type_strings[conversation_refuse_npc] = "conversation_refuse_npc";
+		phrase_type_strings[start_description] = L"start_description";
+		phrase_type_strings[conversation_refuse_npc] = L"conversation_refuse_npc";
 
-		phrase_type_strings[greetings_phrase_npc] = "greetings_phrase_npc";
+		phrase_type_strings[greetings_phrase_npc] = L"greetings_phrase_npc";
 
-		phrase_type_strings[positive_greetings_answer_player] = "positive_greetings_answer_player";
-		phrase_type_strings[neutral_greetings_answer_player] = "neutral_greetings_answer_player";
-		phrase_type_strings[negative_greetings_answer_player] = "negative_greetings_answer_player";
+		phrase_type_strings[positive_greetings_answer_player] = L"positive_greetings_answer_player";
+		phrase_type_strings[neutral_greetings_answer_player] = L"neutral_greetings_answer_player";
+		phrase_type_strings[negative_greetings_answer_player] = L"negative_greetings_answer_player";
 
-		phrase_type_strings[positive_greetings_reaction_npc] = "positive_greetings_reaction_npc";
-		phrase_type_strings[neutral_greetings_reaction_npc] = "neutral_greetings_reaction_npc";
-		phrase_type_strings[negative_greetings_reaction_npc] = "negative_greetings_reaction_npc";
+		phrase_type_strings[positive_greetings_reaction_npc] = L"positive_greetings_reaction_npc";
+		phrase_type_strings[neutral_greetings_reaction_npc] = L"neutral_greetings_reaction_npc";
+		phrase_type_strings[negative_greetings_reaction_npc] = L"negative_greetings_reaction_npc";
 
-		phrase_type_strings[standart_question_npñ] = "standart_question_npñ";
+		phrase_type_strings[standart_question_npc] = L"standart_question_npc";
 
-		phrase_type_strings[job_question_player] = "job_question_player";
-		phrase_type_strings[rumors_question_player] = "rumors_question_player";
+		phrase_type_strings[job_question_player] = L"job_question_player";
+		phrase_type_strings[rumors_question_player] = L"rumors_question_player";
 
-		phrase_type_strings[random_joke_player] = "random_joke_player";
-		phrase_type_strings[random_positive_joke_reaction_npc] = "random_positive_joke_reaction_npc";
-		phrase_type_strings[random_neutral_joke_reaction_npc] = "random_neutral_joke_reaction_npc";
-		phrase_type_strings[random_negative_joke_reaction_npc] = "random_negative_joke_reaction_npc";
+		phrase_type_strings[random_joke_player] = L"random_joke_player";
+		phrase_type_strings[random_positive_joke_reaction_npc] = L"random_positive_joke_reaction_npc";
+		phrase_type_strings[random_neutral_joke_reaction_npc] = L"random_neutral_joke_reaction_npc";
+		phrase_type_strings[random_negative_joke_reaction_npc] = L"random_negative_joke_reaction_npc";
 
-		phrase_type_strings[rumors_refuse_npc] = "rumors_refuse_npc";
+		phrase_type_strings[rumors_refuse_npc] = L"rumors_refuse_npc";
 
-		phrase_type_strings[base_job_refuse_npc] = "base_job_refuse_npc";
-		phrase_type_strings[special_job_refuse_npc] = "special_job_refuse_npc";
-		phrase_type_strings[special_job_question_player] = "special_job_question_player";
-		phrase_type_strings[base_job_question_player] = "base_job_question_player";
-		phrase_type_strings[job_refuse_player] = "job_refuse_player";
-		phrase_type_strings[job_accept_player] = "job_accept_player";
+		phrase_type_strings[base_job_refuse_npc] = L"base_job_refuse_npc";
+		phrase_type_strings[special_job_refuse_npc] = L"special_job_refuse_npc";
+		phrase_type_strings[special_job_question_player] = L"special_job_question_player";
+		phrase_type_strings[base_job_question_player] = L"base_job_question_player";
+		phrase_type_strings[job_refuse_player] = L"job_refuse_player";
+		phrase_type_strings[job_accept_player] = L"job_accept_player";
 
-		phrase_type_strings[farewell_player] = "farewell_player";
-		phrase_type_strings[farewell_npc] = "farewell_npc";
+		phrase_type_strings[farewell_player] = L"farewell_player";
+		phrase_type_strings[farewell_npc] = L"farewell_npc";
 
-		phrase_type_strings[dialog_end_npc] = "dialog_end";
+		phrase_type_strings[dialog_end_npc] = L"dialog_end";
 
-		phrase_type_strings[courier_mission_completed_npc] = "courier_mission_completed_npc";
+        phrase_type_strings[courier_mission_completed_npc] = L"courier_mission_completed_npc";
+        phrase_type_strings[defence_mission_completed_npc] = L"defence_mission_completed_npc";
+
+        phrase_type_strings[continue_phrase_GUI] = L"continue_phrase_GUI";
+        phrase_type_strings[reroll_phrase_GUI] = L"reroll_phrase_GUI";
+        phrase_type_strings[joke_phrase_GUI] = L"joke_phrase_GUI";
+        phrase_type_strings[start_inf_mode_GUI] = L"start_inf_mode_GUI";
+        phrase_type_strings[start_adv_mode_GUI] = L"start_adv_mode_GUI";
+        phrase_type_strings[settings_menu_GUI] = L"settings_menu_GUI";
+        phrase_type_strings[shutdown_GUI] = L"shutdown_GUI";
+        phrase_type_strings[keyboard_mainmenu_title_GUI] = L"keyboard_mainmenu_title_GUI";
+        phrase_type_strings[gamepad_mainmenu_title_GUI] = L"gamepad_mainmenu_title_GUI";
+        phrase_type_strings[setting_nickname_title_GUI] = L"setting_nickname_title_GUI";
+        phrase_type_strings[setting_ranking_title_GUI] = L"setting_ranking_title_GUI";
+        phrase_type_strings[setting_win_width_title_GUI] = L"setting_win_width_title_GUI";
+        phrase_type_strings[setting_win_height_title_GUI] = L"setting_win_height_title_GUI";
+        phrase_type_strings[setting_local_file_title_GUI] = L"setting_local_file_title_GUI";
+        phrase_type_strings[setting_exit_title_GUI] = L"setting_exit_title_GUI";
+        phrase_type_strings[setting_discard_title_GUI] = L"setting_discard_title_GUI";
+        phrase_type_strings[keyboard_nickname_title_GUI] = L"keyboard_nickname_title_GUI";
+        phrase_type_strings[gamepad_nickname_title_GUI] = L"gamepad_nickname_title_GUI";
+        phrase_type_strings[nickname_enter_title_GUI] = L"nickname_enter_title_GUI";
 	}
 
 	/* 
@@ -149,12 +193,12 @@ public:
 	dialog_file_end
 	*/
 	void parseFromFile(std::string path) {
-		std::ifstream dialog_file;
+		std::wifstream dialog_file;
 		dialog_file.open(path);
-
-		std::string input;
+        dialog_file.imbue(std::locale(std::locale(), new std::codecvt_utf8<wchar_t>));
+		std::wstring input;
 		dialog_file >> input;
-		if (input != "dialog_file_start") {
+		if (input != L"dialog_file_start") {
 			if (settings.isErrorOutputEnabled()) {
 				std::cout << "Dialog file is corrupted" << std::endl;
 			}
@@ -164,10 +208,10 @@ public:
 
 		while (true) {
 			dialog_file >> input;
-			if (input == "dialog_file_end") {
+			if (input == L"dialog_file_end") {
 				break;
 			}
-			if (input != "phrase_start") {
+			if (input != L"phrase_start") {
 				if (settings.isErrorOutputEnabled()) {
 					std::cout << "Phrase start expected" << std::endl;
 				}
@@ -178,23 +222,24 @@ public:
 			Phrase new_phrase;
 
 			dialog_file >> input;
-			if (input != "string") {
+			if (input != L"string") {
 				if (settings.isErrorOutputEnabled()) {
 					std::cout << "String marker expected" << std::endl;
 				}
 				dialog_file.close();
 				return;
 			}
-
-			while (dialog_file.get() != '\|') {}
+            wchar_t input_char = ' ';
+			while (dialog_file.get() != L'\|') {
+            }
 			input.clear();
 			while (true) {
-				unsigned char input_char = dialog_file.get();
-				if (input_char == '\|') {
+                input_char = dialog_file.get();
+				if (input_char == L'\|') {
 					break;
 				}
-				if (input_char == '@') {
-					input_char = '\n';
+				if (input_char == L'@') {
+					input_char = L'\n';
 				}
 				input.push_back(input_char);
 			}
@@ -202,7 +247,7 @@ public:
 			new_phrase.phrase = input;
 
 			dialog_file >> input;
-			if (input != "conditions_start") {
+			if (input != L"conditions_start") {
 				if (settings.isErrorOutputEnabled()) {
 					std::cout << "Conditions marker expected" << std::endl;
 				}
@@ -212,20 +257,20 @@ public:
 
 			while (true) {
 				dialog_file >> input;
-				if (input == "conditions_end") {
+				if (input == L"conditions_end") {
 					break;
 				}
-				if (input == "") {
+				if (input == L"") {
 					if (settings.isErrorOutputEnabled()) {
 						std::cout << "Conditions block corrupted" << std::endl;
 					}
 					dialog_file.close();
 					return;
 				}
-				if (input == "min_politeness") {
+				if (input == L"min_politeness") {
 					new_phrase.min_politeness = getInt(dialog_file);
 				}
-				else if (input == "max_politeness") {
+				else if (input == L"max_politeness") {
 					new_phrase.max_politeness = getInt(dialog_file);
 				}
 				else {
@@ -235,7 +280,7 @@ public:
 			}
 
 			dialog_file >> input;
-			if (input != "id") {
+			if (input != L"id") {
 				if (settings.isErrorOutputEnabled()) {
 					std::cout << "ID marker expected" << std::endl;
 				}
@@ -245,7 +290,7 @@ public:
 			dialog_file >> new_phrase.id;
 
 			dialog_file >> input;
-			if (input != "phrase_type") {
+			if (input != L"phrase_type") {
 				if (settings.isErrorOutputEnabled()) {
 					std::cout << "Phrase type marker expected" << std::endl;
 				}
@@ -262,7 +307,7 @@ public:
 			}
 
 			dialog_file >> input;
-			if (input != "phrase_end") {
+			if (input != L"phrase_end") {
 				if (settings.isErrorOutputEnabled()) {
 					std::cout << "Phrase end expected" << std::endl;
 				}
@@ -272,21 +317,24 @@ public:
 		}
 	}
 
-	std::vector<std::string> getPhraseBuffer(PhraseType type, int politeness, std::string id = "") {
-		std::vector<std::string> output;
+	std::vector<std::wstring> getPhraseBuffer(PhraseType type, int politeness, std::wstring id = L"") {
+		std::vector<std::wstring> output;
 		if (phrase_buffer.size() >= type) {
 			for (int i = 0; i < phrase_buffer[type].size(); i++) {
 				if (politeness >= phrase_buffer[type][i].min_politeness && politeness <= phrase_buffer[type][i].max_politeness) {
-					if (id.empty() || id == "common" || id == phrase_buffer[type][i].id || phrase_buffer[type][i].id == "common") {
+					if (id.empty() || id == L"common" || id == phrase_buffer[type][i].id || phrase_buffer[type][i].id == L"common") {
 						output.push_back(phrase_buffer[type][i].phrase);
 					}
 				}
 			}
 		}
+        if (output.empty()) {
+            output.push_back(L" ");
+        }
 		return output;
 	}
 
-	std::vector<std::string> getPersonalIdList() {
+	std::vector<std::wstring> getPersonalIdList() {
 		return personal_id_list;
 	}
 } phrase_container;

@@ -98,7 +98,7 @@ class GUIManager {
 public:
 
 	GUIManager() {
-		base_font.loadFromFile("a_Alterna.ttf");
+		base_font.loadFromFile(consts.getDefaultFontPath());
 		srand(time(NULL));
 		text.resize(1, std::pair<sf::Text *, int>(new sf::Text, 0));
 		text[0].first->setString(start_game_signs[rand() % (start_game_signs.size())]);
@@ -153,6 +153,11 @@ public:
 		text[0].first->setString(string);
 		text[0].second = consts.getFPSLock() * time;
 	}
+
+    void forceSetTopSign(std::wstring string, float time /*in seconds*/) {
+        text[0].first->setString(string);
+        text[0].second = consts.getFPSLock() * time;
+    }
 
 	void setText(std::string string, float time, int number, Point pos, int character_size) {
 		if (number < 0 || time < 0 || character_size < 0) {

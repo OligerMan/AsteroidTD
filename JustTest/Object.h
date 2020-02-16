@@ -392,6 +392,12 @@ public:
 	void * getNPCInfo() {
 		return add_info.getNPCInfo();
 	}
+
+    void setNPCInfo(void * npc_info) {
+        if (!add_info.getNPCInfo()) {
+            add_info.setNPCInfo(npc_info);
+        }
+    }
 };
 
 bool checkObjectCollision(Object * obj1, Object * obj2) {

@@ -5,8 +5,8 @@
 
 struct DialogInfo {
 	bool is_player_turn = false;
-	std::string main_text;
-	std::vector<std::string> answers; // if not players turn contains only "Continue"
+	std::wstring main_text;
+	std::vector<std::wstring> answers; // if not players turn contains only "Continue"
 };
 
 class NPCInfo {
@@ -50,13 +50,28 @@ private:
 	Mission base_mission_info;
 	Mission special_mission_info;
 
-	std::string start_description_string;
-	std::string personal_id;
+	std::wstring start_description_string;
+	std::wstring personal_id;
 
 	// personal qualities(from -100 to 100)
 
 	int politeness = 0;
 	int prejudices = 0;
+
+    std::wstring getContinueString() {
+        std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::continue_phrase_GUI, politeness, personal_id);
+        return buffer[rand() * buffer.size() / RAND_MAX];
+    }
+
+    std::wstring getRerollString() {
+        std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::reroll_phrase_GUI, politeness, personal_id);
+        return buffer[rand() * buffer.size() / RAND_MAX];
+    }
+
+    std::wstring getJokeString() {
+        std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::joke_phrase_GUI, politeness, personal_id);
+        return buffer[rand() * buffer.size() / RAND_MAX];
+    }
 
 public:
 
@@ -66,7 +81,7 @@ public:
 
 		faction = WorldFactionList(rand() % WORLD_FACTIONS_COUNT);
 
-		std::vector<std::string> buffer;
+		std::vector<std::wstring> buffer;
 
 		buffer = phrase_container.getPersonalIdList();
 		personal_id = buffer[rand() * buffer.size() / RAND_MAX];
@@ -76,25 +91,26 @@ public:
 		current_dialog_info.main_text.clear();
 		current_dialog_info.main_text = start_description_string;
 		current_dialog_info.answers.clear();
-		current_dialog_info.answers.push_back("<Continue>");
+        
+		current_dialog_info.answers.push_back(getContinueString());
 		current_dialog_info.is_player_turn = false;
 
 	}
 
-	NPCInfo(WorldFactionList faction, std::string personal_id) : faction(faction), personal_id(personal_id) {
+	NPCInfo(WorldFactionList faction, std::wstring personal_id) : faction(faction), personal_id(personal_id) {
 		politeness = rand() * 200 / RAND_MAX - 100;
 		prejudices = rand() * 200 / RAND_MAX - 100;
 
 		faction = WorldFactionList(rand() % WORLD_FACTIONS_COUNT);
 
-		std::vector<std::string> buffer;
+		std::vector<std::wstring> buffer;
 
 		buffer = phrase_container.getPhraseBuffer(PhraseContainer::start_description, politeness, personal_id);
 		start_description_string = buffer[rand() * buffer.size() / RAND_MAX];
 		current_dialog_info.main_text.clear();
 		current_dialog_info.main_text = start_description_string;
 		current_dialog_info.answers.clear();
-		current_dialog_info.answers.push_back("<Continue>");
+		current_dialog_info.answers.push_back(getContinueString());
 		current_dialog_info.is_player_turn = false;
 
 	}
@@ -107,7 +123,7 @@ public:
 		if (answer_num < 0 || answer_num >= current_dialog_info.answers.size()) {
 			return;
 		}
-		std::vector<std::string> buffer;
+		std::vector<std::wstring> buffer;
 
 		auto jobAvailable = [&]() {
 			return (!job_question_passed && base_job_available && base_mission_info.type != Mission::null);
@@ -129,7 +145,7 @@ public:
 		};
 		auto backToStandartQuestion = [&]() {
 			current_stage = standart_question;
-			addMainText(PhraseContainer::standart_question_npñ);
+			addMainText(PhraseContainer::standart_question_npc);
 			current_dialog_info.answers.clear();
 			if ((jobAvailable() || specialJobAvailable())) {
 				addAnswer(PhraseContainer::job_question_player);
@@ -137,7 +153,7 @@ public:
 			if (rumorsAvaliable()) {
 				addAnswer(PhraseContainer::rumors_question_player);
 			}
-			current_dialog_info.answers.push_back("(Random joke)");
+			current_dialog_info.answers.push_back(getJokeString());
 			addAnswer(PhraseContainer::farewell_player);
 			current_dialog_info.is_player_turn = false;
 		};
@@ -145,7 +161,7 @@ public:
 			current_stage = dialog_end;
 			addMainText(PhraseContainer::dialog_end_npc);
 			current_dialog_info.answers.clear();
-			current_dialog_info.answers.push_back("<Continue>");
+			current_dialog_info.answers.push_back(getContinueString());
 		};
 
 		int rand_coef = 0, joke_mark = 0;
@@ -155,7 +171,7 @@ public:
 				current_stage = conversation_refuse;
 				addMainText(PhraseContainer::conversation_refuse_npc);
 				current_dialog_info.answers.clear();
-				current_dialog_info.answers.push_back("<Continue>");
+				current_dialog_info.answers.push_back(getContinueString());
 				current_dialog_info.is_player_turn = false;
 			}
 			else {
@@ -166,7 +182,7 @@ public:
 				addAnswer(PhraseContainer::neutral_greetings_answer_player);
 				addAnswer(PhraseContainer::negative_greetings_answer_player);
 				addAnswer(PhraseContainer::farewell_player);
-				current_dialog_info.answers.push_back("(Reroll answers)");
+				current_dialog_info.answers.push_back(getRerollString());
 				current_dialog_info.is_player_turn = false;
 			}
 			break;
@@ -181,7 +197,7 @@ public:
 				addAnswer(PhraseContainer::neutral_greetings_answer_player);
 				addAnswer(PhraseContainer::negative_greetings_answer_player);
 				addAnswer(PhraseContainer::farewell_player);
-				current_dialog_info.answers.push_back("(Reroll answers)");
+				current_dialog_info.answers.push_back(getRerollString());
 				current_dialog_info.is_player_turn = false;
 			}
 			if (answer_num == 3) {
@@ -191,21 +207,21 @@ public:
 				current_stage = negative_greeting_reaction;
 				addMainText(PhraseContainer::negative_greetings_reaction_npc);
 				current_dialog_info.answers.clear();
-				current_dialog_info.answers.push_back("<Continue>");
+				current_dialog_info.answers.push_back(getContinueString());
 				current_dialog_info.is_player_turn = true;
 			}
 			if (answer_num == 1) {
 				current_stage = neutral_greeting_reaction;
 				addMainText(PhraseContainer::neutral_greetings_reaction_npc);
 				current_dialog_info.answers.clear();
-				current_dialog_info.answers.push_back("<Continue>");
+				current_dialog_info.answers.push_back(getContinueString());
 				current_dialog_info.is_player_turn = true;
 			}
 			if (answer_num == 0) {
 				current_stage = positive_greeting_reaction;
 				addMainText(PhraseContainer::positive_greetings_reaction_npc);
 				current_dialog_info.answers.clear();
-				current_dialog_info.answers.push_back("<Continue>");
+				current_dialog_info.answers.push_back(getContinueString());
 				current_dialog_info.is_player_turn = true;
 			}
 			break;
@@ -217,7 +233,7 @@ public:
 				current_stage = conversation_refuse;
 				addMainText(PhraseContainer::conversation_refuse_npc);
 				current_dialog_info.answers.clear();
-				current_dialog_info.answers.push_back("<Continue>");
+				current_dialog_info.answers.push_back(getContinueString());
 				current_dialog_info.is_player_turn = false;
 			}
 			else {
@@ -245,7 +261,7 @@ public:
 					addMainText(PhraseContainer::base_job_refuse_npc);
 
 					current_dialog_info.answers.clear();
-					current_dialog_info.answers.push_back("(Continue)");
+					current_dialog_info.answers.push_back(getContinueString());
 					current_dialog_info.is_player_turn = false;
 				}
 				else {
@@ -279,14 +295,14 @@ public:
 					current_stage = rumors_refuse;
 					addMainText(PhraseContainer::rumors_refuse_npc);
 					current_dialog_info.answers.clear();
-					current_dialog_info.answers.push_back("<Continue>");
+					current_dialog_info.answers.push_back(getContinueString());
 					current_dialog_info.is_player_turn = false;
 				}
 				else {
 					current_stage = rumors_refuse;
 					addMainText(PhraseContainer::rumors_refuse_npc);
 					current_dialog_info.answers.clear();
-					current_dialog_info.answers.push_back("<TODO: rumors generator>");
+					current_dialog_info.answers.push_back(L"<TODO: rumors generator>");
 					current_dialog_info.is_player_turn = false;
 				}
 			}
@@ -296,7 +312,7 @@ public:
 				addMainText(PhraseContainer::random_joke_player);
 
 				current_dialog_info.answers.clear();
-				current_dialog_info.answers.push_back("(Continue)");
+				current_dialog_info.answers.push_back(getContinueString());
 				current_dialog_info.is_player_turn = false;
 			}
 			else if ((answer_num == 3 && (jobAvailable() || specialJobAvailable()) && rumorsAvaliable()) || (answer_num == 2 && ((jobAvailable() || specialJobAvailable()) ^ rumorsAvaliable())) || answer_num == 1) {
@@ -305,7 +321,7 @@ public:
 				addMainText(PhraseContainer::farewell_npc);
 
 				current_dialog_info.answers.clear();
-				current_dialog_info.answers.push_back("(Continue)");
+				current_dialog_info.answers.push_back(getContinueString());
 				current_dialog_info.is_player_turn = false;
 			}
 			break;
@@ -317,7 +333,7 @@ public:
 				addMainText(PhraseContainer::random_negative_joke_reaction_npc);
 
 				current_dialog_info.answers.clear();
-				current_dialog_info.answers.push_back("(Continue)");
+				current_dialog_info.answers.push_back(getContinueString());
 				current_dialog_info.is_player_turn = false;
 			}
 			else if (joke_mark <= 66) {
@@ -326,7 +342,7 @@ public:
 				addMainText(PhraseContainer::random_neutral_joke_reaction_npc);
 
 				current_dialog_info.answers.clear();
-				current_dialog_info.answers.push_back("(Continue)");
+				current_dialog_info.answers.push_back(getContinueString());
 				current_dialog_info.is_player_turn = false;
 			}
 			else {
@@ -335,7 +351,7 @@ public:
 				addMainText(PhraseContainer::random_positive_joke_reaction_npc);
 
 				current_dialog_info.answers.clear();
-				current_dialog_info.answers.push_back("(Continue)");
+				current_dialog_info.answers.push_back(getContinueString());
 				current_dialog_info.is_player_turn = false;
 			}
 			break;
@@ -374,7 +390,7 @@ public:
 					current_stage = job_refuse;
 					addMainText(PhraseContainer::special_job_refuse_npc);
 					current_dialog_info.answers.clear();
-					current_dialog_info.answers.push_back("(Continue)");
+					current_dialog_info.answers.push_back(getContinueString());
 				}
 				
 				current_dialog_info.is_player_turn = false;
@@ -435,7 +451,7 @@ public:
 			current_stage = dialog_start;
 			current_dialog_info.main_text = start_description_string;
 			current_dialog_info.answers.clear();
-			current_dialog_info.answers.push_back("<Continue>");
+			current_dialog_info.answers.push_back(getContinueString());
 			current_dialog_info.is_player_turn = false;
 			break;
 		}
@@ -454,5 +470,4 @@ public:
 		special_mission_info.clear();
 		special_mission_info = new_special_mission;
 	}
-
 };

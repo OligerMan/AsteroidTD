@@ -1,4 +1,4 @@
-#include "VisualController.h"
+﻿#include "VisualController.h"
 #include "GUIVisualController.h"
 #include "GUIManager.h"
 #include "ResourceManager.h"
@@ -275,7 +275,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				global_event_buffer.erase(global_event_buffer.begin() + i);
 				break;
 			case EventType::message:
-				gui_manager.forceSetTopSign("Message: " + *static_cast<std::string *>(global_event_buffer[i].getData(0)), 5);
+				gui_manager.forceSetTopSign(L"Message: " + *static_cast<std::wstring *>(global_event_buffer[i].getData(0)), 5);
 				global_event_buffer.erase(global_event_buffer.begin() + i);
 				break;
 			}
@@ -1416,8 +1416,8 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 int main() {
 	HWND console_hWnd = GetConsoleWindow();
 	//ShowWindow(console_hWnd, SW_HIDE);
-
-	phrase_container.parseFromFile("dialog.cfg");
+    //setlocale(LC_ALL, "rus");
+	phrase_container.parseFromFile(settings.getLocalisationFile());
 
 	sf::ContextSettings context_settings;
 	context_settings.antialiasingLevel = 8;
@@ -1465,7 +1465,7 @@ int main() {
 	sf::Text title;
 	sf::Text nickname_title;
 	sf::Font base_font;
-	base_font.loadFromFile("a_Alterna.ttf");
+	base_font.loadFromFile(consts.getDefaultFontPath());
 
 	title.setPosition(sf::Vector2f(window.getView().getSize().x / 2, 150 * window.getView().getSize().y / 1080));
 	title.setFillColor(sf::Color::White);
@@ -1489,7 +1489,7 @@ int main() {
 		sf::Texture texture_default, texture_selected;
 		sf::Sprite sprite;
 		float radius;
-		std::string advice_string;
+		std::wstring advice_string;
 	};
 	enum buttons_name {
 		infinity_mode_button,
@@ -1507,28 +1507,32 @@ int main() {
 	buttons[infinity_mode_button].texture_selected.loadFromFile("menu_buttons\\inf_mode_selected.png");
 	buttons[infinity_mode_button].sprite.setTexture(buttons[infinity_mode_button].texture_default);
 	buttons[infinity_mode_button].radius = 75 * window.getView().getSize().y / 1080;
-	buttons[infinity_mode_button].advice_string = "start infinity mode";
+    std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::start_inf_mode_GUI, 0);
+	buttons[infinity_mode_button].advice_string = buffer[rand() * buffer.size() / RAND_MAX];
 
     buttons[adventure_mode_button].pos = Point(window.getView().getSize().x / 2 - 100 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
     buttons[adventure_mode_button].texture_default.loadFromFile("menu_buttons\\adv_mode.png");
     buttons[adventure_mode_button].texture_selected.loadFromFile("menu_buttons\\adv_mode_selected.png");
     buttons[adventure_mode_button].sprite.setTexture(buttons[adventure_mode_button].texture_default);
     buttons[adventure_mode_button].radius = 75 * window.getView().getSize().y / 1080;
-    buttons[adventure_mode_button].advice_string = "start adventure mode";
+    buffer = phrase_container.getPhraseBuffer(PhraseContainer::start_adv_mode_GUI, 0);
+    buttons[adventure_mode_button].advice_string = buffer[rand() * buffer.size() / RAND_MAX];
 
 	buttons[settings_button].pos = Point(window.getView().getSize().x / 2 + 100 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
 	buttons[settings_button].texture_default.loadFromFile("menu_buttons\\settings.png");
 	buttons[settings_button].texture_selected.loadFromFile("menu_buttons\\settings_selected.png");
 	buttons[settings_button].sprite.setTexture(buttons[settings_button].texture_default);
 	buttons[settings_button].radius = 75 * window.getView().getSize().y / 1080;
-	buttons[settings_button].advice_string = "open settings";
+    buffer = phrase_container.getPhraseBuffer(PhraseContainer::settings_menu_GUI, 0);
+	buttons[settings_button].advice_string = buffer[rand() * buffer.size() / RAND_MAX];
 
 	buttons[shutdown_button].pos = Point(window.getView().getSize().x / 2 + 300 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
 	buttons[shutdown_button].texture_default.loadFromFile("menu_buttons\\shutdown.png");
 	buttons[shutdown_button].texture_selected.loadFromFile("menu_buttons\\shutdown_selected.png");
 	buttons[shutdown_button].sprite.setTexture(buttons[shutdown_button].texture_default);
 	buttons[shutdown_button].radius = 75 * window.getView().getSize().y / 1080;
-	buttons[shutdown_button].advice_string = "close the game";
+    buffer = phrase_container.getPhraseBuffer(PhraseContainer::shutdown_GUI, 0);
+	buttons[shutdown_button].advice_string = buffer[rand() * buffer.size() / RAND_MAX];
 
 	int chosen_button = infinity_mode_button;
 
@@ -1603,9 +1607,11 @@ int main() {
 					buttons[i].sprite.setPosition(sf::Vector2f(buttons[i].pos.x, buttons[i].pos.y));
 				}
 
-				title.setString("Press Space to " + buttons[chosen_button].advice_string);
+                buffer = phrase_container.getPhraseBuffer(PhraseContainer::keyboard_mainmenu_title_GUI, 0);
+				title.setString(buffer[rand() * buffer.size() / RAND_MAX] + buttons[chosen_button].advice_string);
 				if (sf::Joystick::isConnected(0)) {
-					title.setString("Press A to " + buttons[chosen_button].advice_string);
+                    buffer = phrase_container.getPhraseBuffer(PhraseContainer::gamepad_mainmenu_title_GUI, 0);
+					title.setString(buffer[rand() * buffer.size() / RAND_MAX] + buttons[chosen_button].advice_string);
 				}
 				title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
 
@@ -1615,7 +1621,7 @@ int main() {
 					Point cursor_pos;
 					sf::Vector2i mouse_pos = sf::Mouse::getPosition();
 					sf::Vector2i window_pos = window.getPosition();
-					cursor_pos = Point(mouse_pos.x/* - window.getSize().x / 2*/ - window.getPosition().x, mouse_pos.y/* - window.getSize().y / 2*/ - window.getPosition().y);
+					cursor_pos = Point(mouse_pos.x - window.getPosition().x, mouse_pos.y - window.getPosition().y);
 					for (int i = 0; i < buttons.size(); i++) {
 						if ((cursor_pos - buttons[i].pos).getLength() <= buttons[i].radius) {
 							if (i == infinity_mode_button) {
@@ -1646,6 +1652,11 @@ int main() {
 							game_status = game_hero_mode;
 							is_input_state = true;
 						}
+                        if (chosen_button == adventure_mode_button) {
+                            game_status = game_hero_mode;
+                            game_mode = GameMode::adventure_mode;
+                            is_input_state = true;
+                        }
 						if (chosen_button == settings_button) {
 							game_status = settings_menu;
 							is_input_state = true;
@@ -1679,17 +1690,25 @@ int main() {
 				window.draw(menu_background_sprite);
 				for (int i = 0; i < settings_list.size(); i++) {
 					if (settings_list[i] == "nickname") {
-						settings_sign.setString("Nickname: ");
+                        buffer = phrase_container.getPhraseBuffer(PhraseContainer::setting_nickname_title_GUI, 0);
+						settings_sign.setString(buffer[rand() * buffer.size() / RAND_MAX]);
 					}
 					if (settings_list[i] == "ranking_server") {
-						settings_sign.setString("Ranking server: ");
+                        buffer = phrase_container.getPhraseBuffer(PhraseContainer::setting_ranking_title_GUI, 0);
+                        settings_sign.setString(buffer[rand() * buffer.size() / RAND_MAX]);
 					}
 					if (settings_list[i] == "window_width") {
-						settings_sign.setString("Window width: ");
+                        buffer = phrase_container.getPhraseBuffer(PhraseContainer::setting_win_width_title_GUI, 0);
+                        settings_sign.setString(buffer[rand() * buffer.size() / RAND_MAX]);
 					}
 					if (settings_list[i] == "window_height") {
-						settings_sign.setString("Window height: ");
+                        buffer = phrase_container.getPhraseBuffer(PhraseContainer::setting_win_height_title_GUI, 0);
+                        settings_sign.setString(buffer[rand() * buffer.size() / RAND_MAX]);
 					}
+                    if (settings_list[i] == "localisation_file") {
+                        buffer = phrase_container.getPhraseBuffer(PhraseContainer::setting_win_height_title_GUI, 0);
+                        settings_sign.setString(buffer[rand() * buffer.size() / RAND_MAX]);
+                    }
 					if (!settings_changing || i != chosen_setting) {
 						settings_sign.setString(settings_sign.getString() + settings.getSettingString(settings_list[i]));
 					}
@@ -1737,7 +1756,8 @@ int main() {
 						key_pressed = true;
 					}
 
-					title.setString("Press Escape on keyboard or Back on gamepad to exit settings");
+                    buffer = phrase_container.getPhraseBuffer(PhraseContainer::setting_exit_title_GUI, 0);
+                    title.setString(buffer[rand() * buffer.size() / RAND_MAX]);
 				}
 				else {
 					if (((sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) || (sf::Joystick::isConnected(0) && (sf::Joystick::isButtonPressed(0, A))))) {
@@ -1760,7 +1780,9 @@ int main() {
 						}
 						key_pressed = true;
 					}
-					title.setString("Press Escape on keyboard or Back on gamepad to discard changes");
+
+                    buffer = phrase_container.getPhraseBuffer(PhraseContainer::setting_discard_title_GUI, 0);
+                    title.setString(buffer[rand() * buffer.size() / RAND_MAX]);
 				}
 				if (!key_pressed) {
 					last_menu_choice = frame_num - fps.getFPS();
@@ -1774,10 +1796,13 @@ int main() {
 				return 0;
 			}
 			else if (game_status == nickname_enter) {
-				title.setString("Please enter your nickname and press Enter");
+
+                buffer = phrase_container.getPhraseBuffer(PhraseContainer::keyboard_nickname_title_GUI, 0);
+                title.setString(buffer[rand() * buffer.size() / RAND_MAX]);
 
 				if (sf::Joystick::isConnected(0)) {
-					title.setString("Please enter your nickname and press A");
+                    buffer = phrase_container.getPhraseBuffer(PhraseContainer::keyboard_nickname_title_GUI, 0);
+                    title.setString(buffer[rand() * buffer.size() / RAND_MAX]);
 				}
 
 				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Return) || (sf::Joystick::isConnected(0) && sf::Joystick::isButtonPressed(0, A))) && (frame_num - last_menu_choice) > consts.getFPSLock()) {
@@ -1787,8 +1812,9 @@ int main() {
 					game_status = main_menu;
 					continue;
 				}
-
-				nickname_title.setString("Your nickname: " + keyboard_buffer.getBuffer());
+                buffer = phrase_container.getPhraseBuffer(PhraseContainer::keyboard_nickname_title_GUI, 0);
+                std::string kbrd_buf = keyboard_buffer.getBuffer();
+				nickname_title.setString(buffer[rand() * buffer.size() / RAND_MAX] + std::wstring(kbrd_buf.begin(), kbrd_buf.end()));
 				title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
 				nickname_title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
 

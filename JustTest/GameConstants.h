@@ -2,6 +2,8 @@
 
 class Constants {
 
+    const char * default_font = "18888.ttf";
+
 	const double speed_damage_threshold = 100;
 	const double speed_damage_coef = 1;
 	const double max_hero_speed = 10;
@@ -23,7 +25,8 @@ class Constants {
 	const float damage_buff_price = 50;
 	const float heal_buff_price = 100;
 
-	const float enemy_spawn_range = 10000;
+	const float infinity_mode_enemy_spawn_range = 10000;
+    const float defence_mission_enemy_spawn_range = 2500;
 	const float minimal_flight_range = 450;
 
 	const float dome_heal = 0.03;
@@ -52,6 +55,8 @@ class Constants {
 	const float minimal_mission_price = 100;
 	const float max_random_mission_price_addition = 500;
 	const float mission_price_change_coef = 0.975;
+    const float courier_reward_coef = 1;
+    const float defence_reward_coef = 5;
 
 public:
 
@@ -111,9 +116,13 @@ public:
 		return base_gold_price;
 	}
 
-	const float getEnemySpawnRange() {
-		return enemy_spawn_range;
+	const float getInfiniteModeEnemySpawnRange() {
+		return infinity_mode_enemy_spawn_range;
 	}
+
+    const float getDefenceMissionEnemySpawnRange() {
+        return defence_mission_enemy_spawn_range;
+    }
 
 	const float getMinimalFlightRange() {
 		return minimal_flight_range;
@@ -206,4 +215,16 @@ public:
 	const float getMissionPriceChangeCoef() {
 		return mission_price_change_coef;
 	}
+
+    const float getCourierRewardCoef() {
+        return courier_reward_coef;
+    }
+
+    const float getDefenceRewardCoef() {
+        return defence_reward_coef;
+    }
+
+    const char * getDefaultFontPath() {
+        return default_font;
+    }
 } consts;

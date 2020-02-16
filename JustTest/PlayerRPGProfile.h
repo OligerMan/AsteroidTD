@@ -60,10 +60,12 @@ public:
 	std::vector<Point> getCurrentCoordinatesList() {
 		std::vector<Point> output;
 		if (current_mission >= 0 && current_mission < mission_list.size()) {
+            Object * obj_ptr;
+            void * objective;
 			switch (mission_list[current_mission].type) {
 			case Mission::courier:
-				void * objective = mission_list[current_mission].getObjective().objectiveExpansion;
-				Object * obj_ptr = nullptr;
+				objective = mission_list[current_mission].getObjective().objectiveExpansion;
+				obj_ptr = nullptr;
 				if (objective) {
 					obj_ptr = (Object *)((PointObjective *)objective)->object_ptr;
 				}
@@ -71,6 +73,18 @@ public:
 					output.push_back(obj_ptr->getPosition());
 				}
 				break;
+            case Mission::defence:
+                if (mission_list[current_mission].getObjective().type == Objective::point) {
+                    objective = mission_list[current_mission].getObjective().objectiveExpansion;
+                    obj_ptr = nullptr;
+                    if (objective) {
+                        obj_ptr = (Object *)((PointObjective *)objective)->object_ptr;
+                    }
+                    if (obj_ptr) {
+                        output.push_back(obj_ptr->getPosition());
+                    }
+                }
+                break;
 			};
 		}
 		return output;

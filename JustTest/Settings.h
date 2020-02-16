@@ -65,6 +65,7 @@ public:
 		ranking_server,
 		start_gold,
 		nickname,
+        localisation_file
 	};
 
 private:
@@ -86,6 +87,7 @@ private:
 		Setting("ranking_server", "oliger.ddns.net"),
 		Setting("start_gold", 2500),
 		Setting("nickname", ""),
+        Setting("localisation_file", "dialog.cfg"),
 	};
 
 	bool is_settings_loaded;
@@ -115,7 +117,8 @@ public:
 		settings_input << "is_infinite " << set[is_infinite].value << std::endl;
 		settings_input << "infinite_map_radius " << set[infinite_map_radius].value << std::endl;
 		settings_input << "ranking_server " << set[ranking_server].value << std::endl;
-		settings_input << "start_gold " << set[start_gold].value << std::endl;
+        settings_input << "start_gold " << set[start_gold].value << std::endl;
+        settings_input << "localisation_file " << set[localisation_file].value << std::endl;
 		if (set[nickname].value.size()) {
 			settings_input << "nickname " << set[nickname].value << std::endl;
 		}
@@ -207,6 +210,7 @@ public:
 			std::string("ranking_server"),
 			std::string("window_width"),
 			std::string("window_height"),
+            std::string("localisation_file")
 		};
 		return output;
 	}
@@ -274,6 +278,10 @@ public:
 	std::string getRankingServer() {
 		return set[ranking_server].value;
 	}
+
+    std::string getLocalisationFile() {
+        return set[localisation_file].value;
+    }
 };
 
 Settings settings;

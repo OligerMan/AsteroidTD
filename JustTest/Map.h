@@ -118,7 +118,7 @@ private:
 	Object * closest_asteroid = nullptr;
 	std::vector<Object *> discovered_asteroid_list;
 	std::vector<Object *> npc_list;
-    std::map<unsigned int, std::vector<Object *>> enemy_wave_list;
+    std::map<unsigned long long, std::vector<Object *>> enemy_wave_list;
 
 	EventBuffer event_buffer;
 
@@ -404,6 +404,9 @@ private:
 
 	void garbageCollector() {
 		int try_count = 3;
+        auto deleted = [](Object * obj) {
+            return obj != nullptr && (obj->isDeleted() || obj->getUnitInfo() == nullptr || obj->getUnitInfo()->isDead());
+        };
 		//bool dirty = true;
 		while (try_count > 0) {
 			bool smth_cleaned = false;
@@ -413,12 +416,26 @@ private:
 						smth_cleaned = true;
 					}
 					Object * enemy = (Object *)objects[layer][i]->getUnitInfo()->getEnemy();
-					if (enemy != nullptr && (enemy->isDeleted() || enemy->getUnitInfo() == nullptr || enemy->getUnitInfo()->isDead())) {
+					if (deleted(enemy)) {
 						objects[layer][i]->getUnitInfo()->setEnemy(nullptr);
 						smth_cleaned = true;
 					}
 				}
 			}
+            for (auto iter = enemy_wave_list.begin(); iter != enemy_wave_list.end(); iter++) {
+                for (int i = 0; i < iter->second.size(); i++) {
+                    if (deleted(iter->second[i])) {
+                        iter->second.erase(iter->second.begin() + i);
+                    }
+                }
+            }
+            for (int i = 0; i < npc_list.size(); i++) {
+                if (deleted(npc_list[i]) || (npc_list[i] && npc_list[i]->getAttached()->size() == 0)) {
+                    delete static_cast<NPCInfo *>(npc_list[i]->getNPCInfo());
+                    npc_list[i]->setNPCInfo(nullptr);
+                    npc_list.erase(npc_list.begin() + i);
+                }
+            }
 			if (!smth_cleaned) {
 				try_count--;
 			}
@@ -429,7 +446,7 @@ private:
 			bool smth_cleaned = false;
 			for (int layer = 0; layer < objects.size(); layer++) {
 				for (int i = 0; i < objects[layer].size(); i++) {
-					if (objects[layer][i]->isDeleted() || !(objects[layer][i]->getUnitInfo() != nullptr && !objects[layer][i]->getUnitInfo()->isDead())) {
+					if (deleted(objects[layer][i])) {
 						if (objects[layer][i] == hero_object) {
 							hero_object = nullptr;
 						}
@@ -697,7 +714,7 @@ private:
 			SpriteType asteroid_type = asteroid_sprite;
 
 			int special_asteroid_chance = rand() % 1000;
-			bool npc_asteroid_chance = (rand() % 1000) < 100;
+			bool npc_asteroid_chance = (rand() % 1000) < 200;
             npc_asteroid_chance = npc_asteroid_chance && game_mode == GameMode::adventure_mode;
 			if (npc_asteroid_chance) {
 				faction = neutral_faction;
@@ -745,8 +762,10 @@ private:
 				object->initNPCInfo(new NPCInfo(WorldFactionList::Alliance_of_Ancient_Knowledge));
 				int base_npc_lvl = 100 * rand() / RAND_MAX * rand() / RAND_MAX * rand() / RAND_MAX * rand() / RAND_MAX * rand() / RAND_MAX;
 				int special_mission_lvl_dif = 10 * rand() / RAND_MAX;
-				Mission base_mission = createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, Mission::Type::courier, base_npc_lvl);
-				Mission special_mission = createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, Mission::Type::courier, base_npc_lvl + special_mission_lvl_dif);
+                Mission::Type type = static_cast<Mission::Type>(rand() % Mission::TYPE_COUNT);
+				Mission base_mission = createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, type, base_npc_lvl);
+                type = static_cast<Mission::Type>(rand() % Mission::TYPE_COUNT);
+				Mission special_mission = createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, type, base_npc_lvl + special_mission_lvl_dif);
 				if (base_mission.type) {
 					static_cast<NPCInfo *>(object->getNPCInfo())->changeBaseMission(base_mission);
 				}
@@ -765,7 +784,7 @@ private:
 		}
 	}
 
-	void spawnEnemyGroup(int fighter_amount, int gunship_amount, Point pos) {
+	void spawnEnemyGroup(int fighter_amount, int gunship_amount, Point pos, std::vector<Object *> * enemy_list = nullptr) {
 
 		for (int i = 0; i < fighter_amount; i++) {
 			float angle = ((float)i / fighter_amount) * 2 * PI;
@@ -787,6 +806,9 @@ private:
 			object->setAutoOrigin();
 			object->getUnitInfo()->setFaction(aggressive_faction);
 			addObject(object, landscape_layer);
+            if (enemy_list) {
+                enemy_list->push_back(object);
+            }
 			setTurretArray(object);
 		}
 
@@ -810,6 +832,9 @@ private:
 			object->setAutoOrigin();
 			object->getUnitInfo()->setFaction(aggressive_faction);
 			addObject(object, landscape_layer);
+            if (enemy_list) {
+                enemy_list->push_back(object);
+            }
 			setTurretArray(object);
 		}
 	}
@@ -1035,13 +1060,23 @@ private:
 	Mission createMission(WorldFactionList faction, Mission::Type type, int mission_lvl) {
 		Mission output;
 		output.type = type;
-		output.reward = (int)consts.getMinimalMissionPrice() + (int)(consts.getMaxRandomMissionPriceAddition() * (1 - pow(consts.getMissionPriceChangeCoef(), mission_lvl))) / 5 * 5;
+        float reward_coef = 1;
+        switch (type) {
+        case Mission::courier:
+            reward_coef = consts.getCourierRewardCoef();
+            break;
+        case Mission::defence:
+            reward_coef = consts.getDefenceRewardCoef();
+            break;
+        }
+		output.reward = (int)consts.getMinimalMissionPrice() + (int)(consts.getMaxRandomMissionPriceAddition() * reward_coef * (1 - pow(consts.getMissionPriceChangeCoef(), mission_lvl))) / 5 * 5;
 		
+        Object * objective;
 		switch (type) {
-		case Mission::Type::courier:
-			Object * objective = randomNPCAsteroid();
+		case Mission::courier:
+			objective = randomNPCAsteroid();
 			if (objective) {
-				std::vector<void *> objectives_list = { randomNPCAsteroid() };
+				std::vector<void *> objectives_list = { objective };
 				CourierMission * mission = new CourierMission(objectives_list);
 				output.missionExpansion = mission;
 			}
@@ -1049,6 +1084,16 @@ private:
 				output.type = Mission::null;
 			}
 			break;
+        case Mission::defence:
+            objective = randomNPCAsteroid();
+            if (objective) {
+                DefenceMission * mission = new DefenceMission(objective, 2 + sqrt(mission_lvl), mission_lvl);
+                output.missionExpansion = mission;
+            }
+            else {
+                output.type = Mission::null;
+            }
+            break;
 		}
 		return output;
 	}
@@ -1065,15 +1110,10 @@ private:
                     if (hero_object && (hero_object->getPosition() - static_cast<Object *>(static_cast<PointObjective *>(objective.objectiveExpansion)->object_ptr)->getPosition()).getLength() < consts.getInteractionDistance()) {
                         cur_miss.setObjectiveCompleted();
                         if (rpg_profile.getCurrentMission().completed()) {
-                            std::string message_string;
-                            switch (rpg_profile.getCurrentMission().type) {
-                            case Mission::courier:
-                                std::vector<std::string> buffer = phrase_container.getPhraseBuffer(PhraseContainer::courier_mission_completed_npc, 0);
-                                message_string = buffer[rand() * buffer.size() / RAND_MAX];
-                                break;
-                            }
+                            std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::courier_mission_completed_npc, 0);
+                            std::wstring message_string = buffer[rand() * buffer.size() / RAND_MAX];
                             global_event_buffer.push_back(Event(new float(rpg_profile.getCurrentMission().reward), reward));
-                            global_event_buffer.push_back(Event(new std::string(message_string), message));
+                            global_event_buffer.push_back(Event(new std::wstring(message_string), message));
                         }
                     }
                     break;
@@ -1081,7 +1121,7 @@ private:
                 break;
             case Mission::defence:
                 switch (objective.type) {
-                case Objective::asteroid:
+                case Objective::point:
                     if (hero_object && (hero_object->getPosition() - static_cast<Object *>(static_cast<PointObjective *>(objective.objectiveExpansion)->object_ptr)->getPosition()).getLength() < consts.getInteractionDistance()) {
                         cur_miss.setObjectiveCompleted();
                     }
@@ -1101,12 +1141,28 @@ private:
                     }
                     break;
                 case Objective::wave_level:
-					if (mission_info.count(cur_miss.id)) {
-
+					if (enemy_wave_list.count(cur_miss.id)) {
+                        auto iter = enemy_wave_list.find(cur_miss.id);
+                        if (iter->second.empty()) {
+                            cur_miss.setObjectiveCompleted();
+                            enemy_wave_list.erase(iter);
+                            if (rpg_profile.getCurrentMission().completed()) {
+                                std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_mission_completed_npc, 0);
+                                std::wstring message_string = buffer[rand() * buffer.size() / RAND_MAX];
+                                global_event_buffer.push_back(Event(new float(rpg_profile.getCurrentMission().reward), reward));
+                                global_event_buffer.push_back(Event(new std::wstring(message_string), message));
+                            }
+                        }
 					}
-					else {
-
-						mission_info.insert(std::pair<unsigned long long, void *>(cur_miss.id, (void *)(new int(0))));
+					else if(hero_object){
+                        std::vector<Object *> enemy_list;
+                        float angle = (float)(rand() % 1024) / 512 * PI;
+                        Point new_spawn_point = hero_object->getPosition() + Point(cos(angle), sin(angle)) * (consts.getDefenceMissionEnemySpawnRange() + 0.1);
+                        int enemy_lvl = static_cast<FloatObjective *>(objective.objectiveExpansion)->value;
+                        int gunship_amount = enemy_lvl / 10;
+                        int fighter_amount = std::max(1, enemy_lvl / 2 - 2 * gunship_amount);
+                        spawnEnemyGroup(fighter_amount, gunship_amount, new_spawn_point, &enemy_list);
+						enemy_wave_list.insert(std::pair<unsigned long long, std::vector<Object *>>(cur_miss.id, enemy_list));
 					}
                     break;
                 }
@@ -1241,11 +1297,9 @@ public:
 		for (int i = 0; i < base->getAttached()->size(); i++) {
 			if (((*base->getAttached())[i]->getPosition() - base->getPosition()).getLength() <= 150) {
 				inner_ring.push_back((*base->getAttached())[i]);
-				std::cout << ((*base->getAttached())[i]->getPosition() - base->getPosition()).getLength() << std::endl;
 			}
 			else {
 				outer_ring.push_back((*base->getAttached())[i]);
-				std::cout << ((*base->getAttached())[i]->getPosition() - base->getPosition()).getLength() << std::endl;
 			}
 		}
 		Object * object = nullptr;
@@ -1439,10 +1493,10 @@ public:
 		while (group_amount > 0) {
 			int nearest_point = rand() % convex.size();
 			float angle = (float)(rand() % 1024) / 512 * PI;
-			Point new_spawn_point = convex[nearest_point] + Point(cos(angle), sin(angle)) * (consts.getEnemySpawnRange() + 0.1);
+			Point new_spawn_point = convex[nearest_point] + Point(cos(angle), sin(angle)) * (consts.getInfiniteModeEnemySpawnRange() + 0.1);
 			bool outofrange = true;
 			for (int i = 0; i < convex.size(); i++) {
-				if ((convex[i] - new_spawn_point).getLength() < consts.getEnemySpawnRange()) {
+				if ((convex[i] - new_spawn_point).getLength() < consts.getInfiniteModeEnemySpawnRange()) {
 					outofrange = false;
 					break;
 				}

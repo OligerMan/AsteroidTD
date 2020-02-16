@@ -19,7 +19,7 @@ class MissionVisualController {
 public:
 
 	MissionVisualController(sf::RenderWindow & window) {
-		main_font.loadFromFile("a_Alterna.ttf");
+		main_font.loadFromFile(consts.getDefaultFontPath());
 
 		name_text.setPosition(sf::Vector2f(window.getView().getSize().x / 2, 150 * window.getView().getSize().y / 1080));
 		name_text.setFillColor(sf::Color::White);
@@ -43,6 +43,7 @@ public:
 
 		if (mission_list.size() == 0) {
 			setFormatString("No missions", name_text, mission_list_width, mission_list_textbox_height, base_character_size, window);
+            name_text.setFillColor(sf::Color::White);
 			name_text.setPosition(window.getView().getCenter() - view_center + sf::Vector2f(mission_list_border, mission_list_border));
 			window.draw(name_text);
 			setFormatString("Find some missions to see details", description_text, 1920 - mission_list_width - 2 * mission_list_border, 1080 - 2 * mission_list_border, base_character_size, window);
@@ -55,7 +56,7 @@ public:
 		}
 
 		for (int i = 0; i < mission_list.size(); i++) {
-			setFormatString((i == selected_mission ? ">" : "") + mission_list[i].getShortDescription(), name_text, mission_list_width, mission_list_textbox_height, base_character_size, window);
+			setFormatString((i == selected_mission ? L">" : L"") + mission_list[i].getShortDescription(), name_text, mission_list_width, mission_list_textbox_height, base_character_size, window);
 			current_shift = current_shift + 0.01 * (selected_mission - current_shift);
 			name_text.setPosition(window.getView().getCenter() - sf::Vector2f(view_size.x / 2, 0) + sf::Vector2f(mission_list_border, (i - current_shift) * (mission_list_textbox_height)));
 			if (rpg_profile.getCurrentMissionNumber() == i) {
@@ -83,6 +84,7 @@ public:
 
 		if (mission_list.size() == 0) {
 			setFormatString("No completed missions", name_text, mission_list_width, mission_list_textbox_height, base_character_size, window);
+            name_text.setFillColor(sf::Color::White);
 			name_text.setPosition(window.getView().getCenter() - view_center + sf::Vector2f(mission_list_border, mission_list_border));
 			window.draw(name_text);
 			setFormatString("Complete some missions to see details", description_text, 1920 - mission_list_width - 2 * mission_list_border, 1080 - 2 * mission_list_border, base_character_size, window);
@@ -95,7 +97,7 @@ public:
 		}
 
 		for (int i = 0; i < mission_list.size(); i++) {
-			setFormatString((i == selected_mission ? ">" : "") + mission_list[i].getShortDescription(), name_text, mission_list_width, mission_list_textbox_height, base_character_size, window);
+			setFormatString((i == selected_mission ? L">" : L"") + mission_list[i].getShortDescription(), name_text, mission_list_width, mission_list_textbox_height, base_character_size, window);
 			current_shift = current_shift + 0.01 * (selected_mission - current_shift);
 			name_text.setPosition(window.getView().getCenter() - sf::Vector2f(view_size.x / 2, 0) + sf::Vector2f(mission_list_border, (i - current_shift) * (mission_list_textbox_height)));
 			name_text.setFillColor(sf::Color::White);
