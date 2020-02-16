@@ -78,6 +78,8 @@ public:
         keyboard_nickname_title_GUI,
         gamepad_nickname_title_GUI,
         nickname_enter_title_GUI,
+        gold_sign_GUI,
+        research_sign_GUI,
 
 		PHRASE_TYPE_COUNT
 	};
@@ -171,6 +173,8 @@ public:
         phrase_type_strings[keyboard_nickname_title_GUI] = L"keyboard_nickname_title_GUI";
         phrase_type_strings[gamepad_nickname_title_GUI] = L"gamepad_nickname_title_GUI";
         phrase_type_strings[nickname_enter_title_GUI] = L"nickname_enter_title_GUI";
+        phrase_type_strings[gold_sign_GUI] = L"gold_sign_GUI";
+        phrase_type_strings[research_sign_GUI] = L"research_sign_GUI";
 	}
 
 	/* 

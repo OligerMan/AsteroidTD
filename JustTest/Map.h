@@ -760,8 +760,8 @@ private:
 
 			if (npc_asteroid_chance) {
 				object->initNPCInfo(new NPCInfo(WorldFactionList::Alliance_of_Ancient_Knowledge));
-				int base_npc_lvl = 100 * rand() / RAND_MAX * rand() / RAND_MAX * rand() / RAND_MAX * rand() / RAND_MAX * rand() / RAND_MAX;
-				int special_mission_lvl_dif = 10 * rand() / RAND_MAX;
+				int base_npc_lvl = 100 * rand() / (RAND_MAX + 1) * rand() / (RAND_MAX + 1) * rand() / (RAND_MAX + 1) * rand() / (RAND_MAX + 1) * rand() / (RAND_MAX + 1);
+				int special_mission_lvl_dif = 10 * rand() / (RAND_MAX + 1);
                 Mission::Type type = static_cast<Mission::Type>(rand() % Mission::TYPE_COUNT);
 				Mission base_mission = createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, type, base_npc_lvl);
                 type = static_cast<Mission::Type>(rand() % Mission::TYPE_COUNT);
@@ -1045,14 +1045,14 @@ private:
 
 	Object * randomDiscoveredAsteroid() {
 		if (discovered_asteroid_list.size()) {
-			return discovered_asteroid_list[rand() * discovered_asteroid_list.size() / RAND_MAX];
+			return discovered_asteroid_list[rand() * discovered_asteroid_list.size() / (RAND_MAX + 1)];
 		}
 		return objects[landscape_layer][1];
 	}
 
 	Object * randomNPCAsteroid() {
 		if (npc_list.size()) {
-			return npc_list[rand() * npc_list.size() / RAND_MAX];
+			return npc_list[rand() * npc_list.size() / (RAND_MAX + 1)];
 		}
 		return nullptr;
 	}
@@ -1111,7 +1111,7 @@ private:
                         cur_miss.setObjectiveCompleted();
                         if (rpg_profile.getCurrentMission().completed()) {
                             std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::courier_mission_completed_npc, 0);
-                            std::wstring message_string = buffer[rand() * buffer.size() / RAND_MAX];
+                            std::wstring message_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
                             global_event_buffer.push_back(Event(new float(rpg_profile.getCurrentMission().reward), reward));
                             global_event_buffer.push_back(Event(new std::wstring(message_string), message));
                         }
@@ -1148,7 +1148,7 @@ private:
                             enemy_wave_list.erase(iter);
                             if (rpg_profile.getCurrentMission().completed()) {
                                 std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_mission_completed_npc, 0);
-                                std::wstring message_string = buffer[rand() * buffer.size() / RAND_MAX];
+                                std::wstring message_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
                                 global_event_buffer.push_back(Event(new float(rpg_profile.getCurrentMission().reward), reward));
                                 global_event_buffer.push_back(Event(new std::wstring(message_string), message));
                             }

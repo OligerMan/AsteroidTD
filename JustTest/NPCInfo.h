@@ -60,34 +60,34 @@ private:
 
     std::wstring getContinueString() {
         std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::continue_phrase_GUI, politeness, personal_id);
-        return buffer[rand() * buffer.size() / RAND_MAX];
+        return buffer[rand() * buffer.size() / (RAND_MAX + 1)];
     }
 
     std::wstring getRerollString() {
         std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::reroll_phrase_GUI, politeness, personal_id);
-        return buffer[rand() * buffer.size() / RAND_MAX];
+        return buffer[rand() * buffer.size() / (RAND_MAX + 1)];
     }
 
     std::wstring getJokeString() {
         std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::joke_phrase_GUI, politeness, personal_id);
-        return buffer[rand() * buffer.size() / RAND_MAX];
+        return buffer[rand() * buffer.size() / (RAND_MAX + 1)];
     }
 
 public:
 
 	NPCInfo(WorldFactionList faction) : faction(faction) {
-		politeness = rand() * 200 / RAND_MAX - 100;
-		prejudices = rand() * 200 / RAND_MAX - 100;
+		politeness = rand() * 200 / (RAND_MAX + 1) - 100;
+		prejudices = rand() * 200 / (RAND_MAX + 1) - 100;
 
 		faction = WorldFactionList(rand() % WORLD_FACTIONS_COUNT);
 
 		std::vector<std::wstring> buffer;
 
 		buffer = phrase_container.getPersonalIdList();
-		personal_id = buffer[rand() * buffer.size() / RAND_MAX];
+		personal_id = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
 		buffer = phrase_container.getPhraseBuffer(PhraseContainer::start_description, politeness, personal_id);
-		start_description_string = buffer[rand() * buffer.size() / RAND_MAX];
+		start_description_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 		current_dialog_info.main_text.clear();
 		current_dialog_info.main_text = start_description_string;
 		current_dialog_info.answers.clear();
@@ -98,15 +98,15 @@ public:
 	}
 
 	NPCInfo(WorldFactionList faction, std::wstring personal_id) : faction(faction), personal_id(personal_id) {
-		politeness = rand() * 200 / RAND_MAX - 100;
-		prejudices = rand() * 200 / RAND_MAX - 100;
+		politeness = rand() * 200 / (RAND_MAX + 1) - 100;
+		prejudices = rand() * 200 / (RAND_MAX + 1) - 100;
 
 		faction = WorldFactionList(rand() % WORLD_FACTIONS_COUNT);
 
 		std::vector<std::wstring> buffer;
 
 		buffer = phrase_container.getPhraseBuffer(PhraseContainer::start_description, politeness, personal_id);
-		start_description_string = buffer[rand() * buffer.size() / RAND_MAX];
+		start_description_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 		current_dialog_info.main_text.clear();
 		current_dialog_info.main_text = start_description_string;
 		current_dialog_info.answers.clear();
@@ -136,12 +136,12 @@ public:
 		};
 		auto addAnswer = [&](PhraseContainer::PhraseType phrase) {
 			buffer = phrase_container.getPhraseBuffer(phrase, politeness, personal_id);
-			current_dialog_info.answers.push_back(buffer[rand() * buffer.size() / RAND_MAX]);
+			current_dialog_info.answers.push_back(buffer[rand() * buffer.size() / (RAND_MAX + 1)]);
 		};
 		auto addMainText = [&](PhraseContainer::PhraseType phrase) {
 			current_dialog_info.main_text.clear();
 			buffer = phrase_container.getPhraseBuffer(phrase, politeness, personal_id);
-			current_dialog_info.main_text = buffer[rand() * buffer.size() / RAND_MAX];
+			current_dialog_info.main_text = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 		};
 		auto backToStandartQuestion = [&]() {
 			current_stage = standart_question;
@@ -326,7 +326,7 @@ public:
 			}
 			break;
 		case joke:
-			joke_mark = rand() * 100 / RAND_MAX;
+			joke_mark = rand() * 100 / (RAND_MAX + 1);
 			if (joke_mark <= 33) {
 				current_stage = negative_joke_reaction;
 
