@@ -277,6 +277,27 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
     background_manager.generateAroundCenter(game_map1.getHero()->getPosition());
 
+	std::vector<std::wstring> buffer;
+	std::wstring
+		skills_build_sign,
+		skills_ability_sign,
+		skills_interact_sign,
+		new_wave_sign;
+
+	auto resetStrings = [&]() {
+		buffer = phrase_container.getPhraseBuffer(PhraseContainer::skills_build_sign_GUI, 0);
+		skills_build_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+		buffer = phrase_container.getPhraseBuffer(PhraseContainer::skills_ability_sign_GUI, 0);
+		skills_ability_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+		buffer = phrase_container.getPhraseBuffer(PhraseContainer::skills_interact_sign_GUI, 0);
+		skills_interact_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+		buffer = phrase_container.getPhraseBuffer(PhraseContainer::new_wave_sign_GUI, 0);
+		new_wave_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+	};
+
 	while (window.isOpen())
 	{
 		frame_num++;
@@ -354,10 +375,13 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			}
 
 			if (skills_mode == set1) {
-				gui_manager.setText("Ability Mode", 0.01, skill_status_sign, Point(window.getView().getSize().x / 2 / 1.2 - 150 * window.getView().getSize().x / 1920, -(int)window.getView().getSize().y / 2 / 1.2), 50);
+				gui_manager.setText(sf::String(skills_ability_sign), 0.01, skill_status_sign, Point(window.getView().getSize().x / 2 / 1.2 - 150 * window.getView().getSize().x / 1920, -(int)window.getView().getSize().y / 2 / 1.2), 40);
+			}
+			else if(skills_mode == set2) {
+				gui_manager.setText(sf::String(skills_build_sign), 0.01, skill_status_sign, Point(window.getView().getSize().x / 2 / 1.2 - 150 * window.getView().getSize().x / 1920, -(int)window.getView().getSize().y / 2 / 1.2), 40);
 			}
 			else {
-				gui_manager.setText("Build Mode", 0.01, skill_status_sign, Point(window.getView().getSize().x / 2 / 1.2 - 150 * window.getView().getSize().x / 1920, -(int)window.getView().getSize().y / 2 / 1.2), 50);
+				gui_manager.setText(sf::String(skills_interact_sign), 0.01, skill_status_sign, Point(window.getView().getSize().x / 2 / 1.2 - 150 * window.getView().getSize().x / 1920, -(int)window.getView().getSize().y / 2 / 1.2), 40);
 			}
 
 			if (game_status != pause && tutorial.isWorkingOnStep(tutorial.no_tutorial) && game_mode == GameMode::infinity_mode) {
