@@ -66,8 +66,8 @@ public:
         start_adv_mode_GUI,
         settings_menu_GUI,
         shutdown_GUI,
-        keyboard_mainmenu_title_GUI,
-        gamepad_mainmenu_title_GUI,
+        keyboard_press_title_GUI,
+        gamepad_press_title_GUI,
         setting_nickname_title_GUI,
         setting_ranking_title_GUI,
         setting_win_width_title_GUI,
@@ -78,12 +78,19 @@ public:
         keyboard_nickname_title_GUI,
         gamepad_nickname_title_GUI,
         nickname_enter_title_GUI,
+
         gold_sign_GUI,
         research_sign_GUI,
 		skills_build_sign_GUI,
 		skills_ability_sign_GUI,
 		skills_interact_sign_GUI,
 		new_wave_sign_GUI,
+
+        try_again_title_GUI,
+        go_back_to_menu_title_GUI,
+        continue_game_title_GUI,
+        go_to_menu_title_GUI,
+        go_to_desktop_title_GUI,
 
 		PHRASE_TYPE_COUNT
 	};
@@ -165,8 +172,8 @@ public:
         phrase_type_strings[start_adv_mode_GUI] = L"start_adv_mode_GUI";
         phrase_type_strings[settings_menu_GUI] = L"settings_menu_GUI";
         phrase_type_strings[shutdown_GUI] = L"shutdown_GUI";
-        phrase_type_strings[keyboard_mainmenu_title_GUI] = L"keyboard_mainmenu_title_GUI";
-        phrase_type_strings[gamepad_mainmenu_title_GUI] = L"gamepad_mainmenu_title_GUI";
+        phrase_type_strings[keyboard_press_title_GUI] = L"keyboard_press_title_GUI";
+        phrase_type_strings[gamepad_press_title_GUI] = L"gamepad_press_title_GUI";
         phrase_type_strings[setting_nickname_title_GUI] = L"setting_nickname_title_GUI";
         phrase_type_strings[setting_ranking_title_GUI] = L"setting_ranking_title_GUI";
         phrase_type_strings[setting_win_width_title_GUI] = L"setting_win_width_title_GUI";
@@ -177,12 +184,20 @@ public:
         phrase_type_strings[keyboard_nickname_title_GUI] = L"keyboard_nickname_title_GUI";
         phrase_type_strings[gamepad_nickname_title_GUI] = L"gamepad_nickname_title_GUI";
         phrase_type_strings[nickname_enter_title_GUI] = L"nickname_enter_title_GUI";
+
         phrase_type_strings[gold_sign_GUI] = L"gold_sign_GUI";
 		phrase_type_strings[research_sign_GUI] = L"research_sign_GUI";
 		phrase_type_strings[skills_build_sign_GUI] = L"skills_build_sign_GUI";
 		phrase_type_strings[skills_ability_sign_GUI] = L"skills_ability_sign_GUI";
 		phrase_type_strings[skills_interact_sign_GUI] = L"skills_interact_sign_GUI";
-		phrase_type_strings[new_wave_sign_GUI] = L"new_wave_sign_GUI";
+        phrase_type_strings[new_wave_sign_GUI] = L"new_wave_sign_GUI";
+
+        phrase_type_strings[try_again_title_GUI] = L"try_again_title_GUI";
+        phrase_type_strings[go_back_to_menu_title_GUI] = L"go_back_to_menu_title_GUI";
+        phrase_type_strings[continue_game_title_GUI] = L"continue_game_title_GUI";
+        phrase_type_strings[go_to_menu_title_GUI] = L"go_to_menu_title_GUI";
+        phrase_type_strings[go_to_desktop_title_GUI] = L"go_to_desktop_title_GUI";
+
 	}
 
 	/* 

@@ -142,12 +142,72 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 	SkillsMode prev_skills_mode = set1;
 
+    std::vector<std::wstring> buffer;
+    std::wstring
+        skills_build_sign,
+        skills_ability_sign,
+        skills_interact_sign,
+        new_wave_sign,
+        keyboard_press_title,
+        gamepad_press_title,
+
+        try_again_title,
+        go_back_to_menu_title,
+        continue_game_title,
+        go_to_menu_title,
+        go_to_desktop_title,
+        gold_sign_wstring,
+        research_sign_wstring;
+
+    auto resetStrings = [&]() {
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::skills_build_sign_GUI, 0);
+        skills_build_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::skills_ability_sign_GUI, 0);
+        skills_ability_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::skills_interact_sign_GUI, 0);
+        skills_interact_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::new_wave_sign_GUI, 0);
+        new_wave_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::keyboard_press_title_GUI, 0);
+        keyboard_press_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::gamepad_press_title_GUI, 0);
+        gamepad_press_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::try_again_title_GUI, 0);
+        try_again_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::go_back_to_menu_title_GUI, 0);
+        go_back_to_menu_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::continue_game_title_GUI, 0);
+        continue_game_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::go_to_menu_title_GUI, 0);
+        go_to_menu_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::go_to_desktop_title_GUI, 0);
+        go_to_desktop_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::gold_sign_GUI, 0);
+        gold_sign_wstring = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::research_sign_GUI, 0);
+        research_sign_wstring = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+    };
+
+    resetStrings();
+
 	struct Button {
 		Point pos;
 		sf::Texture texture_default, texture_selected;
 		sf::Sprite sprite;
 		float radius = 75;
-		std::string advice_string;
+		std::wstring advice_string;
 	};
 	enum buttons_name {
 		retry,
@@ -165,13 +225,13 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	buttons[retry].texture_default.loadFromFile("menu_buttons\\retry.png");
 	buttons[retry].texture_selected.loadFromFile("menu_buttons\\retry_selected.png");
 	buttons[retry].sprite.setTexture(buttons[retry].texture_default);
-	buttons[retry].advice_string = "try again";
+	buttons[retry].advice_string = try_again_title;
 
 	buttons[menu].pos = Point(960, 500);
 	buttons[menu].texture_default.loadFromFile("menu_buttons\\menu.png");
 	buttons[menu].texture_selected.loadFromFile("menu_buttons\\menu_selected.png");
 	buttons[menu].sprite.setTexture(buttons[menu].texture_default);
-	buttons[menu].advice_string = "go back to menu";
+	buttons[menu].advice_string = go_back_to_menu_title;
 
 	std::vector<Point> game_over_buttons_pos = {
 		buttons[retry].pos,
@@ -183,37 +243,23 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	buttons[pause_continue].texture_default.loadFromFile("menu_buttons\\pause_continue.png");
 	buttons[pause_continue].texture_selected.loadFromFile("menu_buttons\\pause_continue_selected.png");
 	buttons[pause_continue].sprite.setTexture(buttons[pause_continue].texture_default);
-	buttons[pause_continue].advice_string = "continue game";
+	buttons[pause_continue].advice_string = continue_game_title;
 
 	buttons[pause_to_menu].pos = Point();
 	buttons[pause_to_menu].texture_default.loadFromFile("menu_buttons\\pause_to_menu.png");
 	buttons[pause_to_menu].texture_selected.loadFromFile("menu_buttons\\pause_to_menu_selected.png");
 	buttons[pause_to_menu].sprite.setTexture(buttons[pause_to_menu].texture_default);
-	buttons[pause_to_menu].advice_string = "go to menu";
+	buttons[pause_to_menu].advice_string = go_to_menu_title;
 
 	buttons[pause_to_desktop].pos = Point(0, 250);
 	buttons[pause_to_desktop].texture_default.loadFromFile("menu_buttons\\pause_to_desktop.png");
 	buttons[pause_to_desktop].texture_selected.loadFromFile("menu_buttons\\pause_to_desktop_selected.png");
 	buttons[pause_to_desktop].sprite.setTexture(buttons[pause_to_desktop].texture_default);
-	buttons[pause_to_desktop].advice_string = "go to desktop";
+	buttons[pause_to_desktop].advice_string = go_to_desktop_title;
 
 	int chosen_button = retry;  // in game over menu
     int chosen_answer = 0;   // for dialogs
 
-
-    std::vector<std::wstring> buffer;
-    std::wstring
-        gold_sign_wstring,
-        research_sign_wstring;
-
-    auto reset_strings = [&]() {
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::gold_sign_GUI, 0);
-        gold_sign_wstring = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::research_sign_GUI, 0);
-        research_sign_wstring = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-    };
-    reset_strings();
 
 	auto pause_game = [&]() {
 		if (game_status != pause) {
@@ -277,27 +323,6 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
     background_manager.generateAroundCenter(game_map1.getHero()->getPosition());
 
-	std::vector<std::wstring> buffer;
-	std::wstring
-		skills_build_sign,
-		skills_ability_sign,
-		skills_interact_sign,
-		new_wave_sign;
-
-	auto resetStrings = [&]() {
-		buffer = phrase_container.getPhraseBuffer(PhraseContainer::skills_build_sign_GUI, 0);
-		skills_build_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-
-		buffer = phrase_container.getPhraseBuffer(PhraseContainer::skills_ability_sign_GUI, 0);
-		skills_ability_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-
-		buffer = phrase_container.getPhraseBuffer(PhraseContainer::skills_interact_sign_GUI, 0);
-		skills_interact_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-
-		buffer = phrase_container.getPhraseBuffer(PhraseContainer::new_wave_sign_GUI, 0);
-		new_wave_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-	};
-
 	while (window.isOpen())
 	{
 		frame_num++;
@@ -360,8 +385,8 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			hero_hp = hero_object->getUnitInfo()->getHealth();
 			// game cycle
 
-			gui_manager.setText(sf::String(gold_sign_wstring + std::to_wstring((int)resource_manager.getGold())), 0.01, gold_sign, Point(-(int)window.getView().getSize().x / 2 / 1.2, -(int)window.getView().getSize().y / 2 / 1.2), 35);
-			gui_manager.setText(sf::String(research_sign_wstring + std::to_wstring((int)resource_manager.getResearch())), 0.01, research_sign, Point(-(int)window.getView().getSize().x / 2 / 1.2, -(int)window.getView().getSize().y / 2 / 1.2 + 55 * window.getView().getSize().y / 1080), 35);
+			gui_manager.setText(gold_sign_wstring + std::to_wstring((int)resource_manager.getGold()), 0.01, gold_sign, Point(-(int)window.getView().getSize().x / 2 / 1.2, -(int)window.getView().getSize().y / 2 / 1.2), 30);
+			gui_manager.setText(research_sign_wstring + std::to_wstring((int)resource_manager.getResearch()), 0.01, research_sign, Point(-(int)window.getView().getSize().x / 2 / 1.2, -(int)window.getView().getSize().y / 2 / 1.2 + 55 * window.getView().getSize().y / 1080), 30);
 
 			if (game_map1.getClosestAsteroid() && game_map1.getClosestAsteroid()->getNPCInfo()) {
 				if (skills_mode != npc_dialog) {
@@ -375,13 +400,13 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			}
 
 			if (skills_mode == set1) {
-				gui_manager.setText(sf::String(skills_ability_sign), 0.01, skill_status_sign, Point(window.getView().getSize().x / 2 / 1.2 - 150 * window.getView().getSize().x / 1920, -(int)window.getView().getSize().y / 2 / 1.2), 40);
+				gui_manager.setText(skills_ability_sign, 0.01, skill_status_sign, Point(window.getView().getSize().x / 2 / 1.2 - 250 * window.getView().getSize().x / 1920, (int)window.getView().getSize().y / 2 / 1.2 + 10 * window.getView().getSize().x / 1920), 30);
 			}
 			else if(skills_mode == set2) {
-				gui_manager.setText(sf::String(skills_build_sign), 0.01, skill_status_sign, Point(window.getView().getSize().x / 2 / 1.2 - 150 * window.getView().getSize().x / 1920, -(int)window.getView().getSize().y / 2 / 1.2), 40);
+				gui_manager.setText(skills_build_sign, 0.01, skill_status_sign, Point(window.getView().getSize().x / 2 / 1.2 - 250 * window.getView().getSize().x / 1920, (int)window.getView().getSize().y / 2 / 1.2 + 10 * window.getView().getSize().x / 1920), 30);
 			}
 			else {
-				gui_manager.setText(sf::String(skills_interact_sign), 0.01, skill_status_sign, Point(window.getView().getSize().x / 2 / 1.2 - 150 * window.getView().getSize().x / 1920, -(int)window.getView().getSize().y / 2 / 1.2), 40);
+				gui_manager.setText(skills_interact_sign, 0.01, skill_status_sign, Point(window.getView().getSize().x / 2 / 1.2 - 250 * window.getView().getSize().x / 1920, (int)window.getView().getSize().y / 2 / 1.2 + 10 * window.getView().getSize().x / 1920), 30);
 			}
 
 			if (game_status != pause && tutorial.isWorkingOnStep(tutorial.no_tutorial) && game_mode == GameMode::infinity_mode) {
@@ -393,7 +418,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					else {
 						game_map1.spawnEnemy(wave_count, Point(view2.getCenter().x, view2.getCenter().y));
 					}
-					gui_manager.forceSetTopSign("New Wave(" + std::to_string(wave_count) + ")", 5);
+					gui_manager.forceSetTopSign(new_wave_sign + L"(" + std::to_wstring(wave_count) + L")", 5);
 					last_wave = std::chrono::steady_clock::now();
 				}
 			}
@@ -1035,9 +1060,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					buttons[i].sprite.setPosition(sf::Vector2f(buttons[i].pos.x * window.getView().getSize().x / 1920 + viewport_pos.x, buttons[i].pos.y * window.getView().getSize().y / 1080 + viewport_pos.y));
 				}
 
-				gui_manager.forceSetTopSign("Press Space to " + buttons[chosen_button].advice_string, 0.01);
+				gui_manager.forceSetTopSign(keyboard_press_title + buttons[chosen_button].advice_string, 0.01);
 				if (sf::Joystick::isConnected(0)) {
-					gui_manager.forceSetTopSign("Press A to " + buttons[chosen_button].advice_string, 0.01);
+					gui_manager.forceSetTopSign(gamepad_press_title + buttons[chosen_button].advice_string, 0.01);
 				}
 				title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
 
@@ -1181,9 +1206,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				buttons[i].sprite.setPosition(sf::Vector2f(buttons[i].pos.x * window.getView().getSize().x / 1920, buttons[i].pos.y * window.getView().getSize().y / 1080));
 			}
 
-			title.setString("Press Space to " + buttons[chosen_button].advice_string);
+			title.setString(keyboard_press_title + buttons[chosen_button].advice_string);
 			if (sf::Joystick::isConnected(0)) {
-				title.setString("Press A to " + buttons[chosen_button].advice_string);
+				title.setString(gamepad_press_title + buttons[chosen_button].advice_string);
 			}
 			title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
 
@@ -1620,8 +1645,8 @@ int main() {
         setting_local_file_title,
         setting_discard_title,
         setting_exit_title,
-        keyboard_mainmenu_title,
-        gamepad_mainmenu_title,
+        keyboard_press_title,
+        gamepad_press_title,
         keyboard_nickname_title,
         gamepad_nickname_title,
         nickname_enter_title;
@@ -1648,11 +1673,11 @@ int main() {
         buffer = phrase_container.getPhraseBuffer(PhraseContainer::setting_exit_title_GUI, 0);
         setting_exit_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::keyboard_mainmenu_title_GUI, 0);
-        keyboard_mainmenu_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::keyboard_press_title_GUI, 0);
+        keyboard_press_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::gamepad_mainmenu_title_GUI, 0);
-        gamepad_mainmenu_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::gamepad_press_title_GUI, 0);
+        gamepad_press_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
         buffer = phrase_container.getPhraseBuffer(PhraseContainer::keyboard_nickname_title_GUI, 0);
         keyboard_nickname_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
@@ -1700,9 +1725,9 @@ int main() {
 					buttons[i].sprite.setPosition(sf::Vector2f(buttons[i].pos.x, buttons[i].pos.y));
 				}
 
-				title.setString(keyboard_mainmenu_title + buttons[chosen_button].advice_string);
+				title.setString(keyboard_press_title + buttons[chosen_button].advice_string);
 				if (sf::Joystick::isConnected(0)) {
-					title.setString(gamepad_mainmenu_title + buttons[chosen_button].advice_string);
+					title.setString(gamepad_press_title + buttons[chosen_button].advice_string);
 				}
 				title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
 
