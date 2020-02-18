@@ -92,6 +92,28 @@ public:
         go_to_menu_title_GUI,
         go_to_desktop_title_GUI,
 
+        aster_basic_GUI,
+        aster_gold_inter_GUI,
+        aster_iron_inter_GUI,
+        aster_susp_flat_GUI,
+
+        aster_str_crack_GUI,
+        aster_ord_wealthy_GUI,
+        aster_poor_mount_GUI,
+        aster_wealthy_crack_GUI,
+        aster_ord_mount_GUI,
+        aster_str_poor_GUI,
+
+        aster_swamp_gold_GUI,
+        aster_unstab_expl_GUI,
+        aster_old_lab_GUI,
+        aster_lava_surf_GUI,
+
+        aster_drone_GUI,
+        aster_rocket_GUI,
+        aster_anc_lab_GUI,
+        aster_anc_mine_GUI,
+
 		PHRASE_TYPE_COUNT
 	};
 
@@ -198,6 +220,27 @@ public:
         phrase_type_strings[go_to_menu_title_GUI] = L"go_to_menu_title_GUI";
         phrase_type_strings[go_to_desktop_title_GUI] = L"go_to_desktop_title_GUI";
 
+        phrase_type_strings[aster_basic_GUI] = L"aster_basic_GUI";
+        phrase_type_strings[aster_gold_inter_GUI] = L"aster_gold_inter_GUI";
+        phrase_type_strings[aster_iron_inter_GUI] = L"aster_iron_inter_GUI";
+        phrase_type_strings[aster_susp_flat_GUI] = L"aster_susp_flat_GUI";
+
+        phrase_type_strings[aster_str_crack_GUI] = L"aster_str_crack_GUI";
+        phrase_type_strings[aster_ord_wealthy_GUI] = L"aster_ord_wealthy_GUI";
+        phrase_type_strings[aster_poor_mount_GUI] = L"aster_poor_mount_GUI";
+        phrase_type_strings[aster_wealthy_crack_GUI] = L"aster_wealthy_crack_GUI";
+        phrase_type_strings[aster_ord_mount_GUI] = L"aster_ord_mount_GUI";
+        phrase_type_strings[aster_str_poor_GUI] = L"aster_str_poor_GUI";
+
+        phrase_type_strings[aster_swamp_gold_GUI] = L"aster_swamp_gold_GUI";
+        phrase_type_strings[aster_unstab_expl_GUI] = L"aster_unstab_expl_GUI";
+        phrase_type_strings[aster_old_lab_GUI] = L"aster_old_lab_GUI";
+        phrase_type_strings[aster_lava_surf_GUI] = L"aster_lava_surf_GUI";
+
+        phrase_type_strings[aster_drone_GUI] = L"aster_drone_GUI";
+        phrase_type_strings[aster_rocket_GUI] = L"aster_rocket_GUI";
+        phrase_type_strings[aster_anc_lab_GUI] = L"aster_anc_lab_GUI";
+        phrase_type_strings[aster_anc_mine_GUI] = L"aster_anc_mine_GUI";
 	}
 
 	/* 

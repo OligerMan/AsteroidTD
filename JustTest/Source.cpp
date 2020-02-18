@@ -157,47 +157,99 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
         go_to_menu_title,
         go_to_desktop_title,
         gold_sign_wstring,
-        research_sign_wstring;
+        research_sign_wstring,
+
+        aster_basic_sign,
+        aster_gold_inter_sign,
+        aster_iron_inter_sign,
+        aster_susp_flat_sign,
+
+        aster_str_crack_sign,
+        aster_ord_wealthy_sign,
+        aster_poor_mount_sign,
+        aster_wealthy_crack_sign,
+        aster_ord_mount_sign,
+        aster_str_poor_sign,
+
+        aster_swamp_gold_sign,
+        aster_unstab_expl_sign,
+        aster_old_lab_sign,
+        aster_lava_surf_sign,
+
+        aster_drone_sign,
+        aster_rocket_sign,
+        aster_anc_lab_sign,
+        aster_anc_mine_sign;
 
     auto resetStrings = [&]() {
         buffer = phrase_container.getPhraseBuffer(PhraseContainer::skills_build_sign_GUI, 0);
         skills_build_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-
         buffer = phrase_container.getPhraseBuffer(PhraseContainer::skills_ability_sign_GUI, 0);
         skills_ability_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-
         buffer = phrase_container.getPhraseBuffer(PhraseContainer::skills_interact_sign_GUI, 0);
         skills_interact_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-
         buffer = phrase_container.getPhraseBuffer(PhraseContainer::new_wave_sign_GUI, 0);
         new_wave_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
         buffer = phrase_container.getPhraseBuffer(PhraseContainer::keyboard_press_title_GUI, 0);
         keyboard_press_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-
         buffer = phrase_container.getPhraseBuffer(PhraseContainer::gamepad_press_title_GUI, 0);
         gamepad_press_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
         buffer = phrase_container.getPhraseBuffer(PhraseContainer::try_again_title_GUI, 0);
         try_again_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-
         buffer = phrase_container.getPhraseBuffer(PhraseContainer::go_back_to_menu_title_GUI, 0);
         go_back_to_menu_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-
         buffer = phrase_container.getPhraseBuffer(PhraseContainer::continue_game_title_GUI, 0);
         continue_game_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-
         buffer = phrase_container.getPhraseBuffer(PhraseContainer::go_to_menu_title_GUI, 0);
         go_to_menu_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-
         buffer = phrase_container.getPhraseBuffer(PhraseContainer::go_to_desktop_title_GUI, 0);
         go_to_desktop_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-
         buffer = phrase_container.getPhraseBuffer(PhraseContainer::gold_sign_GUI, 0);
         gold_sign_wstring = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-
         buffer = phrase_container.getPhraseBuffer(PhraseContainer::research_sign_GUI, 0);
         research_sign_wstring = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_basic_GUI, 0);
+        aster_basic_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_gold_inter_GUI, 0);
+        aster_gold_inter_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_iron_inter_GUI, 0);
+        aster_iron_inter_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_susp_flat_GUI, 0);
+        aster_susp_flat_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_str_crack_GUI, 0);
+        aster_str_crack_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_ord_wealthy_GUI, 0);
+        aster_ord_wealthy_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_poor_mount_GUI, 0);
+        aster_poor_mount_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_wealthy_crack_GUI, 0);
+        aster_wealthy_crack_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_ord_mount_GUI, 0);
+        aster_ord_mount_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_str_poor_GUI, 0);
+        aster_str_poor_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_swamp_gold_GUI, 0);
+        aster_swamp_gold_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_unstab_expl_GUI, 0);
+        aster_unstab_expl_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_old_lab_GUI, 0);
+        aster_old_lab_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_lava_surf_GUI, 0);
+        aster_lava_surf_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_drone_GUI, 0);
+        aster_drone_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_rocket_GUI, 0);
+        aster_rocket_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_anc_lab_GUI, 0);
+        aster_anc_lab_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_anc_mine_GUI, 0);
+        aster_anc_mine_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
     };
 
     resetStrings();
@@ -384,9 +436,10 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			}
 			hero_hp = hero_object->getUnitInfo()->getHealth();
 			// game cycle
-
-			gui_manager.setText(gold_sign_wstring + std::to_wstring((int)resource_manager.getGold()), 0.01, gold_sign, Point(-(int)window.getView().getSize().x / 2 / 1.2, -(int)window.getView().getSize().y / 2 / 1.2), 30);
-			gui_manager.setText(research_sign_wstring + std::to_wstring((int)resource_manager.getResearch()), 0.01, research_sign, Point(-(int)window.getView().getSize().x / 2 / 1.2, -(int)window.getView().getSize().y / 2 / 1.2 + 55 * window.getView().getSize().y / 1080), 30);
+            Point gold_pos = Point(-(int)window.getView().getSize().x / 2 / 1.2, -(int)window.getView().getSize().y / 2 / 1.2);
+			gui_manager.setText(gold_sign_wstring + std::to_wstring((int)resource_manager.getGold()), 0.01, gold_sign, gold_pos, 30);
+            Point res_pos = Point(-(int)window.getView().getSize().x / 2 / 1.2, -(int)window.getView().getSize().y / 2 / 1.2 + 55 * window.getView().getSize().y / 1080);
+			gui_manager.setText(research_sign_wstring + std::to_wstring((int)resource_manager.getResearch()), 0.01, research_sign, res_pos, 30);
 
 			if (game_map1.getClosestAsteroid() && game_map1.getClosestAsteroid()->getNPCInfo()) {
 				if (skills_mode != npc_dialog) {
@@ -398,15 +451,19 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				skills_mode = prev_skills_mode;
 				prev_skills_mode = SkillsMode::npc_dialog;
 			}
+            Point skill_pos = Point(
+                window.getView().getSize().x / 2 / 1.2 - 250 * window.getView().getSize().x / 1920, 
+                (int)window.getView().getSize().y / 2 / 1.2 + 10 * window.getView().getSize().x / 1920);
 
 			if (skills_mode == set1) {
-				gui_manager.setText(skills_ability_sign, 0.01, skill_status_sign, Point(window.getView().getSize().x / 2 / 1.2 - 250 * window.getView().getSize().x / 1920, (int)window.getView().getSize().y / 2 / 1.2 + 10 * window.getView().getSize().x / 1920), 30);
+                
+				gui_manager.setText(skills_ability_sign, 0.01, skill_status_sign, skill_pos, 30);
 			}
 			else if(skills_mode == set2) {
-				gui_manager.setText(skills_build_sign, 0.01, skill_status_sign, Point(window.getView().getSize().x / 2 / 1.2 - 250 * window.getView().getSize().x / 1920, (int)window.getView().getSize().y / 2 / 1.2 + 10 * window.getView().getSize().x / 1920), 30);
+				gui_manager.setText(skills_build_sign, 0.01, skill_status_sign, skill_pos, 30);
 			}
 			else {
-				gui_manager.setText(skills_interact_sign, 0.01, skill_status_sign, Point(window.getView().getSize().x / 2 / 1.2 - 250 * window.getView().getSize().x / 1920, (int)window.getView().getSize().y / 2 / 1.2 + 10 * window.getView().getSize().x / 1920), 30);
+				gui_manager.setText(skills_interact_sign, 0.01, skill_status_sign, skill_pos, 30);
 			}
 
 			if (game_status != pause && tutorial.isWorkingOnStep(tutorial.no_tutorial) && game_mode == GameMode::infinity_mode) {
@@ -524,7 +581,6 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 									sf::Vertex(sf::Vector2f(x + viewport_pos.x - window.getSize().x / 2, y + viewport_pos.y + 1 - window.getSize().y / 2))
 								};
 								line->color = sf::Color::Red;
-
 								window.draw(line, 2, sf::Lines);
 							}
 						}
@@ -562,7 +618,6 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 								sf::Vertex(sf::Vector2f(navigation_paths[path_num][i].x, navigation_paths[path_num][i].y))
 							};
 							line->color = sf::Color::Blue;
-
 							window.draw(line, 2, sf::Lines);
 						}
 					}
@@ -617,58 +672,58 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				if (closest_asteroid != nullptr && game_frame_num > 1500) {
 					switch (closest_asteroid->getObjectSpriteType()) {
 					case asteroid:
-						gui_manager.setTopSign("Just an asteroid", 0.01);
+						gui_manager.setTopSign(aster_basic_sign, 0.01);
 						break;
 					case asteroid_gold_interspersed_sprite:
-						gui_manager.setTopSign("Gold interspersed asteroid\n(+10% gold income)", 0.01);
+						gui_manager.setTopSign(aster_gold_inter_sign, 0.01);
 						break;
 					case asteroid_iron_interspersed_sprite:
-						gui_manager.setTopSign("Iron interspersed asteroid\n(+10% structures HP)", 0.01);
+						gui_manager.setTopSign(aster_iron_inter_sign, 0.01);
 						break;
 					case asteroid_suspiciously_flat_sprite:
-						gui_manager.setTopSign("Suspiciously flat asteroid\n(+10% research income)", 0.01);
+						gui_manager.setTopSign(aster_susp_flat_sign, 0.01);
 						break;
 					case asteroid_strange_cracked_sprite:
-						gui_manager.setTopSign("Strange cracked asteroid, structures may be fragile\n(-25% HP, +20% research income)", 0.01);
+						gui_manager.setTopSign(aster_str_crack_sign, 0.01);
 						break;
 					case asteroid_ordinary_wealthy_sprite:
-						gui_manager.setTopSign("Absolutely not interesting asteroid with ore deposits\n(-20% research income, +20% gold income)", 0.01);
+						gui_manager.setTopSign(aster_ord_wealthy_sign, 0.01);
 						break;
 					case asteroid_poor_mountainous_sprite:
-						gui_manager.setTopSign("Mountainous asteroid with poor ore deposits\n(-25% gold income, +25% HP)", 0.01);
+						gui_manager.setTopSign(aster_poor_mount_sign, 0.01);
 						break;
 					case asteroid_wealthy_cracked_sprite:
-						gui_manager.setTopSign("Cracked asteroid with ore deposits\n(-25% HP, +25% gold income)", 0.01);
+						gui_manager.setTopSign(aster_wealthy_crack_sign, 0.01);
 						break;
 					case asteroid_ordinary_mountainous_sprite:
-						gui_manager.setTopSign("Absolutely not interesting mountainous asteroid\n(-20% research income, +25% HP)", 0.01);
+						gui_manager.setTopSign(aster_ord_mount_sign, 0.01);
 						break;
 					case asteroid_strange_poor_sprite:
-						gui_manager.setTopSign("Strange asteroid with poor ore deposits\n(-25% gold income, +20% research income)", 0.01);
+						gui_manager.setTopSign(aster_str_poor_sign, 0.01);
 						break;
 					case asteroid_swampy_with_gold_mines_sprite:
-						gui_manager.setTopSign("Swampy asteroid with old mines\n(no moving structures a.k.a turrets, +50% gold income)", 0.01);
+						gui_manager.setTopSign(aster_swamp_gold_sign, 0.01);
 						break;
 					case asteroid_unstable_explosive_ore_sprite:
-						gui_manager.setTopSign("Unstable asteroid with explosive ore\n(no gold mines, +50% damage)", 0.01);
+						gui_manager.setTopSign(aster_unstab_expl_sign, 0.01);
 						break;
 					case asteroid_old_laboratory_sprite:
-						gui_manager.setTopSign("Old laboratory. To activate build 7 domes\n(after activation x30 research station equivalent income)", 0.01);
+						gui_manager.setTopSign(aster_old_lab_sign, 0.01);
 						break;
 					case asteroid_lava_surface_sprite:
-						gui_manager.setTopSign("Lava asteroid\n(no structures allowed)", 0.01);
+						gui_manager.setTopSign(aster_lava_surf_sign, 0.01);
 						break;
 					case asteroid_drone_factory_sprite:
-						gui_manager.setTopSign("Old drone factory. To activate build 7 domes\n(after activation launches some drones)", 0.01);
+						gui_manager.setTopSign(aster_drone_sign, 0.01);
 						break;
 					case asteroid_rocket_launcher_sprite:
-						gui_manager.setTopSign("Old fort with rocket launchers. To activate build 7 domes\n(after activation rocket launchers defend you)", 0.01);
+						gui_manager.setTopSign(aster_rocket_sign, 0.01);
 						break;
 					case asteroid_ancient_laboratory_sprite:
-						gui_manager.setTopSign("Ancient giant laboratory. To activate build 7 domes\n(after activation x50 research station equivalent income)", 0.01);
+						gui_manager.setTopSign(aster_anc_lab_sign, 0.01);
 						break;
 					case asteroid_ancient_giant_gold_mine_sprite:
-						gui_manager.setTopSign("Ancient giant gold mine. To activate build 7 domes\n(after activation x50 gold mine equivalent income)", 0.01);
+						gui_manager.setTopSign(aster_anc_mine_sign, 0.01);
 						break;
 					}
 				}

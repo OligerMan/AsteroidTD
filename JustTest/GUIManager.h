@@ -105,7 +105,7 @@ public:
 		text[0].first->setFillColor(sf::Color::White);
 		text[0].first->setOutlineColor(sf::Color::Black);
 		text[0].first->setOutlineThickness(1);
-		text[0].first->setCharacterSize(50);
+		text[0].first->setCharacterSize(35);
 		text[0].first->setFont(base_font);
 		text[0].second = consts.getFPSLock() * 5;
 	}
@@ -141,6 +141,11 @@ public:
 		text[0].first->setString(string);
 		text[0].second = consts.getFPSLock() * time;
 	}
+
+    void setTopSign(std::wstring string, float time /*in seconds*/) {
+        text[0].first->setString(string);
+        text[0].second = consts.getFPSLock() * time;
+    }
 
 	void setTopSign(char * string, float time /*in seconds*/) {
 		if (text[0].second <= 0) {
