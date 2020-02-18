@@ -9,6 +9,7 @@
 
 #include "Settings.h"
 #include "ParserInput.h"
+#include "FileSearch.h"
 
 struct Phrase {
 	std::wstring phrase, id;
@@ -85,12 +86,15 @@ public:
 		skills_ability_sign_GUI,
 		skills_interact_sign_GUI,
 		new_wave_sign_GUI,
+        message_sign_GUI,
 
         try_again_title_GUI,
         go_back_to_menu_title_GUI,
         continue_game_title_GUI,
         go_to_menu_title_GUI,
         go_to_desktop_title_GUI,
+
+        start_game_sign_GUI,
 
         aster_basic_GUI,
         aster_gold_inter_GUI,
@@ -213,12 +217,16 @@ public:
 		phrase_type_strings[skills_ability_sign_GUI] = L"skills_ability_sign_GUI";
 		phrase_type_strings[skills_interact_sign_GUI] = L"skills_interact_sign_GUI";
         phrase_type_strings[new_wave_sign_GUI] = L"new_wave_sign_GUI";
+        phrase_type_strings[message_sign_GUI] = L"message_sign_GUI";
 
         phrase_type_strings[try_again_title_GUI] = L"try_again_title_GUI";
         phrase_type_strings[go_back_to_menu_title_GUI] = L"go_back_to_menu_title_GUI";
         phrase_type_strings[continue_game_title_GUI] = L"continue_game_title_GUI";
         phrase_type_strings[go_to_menu_title_GUI] = L"go_to_menu_title_GUI";
         phrase_type_strings[go_to_desktop_title_GUI] = L"go_to_desktop_title_GUI";
+        phrase_type_strings[go_to_desktop_title_GUI] = L"go_to_desktop_title_GUI";
+
+        phrase_type_strings[start_game_sign_GUI] = L"start_game_sign_GUI";
 
         phrase_type_strings[aster_basic_GUI] = L"aster_basic_GUI";
         phrase_type_strings[aster_gold_inter_GUI] = L"aster_gold_inter_GUI";
@@ -264,6 +272,7 @@ public:
 	*/
 	void parseFromFile(std::string path) {
 		std::wifstream dialog_file;
+
 		dialog_file.open(path);
         dialog_file.imbue(std::locale(std::locale(), new std::codecvt_utf8<wchar_t>));
 		std::wstring input;
@@ -386,6 +395,13 @@ public:
 			}
 		}
 	}
+
+    void parseFromFolder(std::string path) {
+        std::vector<std::string> * path_list = getFileList(path);
+        for (auto i = path_list->begin(); i != path_list->end(); i++) {
+            parseFromFile(path + "\\" + *i);
+        }
+    }
 
 	std::vector<std::wstring> getPhraseBuffer(PhraseType type, int politeness, std::wstring id = L"") {
 		std::vector<std::wstring> output;

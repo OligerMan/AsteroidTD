@@ -179,6 +179,7 @@
     <None Include="collision\unit.col" />
     <None Include="config.cfg" />
     <None Include="dialog.cfg" />
+    <None Include="dialog_ru.cfg" />
     <None Include="packages.config" />
     <None Include="PlayerStat.proto" />
     <None Include="redactor_resources\object_templates.map" />

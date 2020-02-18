@@ -148,6 +148,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
         skills_ability_sign,
         skills_interact_sign,
         new_wave_sign,
+        message_sign,
         keyboard_press_title,
         gamepad_press_title,
 
@@ -190,6 +191,8 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
         skills_interact_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
         buffer = phrase_container.getPhraseBuffer(PhraseContainer::new_wave_sign_GUI, 0);
         new_wave_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::message_sign_GUI, 0);
+        message_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
         buffer = phrase_container.getPhraseBuffer(PhraseContainer::keyboard_press_title_GUI, 0);
         keyboard_press_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
@@ -388,7 +391,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				global_event_buffer.erase(global_event_buffer.begin() + i);
 				break;
 			case EventType::message:
-				gui_manager.forceSetTopSign(L"Message: " + *static_cast<std::wstring *>(global_event_buffer[i].getData(0)), 5);
+				gui_manager.forceSetTopSign(message_sign + L": " + *static_cast<std::wstring *>(global_event_buffer[i].getData(0)), 5);
 				global_event_buffer.erase(global_event_buffer.begin() + i);
 				break;
 			}
@@ -1535,8 +1538,8 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 int main() {
 	HWND console_hWnd = GetConsoleWindow();
 	ShowWindow(console_hWnd, SW_HIDE);
-    //setlocale(LC_ALL, "rus");
-	phrase_container.parseFromFile(settings.getLocalisationFile());
+
+	phrase_container.parseFromFolder("dialog\\" + settings.getLocalisationFile());
 
 	sf::ContextSettings context_settings;
 	context_settings.antialiasingLevel = 8;

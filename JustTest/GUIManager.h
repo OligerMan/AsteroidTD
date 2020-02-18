@@ -101,7 +101,8 @@ public:
 		base_font.loadFromFile(consts.getDefaultFontPath());
 		srand(time(NULL));
 		text.resize(1, std::pair<sf::Text *, int>(new sf::Text, 0));
-		text[0].first->setString(start_game_signs[rand() % (start_game_signs.size())]);
+        std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::start_game_sign_GUI, 0);
+		text[0].first->setString(buffer[rand() * buffer.size() / (RAND_MAX + 1)]);
 		text[0].first->setFillColor(sf::Color::White);
 		text[0].first->setOutlineColor(sf::Color::Black);
 		text[0].first->setOutlineThickness(1);

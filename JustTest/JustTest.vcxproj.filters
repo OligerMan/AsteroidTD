@@ -234,6 +234,9 @@
     <None Include="dialog.cfg">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="dialog_ru.cfg">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
