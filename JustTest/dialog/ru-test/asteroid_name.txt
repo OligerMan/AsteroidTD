@@ -147,7 +147,7 @@ phrase_end
 
 phrase_start
 string |Гиганская древняя лаборатория. Для работы построить 7 домов
-(after activation x50 research station equivalent income)|
+(после активации скорость исследования как у 50 станций)|
 conditions_start
 conditions_end
 id common
@@ -156,7 +156,7 @@ phrase_end
 
 phrase_start
 string |Гиганская древняя шахта. Для работы построить 7 домов
-(after activation x50 gold mine equivalent income)|
+(после активации скорость добычи как у 50 шахт)|
 conditions_start
 conditions_end
 id common

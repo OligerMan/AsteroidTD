@@ -9,22 +9,6 @@ phrase_type start_description
 phrase_end
 
 phrase_start
-string |Вы видите на экране неизвестную вам модель протокольного дроида|
-conditions_start
-conditions_end
-id protocol_droid
-phrase_type start_description
-phrase_end
-
-phrase_start
-string |Ваш собеседник выглядит как необычный протокольный дроид. Может новая модель?|
-conditions_start
-conditions_end
-id protocol_droid
-phrase_type start_description
-phrase_end
-
-phrase_start
 string |Я не собираюсь разговаривать с таким отбросом как ты|
 conditions_start
 conditions_end
@@ -49,15 +33,15 @@ phrase_type conversation_refuse_npc
 phrase_end
 
 phrase_start
-string |Бип...Буп...завершение_разговора=true...Прощай, путник!|
+string |Привет|
 conditions_start
 conditions_end
-id protocol_droid
-phrase_type conversation_refuse_npc
+id common
+phrase_type greetings_phrase_npc
 phrase_end
 
 phrase_start
-string |Привет|
+string |Здравствуй, странник. Приятно познакомиться|
 conditions_start
 conditions_end
 id common
@@ -74,14 +58,6 @@ phrase_end
 
 phrase_start
 string |Привет, друг|
-conditions_start
-conditions_end
-id common
-phrase_type positive_greetings_answer_player
-phrase_end
-
-phrase_start
-string |Здравствуй, странник. Приятно познакомиться|
 conditions_start
 conditions_end
 id common
@@ -158,7 +134,7 @@ conditions_start
 conditions_end
 id common
 phrase_type positive_greetings_reaction_npc
-phrase_end
+phrase_end	
 
 phrase_start
 string |(Тишина...)|
