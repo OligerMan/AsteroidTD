@@ -1533,6 +1533,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			}
 		}
 	}
+    if (!window.isOpen()) {
+        game_status = exit_to_desktop;
+    }
 }
 
 int main() {
@@ -1749,7 +1752,7 @@ int main() {
 
     resetStrings();
 
-	while (true) {
+	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
@@ -1961,6 +1964,7 @@ int main() {
 				window.display();
 			}
 			else if (game_status == exit_to_desktop) {
+                music_manager.shutdown();
 				return 0;
 			}
 			else if (game_status == nickname_enter) {
@@ -2002,7 +2006,6 @@ int main() {
 				}
 			}
 		}
-		
 	}
 	return 0;
 }

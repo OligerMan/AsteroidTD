@@ -761,15 +761,15 @@ private:
 			if (npc_asteroid_chance) {
 				object->initNPCInfo(new NPCInfo(WorldFactionList::Alliance_of_Ancient_Knowledge));
 				int base_npc_lvl = 100 * rand() / (RAND_MAX + 1) * rand() / (RAND_MAX + 1) * rand() / (RAND_MAX + 1) * rand() / (RAND_MAX + 1) * rand() / (RAND_MAX + 1);
-				int special_mission_lvl_dif = 10 * rand() / (RAND_MAX + 1);
+				int special_mission_lvl_dif = 15 * rand() / (RAND_MAX + 1);
                 Mission::Type type = static_cast<Mission::Type>(rand() % Mission::TYPE_COUNT);
 				Mission base_mission = createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, type, base_npc_lvl);
                 type = static_cast<Mission::Type>(rand() % Mission::TYPE_COUNT);
 				Mission special_mission = createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, type, base_npc_lvl + special_mission_lvl_dif);
-				if (base_mission.type) {
+				if (base_mission.type != Mission::null) {
 					static_cast<NPCInfo *>(object->getNPCInfo())->changeBaseMission(base_mission);
 				}
-				if (special_mission.type) {
+				if (special_mission.type != Mission::null) {
 					static_cast<NPCInfo *>(object->getNPCInfo())->changeSpecialMission(special_mission);
 				}
 				npc_list.push_back(object);

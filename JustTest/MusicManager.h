@@ -44,11 +44,15 @@ public:
 		distribution = std::uniform_int_distribution<int>(1, playlist.size());
 	}
 
+    void shutdown() {
+        working = false;
+        while (!main_cycle_down) {
+            Sleep(10);
+        }
+    }
+
 	~MusicManager() {
-		working = false;
-		while (!main_cycle_down) {
-			Sleep(10);
-		}
+        shutdown();
 	}
 
 	bool isTrackPlaying(int track_num) {

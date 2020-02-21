@@ -99,6 +99,7 @@ string |Сбой программы приветствия... Salve advena!...
 Бип-Буп...Перезагрузка речевого модуля...Здравствуйте. Я D4QP, 
 протокольный дроид. К вашим услугам|
 conditions_start
+max_politeness -33
 conditions_end
 id protocol_droid
 phrase_type greetings_phrase_npc
@@ -133,6 +134,7 @@ string |Прошу простить, мне нужно обработать да
 <Странный шум, дроид начал чуть-чуть подергиваться, но почти сразу вернулся в норму>...
 Протокол предписывает испытывать радость при встрече с доброжелательным собеседником|
 conditions_start
+max_politeness -33
 conditions_end
 id protocol_droid
 phrase_type positive_greetings_reaction_npc
@@ -143,6 +145,7 @@ string |Прошу простить, мне нужно обработать да
 <Странный шум, что-то похожее на дымку, дроид начал чуть-чуть подергиваться, но почти сразу вернулся в норму>...
 Извините за это, давайте продолжим разговор|
 conditions_start
+max_politeness -33
 conditions_end
 id protocol_droid
 phrase_type neutral_greetings_reaction_npc
@@ -170,6 +173,7 @@ string |Прошу простить, мне нужно обработать да
 <Странный шум, потом секунда тишины, дроид начал чуть-чуть подергиваться, но почти сразу вернулся в норму>...
 Прошу вернуться в линию разговора без грубостей|
 conditions_start
+max_politeness -33
 conditions_end
 id protocol_droid
 phrase_type negative_greetings_reaction_npc
@@ -315,6 +319,7 @@ phrase_end
 phrase_start
 string |<Дроид немного дернулся и начал издавать странные звуки>...ЖЖЖ...Пффф...Кзтттт...Перезагрузка когнитивного модуля...Извините, такое редко случается. Обычно если я не могу распознать смысл фразы. Или от очень плохих шуток. Ой....|
 conditions_start
+max_politeness -33
 conditions_end
 id protocol_droid
 phrase_type random_negative_joke_reaction_npc

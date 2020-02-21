@@ -94,7 +94,6 @@ public:
         
 		current_dialog_info.answers.push_back(getContinueString());
 		current_dialog_info.is_player_turn = false;
-
 	}
 
 	NPCInfo(WorldFactionList faction, std::wstring personal_id) : faction(faction), personal_id(personal_id) {
@@ -112,7 +111,6 @@ public:
 		current_dialog_info.answers.clear();
 		current_dialog_info.answers.push_back(getContinueString());
 		current_dialog_info.is_player_turn = false;
-
 	}
 
 	ConversationStage getCurrentStage() {
@@ -255,7 +253,7 @@ public:
 			break;
 		case standart_question:
 			if (answer_num == 0 && (jobAvailable() || specialJobAvailable())) {
-				if (!base_job_available) {
+				if (!jobAvailable()) {
 					current_stage = job_refuse;
 
 					addMainText(PhraseContainer::base_job_refuse_npc);
@@ -265,7 +263,7 @@ public:
 					current_dialog_info.is_player_turn = false;
 				}
 				else {
-					if (!job_question_passed && base_job_available) {
+					if (!job_question_passed && jobAvailable()) {
 						current_stage = job_selection;
 
 						current_dialog_info.main_text = base_mission_info.getShortDescription();
