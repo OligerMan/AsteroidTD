@@ -211,7 +211,7 @@ phrase_end
 phrase_start
 string |Говори, что тебе нужно или проваливай|
 conditions_start
-max_politeness -10
+max_politeness -50
 conditions_end
 id common
 phrase_type standart_question_npc

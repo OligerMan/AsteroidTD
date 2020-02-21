@@ -405,18 +405,33 @@ public:
 
 	std::vector<std::wstring> getPhraseBuffer(PhraseType type, int politeness, std::wstring id = L"") {
 		std::vector<std::wstring> output;
+		bool id_spec_phrase = false;
 		if (phrase_buffer.size() >= type) {
 			for (int i = 0; i < phrase_buffer[type].size(); i++) {
 				if (politeness >= phrase_buffer[type][i].min_politeness && politeness <= phrase_buffer[type][i].max_politeness) {
 					if (id.empty() || id == L"common" || id == phrase_buffer[type][i].id || phrase_buffer[type][i].id == L"common") {
 						output.push_back(phrase_buffer[type][i].phrase);
+						if (id == phrase_buffer[type][i].id) {
+							id_spec_phrase = true;
+							break;
+						}
+					}
+				}
+			}
+			if (id_spec_phrase) {
+				output.clear();
+				for (int i = 0; i < phrase_buffer[type].size(); i++) {
+					if (politeness >= phrase_buffer[type][i].min_politeness && politeness <= phrase_buffer[type][i].max_politeness) {
+						if (id == phrase_buffer[type][i].id) {
+							output.push_back(phrase_buffer[type][i].phrase);
+						}
 					}
 				}
 			}
 		}
         if (output.empty()) {
             output.push_back(L" ");
-        }
+		}
 		return output;
 	}
 
