@@ -47,8 +47,8 @@ private:
 	DialogInfo current_dialog_info;
 	WorldFactionList faction = WORLD_FACTIONS_COUNT;
 
-	Mission base_mission_info;
-	Mission special_mission_info;
+    LegacyMission base_mission_info;
+    LegacyMission special_mission_info;
 
 	std::wstring start_description_string;
 	std::wstring personal_id;
@@ -124,10 +124,10 @@ public:
 		std::vector<std::wstring> buffer;
 
 		auto jobAvailable = [&]() {
-			return (!job_question_passed && base_job_available && base_mission_info.type != Mission::null);
+			return (!job_question_passed && base_job_available && base_mission_info.type != LegacyMission::null);
 		};
 		auto specialJobAvailable = [&]() {
-			return (!special_job_question_passed && special_job_available && special_mission_info.type != Mission::null);
+			return (!special_job_question_passed && special_job_available && special_mission_info.type != LegacyMission::null);
 		};
 		auto rumorsAvaliable = [&]() {
 			return (!rumors_question_passed && rumors_available);
@@ -459,12 +459,12 @@ public:
 		return current_dialog_info;
 	}
 
-	void changeBaseMission(Mission new_base_mission) {
+	void changeBaseMission(LegacyMission new_base_mission) {
 		base_mission_info.clear();
 		base_mission_info = new_base_mission;
 	}
 
-	void changeSpecialMission(Mission new_special_mission) {
+	void changeSpecialMission(LegacyMission new_special_mission) {
 		special_mission_info.clear();
 		special_mission_info = new_special_mission;
 	}

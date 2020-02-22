@@ -37,7 +37,7 @@ public:
 	}
 
 	void processMissionList(sf::RenderWindow & window, int selected_mission) {
-		std::vector<Mission> mission_list = rpg_profile.getMissionList();
+		std::vector<LegacyMission> mission_list = rpg_profile.getMissionList();
 		sf::Vector2f view_size = window.getView().getSize();
 		sf::Vector2f view_center = sf::Vector2f(view_size.x / 2, view_size.y / 2);
 
@@ -78,7 +78,7 @@ public:
 	}
 
 	void processCompletedMissionList(sf::RenderWindow & window, int selected_mission) {
-		std::vector<Mission> mission_list = rpg_profile.getCompletedMissionList();
+		std::vector<LegacyMission> mission_list = rpg_profile.getCompletedMissionList();
 		sf::Vector2f view_size = window.getView().getSize();
 		sf::Vector2f view_center = sf::Vector2f(view_size.x / 2, view_size.y / 2);
 

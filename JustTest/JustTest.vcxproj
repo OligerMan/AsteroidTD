@@ -147,6 +147,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapParser.h" />
     <ClInclude Include="Mission.h" />
+    <ClInclude Include="MissionStage.h" />
     <ClInclude Include="MissionVisualController.h" />
     <ClInclude Include="MusicManager.h" />
     <ClInclude Include="NPCInfo.h" />

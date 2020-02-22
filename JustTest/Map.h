@@ -15,6 +15,7 @@
 #include "Mission.h"
 #include "NPCInfo.h"
 #include "PhraseContainer.h"
+#include "MissionInfo.h"
 
 void fixCollision(Object * obj1, Object * obj2) {
 
@@ -762,14 +763,13 @@ private:
 				object->initNPCInfo(new NPCInfo(WorldFactionList::Alliance_of_Ancient_Knowledge));
 				int base_npc_lvl = 100 * rand() / (RAND_MAX + 1) * rand() / (RAND_MAX + 1) * rand() / (RAND_MAX + 1) * rand() / (RAND_MAX + 1) * rand() / (RAND_MAX + 1);
 				int special_mission_lvl_dif = 15 * rand() / (RAND_MAX + 1);
-                Mission::Type type = static_cast<Mission::Type>(rand() % Mission::TYPE_COUNT);
-				Mission base_mission = createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, type, base_npc_lvl);
-                type = static_cast<Mission::Type>(rand() % Mission::TYPE_COUNT);
-				Mission special_mission = createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, type, base_npc_lvl + special_mission_lvl_dif);
-				if (base_mission.type != Mission::null) {
+                LegacyMission base_mission = createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, base_npc_lvl);
+                type = static_cast<LegacyMission::Type>(rand() % LegacyMission::TYPE_COUNT);
+                LegacyMission special_mission = createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, type, base_npc_lvl + special_mission_lvl_dif);
+				if (base_mission.type != LegacyMission::null) {
 					static_cast<NPCInfo *>(object->getNPCInfo())->changeBaseMission(base_mission);
 				}
-				if (special_mission.type != Mission::null) {
+				if (special_mission.type != LegacyMission::null) {
 					static_cast<NPCInfo *>(object->getNPCInfo())->changeSpecialMission(special_mission);
 				}
 				npc_list.push_back(object);
@@ -1057,23 +1057,15 @@ private:
 		return nullptr;
 	}
 
-	Mission createMission(WorldFactionList faction, Mission::Type type, int mission_lvl) {
-		Mission output;
-		output.type = type;
+    Mission createMission(WorldFactionList faction, int mission_lvl) {
         float reward_coef = 1;
-        switch (type) {
-        case Mission::courier:
-            reward_coef = consts.getCourierRewardCoef();
-            break;
-        case Mission::defence:
-            reward_coef = consts.getDefenceRewardCoef();
-            break;
-        }
-		output.reward = (int)consts.getMinimalMissionPrice() + (int)(consts.getMaxRandomMissionPriceAddition() * reward_coef * (1 - pow(consts.getMissionPriceChangeCoef(), mission_lvl))) / 5 * 5;
+        float reward = (int)consts.getMinimalMissionPrice() + (int)(consts.getMaxRandomMissionPriceAddition() * reward_coef * (1 - pow(consts.getMissionPriceChangeCoef(), mission_lvl))) / 5 * 5;
+        Mission output;
+        
 		
         Object * objective;
 		switch (type) {
-		case Mission::courier:
+		case LegacyMission::courier:
 			objective = randomNPCAsteroid();
 			if (objective) {
 				std::vector<void *> objectives_list = { objective };
@@ -1081,17 +1073,17 @@ private:
 				output.missionExpansion = mission;
 			}
 			else {
-				output.type = Mission::null;
+				output.type = LegacyMission::null;
 			}
 			break;
-        case Mission::defence:
+        case LegacyMission::defence:
             objective = randomNPCAsteroid();
             if (objective) {
                 DefenceMission * mission = new DefenceMission(objective, 2 + sqrt(mission_lvl), mission_lvl);
                 output.missionExpansion = mission;
             }
             else {
-                output.type = Mission::null;
+                output.type = LegacyMission::null;
             }
             break;
 		}
@@ -1100,11 +1092,11 @@ private:
 
 	void checkObjective() {
 		if (!rpg_profile.getCurrentMission().completed()) {
-            Mission cur_miss = rpg_profile.getCurrentMission();
+            LegacyMission cur_miss = rpg_profile.getCurrentMission();
 			Objective objective = cur_miss.getObjective();
             float delay;
             switch (cur_miss.type) {
-            case Mission::courier:
+            case LegacyMission::courier:
                 switch (objective.type) {
                 case Objective::point:
                     if (hero_object && (hero_object->getPosition() - static_cast<Object *>(static_cast<PointObjective *>(objective.objectiveExpansion)->object_ptr)->getPosition()).getLength() < consts.getInteractionDistance()) {
@@ -1119,7 +1111,7 @@ private:
                     break;
                 }
                 break;
-            case Mission::defence:
+            case LegacyMission::defence:
                 switch (objective.type) {
                 case Objective::point:
                     if (hero_object && (hero_object->getPosition() - static_cast<Object *>(static_cast<PointObjective *>(objective.objectiveExpansion)->object_ptr)->getPosition()).getLength() < consts.getInteractionDistance()) {

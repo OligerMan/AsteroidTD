@@ -62,30 +62,14 @@ public:
 		if (current_mission >= 0 && current_mission < mission_list.size()) {
             Object * obj_ptr;
             void * objective;
-			switch (mission_list[current_mission].type) {
-			case Mission::courier:
-				objective = mission_list[current_mission].getObjective().objectiveExpansion;
-				obj_ptr = nullptr;
-				if (objective) {
-					obj_ptr = (Object *)((PointObjective *)objective)->object_ptr;
-				}
-				if (obj_ptr) {
-					output.push_back(obj_ptr->getPosition());
-				}
-				break;
-            case Mission::defence:
-                if (mission_list[current_mission].getObjective().type == Objective::point) {
-                    objective = mission_list[current_mission].getObjective().objectiveExpansion;
-                    obj_ptr = nullptr;
-                    if (objective) {
-                        obj_ptr = (Object *)((PointObjective *)objective)->object_ptr;
-                    }
-                    if (obj_ptr) {
-                        output.push_back(obj_ptr->getPosition());
-                    }
+            switch (mission_list[current_mission].getObjective().type) {
+            case Objective::point:
+                objective = mission_list[current_mission].getObjective().data;
+                if (objective) {
+                    output.push_back(((Object *)objective)->getPosition());
                 }
                 break;
-			};
+            }
 		}
 		return output;
 	}
@@ -94,8 +78,8 @@ public:
 		return current_mission;
 	}
 
-	Mission & getCurrentMission() {
-		Mission output;
+    Mission & getCurrentMission() {
+        Mission output(L"", 0);
 		if (current_mission >= 0 && current_mission < mission_list.size()) {
 			output = mission_list[current_mission];
 		}
