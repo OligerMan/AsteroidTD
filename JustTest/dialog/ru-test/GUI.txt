@@ -222,4 +222,44 @@ id common
 phrase_type go_to_desktop_title_GUI
 phrase_end
 
+phrase_start
+string |Награда|
+conditions_start
+conditions_end
+id common
+phrase_type reward_sign_GUI
+phrase_end
+
+phrase_start
+string |Нет заданий|
+conditions_start
+conditions_end
+id common
+phrase_type no_miss_sign_GUI
+phrase_end
+
+phrase_start
+string |Нет доступных заданий. Задания можно найти у тех, кто живет на астероидах|
+conditions_start
+conditions_end
+id common
+phrase_type no_miss_broad_sign_GUI
+phrase_end
+
+phrase_start
+string |Нет завершенных заданий|
+conditions_start
+conditions_end
+id common
+phrase_type compl_no_miss_sign_GUI
+phrase_end
+
+phrase_start
+string |Нет завершенных заданий. Завершите задание, чтобы увидеть его в этом списке|
+conditions_start
+conditions_end
+id common
+phrase_type compl_no_miss_broad_sign_GUI
+phrase_end
+
 dialog_file_end

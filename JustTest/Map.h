@@ -15,7 +15,6 @@
 #include "Mission.h"
 #include "NPCInfo.h"
 #include "PhraseContainer.h"
-#include "MissionInfo.h"
 
 void fixCollision(Object * obj1, Object * obj2) {
 
@@ -129,6 +128,8 @@ private:
 	float gen_radius = 8500, cam_radius = 5500, min_range = 1500, max_range = 2700, asteroid_speed = 0;
 	int asteroid_amount = 50, max_try_count = 100;
 	bool save_out_range = true, fixed_asteroids = true;
+
+    MissionStageInfo mission_stage_info;
 
 	//////////////////////////////////////////////
 
@@ -761,15 +762,19 @@ private:
 
 			if (npc_asteroid_chance) {
 				object->initNPCInfo(new NPCInfo(WorldFactionList::Alliance_of_Ancient_Knowledge));
-				int base_npc_lvl = 100 * rand() / (RAND_MAX + 1) * rand() / (RAND_MAX + 1) * rand() / (RAND_MAX + 1) * rand() / (RAND_MAX + 1) * rand() / (RAND_MAX + 1);
-				int special_mission_lvl_dif = 15 * rand() / (RAND_MAX + 1);
-                LegacyMission base_mission = createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, base_npc_lvl);
-                type = static_cast<LegacyMission::Type>(rand() % LegacyMission::TYPE_COUNT);
-                LegacyMission special_mission = createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, type, base_npc_lvl + special_mission_lvl_dif);
-				if (base_mission.type != LegacyMission::null) {
+				int base_npc_lvl = 
+                    (float)rand() / (float)(RAND_MAX + 1) * 
+                    (float)rand() / (float)(RAND_MAX + 1) * 
+                    (float)rand() / (float)(RAND_MAX + 1) * 
+                    (float)rand() / (float)(RAND_MAX + 1);
+
+				int special_mission_lvl_dif = rand() / (RAND_MAX + 1);
+                Mission base_mission = createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, base_npc_lvl);
+                Mission special_mission = createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, 1 - (1 - base_npc_lvl) * special_mission_lvl_dif);
+				if (!base_mission.isFailed()) {
 					static_cast<NPCInfo *>(object->getNPCInfo())->changeBaseMission(base_mission);
 				}
-				if (special_mission.type != LegacyMission::null) {
+				if (!special_mission.isFailed()) {
 					static_cast<NPCInfo *>(object->getNPCInfo())->changeSpecialMission(special_mission);
 				}
 				npc_list.push_back(object);
@@ -1052,96 +1057,96 @@ private:
 
 	Object * randomNPCAsteroid() {
 		if (npc_list.size()) {
-			return npc_list[rand() * npc_list.size() / (RAND_MAX + 1)];
+			return npc_list[npc_list.size() * rand() / (RAND_MAX + 1)];
 		}
 		return nullptr;
 	}
 
-    Mission createMission(WorldFactionList faction, int mission_lvl) {
-        float reward_coef = 1;
-        float reward = (int)consts.getMinimalMissionPrice() + (int)(consts.getMaxRandomMissionPriceAddition() * reward_coef * (1 - pow(consts.getMissionPriceChangeCoef(), mission_lvl))) / 5 * 5;
-        Mission output;
-        
-		
-        Object * objective;
-		switch (type) {
-		case LegacyMission::courier:
-			objective = randomNPCAsteroid();
-			if (objective) {
-				std::vector<void *> objectives_list = { objective };
-				CourierMission * mission = new CourierMission(objectives_list);
-				output.missionExpansion = mission;
-			}
-			else {
-				output.type = LegacyMission::null;
-			}
-			break;
-        case LegacyMission::defence:
-            objective = randomNPCAsteroid();
-            if (objective) {
-                DefenceMission * mission = new DefenceMission(objective, 2 + sqrt(mission_lvl), mission_lvl);
-                output.missionExpansion = mission;
+    Mission createMission(WorldFactionList faction, float mission_lvl_coef) {
+
+        auto mission_stage_list = mission_stage_info.getRandomMissionDescription();
+        float reward_coef = mission_stage_list.first;
+        float reward = (int)consts.getMinimalMissionPrice() + (int)(consts.getMaxRandomMissionPriceAddition() * reward_coef * (1 - pow(consts.getMissionPriceChangeCoef(), 100 * mission_lvl_coef))) / 5 * 5;
+        Mission output(reward);
+
+        for (auto i = mission_stage_list.second.begin(); i != mission_stage_list.second.end(); i++) {
+            BaseInfo * info = *i;
+            void * cour_obj_ptr, * def_obj_ptr;
+            switch (info->getType()) {
+            case BaseInfo::courier:
+                cour_obj_ptr = randomNPCAsteroid();
+                if (cour_obj_ptr == nullptr) {
+                    output.setFailState();
+                }
+                output.addMissionStage(new CourierStage(cour_obj_ptr, info->getStringID()));
+                break;
+            case BaseInfo::defence:
+                def_obj_ptr = randomNPCAsteroid();
+                if (def_obj_ptr == nullptr) {
+                    output.setFailState();
+                }
+                output.addMissionStage(new DefenceStage(def_obj_ptr, *static_cast<DefenceInfo *>(info), info->getMinLvl() + (info->getMaxLvl() - info->getMinLvl()) * mission_lvl_coef));
+                break;
             }
-            else {
-                output.type = LegacyMission::null;
-            }
-            break;
-		}
+        }
 		return output;
 	}
 
 	void checkObjective() {
-		if (!rpg_profile.getCurrentMission().completed()) {
-            LegacyMission cur_miss = rpg_profile.getCurrentMission();
-			Objective objective = cur_miss.getObjective();
+        Mission * cur_miss = rpg_profile.getCurrentMission();
+        if (cur_miss == nullptr) {
+            return;
+        }
+		if (!cur_miss->completed()) {
+			Objective objective = cur_miss->getObjective();
             float delay;
-            switch (cur_miss.type) {
-            case LegacyMission::courier:
+            switch (cur_miss->getMissionStageType()) {
+            case MissionStage::courier:
                 switch (objective.type) {
                 case Objective::point:
-                    if (hero_object && (hero_object->getPosition() - static_cast<Object *>(static_cast<PointObjective *>(objective.objectiveExpansion)->object_ptr)->getPosition()).getLength() < consts.getInteractionDistance()) {
-                        cur_miss.setObjectiveCompleted();
-                        if (rpg_profile.getCurrentMission().completed()) {
+                    if (hero_object && (hero_object->getPosition() - static_cast<Object *>(objective.data)->getPosition()).getLength() < consts.getInteractionDistance()) {
+                        cur_miss->setObjectiveCompleted();
+                        if (rpg_profile.getCurrentMission()->completed()) {
                             std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::courier_mission_completed_npc, 0);
                             std::wstring message_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-                            global_event_buffer.push_back(Event(new float(rpg_profile.getCurrentMission().reward), reward));
+                            global_event_buffer.push_back(Event(new float(rpg_profile.getCurrentMission()->getReward()), reward));
                             global_event_buffer.push_back(Event(new std::wstring(message_string), message));
                         }
                     }
                     break;
                 }
                 break;
-            case LegacyMission::defence:
+            case MissionStage::defence:
                 switch (objective.type) {
                 case Objective::point:
-                    if (hero_object && (hero_object->getPosition() - static_cast<Object *>(static_cast<PointObjective *>(objective.objectiveExpansion)->object_ptr)->getPosition()).getLength() < consts.getInteractionDistance()) {
-                        cur_miss.setObjectiveCompleted();
+                    if (hero_object && (hero_object->getPosition() - static_cast<Object *>(objective.data)->getPosition()).getLength() < consts.getInteractionDistance()) {
+                        cur_miss->setObjectiveCompleted();
                     }
                     break;
                 case Objective::wave_delay:
-					delay = static_cast<FloatObjective *>(objective.objectiveExpansion)->value;
-                    if (mission_info.count(cur_miss.id)) {
-						auto iter = mission_info.find(cur_miss.id);
+					delay = *static_cast<float *>(objective.data);
+                    if (mission_info.count(cur_miss->getID())) {
+						auto iter = mission_info.find(cur_miss->getID());
 						auto time_dif = std::chrono::steady_clock::now() - *(std::chrono::time_point<std::chrono::steady_clock> *)(iter->second);
 						if (std::chrono::duration_cast<std::chrono::seconds>(time_dif).count() > delay) {
 							mission_info.erase(iter);
-							cur_miss.setObjectiveCompleted();
+							cur_miss->setObjectiveCompleted();
 						}
                     }
                     else {
-                        mission_info.insert(std::pair<unsigned long long, void *>(cur_miss.id, (void *)new std::chrono::time_point<std::chrono::steady_clock>(std::chrono::steady_clock::now())));
+                        mission_info.insert(std::pair<unsigned long long, void *>(cur_miss->getID(), (void *)new std::chrono::time_point<std::chrono::steady_clock>(std::chrono::steady_clock::now())));
                     }
                     break;
                 case Objective::wave_level:
-					if (enemy_wave_list.count(cur_miss.id)) {
-                        auto iter = enemy_wave_list.find(cur_miss.id);
+					if (enemy_wave_list.count(cur_miss->getID())) {
+                        auto iter = enemy_wave_list.find(cur_miss->getID());
                         if (iter->second.empty()) {
-                            cur_miss.setObjectiveCompleted();
+                            cur_miss->setObjectiveCompleted();
                             enemy_wave_list.erase(iter);
-                            if (rpg_profile.getCurrentMission().completed()) {
+                            if (rpg_profile.getCurrentMission()->completed()) {
                                 std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_mission_completed_npc, 0);
                                 std::wstring message_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-                                global_event_buffer.push_back(Event(new float(rpg_profile.getCurrentMission().reward), reward));
+                                global_event_buffer.push_back(Event(new float(rpg_profile.getCurrentMission()->getReward()), reward));
                                 global_event_buffer.push_back(Event(new std::wstring(message_string), message));
                             }
                         }
@@ -1150,11 +1155,11 @@ private:
                         std::vector<Object *> enemy_list;
                         float angle = (float)(rand() % 1024) / 512 * PI;
                         Point new_spawn_point = hero_object->getPosition() + Point(cos(angle), sin(angle)) * (consts.getDefenceMissionEnemySpawnRange() + 0.1);
-                        int enemy_lvl = static_cast<FloatObjective *>(objective.objectiveExpansion)->value;
+                        int enemy_lvl = *static_cast<float *>(objective.data);
                         int gunship_amount = enemy_lvl / 10;
                         int fighter_amount = std::max(1, enemy_lvl / 2 - 2 * gunship_amount);
                         spawnEnemyGroup(fighter_amount, gunship_amount, new_spawn_point, &enemy_list);
-						enemy_wave_list.insert(std::pair<unsigned long long, std::vector<Object *>>(cur_miss.id, enemy_list));
+						enemy_wave_list.insert(std::pair<unsigned long long, std::vector<Object *>>(cur_miss->getID(), enemy_list));
 					}
                     break;
                 }
@@ -1166,9 +1171,12 @@ private:
 
 public:
 
-	Map() {}
+	Map(std::wstring mission_desc_path) : mission_stage_info(mission_desc_path) {}
 
-	Map(std::string path) : objects(parseMap(path)) {
+	Map(std::string path, std::wstring mission_desc_path) : 
+        objects(parseMap(path)), 
+        mission_stage_info(mission_desc_path) {
+
 		for (int layer = 0; layer < objects.size(); layer++) {
 			for (int i = 0; i < objects[layer].size(); i++) {
 				if (objects[layer][i]->getObjectType() == ObjectType::hero) {

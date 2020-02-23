@@ -78,12 +78,11 @@ public:
 		return current_mission;
 	}
 
-    Mission & getCurrentMission() {
-        Mission output(L"", 0);
+    Mission * getCurrentMission() {
 		if (current_mission >= 0 && current_mission < mission_list.size()) {
-			output = mission_list[current_mission];
+			return &mission_list[current_mission];
 		}
-		return output;
+		return nullptr;
 	}
 
 	void setCurrentMission(int new_current_mission) {
@@ -102,5 +101,10 @@ public:
 			}
 		}
 	}
+
+    void clear() {
+        mission_list.clear();
+        completed_mission_list.clear();
+    }
 
 } rpg_profile;

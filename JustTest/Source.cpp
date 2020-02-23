@@ -67,7 +67,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 	GameStatus prev_game_status = pause;
 
-	Map game_map1("maps/" + map_name + ".map");
+	Map game_map1("maps/" + map_name + ".map", L"mission.cfg");
 
 	resource_manager.clear(settings.getStartGold(), 5);
     research_manager.initResearch("research.cfg");
@@ -1540,7 +1540,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 int main() {
 	HWND console_hWnd = GetConsoleWindow();
-	ShowWindow(console_hWnd, SW_HIDE);
+	//ShowWindow(console_hWnd, SW_HIDE);
 
 	phrase_container.parseFromFolder("dialog\\" + settings.getLocalisationFile());
 
@@ -1998,6 +1998,7 @@ int main() {
 			else {
 				fps.reset();
 				try {
+                    rpg_profile.clear();
 					gameCycle("map2", window, visual_ctrl, gui_visual_ctrl, res_visual_ctrl);
 					last_menu_choice = frame_num + consts.getFPSLock();
 				}

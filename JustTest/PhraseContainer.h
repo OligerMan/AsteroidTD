@@ -96,6 +96,12 @@ public:
 
         start_game_sign_GUI,
 
+        reward_sign_GUI,
+        no_miss_sign_GUI,
+        no_miss_broad_sign_GUI,
+        compl_no_miss_sign_GUI,
+        compl_no_miss_broad_sign_GUI,
+
         aster_basic_GUI,
         aster_gold_inter_GUI,
         aster_iron_inter_GUI,
@@ -117,6 +123,18 @@ public:
         aster_rocket_GUI,
         aster_anc_lab_GUI,
         aster_anc_mine_GUI,
+
+        courier_current_desc_miss,
+        courier_short_desc_miss,
+        courier_broad_desc_miss,
+
+        defence_short_desc_miss,
+        defence_broad_desc_miss,
+        defence_cur_search_desc_miss,
+        defence_cur_ready_desc_miss,
+        defence_cur_wave_start_desc_miss,
+        defence_cur_wave_active_desc_miss,
+        defence_cur_finished_desc_miss,
 
 		PHRASE_TYPE_COUNT
 	};
@@ -228,6 +246,12 @@ public:
 
         phrase_type_strings[start_game_sign_GUI] = L"start_game_sign_GUI";
 
+        phrase_type_strings[reward_sign_GUI] = L"reward_sign_GUI";
+        phrase_type_strings[no_miss_sign_GUI] = L"no_miss_sign_GUI";
+        phrase_type_strings[no_miss_broad_sign_GUI] = L"no_miss_broad_sign_GUI";
+        phrase_type_strings[compl_no_miss_sign_GUI] = L"compl_no_miss_sign_GUI";
+        phrase_type_strings[compl_no_miss_broad_sign_GUI] = L"compl_no_miss_broad_sign_GUI";
+
         phrase_type_strings[aster_basic_GUI] = L"aster_basic_GUI";
         phrase_type_strings[aster_gold_inter_GUI] = L"aster_gold_inter_GUI";
         phrase_type_strings[aster_iron_inter_GUI] = L"aster_iron_inter_GUI";
@@ -249,6 +273,19 @@ public:
         phrase_type_strings[aster_rocket_GUI] = L"aster_rocket_GUI";
         phrase_type_strings[aster_anc_lab_GUI] = L"aster_anc_lab_GUI";
         phrase_type_strings[aster_anc_mine_GUI] = L"aster_anc_mine_GUI";
+
+        phrase_type_strings[courier_current_desc_miss] = L"courier_current_desc_miss";
+        phrase_type_strings[courier_short_desc_miss] = L"courier_short_desc_miss";
+        phrase_type_strings[courier_broad_desc_miss] = L"courier_broad_desc_miss";
+
+        phrase_type_strings[defence_short_desc_miss] = L"defence_short_desc_miss";
+        phrase_type_strings[defence_broad_desc_miss] = L"defence_broad_desc_miss";
+        phrase_type_strings[defence_cur_search_desc_miss] = L"defence_cur_search_desc_miss";
+        phrase_type_strings[defence_cur_ready_desc_miss] = L"defence_cur_ready_desc_miss";
+        phrase_type_strings[defence_cur_wave_start_desc_miss] = L"defence_cur_wave_start_desc_miss";
+        phrase_type_strings[defence_cur_wave_active_desc_miss] = L"defence_cur_wave_active_desc_miss";
+        phrase_type_strings[defence_cur_finished_desc_miss] = L"defence_cur_finished_desc_miss";
+
 	}
 
 	/* 

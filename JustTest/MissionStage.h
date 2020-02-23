@@ -3,11 +3,15 @@
 #include <string>
 #include <vector>
 
+#include "MissionInfo.h"
+#include "PhraseContainer.h"
+
 struct Objective {
     enum Type {
         null,
         point,
-        numeric,
+        wave_delay,
+        wave_level
     }type;
     void * data;
 
@@ -18,18 +22,25 @@ struct Objective {
 
 
 class MissionStage {
+public:
     enum Type {
         courier,
         defence,
-    } type;
+
+        TYPE_COUNT
+    };
+private:
+    Type type;
 public:
 
+    MissionStage(Type type) : type(type) {}
     virtual Objective getObjective() { return Objective(); }
     virtual void setObjectiveCompleted() {}
     virtual std::wstring getCurrentDescription() { return L"Mission doesn't exist, sorry for bug"; }
     virtual std::wstring getShortDescription() { return L"Mission doesn't exist, sorry for bug"; }
     virtual std::wstring getBroadDescription() { return L"Mission doesn't exist, sorry for bug"; }
     virtual bool completed() { return true; }
+    Type getType() { return type; }
 };
 
 class CourierStage : public MissionStage {
@@ -37,12 +48,18 @@ class CourierStage : public MissionStage {
     std::wstring current_description, short_description, broad_description;
 public:
 
-    CourierStage(void * courier_objective, std::wstring mission_type) : objective(courier_objective) {
-        
+    CourierStage(void * courier_objective, std::wstring mission_type) : objective(courier_objective), MissionStage(courier) {
+        auto buffer = phrase_container.getPhraseBuffer(PhraseContainer::courier_current_desc_miss, 0);
+        current_description = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::courier_short_desc_miss, 0);
+        short_description = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::courier_broad_desc_miss, 0);
+        broad_description = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
     }
 
     Objective getObjective() override {
         Objective output;
+        std::cout << "kek" << std::endl;
         if (objective) {
             output.type = Objective::point;
             output.data = objective;
@@ -86,10 +103,27 @@ class DefenceStage : public MissionStage {
     std::wstring short_description, broad_description, cur_desc_search, cur_desc_ready, cur_desc_wave_start, cur_desc_wave_active, cur_desc_finished;
 
 public:
-    DefenceStage(void * objective, int wave_amount, int wave_level, std::wstring mission_type) {
+    DefenceStage(void * objective, DefenceInfo info, int mission_level) : objective(objective), MissionStage(defence) {
+
         state = object_search;
+        wave_amount = info.getWaveAmount();
+        level = mission_level;
+        wave_delay = info.getWaveDelay();
 
-
+        auto buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_short_desc_miss, 0);
+        short_description = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_broad_desc_miss, 0);
+        broad_description = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_cur_search_desc_miss, 0);
+        cur_desc_search = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_cur_ready_desc_miss, 0);
+        cur_desc_ready = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_cur_wave_start_desc_miss, 0);
+        cur_desc_wave_start = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_cur_wave_active_desc_miss, 0);
+        cur_desc_wave_active = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_cur_finished_desc_miss, 0);
+        cur_desc_finished = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
     }
 
     Objective getObjective() override {
@@ -100,11 +134,11 @@ public:
             output.data = objective;
             break;
         case get_ready:
-            output.type = Objective::numeric;
+            output.type = Objective::wave_delay;
             output.data = new float(wave_delay);
             break;
         case wave_active:
-            output.type = Objective::numeric;
+            output.type = Objective::wave_level;
             output.data = new float(level);
             break;
         case finished:

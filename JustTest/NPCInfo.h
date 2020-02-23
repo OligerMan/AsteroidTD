@@ -47,8 +47,8 @@ private:
 	DialogInfo current_dialog_info;
 	WorldFactionList faction = WORLD_FACTIONS_COUNT;
 
-    LegacyMission base_mission_info;
-    LegacyMission special_mission_info;
+    Mission base_mission_info;
+    Mission special_mission_info;
 
 	std::wstring start_description_string;
 	std::wstring personal_id;
@@ -75,7 +75,7 @@ private:
 
 public:
 
-	NPCInfo(WorldFactionList faction) : faction(faction) {
+	/*NPCInfo(WorldFactionList faction) : faction(faction) {
 		politeness = rand() * 200 / (RAND_MAX + 1) - 100;
 		prejudices = rand() * 200 / (RAND_MAX + 1) - 100;
 
@@ -94,9 +94,9 @@ public:
         
 		current_dialog_info.answers.push_back(getContinueString());
 		current_dialog_info.is_player_turn = false;
-	}
+	}*/
 
-	NPCInfo(WorldFactionList faction, std::wstring personal_id) : faction(faction), personal_id(personal_id) {
+	NPCInfo(WorldFactionList faction, std::wstring personal_id) : faction(faction), personal_id(personal_id), base_mission_info(0), special_mission_info(0) {
 		politeness = rand() * 200 / (RAND_MAX + 1) - 100;
 		prejudices = rand() * 200 / (RAND_MAX + 1) - 100;
 
@@ -109,9 +109,15 @@ public:
 		current_dialog_info.main_text.clear();
 		current_dialog_info.main_text = start_description_string;
 		current_dialog_info.answers.clear();
+
 		current_dialog_info.answers.push_back(getContinueString());
 		current_dialog_info.is_player_turn = false;
 	}
+
+    NPCInfo(WorldFactionList faction) : NPCInfo(faction, L"") {
+        std::vector<std::wstring> buffer = phrase_container.getPersonalIdList();
+        personal_id = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+    }
 
 	ConversationStage getCurrentStage() {
 		return current_stage;
@@ -124,10 +130,10 @@ public:
 		std::vector<std::wstring> buffer;
 
 		auto jobAvailable = [&]() {
-			return (!job_question_passed && base_job_available && base_mission_info.type != LegacyMission::null);
+			return (!job_question_passed && base_job_available && base_mission_info.getMissionStageType() != MissionStage::TYPE_COUNT);
 		};
 		auto specialJobAvailable = [&]() {
-			return (!special_job_question_passed && special_job_available && special_mission_info.type != LegacyMission::null);
+			return (!special_job_question_passed && special_job_available && special_mission_info.getMissionStageType() != MissionStage::TYPE_COUNT);
 		};
 		auto rumorsAvaliable = [&]() {
 			return (!rumors_question_passed && rumors_available);
@@ -459,12 +465,12 @@ public:
 		return current_dialog_info;
 	}
 
-	void changeBaseMission(LegacyMission new_base_mission) {
+	void changeBaseMission(Mission new_base_mission) {
 		base_mission_info.clear();
 		base_mission_info = new_base_mission;
 	}
 
-	void changeSpecialMission(LegacyMission new_special_mission) {
+	void changeSpecialMission(Mission new_special_mission) {
 		special_mission_info.clear();
 		special_mission_info = new_special_mission;
 	}
