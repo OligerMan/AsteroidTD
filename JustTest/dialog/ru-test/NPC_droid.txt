@@ -1,7 +1,7 @@
 dialog_file_start
 
 phrase_start
-string |Вы видите на экране неизвестную вам модель протокольного дроида|
+string |Вы видите на экране неизвестную вам модель протокольного дроида. Похоже, что он хочет общаться только дистанционно|
 conditions_start
 conditions_end
 id protocol_droid
@@ -9,7 +9,7 @@ phrase_type start_description
 phrase_end
 
 phrase_start
-string |Ваш собеседник выглядит как необычный протокольный дроид. Может новая модель?|
+string |Ваш собеседник выглядит как необычный протокольный дроид. Может новая модель? К себе не приглашает, так что видимо будем общаться дистанционно|
 conditions_start
 conditions_end
 id protocol_droid

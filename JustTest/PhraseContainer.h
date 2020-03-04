@@ -124,6 +124,32 @@ public:
         aster_anc_lab_GUI,
         aster_anc_mine_GUI,
 
+        tutorial_base_desc,
+        tutorial_move,
+        tutorial_view,
+        tutorial_dome,
+        tutorial_dome_desc,
+        tutorial_turret,
+        tutorial_turret_desc,
+        tutorial_gold,
+        tutorial_gold_desc,
+        tutorial_science,
+        tutorial_science_desc,
+        tutorial_skill_mode,
+        tutorial_rocket,
+        tutorial_speed,
+        tutorial_damage,
+        tutorial_heal,
+        tutorial_research,
+        tutorial_research_close,
+        tutorial_pause,
+        tutorial_unpause,
+        tutorial_end,
+
+        tutorial_for_next_step,
+        tutorial_move_pts_left,
+        tutorial_times_left,
+
         courier_current_desc_miss,
         courier_short_desc_miss,
         courier_broad_desc_miss,
@@ -286,6 +312,27 @@ public:
         phrase_type_strings[defence_cur_wave_active_desc_miss] = L"defence_cur_wave_active_desc_miss";
         phrase_type_strings[defence_cur_finished_desc_miss] = L"defence_cur_finished_desc_miss";
 
+        phrase_type_strings[tutorial_base_desc] = L"tutorial_base_desc";
+        phrase_type_strings[tutorial_move] = L"tutorial_move";
+        phrase_type_strings[tutorial_view] = L"tutorial_view";
+        phrase_type_strings[tutorial_dome] = L"tutorial_dome";
+        phrase_type_strings[tutorial_dome_desc] = L"tutorial_dome_desc";
+        phrase_type_strings[tutorial_turret] = L"tutorial_turret";
+        phrase_type_strings[tutorial_turret_desc] = L"tutorial_turret_desc";
+        phrase_type_strings[tutorial_gold] = L"tutorial_gold";
+        phrase_type_strings[tutorial_gold_desc] = L"tutorial_gold_desc";
+        phrase_type_strings[tutorial_science] = L"tutorial_science";
+        phrase_type_strings[tutorial_science_desc] = L"tutorial_science_desc";
+        phrase_type_strings[tutorial_skill_mode] = L"tutorial_skill_mode";
+        phrase_type_strings[tutorial_rocket] = L"tutorial_rocket";
+        phrase_type_strings[tutorial_speed] = L"tutorial_speed";
+        phrase_type_strings[tutorial_damage] = L"tutorial_damage";
+        phrase_type_strings[tutorial_heal] = L"tutorial_heal";
+        phrase_type_strings[tutorial_research] = L"tutorial_research";
+        phrase_type_strings[tutorial_research_close] = L"tutorial_research_close";
+        phrase_type_strings[tutorial_pause] = L"tutorial_pause";
+        phrase_type_strings[tutorial_unpause] = L"tutorial_unpause";
+        phrase_type_strings[tutorial_end] = L"tutorial_end";
 	}
 
 	/* 

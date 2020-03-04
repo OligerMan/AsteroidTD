@@ -29,8 +29,8 @@ class Constants {
     const float defence_mission_enemy_spawn_range = 2500;
 	const float minimal_flight_range = 450;
 
-	const float dome_heal = 0.03;
-	const float hero_heal = 0.3;
+	const float dome_heal = 0.1;
+	const float hero_heal = 1;
 
 	const float fire_damage = 0.25;
 	const float regen_buff = 0.06;

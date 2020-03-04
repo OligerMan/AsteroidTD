@@ -89,7 +89,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	sf::Vector2f strategic_back_pos, main_back_pos;
 
 	game_status = game_hero_mode;
-	skills_mode = set2;
+	skills_mode = set1;
 
 	window.setView(view1);
 
@@ -180,7 +180,34 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
         aster_drone_sign,
         aster_rocket_sign,
         aster_anc_lab_sign,
-        aster_anc_mine_sign;
+        aster_anc_mine_sign,
+
+        tutorial_base_desc,
+        tutorial_move,
+        tutorial_view,
+        tutorial_dome,
+        tutorial_dome_desc,
+        tutorial_turret,
+        tutorial_turret_desc,
+        tutorial_gold,
+        tutorial_gold_desc,
+        tutorial_science,
+        tutorial_science_desc,
+        tutorial_skill_mode,
+        tutorial_rocket,
+        tutorial_speed,
+        tutorial_damage,
+        tutorial_heal,
+        tutorial_research,
+        tutorial_research_close,
+        tutorial_pause,
+        tutorial_unpause,
+        tutorial_end,
+
+        tutorial_for_next_step,
+        tutorial_move_pts_left,
+        tutorial_times_left;
+
 
     auto resetStrings = [&]() {
         buffer = phrase_container.getPhraseBuffer(PhraseContainer::skills_build_sign_GUI, 0);
@@ -253,6 +280,56 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
         aster_anc_lab_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
         buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_anc_mine_GUI, 0);
         aster_anc_mine_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_base_desc, 0);
+        tutorial_base_desc = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_move, 0);
+        tutorial_move = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_view, 0);
+        tutorial_view = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_dome, 0);
+        tutorial_dome = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_dome_desc, 0);
+        tutorial_dome_desc = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_turret, 0);
+        tutorial_turret = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_turret_desc, 0);
+        tutorial_turret_desc = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_gold, 0);
+        tutorial_gold = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_gold_desc, 0);
+        tutorial_gold_desc = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_science, 0);
+        tutorial_science = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_science_desc, 0);
+        tutorial_science_desc = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_skill_mode, 0);
+        tutorial_skill_mode = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_rocket, 0);
+        tutorial_rocket = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_speed, 0);
+        tutorial_speed = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_damage, 0);
+        tutorial_damage = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_heal, 0);
+        tutorial_heal = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_research, 0);
+        tutorial_research = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_research_close, 0);
+        tutorial_research_close = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_pause, 0);
+        tutorial_pause = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_unpause, 0);
+        tutorial_unpause = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_end, 0);
+        tutorial_end = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_for_next_step, 0);
+        tutorial_for_next_step = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_move_pts_left, 0);
+        tutorial_move_pts_left = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_times_left, 0);
+        tutorial_times_left = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
     };
 
     resetStrings();
@@ -486,72 +563,72 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			// tutorial code
 			if (tutorial.getCurrentStep() != tutorial.no_tutorial) {
 				if (tutorial.isWorkingOnStep(tutorial.base_description)) {
-					gui_manager.forceSetTopSign("This tutorial will show you\nsome base mechanics of\nthis game\n(press " + (sf::Joystick::isConnected(0) ? std::string("A") : std::string("Space")) + " for next step)", 0.01);
+					gui_manager.forceSetTopSign(tutorial_base_desc/*"This tutorial will show you\nsome base mechanics of\nthis game\n(press "*/ + (sf::Joystick::isConnected(0) ? std::wstring(L"A") : std::wstring(L"Space")) + tutorial_for_next_step/*" for next step)"*/, 0.01);
 				}
 				if (tutorial.isWorkingOnStep(tutorial.movement_tutorial)) {
-					gui_manager.forceSetTopSign("Try to move with WASD keys\nor left gamepad stick\n(" + std::to_string((int)move_points_left) + " pts left)", 0.01);
+					gui_manager.forceSetTopSign(tutorial_move/*"Try to move with WASD keys\nor left gamepad stick\n("*/ + std::to_wstring((int)move_points_left) + tutorial_move_pts_left/*" pts left)"*/, 0.01);
 					move_points_left -= hero_object->getSpeed().getLength();
 					if (move_points_left < 0) {
 						tutorial.nextStep();
 					}
 				}
 				if (tutorial.isWorkingOnStep(tutorial.switching_view_tutorial)) {
-					gui_manager.forceSetTopSign("OK! Now let's try to change\ncamera mode with Q keyboard key\nor LB gamepad key\n(" + std::to_string(switching_view_counter) + " times left)", 0.01);
+					gui_manager.forceSetTopSign(tutorial_view/*"OK! Now let's try to change\ncamera mode with Q keyboard key\nor LB gamepad key\n("*/ + std::to_wstring(switching_view_counter) + tutorial_times_left/*" times left)"*/, 0.01);
 					if (switching_view_counter == 0) {
 						tutorial.nextStep();
 					}
 				}
 
 				if (tutorial.isWorkingOnStep(tutorial.build_mode_dome_tutorial)) {
-					gui_manager.forceSetTopSign("Fly to the nearest asteroid\nand build dome on it\nwith key 1 on keyboard\nor Y on gamepad", 0.01);
+					gui_manager.forceSetTopSign(tutorial_dome/*"Fly to the nearest asteroid\nand build dome on it\nwith key 1 on keyboard\nor Y on gamepad"*/, 0.01);
 				}
 				if (tutorial.isWorkingOnStep(tutorial.build_mode_dome_description_tutorial)) {
-					gui_manager.forceSetTopSign("Dome grants some regeneration\nfor all structures on same asteroid\n(Space or A to proceed)", 0.01);
+					gui_manager.forceSetTopSign(tutorial_dome_desc/*"Dome grants some regeneration\nfor all structures on same asteroid\n(Space or A to proceed)"*/, 0.01);
 				}
 
 				if (tutorial.isWorkingOnStep(tutorial.build_mode_turret_tutorial)) {
-					gui_manager.forceSetTopSign("Fly to the nearest asteroid\nand build turret on it\nwith key 2 on keyboard\nor X on gamepad", 0.01);
+					gui_manager.forceSetTopSign(tutorial_turret/*"Fly to the nearest asteroid\nand build turret on it\nwith key 2 on keyboard\nor X on gamepad"*/, 0.01);
 				}
 				if (tutorial.isWorkingOnStep(tutorial.build_mode_turret_description_tutorial)) {
-					gui_manager.forceSetTopSign("Turret is full-autonomous static\ndefence system for asteroid\nwith one minus - range so\nyou need more to defend your structures\n(Space or A to proceed)", 0.01);
+					gui_manager.forceSetTopSign(tutorial_turret_desc/*"Turret is full-autonomous static\ndefence system for asteroid\nwith one minus - range so\nyou need more to defend your structures\n(Space or A to proceed)"*/, 0.01);
 				}
 
 				if (tutorial.isWorkingOnStep(tutorial.build_mode_gold_tutorial)) {
-					gui_manager.forceSetTopSign("Fly to the nearest asteroid\nand build gold mine on it\nwith key 3 on keyboard\nor B on gamepad", 0.01);
+					gui_manager.forceSetTopSign(tutorial_gold/*"Fly to the nearest asteroid\nand build gold mine on it\nwith key 3 on keyboard\nor B on gamepad"*/, 0.01);
 				}
 				if (tutorial.isWorkingOnStep(tutorial.build_mode_gold_description_tutorial)) {
-					gui_manager.forceSetTopSign("You need gold mines to extract\nfrom asteroid all you can sell for gold\n(Space or A to proceed)", 0.01);
+					gui_manager.forceSetTopSign(tutorial_gold_desc/*"You need gold mines to extract\nfrom asteroid all you can sell for gold\n(Space or A to proceed)"*/, 0.01);
 				}
 
 				if (tutorial.isWorkingOnStep(tutorial.build_mode_science_tutorial)) {
-					gui_manager.forceSetTopSign("Fly to the nearest asteroid\nand build science station on it\nwith key 4 on keyboard\nor A on gamepad", 0.01);
+					gui_manager.forceSetTopSign(tutorial_science/*"Fly to the nearest asteroid\nand build science station on it\nwith key 4 on keyboard\nor A on gamepad"*/, 0.01);
 				}
 				if (tutorial.isWorkingOnStep(tutorial.build_mode_science_description_tutorial)) {
-					gui_manager.forceSetTopSign("You need science stations to\nget some research points\n(about it slightly further,\nSpace or A to proceed)", 0.01);
+					gui_manager.forceSetTopSign(tutorial_science_desc/*"You need science stations to\nget some research points\n(about it slightly further,\nSpace or A to proceed)"*/, 0.01);
 				}
 
 				if (tutorial.isWorkingOnStep(tutorial.switching_modes_tutorial)) {
-					gui_manager.forceSetTopSign("OK! Now let's try to change\nbuild mode to skills mode with E keyboard key\nor RB gamepad key\n(" + std::to_string(switching_modes_counter) + " times left)", 0.01);
+					gui_manager.forceSetTopSign(tutorial_skill_mode/*"OK! Now let's try to change\nbuild mode to skills mode with E keyboard key\nor RB gamepad key\n("*/ + std::to_wstring(switching_modes_counter) + tutorial_times_left/*" times left)"*/, 0.01);
 					if (switching_modes_counter == 0) {
 						tutorial.nextStep();
 					}
 				}
 
 				if (tutorial.isWorkingOnStep(tutorial.using_skills_rocket_tutorial)) {
-					gui_manager.forceSetTopSign("This was assumed as a damage skill with low cost,\nbut I still don't have enough\ntime to create it\n(1 key on keyboard or Y on gamepad to try)", 0.01);
+					gui_manager.forceSetTopSign(tutorial_rocket/*"This was assumed as a damage skill with low cost,\nbut I still don't have enough\ntime to create it\n(1 key on keyboard or Y on gamepad to try)"*/, 0.01);
 				}
 				if (tutorial.isWorkingOnStep(tutorial.using_skills_speed_tutorial)) {
-					gui_manager.forceSetTopSign("This just your speed buff\n(2 key on keyboard or X on gamepad to try)", 0.01);
+					gui_manager.forceSetTopSign(tutorial_speed/*"This just your speed buff\n(2 key on keyboard or X on gamepad to try)"*/, 0.01);
 				}
 				if (tutorial.isWorkingOnStep(tutorial.using_skills_damage_tutorial)) {
-					gui_manager.forceSetTopSign("Doubles damage and attack speed\non all turrets on asteroid\nnext to your ship\n(3 key on keyboard or B on gamepad to try)", 0.01);
+					gui_manager.forceSetTopSign(tutorial_damage/*"Doubles damage and attack speed\non all turrets on asteroid\nnext to your ship\n(3 key on keyboard or B on gamepad to try)"*/, 0.01);
 				}
 				if (tutorial.isWorkingOnStep(tutorial.using_skills_heal_tutorial)) {
-					gui_manager.forceSetTopSign("Heals you and all structures\non asteroids next to your ship\n(4 key on keyboard or A on gamepad to try)", 0.01);
+					gui_manager.forceSetTopSign(tutorial_heal/*"Heals you and all structures\non asteroids next to your ship\n(4 key on keyboard or A on gamepad to try)"*/, 0.01);
 				}
 
 				if (tutorial.isWorkingOnStep(tutorial.research_tutorial)) {
-					gui_manager.forceSetTopSign("Press F on keyboard or BACK on gamepad\nto open research list", 0.01);
+					gui_manager.forceSetTopSign(tutorial_research/*"Press F on keyboard or BACK on gamepad\nto open research list"*/, 0.01);
 				}
 				if (tutorial.isWorkingOnStep(tutorial.pause_tutorial)) {
 					gui_manager.forceSetTopSign("Press R to pause the game", 0.01);
@@ -1540,7 +1617,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 int main() {
 	HWND console_hWnd = GetConsoleWindow();
-	//ShowWindow(console_hWnd, SW_HIDE);
+	ShowWindow(console_hWnd, SW_HIDE);
 
 	phrase_container.parseFromFolder("dialog\\" + settings.getLocalisationFile());
 

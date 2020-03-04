@@ -23,7 +23,7 @@ enum SkillsMode {
 
 enum GameMode {
     infinity_mode,
-    adventure_mode
+    adventure_mode,
 };
 
 GameStatus game_status;
