@@ -333,6 +333,10 @@ public:
         phrase_type_strings[tutorial_pause] = L"tutorial_pause";
         phrase_type_strings[tutorial_unpause] = L"tutorial_unpause";
         phrase_type_strings[tutorial_end] = L"tutorial_end";
+
+        phrase_type_strings[tutorial_for_next_step] = L"tutorial_for_next_step";
+        phrase_type_strings[tutorial_move_pts_left] = L"tutorial_move_pts_left";
+        phrase_type_strings[tutorial_times_left] = L"tutorial_times_left";
 	}
 
 	/* 
