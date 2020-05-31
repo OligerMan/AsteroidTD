@@ -6,20 +6,33 @@
 #include <iostream>
 #include <codecvt>
 #include <locale>
+#include <map>
 
 #include "Settings.h"
 #include "ParserInput.h"
 #include "FileSearch.h"
 
 struct Phrase {
-	std::wstring phrase, id;
+    struct Conditions {
+        std::wstring name, value;
+        enum {
+            lower,
+            not_greater,
+            equal,
+            not_lower,
+            greater
+        } sign;
+    };
+    std::wstring phrase, id;
 	int min_politeness = -100;
 	int max_politeness = 100;
+
+    std::vector<Conditions> conditions;
 };
 
 class PhraseContainer {
 public:
-	enum PhraseType {
+	/*enum PhraseType {
 		start_description,
 		conversation_refuse_npc,
 
@@ -163,22 +176,23 @@ public:
         defence_cur_finished_desc_miss,
 
 		PHRASE_TYPE_COUNT
-	};
+	};*/
 
 private:
 
-	std::vector<std::vector<Phrase>> phrase_buffer;
-	std::vector<std::wstring> phrase_type_strings;
+    std::map<std::wstring, std::vector<Phrase>> new_phrase_buffer;
+	//std::vector<std::vector<Phrase>> phrase_buffer;
+	//std::vector<std::wstring> phrase_type_strings;
 	std::vector<std::wstring> personal_id_list;
 
-	int is_phrase_type_exists(std::wstring example) {
+	/*int is_phrase_type_exists(std::wstring example) {
 		for (int i = 0; i < PHRASE_TYPE_COUNT; i++) {
 			if (phrase_type_strings[i] == example) {
 				return i;
 			}
 		}
 		return -1;
-	}
+	}*/
 
 	int is_personal_id_exists(std::wstring example) {
 		for (int i = 0; i < personal_id_list.size(); i++) {
@@ -191,7 +205,7 @@ private:
 
 public:
 
-	PhraseContainer() {
+	/*PhraseContainer() {
 		phrase_type_strings.resize(PHRASE_TYPE_COUNT);
 		phrase_buffer.resize(PHRASE_TYPE_COUNT);
 
@@ -337,7 +351,7 @@ public:
         phrase_type_strings[tutorial_for_next_step] = L"tutorial_for_next_step";
         phrase_type_strings[tutorial_move_pts_left] = L"tutorial_move_pts_left";
         phrase_type_strings[tutorial_times_left] = L"tutorial_times_left";
-	}
+	}*/
 
 	/* 
 	file structure:
@@ -465,13 +479,20 @@ public:
 				return;
 			}
 			dialog_file >> input;
-			int type = is_phrase_type_exists(input);
-			if (type != -1) {
+            auto phrase_iter = new_phrase_buffer.find(input);
+            if (phrase_iter == new_phrase_buffer.end()) {
+                new_phrase_buffer.insert({ input, std::vector<Phrase>() });
+                phrase_iter = new_phrase_buffer.find(input);
+            }
+            phrase_iter->second.push_back(new_phrase);
+            if (is_personal_id_exists(new_phrase.id) == -1) {
+                personal_id_list.push_back(new_phrase.id);
+            }
+
+		    /*int type = is_phrase_type_exists(input);
+		    if (type != -1) {
 				phrase_buffer[type].push_back(new_phrase);
-				if (is_personal_id_exists(new_phrase.id) == -1) {
-					personal_id_list.push_back(new_phrase.id);
-				}
-			}
+		    }*/
 
 			dialog_file >> input;
 			if (input != L"phrase_end") {
@@ -491,7 +512,7 @@ public:
         }
     }
 
-	std::vector<std::wstring> getPhraseBuffer(PhraseType type, int politeness, std::wstring id = L"") {
+	/*std::vector<std::wstring> getPhraseBuffer(PhraseType type, int politeness, std::wstring id = L"") {
 		std::vector<std::wstring> output;
 		bool id_spec_phrase = false;
 		if (phrase_buffer.size() >= type) {
@@ -521,7 +542,40 @@ public:
             output.push_back(L" ");
 		}
 		return output;
-	}
+	}*/
+
+    std::vector<std::wstring> getPhraseBuffer(std::wstring type, int politeness, std::wstring id = L"") {
+        std::vector<std::wstring> output;
+        bool id_spec_phrase = false;
+        auto iter = new_phrase_buffer.find(type);
+        if (iter != new_phrase_buffer.end()) {
+            for (int i = 0; i < iter->second.size(); i++) {
+                if (politeness >= iter->second[i].min_politeness && politeness <= iter->second[i].max_politeness) {
+                    if (id.empty() || id == L"common" || id == iter->second[i].id || iter->second[i].id == L"common") {
+                        output.push_back(iter->second[i].phrase);
+                        if (id == iter->second[i].id) {
+                            id_spec_phrase = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (id_spec_phrase) {
+                output.clear();
+                for (int i = 0; i < iter->second.size(); i++) {
+                    if (politeness >= iter->second[i].min_politeness && politeness <= iter->second[i].max_politeness) {
+                        if (id == iter->second[i].id) {
+                            output.push_back(iter->second[i].phrase);
+                        }
+                    }
+                }
+            }
+        }
+        if (output.empty()) {
+            output.push_back(L" ");
+        }
+        return output;
+    }
 
 	std::vector<std::wstring> getPersonalIdList() {
 		return personal_id_list;

@@ -156,7 +156,7 @@ public:
 		drawResearchInfo(window, viewport_pos, cur_research_index);
 
 		if (tutorial.getCurrentStep() == tutorial.research_tutorial_close) {
-			tutorial_sign.setString(phrase_container.getPhraseBuffer(PhraseContainer::tutorial_research_close, 0)[0]/*"Try to research something by selecting it\nwith WASD on left stick and pressing\nSpace on keyboard or A on gamepad\nand then exit with F"*/);
+			tutorial_sign.setString(phrase_container.getPhraseBuffer(L"tutorial_research_close", 0)[0]/*"Try to research something by selecting it\nwith WASD on left stick and pressing\nSpace on keyboard or A on gamepad\nand then exit with F"*/);
 			tutorial_sign.setOrigin(-viewport_pos + sf::Vector2f(tutorial_sign.getLocalBounds().width / 2, 0));
 			tutorial_sign.setCharacterSize(40 * window->getView().getSize().y / 1080);
 		}

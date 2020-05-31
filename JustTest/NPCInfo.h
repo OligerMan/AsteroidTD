@@ -4,9 +4,27 @@
 #include "PlayerRPGProfile.h"
 
 struct DialogInfo {
+    struct Answer {
+        std::wstring text;
+        //PhraseContainer::PhraseType type;
+        std::wstring type;
+        
+        Answer(std::wstring text, std::wstring type) : text(text), type(type) {}
+    };
 	bool is_player_turn = false;
 	std::wstring main_text;
-	std::vector<std::wstring> answers; // if not players turn contains only "Continue"
+	std::vector<Answer> answers; // if not players turn contains only "Continue"
+};
+
+struct DialogInfoModified {
+    struct Answer {
+        std::wstring text;
+        //PhraseContainer::PhraseType type;
+        std::wstring type;
+    };
+
+    std::wstring main_text;
+    std::vector<Answer> answers;
 };
 
 class NPCInfo {
@@ -58,65 +76,52 @@ private:
 	int politeness = 0;
 	int prejudices = 0;
 
-    std::wstring getContinueString() {
-        std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::continue_phrase_GUI, politeness, personal_id);
-        return buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+    DialogInfo::Answer getContinueAnswer() {
+        //std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::continue_phrase_GUI, politeness, personal_id);
+        std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(L"continue_phrase_GUI", politeness, personal_id);
+        return DialogInfo::Answer(buffer[rand() * buffer.size() / (RAND_MAX + 1)], L"continue_phrase_GUI");
     }
 
-    std::wstring getRerollString() {
-        std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::reroll_phrase_GUI, politeness, personal_id);
-        return buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+    DialogInfo::Answer getRerollAnswer() {
+        std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(L"reroll_phrase_GUI", politeness, personal_id);
+        return DialogInfo::Answer(buffer[rand() * buffer.size() / (RAND_MAX + 1)], L"reroll_phrase_GUI");
     }
 
-    std::wstring getJokeString() {
-        std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::joke_phrase_GUI, politeness, personal_id);
-        return buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+    DialogInfo::Answer getJokeAnswer() {
+        std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(L"joke_phrase_GUI", politeness, personal_id);
+        return DialogInfo::Answer(buffer[rand() * buffer.size() / (RAND_MAX + 1)], L"joke_phrase_GUI");
+    }
+
+    void setDefaultSettings() {
+        politeness = rand() * 200 / (RAND_MAX + 1) - 100;
+        prejudices = rand() * 200 / (RAND_MAX + 1) - 100;
+
+        faction = WorldFactionList(rand() % WORLD_FACTIONS_COUNT);
+
+        std::vector<std::wstring> buffer;
+
+        buffer = phrase_container.getPhraseBuffer(L"start_description", politeness, personal_id);
+        start_description_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        current_dialog_info.main_text.clear();
+        current_dialog_info.main_text = start_description_string;
+        current_dialog_info.answers.clear();
+
+        current_dialog_info.answers.push_back(getContinueAnswer());
+        current_dialog_info.is_player_turn = false;
     }
 
 public:
 
-	/*NPCInfo(WorldFactionList faction) : faction(faction) {
-		politeness = rand() * 200 / (RAND_MAX + 1) - 100;
-		prejudices = rand() * 200 / (RAND_MAX + 1) - 100;
-
-		faction = WorldFactionList(rand() % WORLD_FACTIONS_COUNT);
-
-		std::vector<std::wstring> buffer;
-
-		buffer = phrase_container.getPersonalIdList();
-		personal_id = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-
-		buffer = phrase_container.getPhraseBuffer(PhraseContainer::start_description, politeness, personal_id);
-		start_description_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-		current_dialog_info.main_text.clear();
-		current_dialog_info.main_text = start_description_string;
-		current_dialog_info.answers.clear();
-        
-		current_dialog_info.answers.push_back(getContinueString());
-		current_dialog_info.is_player_turn = false;
-	}*/
 
 	NPCInfo(WorldFactionList faction, std::wstring personal_id) : faction(faction), personal_id(personal_id), base_mission_info(0), special_mission_info(0) {
-		politeness = rand() * 200 / (RAND_MAX + 1) - 100;
-		prejudices = rand() * 200 / (RAND_MAX + 1) - 100;
-
-		faction = WorldFactionList(rand() % WORLD_FACTIONS_COUNT);
-
-		std::vector<std::wstring> buffer;
-
-		buffer = phrase_container.getPhraseBuffer(PhraseContainer::start_description, politeness, personal_id);
-		start_description_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-		current_dialog_info.main_text.clear();
-		current_dialog_info.main_text = start_description_string;
-		current_dialog_info.answers.clear();
-
-		current_dialog_info.answers.push_back(getContinueString());
-		current_dialog_info.is_player_turn = false;
+        setDefaultSettings();
 	}
 
     NPCInfo(WorldFactionList faction) : NPCInfo(faction, L"") {
         std::vector<std::wstring> buffer = phrase_container.getPersonalIdList();
         personal_id = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+        setDefaultSettings();
     }
 
 	ConversationStage getCurrentStage() {
@@ -138,34 +143,34 @@ public:
 		auto rumorsAvaliable = [&]() {
 			return (!rumors_question_passed && rumors_available);
 		};
-		auto addAnswer = [&](PhraseContainer::PhraseType phrase) {
+		auto addAnswer = [&](std::wstring phrase) {
 			buffer = phrase_container.getPhraseBuffer(phrase, politeness, personal_id);
-			current_dialog_info.answers.push_back(buffer[rand() * buffer.size() / (RAND_MAX + 1)]);
+			current_dialog_info.answers.push_back(DialogInfo::Answer(buffer[rand() * buffer.size() / (RAND_MAX + 1)], phrase));
 		};
-		auto addMainText = [&](PhraseContainer::PhraseType phrase) {
+		auto addMainText = [&](std::wstring phrase) {
 			current_dialog_info.main_text.clear();
 			buffer = phrase_container.getPhraseBuffer(phrase, politeness, personal_id);
 			current_dialog_info.main_text = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 		};
 		auto backToStandartQuestion = [&]() {
 			current_stage = standart_question;
-			addMainText(PhraseContainer::standart_question_npc);
+			addMainText(L"standart_question_npc");
 			current_dialog_info.answers.clear();
 			if ((jobAvailable() || specialJobAvailable())) {
-				addAnswer(PhraseContainer::job_question_player);
+				addAnswer(L"job_question_player");
 			}
 			if (rumorsAvaliable()) {
-				addAnswer(PhraseContainer::rumors_question_player);
+				addAnswer(L"rumors_question_player");
 			}
-			current_dialog_info.answers.push_back(getJokeString());
-			addAnswer(PhraseContainer::farewell_player);
+			current_dialog_info.answers.push_back(getJokeAnswer());
+			addAnswer(L"farewell_player");
 			current_dialog_info.is_player_turn = false;
 		};
 		auto goEnd = [&]() {
 			current_stage = dialog_end;
-			addMainText(PhraseContainer::dialog_end_npc);
+			addMainText(L"dialog_end_npc");
 			current_dialog_info.answers.clear();
-			current_dialog_info.answers.push_back(getContinueString());
+			current_dialog_info.answers.push_back(getContinueAnswer());
 		};
 
 		int rand_coef = 0, joke_mark = 0;
@@ -173,20 +178,20 @@ public:
 		case dialog_start:
 			if (prejudices + rpg_profile.getFactionFame(faction) + rpg_profile.getGlobalFame() < -150) {
 				current_stage = conversation_refuse;
-				addMainText(PhraseContainer::conversation_refuse_npc);
+				addMainText(L"conversation_refuse_npc");
 				current_dialog_info.answers.clear();
-				current_dialog_info.answers.push_back(getContinueString());
+				current_dialog_info.answers.push_back(getContinueAnswer());
 				current_dialog_info.is_player_turn = false;
 			}
 			else {
 				current_stage = greetings_phrase;
-				addMainText(PhraseContainer::greetings_phrase_npc);
+				addMainText(L"greetings_phrase_npc");
 				current_dialog_info.answers.clear();
-				addAnswer(PhraseContainer::positive_greetings_answer_player);
-				addAnswer(PhraseContainer::neutral_greetings_answer_player);
-				addAnswer(PhraseContainer::negative_greetings_answer_player);
-				addAnswer(PhraseContainer::farewell_player);
-				current_dialog_info.answers.push_back(getRerollString());
+				addAnswer(L"positive_greetings_answer_player");
+				addAnswer(L"neutral_greetings_answer_player");
+				addAnswer(L"negative_greetings_answer_player");
+				addAnswer(L"farewell_player");
+				current_dialog_info.answers.push_back(getRerollAnswer());
 				current_dialog_info.is_player_turn = false;
 			}
 			break;
@@ -195,37 +200,37 @@ public:
 			current_dialog_info.is_player_turn = false;
 			break;
 		case greetings_phrase:
-			if (answer_num == 4) {
+			if (current_dialog_info.answers[answer_num].type == L"reroll_phrase_GUI") {
 				current_dialog_info.answers.clear();
-				addAnswer(PhraseContainer::positive_greetings_answer_player);
-				addAnswer(PhraseContainer::neutral_greetings_answer_player);
-				addAnswer(PhraseContainer::negative_greetings_answer_player);
-				addAnswer(PhraseContainer::farewell_player);
-				current_dialog_info.answers.push_back(getRerollString());
+				addAnswer(L"positive_greetings_answer_player");
+				addAnswer(L"neutral_greetings_answer_player");
+				addAnswer(L"negative_greetings_answer_player");
+				addAnswer(L"farewell_player");
+				current_dialog_info.answers.push_back(getRerollAnswer());
 				current_dialog_info.is_player_turn = false;
 			}
-			if (answer_num == 3) {
+			if (current_dialog_info.answers[answer_num].type == L"farewell_player") {
 				goEnd();
 			}
-			if (answer_num == 2) {
+			if (current_dialog_info.answers[answer_num].type == L"negative_greetings_answer_player") {
 				current_stage = negative_greeting_reaction;
-				addMainText(PhraseContainer::negative_greetings_reaction_npc);
+				addMainText(L"negative_greetings_reaction_npc");
 				current_dialog_info.answers.clear();
-				current_dialog_info.answers.push_back(getContinueString());
+				current_dialog_info.answers.push_back(getContinueAnswer());
 				current_dialog_info.is_player_turn = true;
 			}
-			if (answer_num == 1) {
+			if (current_dialog_info.answers[answer_num].type == L"neutral_greetings_answer_player") {
 				current_stage = neutral_greeting_reaction;
-				addMainText(PhraseContainer::neutral_greetings_reaction_npc);
+				addMainText(L"neutral_greetings_reaction_npc");
 				current_dialog_info.answers.clear();
-				current_dialog_info.answers.push_back(getContinueString());
+				current_dialog_info.answers.push_back(getContinueAnswer());
 				current_dialog_info.is_player_turn = true;
 			}
-			if (answer_num == 0) {
+			if (current_dialog_info.answers[answer_num].type == L"positive_greetings_answer_player") {
 				current_stage = positive_greeting_reaction;
-				addMainText(PhraseContainer::positive_greetings_reaction_npc);
+				addMainText(L"positive_greetings_reaction_npc");
 				current_dialog_info.answers.clear();
-				current_dialog_info.answers.push_back(getContinueString());
+				current_dialog_info.answers.push_back(getContinueAnswer());
 				current_dialog_info.is_player_turn = true;
 			}
 			break;
@@ -235,9 +240,9 @@ public:
 			rand_coef = rand() % 10;
 			if (rand_coef == 0) {
 				current_stage = conversation_refuse;
-				addMainText(PhraseContainer::conversation_refuse_npc);
+				addMainText(L"conversation_refuse_npc");
 				current_dialog_info.answers.clear();
-				current_dialog_info.answers.push_back(getContinueString());
+				current_dialog_info.answers.push_back(getContinueAnswer());
 				current_dialog_info.is_player_turn = false;
 			}
 			else {
@@ -258,14 +263,14 @@ public:
 			backToStandartQuestion();
 			break;
 		case standart_question:
-			if (answer_num == 0 && (jobAvailable() || specialJobAvailable())) {
+			if (current_dialog_info.answers[answer_num].type == L"job_question_player") {
 				if (!jobAvailable()) {
 					current_stage = job_refuse;
 
-					addMainText(PhraseContainer::base_job_refuse_npc);
+					addMainText(L"base_job_refuse_npc");
 
 					current_dialog_info.answers.clear();
-					current_dialog_info.answers.push_back(getContinueString());
+					current_dialog_info.answers.push_back(getContinueAnswer());
 					current_dialog_info.is_player_turn = false;
 				}
 				else {
@@ -275,11 +280,11 @@ public:
 						current_dialog_info.main_text = base_mission_info.getShortDescription();
 
 						current_dialog_info.answers.clear();
-						addAnswer(PhraseContainer::job_accept_player); 
+						addAnswer(L"job_accept_player"); 
 						if (!special_job_question_passed) {
-							addAnswer(PhraseContainer::special_job_question_player);
+							addAnswer(L"special_job_question_player");
 						}
-						addAnswer(PhraseContainer::job_refuse_player);
+						addAnswer(L"job_refuse_player");
 					}
 					else {
 						current_stage = special_job_offer;
@@ -288,44 +293,44 @@ public:
 
 
 						current_dialog_info.answers.clear();
-						addAnswer(PhraseContainer::job_accept_player);
-						addAnswer(PhraseContainer::job_refuse_player);
+						addAnswer(L"job_accept_player");
+						addAnswer(L"job_refuse_player");
 					}
 					current_dialog_info.is_player_turn = false;
 				}
 			}
-			else if ((answer_num == 1 && (jobAvailable() || specialJobAvailable()) && rumorsAvaliable()) || answer_num == 0) {
+			else if (current_dialog_info.answers[answer_num].type == L"rumors_question_player") {
 				if (prejudices + rpg_profile.getFactionFame(faction) + rpg_profile.getGlobalFame() < 0) {
 					current_stage = rumors_refuse;
-					addMainText(PhraseContainer::rumors_refuse_npc);
+					addMainText(L"rumors_refuse_npc");
 					current_dialog_info.answers.clear();
-					current_dialog_info.answers.push_back(getContinueString());
+					current_dialog_info.answers.push_back(getContinueAnswer());
 					current_dialog_info.is_player_turn = false;
 				}
 				else {
 					current_stage = rumors_refuse;
-					addMainText(PhraseContainer::rumors_refuse_npc);
+					addMainText(L"rumors_refuse_npc");
 					current_dialog_info.answers.clear();
-					current_dialog_info.answers.push_back(L"<TODO: rumors generator>");
+					current_dialog_info.answers.push_back(DialogInfo::Answer(L"<TODO: rumors generator>", L""));
 					current_dialog_info.is_player_turn = false;
 				}
 			}
-			else if ((answer_num == 2 && (jobAvailable() || specialJobAvailable()) && rumorsAvaliable()) || (answer_num == 1 && ((jobAvailable() || specialJobAvailable()) ^ rumorsAvaliable())) || answer_num == 0) {
+			else if (current_dialog_info.answers[answer_num].type == L"joke_phrase_GUI") {
 				current_stage = joke;
 
-				addMainText(PhraseContainer::random_joke_player);
+				addMainText(L"random_joke_player");
 
 				current_dialog_info.answers.clear();
-				current_dialog_info.answers.push_back(getContinueString());
+				current_dialog_info.answers.push_back(getContinueAnswer());
 				current_dialog_info.is_player_turn = false;
 			}
-			else if ((answer_num == 3 && (jobAvailable() || specialJobAvailable()) && rumorsAvaliable()) || (answer_num == 2 && ((jobAvailable() || specialJobAvailable()) ^ rumorsAvaliable())) || answer_num == 1) {
+			else if (current_dialog_info.answers[answer_num].type == L"farewell_player") {
 				current_stage = farewell;
 
-				addMainText(PhraseContainer::farewell_npc);
+				addMainText(L"farewell_npc");
 
 				current_dialog_info.answers.clear();
-				current_dialog_info.answers.push_back(getContinueString());
+				current_dialog_info.answers.push_back(getContinueAnswer());
 				current_dialog_info.is_player_turn = false;
 			}
 			break;
@@ -334,28 +339,28 @@ public:
 			if (joke_mark <= 33) {
 				current_stage = negative_joke_reaction;
 
-				addMainText(PhraseContainer::random_negative_joke_reaction_npc);
+				addMainText(L"random_negative_joke_reaction_npc");
 
 				current_dialog_info.answers.clear();
-				current_dialog_info.answers.push_back(getContinueString());
+				current_dialog_info.answers.push_back(getContinueAnswer());
 				current_dialog_info.is_player_turn = false;
 			}
 			else if (joke_mark <= 66) {
 				current_stage = neutral_joke_reaction;
 
-				addMainText(PhraseContainer::random_neutral_joke_reaction_npc);
+				addMainText(L"random_neutral_joke_reaction_npc");
 
 				current_dialog_info.answers.clear();
-				current_dialog_info.answers.push_back(getContinueString());
+				current_dialog_info.answers.push_back(getContinueAnswer());
 				current_dialog_info.is_player_turn = false;
 			}
 			else {
 				current_stage = positive_joke_reaction;
 
-				addMainText(PhraseContainer::random_positive_joke_reaction_npc);
+				addMainText(L"random_positive_joke_reaction_npc");
 
 				current_dialog_info.answers.clear();
-				current_dialog_info.answers.push_back(getContinueString());
+				current_dialog_info.answers.push_back(getContinueAnswer());
 				current_dialog_info.is_player_turn = false;
 			}
 			break;
@@ -369,17 +374,17 @@ public:
 			backToStandartQuestion();
 			break;
 		case job_selection:
-			if (answer_num == 0) {
+			if (current_dialog_info.answers[answer_num].type == L"job_accept_player") {
 				current_stage = standart_job;
 
 				current_dialog_info.main_text = base_mission_info.getBroadDescription();
 
 				current_dialog_info.answers.clear();
-				addAnswer(PhraseContainer::job_accept_player);
-				addAnswer(PhraseContainer::job_refuse_player);
+				addAnswer(L"job_accept_player");
+				addAnswer(L"job_refuse_player");
 				current_dialog_info.is_player_turn = false;
 			}
-			else if (answer_num == 1 && !special_job_question_passed) {
+			else if (current_dialog_info.answers[answer_num].type == L"special_job_question_player") {
 
 				if (special_job_available || prejudices + rpg_profile.getFactionFame(faction) + rpg_profile.getGlobalFame() > 150) {
 					current_stage = special_job_offer;
@@ -387,56 +392,56 @@ public:
 					current_dialog_info.main_text = special_mission_info.getShortDescription();
 
 					current_dialog_info.answers.clear();
-					addAnswer(PhraseContainer::job_accept_player);
-					addAnswer(PhraseContainer::job_refuse_player);
+					addAnswer(L"job_accept_player");
+					addAnswer(L"job_refuse_player");
 				}
 				else {
 					current_stage = job_refuse;
-					addMainText(PhraseContainer::special_job_refuse_npc);
+					addMainText(L"special_job_refuse_npc");
 					current_dialog_info.answers.clear();
-					current_dialog_info.answers.push_back(getContinueString());
+					current_dialog_info.answers.push_back(getContinueAnswer());
 				}
 				
 				current_dialog_info.is_player_turn = false;
 			}
-			else {
+			else if (current_dialog_info.answers[answer_num].type == L"job_refuse_player") {
 				backToStandartQuestion();
 			}
 			break;
 		case special_job_offer:
-			if (answer_num == 0) {
+			if (current_dialog_info.answers[answer_num].type == L"job_accept_player") {
 				current_stage = special_job;
 
 				current_dialog_info.main_text = special_mission_info.getBroadDescription();
 
 				current_dialog_info.answers.clear();
-				addAnswer(PhraseContainer::job_accept_player);
-				addAnswer(PhraseContainer::job_refuse_player);
+				addAnswer(L"job_accept_player");
+				addAnswer(L"job_refuse_player");
 				current_dialog_info.is_player_turn = false;
 			}
-			else {
+			else if (current_dialog_info.answers[answer_num].type == L"job_refuse_player") {
 				backToStandartQuestion();
 			}
 			break;
 		case standart_job:
 			job_question_passed = true;
-			if (answer_num == 0) {
+			if (current_dialog_info.answers[answer_num].type == L"job_accept_player") {
 				rpg_profile.addMission(base_mission_info);
 
 				backToStandartQuestion();
 			}
-			else {
+			else if (current_dialog_info.answers[answer_num].type == L"job_refuse_player") {
 				backToStandartQuestion();
 			}
 			break;
 		case special_job:
 			special_job_question_passed = true;
-			if (answer_num == 0) {
+			if (current_dialog_info.answers[answer_num].type == L"job_accept_player") {
 				rpg_profile.addMission(special_mission_info);
 
 				backToStandartQuestion();
 			}
-			else {
+			else if (current_dialog_info.answers[answer_num].type == L"job_refuse_player") {
 				backToStandartQuestion();
 			}
 			break;
@@ -455,7 +460,7 @@ public:
 			current_stage = dialog_start;
 			current_dialog_info.main_text = start_description_string;
 			current_dialog_info.answers.clear();
-			current_dialog_info.answers.push_back(getContinueString());
+			current_dialog_info.answers.push_back(getContinueAnswer());
 			current_dialog_info.is_player_turn = false;
 			break;
 		}

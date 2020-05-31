@@ -54,7 +54,7 @@ public:
 
         int answer_shift = 0;
         for (int i = 0; i < info.answers.size(); i++) {
-            setFormatString((i == selected_answer ? L"> " : L"") + info.answers[i], answer_text, max_dialog_window_width - 2 * answer_border, answer_border * 2, base_character_size, window);
+            setFormatString((i == selected_answer ? L"> " : L"") + info.answers[i].text, answer_text, max_dialog_window_width - 2 * answer_border, answer_border * 2, base_character_size, window);
             answer_text.setPosition(sf::Vector2f(answer_border, main_text.getGlobalBounds().height + answer_border_top + answer_border + answer_shift) + dialog_window_shift + view_center);
             answer_shift += answer_text.getGlobalBounds().height + answer_border_top;
             window.draw(answer_text);

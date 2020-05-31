@@ -122,6 +122,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AdditionalInfo.h" />
+    <ClInclude Include="Analitics.h" />
     <ClInclude Include="AStarAlgorithm.h" />
     <ClInclude Include="BackgroundGeneration.h" />
     <ClInclude Include="ButtonSelector.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="SetFormatString.h" />
     <ClInclude Include="Settings.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="StructureSetGeneration.h" />
     <ClInclude Include="Tutorial.h" />
     <ClInclude Include="UnitInfo.h" />

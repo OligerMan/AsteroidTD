@@ -378,7 +378,7 @@ public:
 	}
 
 	bool isDead() {
-		return (!inf_hp && (hp < 0));
+		return (!inf_hp && (hp <= 0));
 	}
 
 	int getFaction() {

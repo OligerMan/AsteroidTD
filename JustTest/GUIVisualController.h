@@ -18,6 +18,9 @@ class GUIVisualController{
 
 	bool is_active = true;
 
+    sf::Font base_font;
+    sf::Text skill_price_sign;
+
 	enum {
 		ready,
 		not_enough_money,
@@ -174,6 +177,13 @@ public:
 
 		uploadTextures(texture_path);
 		initSprites();
+
+        base_font.loadFromFile(consts.getDefaultFontPath());
+
+        skill_price_sign.setFillColor(sf::Color::White);
+        skill_price_sign.setOutlineColor(sf::Color::Black);
+        skill_price_sign.setOutlineThickness(1);
+        skill_price_sign.setFont(base_font);
 	}
 
 	void setActive() {
@@ -251,6 +261,17 @@ public:
 			}
 		}
 
+        //skill_price_sign.setPosition(pos.x, pos.y);
+        skill_price_sign.setOrigin(
+             - 
+            window->getView().getCenter().x - 
+            consts.getSkillsIconSize(), 
+            skill_price_sign.getLocalBounds().height / 2 - 
+            window->getView().getCenter().y - 
+            consts.getSkillsIconSize());
+
+        skill_price_sign.setCharacterSize(60 * window->getSize().y / 1080);
+
         if (game_status == GameStatus::game_hero_mode) {
 
             if (skills_mode == SkillsMode::set1) {
@@ -260,24 +281,39 @@ public:
                 else {
                     window->draw(skills_sprite[attack_buff_skill][not_enough_money]);
                 }
+                skill_price_sign.setString(std::to_string((int)consts.getDamageBuffPrice()));
+                skill_price_sign.setPosition(skills_sprite[attack_buff_skill][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
+                window->draw(skill_price_sign);
+
                 if (resource_manager.isEnoughGold(consts.getSpeedBuffPrice())) {
                     window->draw(skills_sprite[speed_boost_skill][ready]);
                 }
                 else {
                     window->draw(skills_sprite[speed_boost_skill][not_enough_money]);
                 }
+                skill_price_sign.setString(std::to_string((int)consts.getSpeedBuffPrice()));
+                skill_price_sign.setPosition(skills_sprite[speed_boost_skill][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
+                window->draw(skill_price_sign);
+
                 if (resource_manager.isEnoughGold(consts.getAttackAbilityPrice())) {
                     window->draw(skills_sprite[rocket_skill][ready]);
                 }
                 else {
                     window->draw(skills_sprite[rocket_skill][not_enough_money]);
                 }
+                skill_price_sign.setString(std::to_string((int)consts.getAttackAbilityPrice()));
+                skill_price_sign.setPosition(skills_sprite[rocket_skill][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
+                window->draw(skill_price_sign);
+
                 if (resource_manager.isEnoughGold(consts.getHealBuffPrice())) {
                     window->draw(skills_sprite[heal_skill][ready]);
                 }
                 else {
                     window->draw(skills_sprite[heal_skill][not_enough_money]);
                 }
+                skill_price_sign.setString(std::to_string((int)consts.getHealBuffPrice()));
+                skill_price_sign.setPosition(skills_sprite[heal_skill][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
+                window->draw(skill_price_sign);
             }
             else if (skills_mode == SkillsMode::set2) {
                 if (resource_manager.isEnoughGold(consts.getBaseDomePrice())) {
@@ -286,24 +322,39 @@ public:
                 else {
                     window->draw(skills_sprite[dome_struct][not_enough_money]);
                 }
+                skill_price_sign.setString(std::to_string((int)consts.getBaseDomePrice()));
+                skill_price_sign.setPosition(skills_sprite[dome_struct][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
+                window->draw(skill_price_sign);
+
                 if (resource_manager.isEnoughGold(consts.getBaseSciencePrice())) {
                     window->draw(skills_sprite[science_struct][ready]);
                 }
                 else {
                     window->draw(skills_sprite[science_struct][not_enough_money]);
                 }
+                skill_price_sign.setString(std::to_string((int)consts.getBaseSciencePrice()));
+                skill_price_sign.setPosition(skills_sprite[science_struct][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
+                window->draw(skill_price_sign);
+
                 if (resource_manager.isEnoughGold(consts.getBaseGoldPrice())) {
                     window->draw(skills_sprite[gold_struct][ready]);
                 }
                 else {
                     window->draw(skills_sprite[gold_struct][not_enough_money]);
                 }
+                skill_price_sign.setString(std::to_string((int)consts.getBaseGoldPrice()));
+                skill_price_sign.setPosition(skills_sprite[gold_struct][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
+                window->draw(skill_price_sign);
+
                 if (resource_manager.isEnoughGold(consts.getBaseTurretPrice())) {
                     window->draw(skills_sprite[turret_struct][ready]);
                 }
                 else {
                     window->draw(skills_sprite[turret_struct][not_enough_money]);
                 }
+                skill_price_sign.setString(std::to_string((int)consts.getBaseTurretPrice()));
+                skill_price_sign.setPosition(skills_sprite[turret_struct][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
+                window->draw(skill_price_sign);
 			}
 			else {
 				window->draw(skills_sprite[dialog_start][ready]);

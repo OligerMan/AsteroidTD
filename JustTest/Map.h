@@ -674,44 +674,124 @@ private:
 			Point new_pos = Point(x, y);
 
 			FactionList faction = null_faction;
-			int faction_score = rand() % 1000;
-			if (faction_score > 900) {
-				//faction = friendly_faction;
-			}
-			if (faction_score > 933) {
-				//faction = neutral_faction;
-			}
-			if (faction_score > 966) {
-				//faction = aggressive_faction;
-			}
 
-			static std::vector<std::vector<SpriteType>> tier_list{
-				{   // tier 0
-					asteroid_gold_interspersed_sprite,
-					asteroid_iron_interspersed_sprite,
-					asteroid_suspiciously_flat_sprite 
-				},
-				{   // tier 1
-					asteroid_strange_cracked_sprite,
-					asteroid_ordinary_wealthy_sprite,
-					asteroid_poor_mountainous_sprite,
-					asteroid_wealthy_cracked_sprite,
-					asteroid_ordinary_mountainous_sprite,
-					asteroid_strange_poor_sprite
-				},
-				{   // tier 2
-					asteroid_swampy_with_gold_mines_sprite,
-					asteroid_unstable_explosive_ore_sprite,
-					asteroid_old_laboratory_sprite,
-					asteroid_lava_surface_sprite
-				},
-				{   // tier 3
-					asteroid_drone_factory_sprite,
-					asteroid_rocket_launcher_sprite,
-					asteroid_ancient_laboratory_sprite,
-					asteroid_ancient_giant_gold_mine_sprite
-				}
-			};
+			//static std::vector<std::vector<SpriteType>> tier_list{   // old tier system
+			//	{   // tier 0
+			//		asteroid_gold_interspersed_sprite,
+			//		asteroid_iron_interspersed_sprite,
+			//		asteroid_suspiciously_flat_sprite 
+			//	},
+			//	{   // tier 1
+			//		asteroid_strange_cracked_sprite,
+			//		asteroid_ordinary_wealthy_sprite,
+			//		asteroid_poor_mountainous_sprite,
+			//		asteroid_wealthy_cracked_sprite,
+			//		asteroid_ordinary_mountainous_sprite,
+			//		asteroid_strange_poor_sprite
+			//	},
+			//	{   // tier 2
+			//		asteroid_swampy_with_gold_mines_sprite,
+			//		asteroid_unstable_explosive_ore_sprite,
+			//		asteroid_old_laboratory_sprite,
+			//		asteroid_lava_surface_sprite
+			//	},
+			//	{   // tier 3
+			//		asteroid_drone_factory_sprite,
+			//		asteroid_rocket_launcher_sprite,
+			//		asteroid_ancient_laboratory_sprite,
+			//		asteroid_ancient_giant_gold_mine_sprite
+			//	}
+			//};
+
+            static std::vector<std::vector<SpriteType>> tier_list {    // new tier system(old tiers mixed because of increased chance of special asteroids)
+                {   // tier 0
+                    asteroid_gold_interspersed_sprite,
+                    asteroid_iron_interspersed_sprite,
+                    asteroid_suspiciously_flat_sprite
+                },
+                {   // tier 1
+
+                    asteroid_gold_interspersed_sprite,
+                    asteroid_iron_interspersed_sprite,
+                    asteroid_suspiciously_flat_sprite,
+
+                    asteroid_gold_interspersed_sprite,
+                    asteroid_iron_interspersed_sprite,
+                    asteroid_suspiciously_flat_sprite,
+
+                    asteroid_strange_cracked_sprite,
+                    asteroid_ordinary_wealthy_sprite,
+                    asteroid_poor_mountainous_sprite,
+                    asteroid_wealthy_cracked_sprite,
+                    asteroid_ordinary_mountainous_sprite,
+                    asteroid_strange_poor_sprite
+                },
+                {   // tier 2
+                    asteroid_gold_interspersed_sprite,
+                    asteroid_iron_interspersed_sprite,
+                    asteroid_suspiciously_flat_sprite,
+
+                    asteroid_gold_interspersed_sprite,
+                    asteroid_iron_interspersed_sprite,
+                    asteroid_suspiciously_flat_sprite,
+
+                    asteroid_strange_cracked_sprite,
+                    asteroid_ordinary_wealthy_sprite,
+                    asteroid_poor_mountainous_sprite,
+                    asteroid_wealthy_cracked_sprite,
+                    asteroid_ordinary_mountainous_sprite,
+                    asteroid_strange_poor_sprite,
+
+                    asteroid_strange_cracked_sprite,
+                    asteroid_ordinary_wealthy_sprite,
+                    asteroid_poor_mountainous_sprite,
+                    asteroid_wealthy_cracked_sprite,
+                    asteroid_ordinary_mountainous_sprite,
+                    asteroid_strange_poor_sprite,
+
+                    asteroid_swampy_with_gold_mines_sprite,
+                    asteroid_unstable_explosive_ore_sprite,
+                    asteroid_old_laboratory_sprite,
+                    asteroid_lava_surface_sprite
+                },
+                {   // tier 3
+                    asteroid_gold_interspersed_sprite,
+                    asteroid_iron_interspersed_sprite,
+                    asteroid_suspiciously_flat_sprite,
+
+                    asteroid_gold_interspersed_sprite,
+                    asteroid_iron_interspersed_sprite,
+                    asteroid_suspiciously_flat_sprite,
+
+                    asteroid_gold_interspersed_sprite,
+                    asteroid_iron_interspersed_sprite,
+                    asteroid_suspiciously_flat_sprite,
+
+                    asteroid_strange_cracked_sprite,
+                    asteroid_ordinary_wealthy_sprite,
+                    asteroid_poor_mountainous_sprite,
+                    asteroid_wealthy_cracked_sprite,
+                    asteroid_ordinary_mountainous_sprite,
+                    asteroid_strange_poor_sprite,
+
+                    asteroid_strange_cracked_sprite,
+                    asteroid_ordinary_wealthy_sprite,
+                    asteroid_poor_mountainous_sprite,
+                    asteroid_wealthy_cracked_sprite,
+                    asteroid_ordinary_mountainous_sprite,
+                    asteroid_strange_poor_sprite,
+
+                    asteroid_swampy_with_gold_mines_sprite,
+                    asteroid_unstable_explosive_ore_sprite,
+                    asteroid_old_laboratory_sprite,
+                    asteroid_lava_surface_sprite,
+
+                    asteroid_drone_factory_sprite,
+                    asteroid_rocket_launcher_sprite,
+                    asteroid_ancient_laboratory_sprite,
+                    asteroid_ancient_giant_gold_mine_sprite
+                }
+            };
 
 			SpriteType asteroid_type = asteroid_sprite;
 
@@ -727,13 +807,13 @@ private:
 				}
 				int num = std::min((int)tier_list.size() - 1, std::max(0, (int)(new_pos.getLength() / consts.getTierRange())));
 
-				if (special_asteroid_chance < 66) {
+				if (special_asteroid_chance < 250) {
 					asteroid_type = tier_list[std::max(0, num - 2)][rand() % tier_list[std::max(0, num - 2)].size()];
 				}
-				if (special_asteroid_chance < 133) {
+				if (special_asteroid_chance < 500) {
 					asteroid_type = tier_list[std::max(0, num - 1)][rand() % tier_list[std::max(0, num - 1)].size()];
 				}
-				if (special_asteroid_chance < 200) {
+				if (special_asteroid_chance < 750) {
 					asteroid_type = tier_list[num][rand() % tier_list[num].size()];
 				}
 			}
@@ -869,7 +949,7 @@ private:
 		case alien_gunship:
 			object = new Object
 			(
-				base->getPosition() + Point(-80, 45),
+				base->getPosition() + Point(-77, 0),
 				Point(),
 				ObjectType::alien_turret2,
 				CollisionType::alien_turret2_col,
@@ -887,7 +967,7 @@ private:
 
 			object = new Object
 			(
-				base->getPosition() + Point(80, 45),
+				base->getPosition() + Point(74, 0),
 				Point(),
 				ObjectType::alien_turret2,
 				CollisionType::alien_turret2_col,
@@ -905,7 +985,7 @@ private:
 
 			object = new Object
 			(
-				base->getPosition() + Point(-95, -30),
+				base->getPosition() + Point(69, -45),
 				Point(),
 				ObjectType::alien_turret2,
 				CollisionType::alien_turret2_col,
@@ -923,7 +1003,7 @@ private:
 
 			object = new Object
 			(
-				base->getPosition() + Point(95, -30),
+				base->getPosition() + Point(-73, -45),
 				Point(),
 				ObjectType::alien_turret2,
 				CollisionType::alien_turret2_col,
@@ -1107,7 +1187,7 @@ private:
                     if (hero_object && (hero_object->getPosition() - static_cast<Object *>(objective.data)->getPosition()).getLength() < consts.getInteractionDistance()) {
                         cur_miss->setObjectiveCompleted();
                         if (rpg_profile.getCurrentMission()->completed()) {
-                            std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::courier_mission_completed_npc, 0);
+                            std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(L"courier_mission_completed_npc", 0);
                             std::wstring message_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
                             global_event_buffer.push_back(Event(new float(rpg_profile.getCurrentMission()->getReward()), reward));
                             global_event_buffer.push_back(Event(new std::wstring(message_string), message));
@@ -1144,7 +1224,7 @@ private:
                             cur_miss->setObjectiveCompleted();
                             enemy_wave_list.erase(iter);
                             if (rpg_profile.getCurrentMission()->completed()) {
-                                std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_mission_completed_npc, 0);
+                                std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(L"defence_mission_completed_npc", 0);
                                 std::wstring message_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
                                 global_event_buffer.push_back(Event(new float(rpg_profile.getCurrentMission()->getReward()), reward));
                                 global_event_buffer.push_back(Event(new std::wstring(message_string), message));

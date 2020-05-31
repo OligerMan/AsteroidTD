@@ -1,4 +1,19 @@
-﻿  Source.cpp
+﻿  PlayerStat.pb.cc
+E:\Projects\AsteroidTD\JustTest\protoc_src\google/protobuf/map_type_handler.h(474): warning C4800: 'google::protobuf::uint64': forcing value to bool 'true' or 'false' (performance warning)
+PlayerStat.pb.cc(294): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
+PlayerStat.pb.cc(302): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
+PlayerStat.pb.cc(601): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
+PlayerStat.pb.cc(609): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
+PlayerStat.pb.cc(940): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
+PlayerStat.pb.cc(1240): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
+PlayerStat.pb.cc(1248): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
+PlayerStat.pb.cc(1263): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
+PlayerStat.pb.cc(1271): warning C4800: 'google::protobuf::uint64': forcing value to bool 'true' or 'false' (performance warning)
+E:\Projects\AsteroidTD\JustTest\protoc_src\google/protobuf/has_bits.h(73): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  E:\Projects\AsteroidTD\JustTest\protoc_src\google/protobuf/has_bits.h(72): note: while compiling class template member function 'void google::protobuf::internal::HasBits<1>::Or(const google::protobuf::internal::HasBits<1> &)'
+  PlayerStat.pb.cc(326): note: see reference to function template instantiation 'void google::protobuf::internal::HasBits<1>::Or(const google::protobuf::internal::HasBits<1> &)' being compiled
+  E:\Projects\AsteroidTD\JustTest\protoc_src\google/protobuf/has_bits.h(83): note: see reference to class template instantiation 'google::protobuf::internal::HasBits<1>' being compiled
+  Source.cpp
 e:\projects\asteroidtd\justtest\GeometryComponents.h(127): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\GeometryComponents.h(172): warning C4305: '+=': truncation from 'double' to 'float'
 e:\projects\asteroidtd\justtest\GeometryComponents.h(175): warning C4305: '-=': truncation from 'double' to 'float'
@@ -112,10 +127,10 @@ E:\Projects\AsteroidTD\JustTest\protoc_src\google/protobuf/map_type_handler.h(47
 e:\projects\asteroidtd\justtest\OnlineRank.h(43): warning C4267: 'argument': conversion from 'size_t' to 'google::protobuf::int32', possible loss of data
 e:\projects\asteroidtd\justtest\OnlineRank.h(86): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
 e:\projects\asteroidtd\justtest\MissionInfo.h(23): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-e:\projects\asteroidtd\justtest\PhraseContainer.h(400): warning C4129: '|': unrecognized character escape sequence
-e:\projects\asteroidtd\justtest\PhraseContainer.h(405): warning C4129: '|': unrecognized character escape sequence
-e:\projects\asteroidtd\justtest\MissionStage.h(138): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\MissionStage.h(142): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\PhraseContainer.h(414): warning C4129: '|': unrecognized character escape sequence
+e:\projects\asteroidtd\justtest\PhraseContainer.h(419): warning C4129: '|': unrecognized character escape sequence
+e:\projects\asteroidtd\justtest\MissionStage.h(148): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\MissionStage.h(152): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\PlayerRPGProfile.h(21): warning C4305: 'argument': truncation from 'double' to 'float'
 e:\projects\asteroidtd\justtest\PlayerRPGProfile.h(26): warning C4305: 'argument': truncation from 'double' to 'float'
 e:\projects\asteroidtd\justtest\PlayerRPGProfile.h(63): warning C4101: 'obj_ptr': unreferenced local variable
@@ -132,35 +147,35 @@ e:\projects\asteroidtd\justtest\Map.h(633): warning C4244: '=': conversion from 
 e:\projects\asteroidtd\justtest\Map.h(648): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\Map.h(650): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\Map.h(652): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(756): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(769): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(772): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(773): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(783): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(795): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(821): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(980): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Map.h(983): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Map.h(986): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Map.h(990): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Map.h(999): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Map.h(1002): warning C4305: '=': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Map.h(1069): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(1088): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(1156): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(1158): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(1202): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(1404): warning C4305: 'argument': truncation from 'double' to 'float'
-e:\projects\asteroidtd\justtest\Map.h(1430): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(1432): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(1441): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(1443): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(1451): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(1453): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(1459): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(1461): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(1489): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-e:\projects\asteroidtd\justtest\Map.h(1495): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(836): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(849): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(852): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(853): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(863): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(875): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(901): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(1060): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Map.h(1063): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Map.h(1066): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Map.h(1070): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Map.h(1079): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Map.h(1082): warning C4305: '=': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Map.h(1149): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(1168): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(1236): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(1238): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(1282): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(1484): warning C4305: 'argument': truncation from 'double' to 'float'
+e:\projects\asteroidtd\justtest\Map.h(1510): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(1512): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(1521): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(1523): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(1531): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(1533): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(1539): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(1541): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(1569): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\Map.h(1575): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\VisualController.h(132): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\VisualController.h(133): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\VisualController.h(134): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
@@ -210,17 +225,17 @@ e:\projects\asteroidtd\justtest\VisualController.h(251): warning C4244: 'argumen
 e:\projects\asteroidtd\justtest\VisualController.h(252): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\VisualController.h(253): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\VisualController.h(254): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\GUIVisualController.h(152): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\GUIVisualController.h(213): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\GUIVisualController.h(214): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\GUIVisualController.h(215): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\GUIVisualController.h(155): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\GUIVisualController.h(223): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\GUIVisualController.h(227): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-e:\projects\asteroidtd\justtest\GUIVisualController.h(229): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\GUIVisualController.h(232): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\GUIVisualController.h(246): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\GUIVisualController.h(315): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-e:\projects\asteroidtd\justtest\GUIVisualController.h(316): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\GUIVisualController.h(224): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\GUIVisualController.h(225): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\GUIVisualController.h(233): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\GUIVisualController.h(237): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+e:\projects\asteroidtd\justtest\GUIVisualController.h(239): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\GUIVisualController.h(242): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\GUIVisualController.h(256): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\GUIVisualController.h(366): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+e:\projects\asteroidtd\justtest\GUIVisualController.h(367): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\GUIParser.h(85): warning C4800: 'std::vector<std::vector<Object *,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>> **': forcing value to bool 'true' or 'false' (performance warning)
           with
           [
@@ -391,9 +406,7 @@ C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): war
               _Other2=double &
           ]
   Generating code
-  202 of 6422 functions ( 3.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    22 functions had inline decision re-evaluated but remain unchanged
+  All 6644 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.exe
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.pdb (Full PDB)

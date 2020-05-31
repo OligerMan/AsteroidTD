@@ -49,11 +49,14 @@ class CourierStage : public MissionStage {
 public:
 
     CourierStage(void * courier_objective, std::wstring mission_type) : objective(courier_objective), MissionStage(courier) {
-        auto buffer = phrase_container.getPhraseBuffer(PhraseContainer::courier_current_desc_miss, 0);
+        //auto buffer = phrase_container.getPhraseBuffer(PhraseContainer::courier_current_desc_miss, 0);
+        auto buffer = phrase_container.getPhraseBuffer(L"courier_current_desc_miss", 0);
         current_description = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::courier_short_desc_miss, 0);
+        //buffer = phrase_container.getPhraseBuffer(PhraseContainer::courier_short_desc_miss, 0);
+        buffer = phrase_container.getPhraseBuffer(L"courier_short_desc_miss", 0);
         short_description = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::courier_broad_desc_miss, 0);
+        //buffer = phrase_container.getPhraseBuffer(PhraseContainer::courier_broad_desc_miss, 0);
+        buffer = phrase_container.getPhraseBuffer(L"courier_broad_desc_miss", 0);
         broad_description = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
     }
 
@@ -110,19 +113,26 @@ public:
         level = mission_level;
         wave_delay = info.getWaveDelay();
 
-        auto buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_short_desc_miss, 0);
+        //auto buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_short_desc_miss, 0);
+        auto buffer = phrase_container.getPhraseBuffer(L"defence_short_desc_miss", 0);
         short_description = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_broad_desc_miss, 0);
+        //buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_broad_desc_miss, 0);
+        buffer = phrase_container.getPhraseBuffer(L"defence_broad_desc_miss", 0);
         broad_description = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_cur_search_desc_miss, 0);
+        //buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_cur_search_desc_miss, 0);
+        buffer = phrase_container.getPhraseBuffer(L"defence_cur_search_desc_miss", 0);
         cur_desc_search = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_cur_ready_desc_miss, 0);
+        //buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_cur_ready_desc_miss, 0);
+        buffer = phrase_container.getPhraseBuffer(L"defence_cur_ready_desc_miss", 0);
         cur_desc_ready = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_cur_wave_start_desc_miss, 0);
+        //buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_cur_wave_start_desc_miss, 0);
+        buffer = phrase_container.getPhraseBuffer(L"defence_cur_wave_start_desc_miss", 0);
         cur_desc_wave_start = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_cur_wave_active_desc_miss, 0);
+        //buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_cur_wave_active_desc_miss, 0);
+        buffer = phrase_container.getPhraseBuffer(L"defence_cur_wave_active_desc_miss", 0);
         cur_desc_wave_active = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_cur_finished_desc_miss, 0);
+        //buffer = phrase_container.getPhraseBuffer(PhraseContainer::defence_cur_finished_desc_miss, 0);
+        buffer = phrase_container.getPhraseBuffer(L"defence_cur_finished_desc_miss", 0);
         cur_desc_finished = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
     }
 

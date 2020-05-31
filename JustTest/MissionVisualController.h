@@ -37,7 +37,7 @@ public:
 	}
 
 	void processMissionList(sf::RenderWindow & window, int selected_mission) {
-        auto buffer = phrase_container.getPhraseBuffer(PhraseContainer::no_miss_sign_GUI, 0);
+        auto buffer = phrase_container.getPhraseBuffer(L"no_miss_sign_GUI", 0);
 		std::vector<Mission> mission_list = rpg_profile.getMissionList();
 		sf::Vector2f view_size = window.getView().getSize();
 		sf::Vector2f view_center = sf::Vector2f(view_size.x / 2, view_size.y / 2);
@@ -47,7 +47,7 @@ public:
             name_text.setFillColor(sf::Color::White);
 			name_text.setPosition(window.getView().getCenter() - view_center + sf::Vector2f(mission_list_border, mission_list_border));
 			window.draw(name_text);
-            buffer = phrase_container.getPhraseBuffer(PhraseContainer::no_miss_broad_sign_GUI, 0);
+            buffer = phrase_container.getPhraseBuffer(L"no_miss_broad_sign_GUI", 0);
 			setFormatString(buffer[buffer.size() * rand() / (RAND_MAX + 1)], description_text, 1920 - mission_list_width - 2 * mission_list_border, 1080 - 2 * mission_list_border, base_character_size, window);
 			description_text.setPosition(window.getView().getCenter() - view_center + sf::Vector2f(mission_list_width + 2 * mission_list_border, mission_list_border));
 			window.draw(description_text);
@@ -75,13 +75,13 @@ public:
 		window.draw(description_text);
 
 		description_text.setPosition(window.getView().getCenter() - view_center + sf::Vector2f(mission_list_width + 2 * mission_list_border, mission_list_border + description_text.getGlobalBounds().height + base_character_size));
-		buffer = phrase_container.getPhraseBuffer(PhraseContainer::reward_sign_GUI, 0);
+		buffer = phrase_container.getPhraseBuffer(L"reward_sign_GUI", 0);
         setFormatString(buffer[buffer.size() * rand() / (RAND_MAX + 1)] + L": " + std::to_wstring((int)mission_list[selected_mission].getReward()), description_text, 1920 - mission_list_width - 2 * mission_list_border, 1080 - 2 * mission_list_border, base_character_size, window);
 		window.draw(description_text);
 	}
 
 	void processCompletedMissionList(sf::RenderWindow & window, int selected_mission) {
-        auto buffer = phrase_container.getPhraseBuffer(PhraseContainer::compl_no_miss_sign_GUI, 0);
+        auto buffer = phrase_container.getPhraseBuffer(L"compl_no_miss_sign_GUI", 0);
 		std::vector<Mission> mission_list = rpg_profile.getCompletedMissionList();
 		sf::Vector2f view_size = window.getView().getSize();
 		sf::Vector2f view_center = sf::Vector2f(view_size.x / 2, view_size.y / 2);
@@ -91,7 +91,7 @@ public:
             name_text.setFillColor(sf::Color::White);
 			name_text.setPosition(window.getView().getCenter() - view_center + sf::Vector2f(mission_list_border, mission_list_border));
 			window.draw(name_text); 
-            buffer = phrase_container.getPhraseBuffer(PhraseContainer::compl_no_miss_broad_sign_GUI, 0);
+            buffer = phrase_container.getPhraseBuffer(L"compl_no_miss_broad_sign_GUI", 0);
 			setFormatString(buffer[buffer.size() * rand() / (RAND_MAX + 1)], description_text, 1920 - mission_list_width - 2 * mission_list_border, 1080 - 2 * mission_list_border, base_character_size, window);
 			description_text.setPosition(window.getView().getCenter() - view_center + sf::Vector2f(mission_list_width + 2 * mission_list_border, mission_list_border));
 			window.draw(description_text);
@@ -114,7 +114,7 @@ public:
 		window.draw(description_text);
 
 		description_text.setPosition(window.getView().getCenter() - view_center + sf::Vector2f(mission_list_width + 2 * mission_list_border, mission_list_border + description_text.getGlobalBounds().height + base_character_size));
-		buffer = phrase_container.getPhraseBuffer(PhraseContainer::reward_sign_GUI, 0);
+		buffer = phrase_container.getPhraseBuffer(L"reward_sign_GUI", 0);
         setFormatString(buffer[buffer.size() * rand() / (RAND_MAX + 1)] + L": " + std::to_wstring((int)mission_list[selected_mission].getReward()), description_text, 1920 - mission_list_width - 2 * mission_list_border, 1080 - 2 * mission_list_border, base_character_size, window);
 		window.draw(description_text);
 	}

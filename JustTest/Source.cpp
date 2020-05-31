@@ -210,125 +210,125 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 
     auto resetStrings = [&]() {
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::skills_build_sign_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"skills_build_sign_GUI", 0);
         skills_build_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::skills_ability_sign_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"skills_ability_sign_GUI", 0);
         skills_ability_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::skills_interact_sign_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"skills_interact_sign_GUI", 0);
         skills_interact_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::new_wave_sign_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"new_wave_sign_GUI", 0);
         new_wave_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::message_sign_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"message_sign_GUI", 0);
         message_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::keyboard_press_title_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"keyboard_press_title_GUI", 0);
         keyboard_press_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::gamepad_press_title_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"gamepad_press_title_GUI", 0);
         gamepad_press_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::try_again_title_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"try_again_title_GUI", 0);
         try_again_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::go_back_to_menu_title_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"go_back_to_menu_title_GUI", 0);
         go_back_to_menu_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::continue_game_title_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"continue_game_title_GUI", 0);
         continue_game_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::go_to_menu_title_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"go_to_menu_title_GUI", 0);
         go_to_menu_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::go_to_desktop_title_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"go_to_desktop_title_GUI", 0);
         go_to_desktop_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::gold_sign_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"gold_sign_GUI", 0);
         gold_sign_wstring = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::research_sign_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"research_sign_GUI", 0);
         research_sign_wstring = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_basic_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"aster_basic_GUI", 0);
         aster_basic_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_gold_inter_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"aster_gold_inter_GUI", 0);
         aster_gold_inter_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_iron_inter_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"aster_iron_inter_GUI", 0);
         aster_iron_inter_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_susp_flat_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"aster_susp_flat_GUI", 0);
         aster_susp_flat_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_str_crack_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"aster_str_crack_GUI", 0);
         aster_str_crack_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_ord_wealthy_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"aster_ord_wealthy_GUI", 0);
         aster_ord_wealthy_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_poor_mount_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"aster_poor_mount_GUI", 0);
         aster_poor_mount_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_wealthy_crack_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"aster_wealthy_crack_GUI", 0);
         aster_wealthy_crack_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_ord_mount_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"aster_ord_mount_GUI", 0);
         aster_ord_mount_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_str_poor_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"aster_str_poor_GUI", 0);
         aster_str_poor_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_swamp_gold_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"aster_swamp_gold_GUI", 0);
         aster_swamp_gold_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_unstab_expl_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"aster_unstab_expl_GUI", 0);
         aster_unstab_expl_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_old_lab_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"aster_old_lab_GUI", 0);
         aster_old_lab_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_lava_surf_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"aster_lava_surf_GUI", 0);
         aster_lava_surf_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_drone_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"aster_drone_GUI", 0);
         aster_drone_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_rocket_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"aster_rocket_GUI", 0);
         aster_rocket_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_anc_lab_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"aster_anc_lab_GUI", 0);
         aster_anc_lab_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::aster_anc_mine_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"aster_anc_mine_GUI", 0);
         aster_anc_mine_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_base_desc, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_base_desc", 0);
         tutorial_base_desc = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_move, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_move", 0);
         tutorial_move = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_view, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_view", 0);
         tutorial_view = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_dome, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_dome", 0);
         tutorial_dome = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_dome_desc, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_dome_desc", 0);
         tutorial_dome_desc = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_turret, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_turret", 0);
         tutorial_turret = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_turret_desc, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_turret_desc", 0);
         tutorial_turret_desc = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_gold, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_gold", 0);
         tutorial_gold = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_gold_desc, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_gold_desc", 0);
         tutorial_gold_desc = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_science, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_science", 0);
         tutorial_science = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_science_desc, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_science_desc", 0);
         tutorial_science_desc = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_skill_mode, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_skill_mode", 0);
         tutorial_skill_mode = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_rocket, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_rocket", 0);
         tutorial_rocket = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_speed, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_speed", 0);
         tutorial_speed = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_damage, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_damage", 0);
         tutorial_damage = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_heal, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_heal", 0);
         tutorial_heal = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_research, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_research", 0);
         tutorial_research = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_research_close, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_research_close", 0);
         tutorial_research_close = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_pause, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_pause", 0);
         tutorial_pause = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_unpause, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_unpause", 0);
         tutorial_unpause = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_end, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_end", 0);
         tutorial_end = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_for_next_step, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_for_next_step", 0);
         tutorial_for_next_step = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_move_pts_left, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_move_pts_left", 0);
         tutorial_move_pts_left = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::tutorial_times_left, 0);
+        buffer = phrase_container.getPhraseBuffer(L"tutorial_times_left", 0);
         tutorial_times_left = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
     };
 
@@ -394,7 +394,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 
 	auto pause_game = [&]() {
-		if (game_status != pause) {
+		if (game_status != pause && tutorial.isWorkingOnStep(tutorial.pause_tutorial)) {
 			prev_game_status = game_status;
 			game_status = pause;
 			last_pause = frame_num;
@@ -1713,7 +1713,7 @@ int main() {
 	buttons[infinity_mode_button].texture_selected.loadFromFile("menu_buttons\\inf_mode_selected.png");
 	buttons[infinity_mode_button].sprite.setTexture(buttons[infinity_mode_button].texture_default);
 	buttons[infinity_mode_button].radius = 75 * window.getView().getSize().y / 1080;
-    std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(PhraseContainer::start_inf_mode_GUI, 0);
+    std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(L"start_inf_mode_GUI", 0);
 	buttons[infinity_mode_button].advice_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
     buttons[adventure_mode_button].pos = Point(window.getView().getSize().x / 2 - 100 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
@@ -1721,7 +1721,7 @@ int main() {
     buttons[adventure_mode_button].texture_selected.loadFromFile("menu_buttons\\adv_mode_selected.png");
     buttons[adventure_mode_button].sprite.setTexture(buttons[adventure_mode_button].texture_default);
     buttons[adventure_mode_button].radius = 75 * window.getView().getSize().y / 1080;
-    buffer = phrase_container.getPhraseBuffer(PhraseContainer::start_adv_mode_GUI, 0);
+    buffer = phrase_container.getPhraseBuffer(L"start_adv_mode_GUI", 0);
     buttons[adventure_mode_button].advice_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
 	buttons[settings_button].pos = Point(window.getView().getSize().x / 2 + 100 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
@@ -1729,7 +1729,7 @@ int main() {
 	buttons[settings_button].texture_selected.loadFromFile("menu_buttons\\settings_selected.png");
 	buttons[settings_button].sprite.setTexture(buttons[settings_button].texture_default);
 	buttons[settings_button].radius = 75 * window.getView().getSize().y / 1080;
-    buffer = phrase_container.getPhraseBuffer(PhraseContainer::settings_menu_GUI, 0);
+    buffer = phrase_container.getPhraseBuffer(L"settings_menu_GUI", 0);
 	buttons[settings_button].advice_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
 	buttons[shutdown_button].pos = Point(window.getView().getSize().x / 2 + 300 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
@@ -1737,7 +1737,7 @@ int main() {
 	buttons[shutdown_button].texture_selected.loadFromFile("menu_buttons\\shutdown_selected.png");
 	buttons[shutdown_button].sprite.setTexture(buttons[shutdown_button].texture_default);
 	buttons[shutdown_button].radius = 75 * window.getView().getSize().y / 1080;
-    buffer = phrase_container.getPhraseBuffer(PhraseContainer::shutdown_GUI, 0);
+    buffer = phrase_container.getPhraseBuffer(L"shutdown_GUI", 0);
 	buttons[shutdown_button].advice_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
 	int chosen_button = infinity_mode_button;
@@ -1794,40 +1794,40 @@ int main() {
         nickname_enter_title;
 
     auto resetStrings = [&]() {
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::setting_nickname_title_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"setting_nickname_title_GUI", 0);
         setting_nickname_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::setting_ranking_title_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"setting_ranking_title_GUI", 0);
         setting_ranking_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::setting_win_width_title_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"setting_win_width_title_GUI", 0);
         setting_win_width_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::setting_win_height_title_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"setting_win_height_title_GUI", 0);
         setting_win_height_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::setting_local_file_title_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"setting_local_file_title_GUI", 0);
         setting_local_file_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::setting_discard_title_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"setting_discard_title_GUI", 0);
         setting_discard_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::setting_exit_title_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"setting_exit_title_GUI", 0);
         setting_exit_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::keyboard_press_title_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"keyboard_press_title_GUI", 0);
         keyboard_press_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::gamepad_press_title_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"gamepad_press_title_GUI", 0);
         gamepad_press_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::keyboard_nickname_title_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"keyboard_nickname_title_GUI", 0);
         keyboard_nickname_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::gamepad_nickname_title_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"gamepad_nickname_title_GUI", 0);
         gamepad_nickname_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-        buffer = phrase_container.getPhraseBuffer(PhraseContainer::nickname_enter_title_GUI, 0);
+        buffer = phrase_container.getPhraseBuffer(L"nickname_enter_title_GUI", 0);
         nickname_enter_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
     };
 

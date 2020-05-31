@@ -406,7 +406,3 @@ bool checkObjectCollision(Object * obj1, Object * obj2) {
 	}
 	return checkModelCollision(obj1->getCollisionModel(), obj2->getCollisionModel());
 }
-
-struct TestKek {
-	int kek = 0;
-};
