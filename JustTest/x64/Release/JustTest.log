@@ -1,19 +1,4 @@
-﻿  PlayerStat.pb.cc
-E:\Projects\AsteroidTD\JustTest\protoc_src\google/protobuf/map_type_handler.h(474): warning C4800: 'google::protobuf::uint64': forcing value to bool 'true' or 'false' (performance warning)
-PlayerStat.pb.cc(294): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
-PlayerStat.pb.cc(302): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
-PlayerStat.pb.cc(601): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
-PlayerStat.pb.cc(609): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
-PlayerStat.pb.cc(940): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
-PlayerStat.pb.cc(1240): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
-PlayerStat.pb.cc(1248): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
-PlayerStat.pb.cc(1263): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
-PlayerStat.pb.cc(1271): warning C4800: 'google::protobuf::uint64': forcing value to bool 'true' or 'false' (performance warning)
-E:\Projects\AsteroidTD\JustTest\protoc_src\google/protobuf/has_bits.h(73): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-  E:\Projects\AsteroidTD\JustTest\protoc_src\google/protobuf/has_bits.h(72): note: while compiling class template member function 'void google::protobuf::internal::HasBits<1>::Or(const google::protobuf::internal::HasBits<1> &)'
-  PlayerStat.pb.cc(326): note: see reference to function template instantiation 'void google::protobuf::internal::HasBits<1>::Or(const google::protobuf::internal::HasBits<1> &)' being compiled
-  E:\Projects\AsteroidTD\JustTest\protoc_src\google/protobuf/has_bits.h(83): note: see reference to class template instantiation 'google::protobuf::internal::HasBits<1>' being compiled
-  Source.cpp
+﻿  Source.cpp
 e:\projects\asteroidtd\justtest\GeometryComponents.h(127): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\GeometryComponents.h(172): warning C4305: '+=': truncation from 'double' to 'float'
 e:\projects\asteroidtd\justtest\GeometryComponents.h(175): warning C4305: '-=': truncation from 'double' to 'float'
@@ -261,7 +246,7 @@ e:\projects\asteroidtd\justtest\ResearchVisualController.h(123): warning C4244: 
 e:\projects\asteroidtd\justtest\ResearchVisualController.h(141): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\ResearchVisualController.h(142): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\asteroidtd\justtest\ResearchVisualController.h(161): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-e:\projects\asteroidtd\justtest\MusicManager.h(44): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\MusicManager.h(45): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
 e:\projects\asteroidtd\justtest\BackgroundGeneration.h(35): warning C4305: 'initializing': truncation from 'double' to 'float'
 e:\projects\asteroidtd\justtest\BackgroundGeneration.h(46): warning C4305: 'initializing': truncation from 'double' to 'float'
 e:\projects\asteroidtd\justtest\BackgroundGeneration.h(80): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
@@ -386,12 +371,12 @@ Source.cpp(1680): warning C4244: 'argument': conversion from 'float' to 'unsigne
 Source.cpp(1683): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
 Source.cpp(1687): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
 Source.cpp(1778): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(1866): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(1867): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(1973): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-Source.cpp(2040): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-Source.cpp(2042): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-Source.cpp(2084): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(1869): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(1870): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(1976): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+Source.cpp(2043): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(2045): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+Source.cpp(2087): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   e:\projects\asteroidtd\justtest\AStarAlgorithm.h(49): note: see reference to function template instantiation 'std::pair<Point,int>::pair<Point,double&,void,0>(_Other1 &&,_Other2) noexcept' being compiled
           with
@@ -406,7 +391,9 @@ C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): war
               _Other2=double &
           ]
   Generating code
-  All 6644 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  243 of 6646 functions ( 3.7%) were compiled, the rest were copied from previous compilation.
+    40 functions were new in current compilation
+    25 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.exe
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.pdb (Full PDB)

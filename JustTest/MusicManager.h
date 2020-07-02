@@ -15,6 +15,7 @@ class MusicManager {
 	std::vector<std::string> track_name;
 	int current_track = 0;
 	bool play_state = true;
+	float current_volume = 30.0f;
 
 	std::random_device r;
 	std::default_random_engine generator;
@@ -75,10 +76,11 @@ public:
 
 	void setVolume(float volume) {
 		playlist[current_track]->setVolume(volume);
+		current_volume = volume;
 	}
 
 	float getVolume() {
-		return playlist[current_track]->getVolume();
+		return current_volume;
 	}
 
 	void launchMusicWorker() {
@@ -90,7 +92,7 @@ public:
 						while (current_track == prev_track) {
 							current_track = distribution(generator) - 1;
 						}
-						playlist[current_track]->setVolume(30.0f);
+						playlist[current_track]->setVolume(current_volume);
 						play_state = true;
 
 						std::cout << "New track is " << track_name[current_track] << std::endl;

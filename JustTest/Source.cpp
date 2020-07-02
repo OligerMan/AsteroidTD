@@ -1841,6 +1841,9 @@ int main() {
 				window.close();
 				return 0;
 			}
+			if (event.type == sf::Event::MouseWheelScrolled) {
+				music_manager.setVolume(std::max(std::min(100.0f, music_manager.getVolume() + event.mouseWheelScroll.delta), 0.0f));
+			}
 		}
 
 		frame_num++;
