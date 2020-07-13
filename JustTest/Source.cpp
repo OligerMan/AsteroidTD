@@ -26,7 +26,7 @@ enum XBOXGamepadButtons {
 	A,B,X,Y,LB,RB,BACK,START,LSTICK,RSTICK
 };
 
-void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController & visual_ctrl, GUIVisualController & gui_visual_ctrl, ResearchVisualController & res_visual_ctrl) {
+void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController & visual_ctrl, GUIVisualController & gui_visual_ctrl, ResearchVisualController & res_visual_ctrl, MusicManager & music_manager) {
 
 	sf::Texture main_background_texture, research_background_texture, game_over_background_texture;
 	sf::Sprite main_background_sprite, research_background_sprite, game_over_background_sprite;
@@ -1523,7 +1523,8 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				}
 
 				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, A)) && ((frame_num - last_dialog_choice) > fps.getFPS())) {
-					if (npc->getCurrentStage() != NPCInfo::ConversationStage::dialog_end) {
+					
+					if (npc->getCurrentStage() != L"dialog_end_npc") {
 						npc->nextTurn(chosen_answer);
 					}
 					else {
@@ -1611,6 +1612,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			}
 			if (event.type == sf::Event::LostFocus) {
 				pause_game();
+			}
+			if (event.type == sf::Event::MouseWheelScrolled) {
+				music_manager.setVolume(std::max(std::min(100.0f, music_manager.getVolume() + event.mouseWheelScroll.delta), 0.0f));
 			}
 		}
 	}
@@ -2083,7 +2087,7 @@ int main() {
 				fps.reset();
 				try {
                     rpg_profile.clear();
-					gameCycle("map2", window, visual_ctrl, gui_visual_ctrl, res_visual_ctrl);
+					gameCycle("map2", window, visual_ctrl, gui_visual_ctrl, res_visual_ctrl, music_manager);
 					last_menu_choice = frame_num + consts.getFPSLock();
 				}
 				catch (std::exception exc) {

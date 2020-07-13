@@ -13,18 +13,24 @@ struct DialogInfo {
     };
 	bool is_player_turn = false;
 	std::wstring main_text;
-	std::vector<Answer> answers; // if not players turn contains only "Continue"
+	std::vector<DialogInfo::Answer> answers; // if not players turn contains only "Continue"
 };
 
-struct DialogInfoModified {
-    struct Answer {
-        std::wstring text;
-        //PhraseContainer::PhraseType type;
-        std::wstring type;
-    };
+struct Answer {
+	std::wstring answer_text_id;
+	std::wstring next_state_id;
+	std::vector<std::pair<std::wstring, std::wstring>> conditions;
+	std::vector<std::pair<std::wstring, std::wstring>> side_effects;
 
-    std::wstring main_text;
-    std::vector<Answer> answers;
+	Answer(
+		std::wstring answer_text_id,
+		std::wstring next_state_id,
+		std::vector<std::pair<std::wstring, std::wstring>> conditions, 
+		std::vector<std::pair<std::wstring, std::wstring>> side_effects) :
+		answer_text_id(answer_text_id),
+		next_state_id(next_state_id),
+		conditions(conditions),
+		side_effects(side_effects) {}
 };
 
 class NPCInfo {
@@ -62,6 +68,8 @@ private:
 	bool rumors_question_passed = false;
 
 	ConversationStage current_stage = dialog_start;
+	std::map<std::wstring, std::vector<Answer>> dialog_state_list;   // map<state_name, state_answers_info
+	std::map<std::wstring, std::vector<Answer>>::iterator cur_dialog_state = dialog_state_list.end();
 	DialogInfo current_dialog_info;
 	WorldFactionList faction = WORLD_FACTIONS_COUNT;
 
@@ -108,6 +116,31 @@ private:
 
         current_dialog_info.answers.push_back(getContinueAnswer());
         current_dialog_info.is_player_turn = false;
+
+		//// new part
+
+		dialog_state_list = 
+		{
+			{ L"start_description", std::vector<Answer>
+				({ 
+					Answer(L"continue_phrase_GUI", L"greetings_phrase_npc",{},{}) 
+				}) 
+			},
+			{ L"greetings_phrase_npc", std::vector<Answer>
+				({
+					Answer(L"positive_greetings_answer_player", L"positive_greetings_reaction_npc",{},{}),
+					Answer(L"neutral_greetings_answer_player", L"neutral_greetings_reaction_npc",{},{}),
+					Answer(L"negative_greetings_answer_player", L"negative_greetings_reaction_npc",{},{}),
+					Answer(L"farewell_player", L"dialog_end_npc",{},{}),
+				}) 
+			},
+			{ L"dialog_end_npc", std::vector<Answer>
+				({
+					Answer(L"continue_phrase_GUI", L"start_description",{},{})
+				})
+			},
+		};
+		cur_dialog_state = dialog_state_list.find(L"start_description");
     }
 
 public:
@@ -123,11 +156,47 @@ public:
 
         setDefaultSettings();
     }
-
+/*
 	ConversationStage getCurrentStage() {
 		return current_stage;
+	}*/
+
+	std::wstring getCurrentStage() {
+		std::wstring output;
+		if (cur_dialog_state != dialog_state_list.end()) {
+			output = cur_dialog_state->first;
+		}
+		return output;
 	}
 
+	void nextTurn(uint32_t answer_num) {
+		std::vector<std::wstring> buffer;
+		auto addAnswer = [&](std::wstring phrase) {
+			buffer = phrase_container.getPhraseBuffer(phrase, politeness, personal_id);
+			current_dialog_info.answers.push_back(DialogInfo::Answer(buffer[rand() * buffer.size() / (RAND_MAX + 1)], phrase));
+		};
+		auto addMainText = [&](std::wstring phrase) {
+			current_dialog_info.main_text.clear();
+			buffer = phrase_container.getPhraseBuffer(phrase, politeness, personal_id);
+			current_dialog_info.main_text = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+		};
+
+		if (cur_dialog_state != dialog_state_list.end()) {
+			auto next_state_id = cur_dialog_state->second[answer_num].next_state_id;
+			auto new_state = dialog_state_list.find(next_state_id);
+
+			if (new_state != dialog_state_list.end()) {
+				addMainText(next_state_id);
+
+				for (int i = 0; i < new_state->second.size(); i++) {
+					addAnswer(new_state->second[i].answer_text_id);
+				}
+
+				cur_dialog_state = new_state;
+			}
+		}
+	}
+/*
 	void nextTurn(int answer_num) {
 		if (answer_num < 0 || answer_num >= current_dialog_info.answers.size()) {
 			return;
@@ -464,7 +533,7 @@ public:
 			current_dialog_info.is_player_turn = false;
 			break;
 		}
-	}
+	}*/
 
 	DialogInfo getDialogInfo() {
 		return current_dialog_info;
