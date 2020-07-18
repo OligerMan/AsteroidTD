@@ -119,6 +119,11 @@ e:\projects\asteroidtd\justtest\MissionStage.h(152): warning C4244: 'initializin
 e:\projects\asteroidtd\justtest\PlayerRPGProfile.h(21): warning C4305: 'argument': truncation from 'double' to 'float'
 e:\projects\asteroidtd\justtest\PlayerRPGProfile.h(26): warning C4305: 'argument': truncation from 'double' to 'float'
 e:\projects\asteroidtd\justtest\PlayerRPGProfile.h(63): warning C4101: 'obj_ptr': unreferenced local variable
+e:\projects\asteroidtd\justtest\NPCInfo.h(172): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\NPCInfo.h(176): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\NPCInfo.h(180): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\NPCInfo.h(184): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+e:\projects\asteroidtd\justtest\NPCInfo.h(188): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
 e:\projects\asteroidtd\justtest\Map.h(162): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data
 e:\projects\asteroidtd\justtest\Map.h(165): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data
 e:\projects\asteroidtd\justtest\Map.h(169): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data
@@ -391,9 +396,9 @@ C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): war
               _Other2=double &
           ]
   Generating code
-  212 of 6907 functions ( 3.1%) were compiled, the rest were copied from previous compilation.
-    6 functions were new in current compilation
-    21 functions had inline decision re-evaluated but remain unchanged
+  206 of 6944 functions ( 3.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    22 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.exe
   JustTest.vcxproj -> E:\Projects\AsteroidTD\x64\Release\bf3.pdb (Full PDB)

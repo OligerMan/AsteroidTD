@@ -1,5 +1,7 @@
 #pragma once
 
+#include <fstream>
+
 #include "PhraseContainer.h"
 #include "PlayerRPGProfile.h"
 
@@ -69,7 +71,7 @@ private:
 
 	ConversationStage current_stage = dialog_start;
 	std::map<std::wstring, std::vector<Answer>> dialog_state_list;   // map<state_name, state_answers_info
-	std::map<std::wstring, std::vector<Answer>>::iterator cur_dialog_state = dialog_state_list.end();
+	std::map<std::wstring, std::vector<Answer>>::iterator cur_dialog_state;
 	DialogInfo current_dialog_info;
 	WorldFactionList faction = WORLD_FACTIONS_COUNT;
 
@@ -100,6 +102,94 @@ private:
         return DialogInfo::Answer(buffer[rand() * buffer.size() / (RAND_MAX + 1)], L"joke_phrase_GUI");
     }
 
+	std::map<std::wstring, std::vector<Answer>> getDialogStateFromFile(std::wstring path) {
+		std::map<std::wstring, std::vector<Answer>> output;
+
+		std::wifstream dialog_file(path);
+		std::wstring input;
+		
+		while (true) {
+			dialog_file >> input;
+			if (input != L"dialog_node") {
+				
+			}
+			if (input == L"file_end") {
+				break;
+			}
+			std::wstring node_name;
+			std::vector<Answer> answer_list;
+			dialog_file >> input;
+			if (input != L"node_name") {
+
+			}
+			dialog_file >> node_name;
+
+			dialog_file >> input;
+			while (input == L"answer") {
+				Answer answer(L"", L"", {}, {});
+				dialog_file >> input;
+				if (input != L"answer_text_id") {
+
+				}
+				dialog_file >> answer.answer_text_id;
+
+				dialog_file >> input;
+				if (input != L"next_state_id") {
+
+				}
+				dialog_file >> answer.next_state_id;
+
+				dialog_file >> input;
+				if (input != L"conditions") {
+
+				}
+				dialog_file >> input;
+				while (input == L">") {
+					std::pair<std::wstring, std::wstring> condition;
+					dialog_file >> condition.first;
+					dialog_file >> condition.second;
+					answer.conditions.push_back(condition);
+
+					dialog_file >> input;
+				}
+				if (input != L"conditions_end") {
+
+				}
+
+				dialog_file >> input;
+				if (input != L"side_effects") {
+
+				}
+				dialog_file >> input;
+				while (input == L">") {
+					std::pair<std::wstring, std::wstring> side_effect;
+					dialog_file >> side_effect.first;
+					dialog_file >> side_effect.second;
+					answer.side_effects.push_back(side_effect);
+
+					dialog_file >> input;
+				}
+				if (input != L"side_effects_end") {
+
+				}
+
+				answer_list.push_back(answer);
+
+				dialog_file >> input;
+			}
+			if (input != L"answer_end") {
+
+			}
+			dialog_file >> input;
+			if (input != L"dialog_node_end") {
+
+			}
+
+			output.insert(std::pair<std::wstring, std::vector<Answer>>(node_name, answer_list));
+		}
+		return output;
+	}
+
     void setDefaultSettings() {
         politeness = rand() * 200 / (RAND_MAX + 1) - 100;
         prejudices = rand() * 200 / (RAND_MAX + 1) - 100;
@@ -122,8 +212,9 @@ private:
 		dialog_state_list = 
 		{
 			{ L"start_description", std::vector<Answer>
-				({ 
-					Answer(L"continue_phrase_GUI", L"greetings_phrase_npc",{},{}) 
+				({
+					Answer(L"continue_phrase_GUI", L"greetings_phrase_npc", {{L"fame_greater", L"-150"}}, {}),
+					Answer(L"continue_phrase_GUI", L"conversation_refuse", {{L"fame_notgreater", L"-150"}}, {})
 				}) 
 			},
 			{ L"greetings_phrase_npc", std::vector<Answer>
@@ -131,26 +222,77 @@ private:
 					Answer(L"positive_greetings_answer_player", L"positive_greetings_reaction_npc",{},{}),
 					Answer(L"neutral_greetings_answer_player", L"neutral_greetings_reaction_npc",{},{}),
 					Answer(L"negative_greetings_answer_player", L"negative_greetings_reaction_npc",{},{}),
-					Answer(L"farewell_player", L"dialog_end_npc",{},{}),
+					Answer(L"farewell_player", L"dialog_end",{},{}),
 				}) 
 			},
-			{ L"dialog_end_npc", std::vector<Answer>
+			{ L"dialog_end", std::vector<Answer>
 				({
 					Answer(L"continue_phrase_GUI", L"start_description",{},{})
+				})
+			},
+			{ L"conversation_refuse", std::vector<Answer>
+				({
+					Answer(L"continue_phrase_GUI", L"dialog_end",{},{})
 				})
 			},
 		};
 		cur_dialog_state = dialog_state_list.find(L"start_description");
     }
 
+	bool isValidCondition(std::pair<std::wstring, std::wstring> condition) {
+		if (condition.first == L"special_job_available") {
+			return condition.second == L"1";
+		}
+		if (condition.first == L"base_job_available") {
+			return condition.second == L"1";
+		}
+		if (condition.first == L"special_job_accepted") {
+			return condition.second == L"1";
+		}
+		if (condition.first == L"base_job_accepted") {
+			return condition.second == L"1";
+		}
+		if (condition.first == L"rumor_available") {
+			return condition.second == L"1";
+		}
+		if (condition.first == L"rumor_accepted") {
+			return condition.second == L"1";
+		}
+		if (condition.first == L"fame_lower") {
+			int fame = prejudices + rpg_profile.getFactionFame(faction) + rpg_profile.getGlobalFame();
+			return fame < std::stoi(condition.second);
+		}
+		if (condition.first == L"fame_notgreater") {
+			int fame = prejudices + rpg_profile.getFactionFame(faction) + rpg_profile.getGlobalFame();
+			return fame <= std::stoi(condition.second);
+		}
+		if (condition.first == L"fame_equal") {
+			int fame = prejudices + rpg_profile.getFactionFame(faction) + rpg_profile.getGlobalFame();
+			return fame == std::stoi(condition.second);
+		}
+		if (condition.first == L"fame_notlower") {
+			int fame = prejudices + rpg_profile.getFactionFame(faction) + rpg_profile.getGlobalFame();
+			return fame >= std::stoi(condition.second);
+		}
+		if (condition.first == L"fame_greater") {
+			int fame = prejudices + rpg_profile.getFactionFame(faction) + rpg_profile.getGlobalFame();
+			return fame > std::stoi(condition.second);
+		}
+		
+		return false;
+	}
+
 public:
 
 
 	NPCInfo(WorldFactionList faction, std::wstring personal_id) : faction(faction), personal_id(personal_id), base_mission_info(0), special_mission_info(0) {
         setDefaultSettings();
+		dialog_state_list = getDialogStateFromFile(L"dialog_config\\" + personal_id + L".txt");
+
+		cur_dialog_state = dialog_state_list.find(L"start_description");
 	}
 
-    NPCInfo(WorldFactionList faction) : NPCInfo(faction, L"") {
+    NPCInfo(WorldFactionList faction) : NPCInfo(faction, L"base_dialog") {
         std::vector<std::wstring> buffer = phrase_container.getPersonalIdList();
         personal_id = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
@@ -188,8 +330,17 @@ public:
 			if (new_state != dialog_state_list.end()) {
 				addMainText(next_state_id);
 
+				current_dialog_info.answers.clear();
 				for (int i = 0; i < new_state->second.size(); i++) {
-					addAnswer(new_state->second[i].answer_text_id);
+					bool answer_valid = true;
+					for (auto cond = new_state->second[i].conditions.begin(); cond != new_state->second[i].conditions.end(); cond++) {
+						if (!isValidCondition(*cond)) {
+							answer_valid = false;
+						}
+					}
+					if (answer_valid) {
+						addAnswer(new_state->second[i].answer_text_id);
+					}
 				}
 
 				cur_dialog_state = new_state;

@@ -1524,7 +1524,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, A)) && ((frame_num - last_dialog_choice) > fps.getFPS())) {
 					
-					if (npc->getCurrentStage() != L"dialog_end_npc") {
+					if (npc->getCurrentStage() != L"dialog_end") {
 						npc->nextTurn(chosen_answer);
 					}
 					else {
@@ -1627,7 +1627,7 @@ int main() {
 	HWND console_hWnd = GetConsoleWindow();
 	ShowWindow(console_hWnd, SW_HIDE);
 
-	phrase_container.parseFromFolder("dialog\\" + settings.getLocalisationFile());
+	phrase_container.parseFromFolder("text_config\\" + settings.getLocalisationFile());
 
 	sf::ContextSettings context_settings;
 	context_settings.antialiasingLevel = 8;
