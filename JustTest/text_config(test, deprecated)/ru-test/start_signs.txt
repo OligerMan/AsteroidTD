@@ -1,0 +1,11 @@
+dialog_file_start
+
+phrase_start
+string |Начнём игру|
+conditions_start
+conditions_end
+id common
+phrase_type start_game_sign_GUI
+phrase_end
+
+dialog_file_end

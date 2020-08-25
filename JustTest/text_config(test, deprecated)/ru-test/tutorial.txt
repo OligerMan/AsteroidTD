@@ -1,0 +1,252 @@
+dialog_file_start
+
+phrase_start
+string |
+Это руководство поможет вам разобраться 
+в управлении(нажмите |
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_base_desc
+phrase_end
+
+phrase_start
+string |
+Попробуйте полетать при помощи 
+клавиш WASD или левого стика геймпада
+или любой кнопки мыши
+(|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_move
+phrase_end
+
+phrase_start
+string |
+Для включения дальнего вида 
+используйте Q или LB
+(|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_view
+phrase_end
+
+phrase_start
+string |
+Подлетите к ближайшему астероиду 
+и постройте главное здание
+(1 на клавиатуре, Y на геймпаде)|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_dome
+phrase_end
+
+phrase_start
+string |
+Главное здание ускоряет починку 
+всех зданий на астероиде
+(Пробел или A для продолжения)|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_dome_desc
+phrase_end
+
+phrase_start
+string |
+Подлетите к ближайшему астероиду 
+и постройте защитную турель
+(2 на клавиатуре, X на геймпаде)|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_turret
+phrase_end
+
+phrase_start
+string |
+Турель атакует ближайшую 
+враждебную цель
+(Пробел или A для продолжения)|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_turret_desc
+phrase_end
+
+phrase_start
+string |
+Подлетите к ближайшему астероиду 
+и постройте золотую шахту
+(3 на клавиатуре, B на геймпаде)|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_gold
+phrase_end
+
+phrase_start
+string |
+Шахты добывают золото, которое можно потом 
+использовать для постройки других зданий
+(Пробел или A для продолжения)|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_gold_desc
+phrase_end
+
+phrase_start
+string |
+Подлетите к ближайшему астероиду 
+и постройте лабораторию
+(4 на клавиатуре, A на геймпаде)|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_science
+phrase_end
+
+phrase_start
+string |
+Лаборатории добывают очки исследования, 
+которые можно потратить на улучшение зданий
+(Пробел или A для продолжения)|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_science_desc
+phrase_end
+
+phrase_start
+string |
+Для переключения в режим способностей нажмите 
+E на клавиатуре или RB на геймпаде(|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_skill_mode
+phrase_end
+
+phrase_start
+string |
+Для того, чтобы выпустить самонаводящуюся ракету 
+нажмите 1 на клавиатуре, Y на геймпаде или ЛКМ|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_rocket
+phrase_end
+
+phrase_start
+string |
+Для того, чтобы активировать ускорение 
+нажмите 2 на клавиатуре или X на геймпаде|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_speed
+phrase_end
+
+phrase_start
+string |
+Для того, чтобы удвоить урон и скорость 
+атаки всех турелей на астероиде
+нажмите 3 на клавиатуре или B на геймпаде|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_damage
+phrase_end
+
+phrase_start
+string |
+Для того, чтобы частично починить все здания 
+на астероиде и увеличить их восстановление
+нажмите 4 на клавиатуре или A на геймпаде|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_heal
+phrase_end
+
+phrase_start
+string |
+Нажмите F на клавиатуре или BACK на геймпаде, 
+чтобы открыть меню исследований|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_research
+phrase_end
+
+phrase_start
+string |
+Попробуйте исследовать что-нибудь, выбрав 
+исследование при помощи WASD или левого 
+стика геймпада и нажав Пробел или A
+(чтобы выйти нажмите F/BACK)|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_research_close
+phrase_end
+
+phrase_start
+string |
+Нажмите Escape на клавиатуре или START на геймпаде, 
+чтобы поставить игру на паузу|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_pause
+phrase_end
+
+phrase_start
+string |
+Нажмите Пробел на клавиатуре или A на геймпаде, 
+чтобы возобновить игру|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_unpause
+phrase_end
+
+phrase_start
+string |
+Теперь вы знаете основы игры. 
+Нажмите Пробел или A, чтобы начать новую игру. GL HF|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_end
+phrase_end
+
+phrase_start
+string | для следующего шага)|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_for_next_step
+phrase_end
+
+phrase_start
+string | метров осталось)|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_move_pts_left
+phrase_end
+
+phrase_start
+string | раз(a) осталось)|
+conditions_start
+conditions_end
+id common
+phrase_type tutorial_times_left
+phrase_end
+
+dialog_file_end

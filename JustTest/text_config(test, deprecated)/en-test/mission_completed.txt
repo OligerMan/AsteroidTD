@@ -1,0 +1,19 @@
+dialog_file_start
+
+phrase_start
+string |Thanks for good job|
+conditions_start
+conditions_end
+id common
+phrase_type courier_mission_completed_npc
+phrase_end
+
+phrase_start
+string |Thanks for good job|
+conditions_start
+conditions_end
+id common
+phrase_type defence_mission_completed_npc
+phrase_end
+
+dialog_file_end

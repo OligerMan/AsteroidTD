@@ -15,6 +15,7 @@
 #include "Mission.h"
 #include "NPCInfo.h"
 #include "PhraseContainer.h"
+#include "AsteroidGenerator.h"
 
 void fixCollision(Object * obj1, Object * obj2) {
 
@@ -124,6 +125,7 @@ private:
 
 	Object * last_clicked_object = nullptr;
 
+	AsteroidGenerator asteroid_gen;
 	Point gen_basis;
 	float gen_radius = 8500, cam_radius = 5500, min_range = 1500, max_range = 2700, asteroid_speed = 0;
 	int asteroid_amount = 50, max_try_count = 100;
@@ -297,7 +299,11 @@ private:
 								if (object2->getUnitInfo() == nullptr) {
 									continue;
 								}
-
+								if (object1->getObjectType() == turret) {
+									if ((object1->getPosition() - object2->getPosition()).getLength() > research_manager.getTurretAttackRangeCoef()) {
+										//continue;
+									}
+								}
 								int faction2 = object2->getUnitInfo()->getFaction();
 
 								if (areEnemies((FactionList)faction1, (FactionList)faction2)) {
@@ -601,205 +607,108 @@ private:
 		else {
 			cnt = asteroid_amount - obj_count;
 		}
-
-		if (!obj_count) {
-			FactionList faction = null_faction;
-
-			Point new_pos = Point(0, 0);
-			Object * object = new Object
-			(
-				new_pos,
-				Point(),
-				ObjectType::asteroid,
-				CollisionType::asteroid_col,
-				VisualInfo
-				(
-					SpriteType::asteroid_sprite,
-					AnimationType::hold_anim,
-					1000000000
-				)
-			);
-			float angle = rand() / (float)RAND_MAX * PI;
-			float range = asteroid_speed;
-			float x = cos(angle)*range, y = sin(angle)*range;
-			object->setSpeed(Point(x, y));
-			object->setAutoOrigin();
-			object->getUnitInfo()->setFaction(faction);
-			addObject(object, landscape_layer);
-
-
-			std::vector<Object *> struct_arr = getRandomStructureSet(new_pos, object->getCollisionModel()->getModelElem(0)->collision_radius, struct_set, faction);
-			for (int i = 0; i < struct_arr.size(); i++) {
-				angle = rand() / (float)RAND_MAX * PI;
-				range = asteroid_speed;
-				x = cos(angle)*range, y = sin(angle)*range;
-				struct_arr[i]->setSpeed(Point(x, y));
-				addObject(struct_arr[i], landscape_layer);
-				object->attachObject(struct_arr[i]);
-			}
-		}
 		
-		while (cnt > 0) {
-			bool in_min = false, in_max = false;
-			try_count = max_try_count;
-			float angle, range, x, y;
-			while ((in_min || !in_max) && (cnt > 0) && (try_count > 0)) {
-				in_min = false, in_max = false;
-				angle = rand() / (float)RAND_MAX * PI * 2;
-				range = cam_radius + rand() / (float)RAND_MAX * (gen_radius - cam_radius);
-				x = cos(angle)*range + gen_basis.x, y = sin(angle)*range + gen_basis.y;
-				for (int j = 0; j < objects[landscape_layer].size(); j++) {
-					int cur_dist = (objects[landscape_layer][j]->getPosition() - Point(x, y)).getLength();
-					if (cur_dist <= min_range) {
-						in_min = true;
-					}
-					if (cur_dist <= max_range) {
-						in_max = true;
-					}
+		std::vector<std::pair<Point, std::reference_wrapper<AsteroidGenerator::NPC_Metadata>>> new_asteroid_list = asteroid_gen.processFrame(gen_basis, gen_radius);
+		for (auto iter = new_asteroid_list.begin(); iter != new_asteroid_list.end(); iter++) {
+			Point new_pos = iter->first;
+			FactionList faction = iter->second.get().faction;
+
+			static std::vector<std::vector<SpriteType>> tier_list{    // new tier system(old tiers mixed because of increased chance of special asteroids)
+				{   // tier 0
+					asteroid_gold_interspersed_sprite,
+					asteroid_iron_interspersed_sprite,
+					asteroid_suspiciously_flat_sprite
+				},
+				{   // tier 1
+
+					asteroid_gold_interspersed_sprite,
+					asteroid_iron_interspersed_sprite,
+					asteroid_suspiciously_flat_sprite,
+
+					asteroid_gold_interspersed_sprite,
+					asteroid_iron_interspersed_sprite,
+					asteroid_suspiciously_flat_sprite,
+
+					asteroid_strange_cracked_sprite,
+					asteroid_ordinary_wealthy_sprite,
+					asteroid_poor_mountainous_sprite,
+					asteroid_wealthy_cracked_sprite,
+					asteroid_ordinary_mountainous_sprite,
+					asteroid_strange_poor_sprite
+				},
+				{   // tier 2
+					asteroid_gold_interspersed_sprite,
+					asteroid_iron_interspersed_sprite,
+					asteroid_suspiciously_flat_sprite,
+
+					asteroid_gold_interspersed_sprite,
+					asteroid_iron_interspersed_sprite,
+					asteroid_suspiciously_flat_sprite,
+
+					asteroid_strange_cracked_sprite,
+					asteroid_ordinary_wealthy_sprite,
+					asteroid_poor_mountainous_sprite,
+					asteroid_wealthy_cracked_sprite,
+					asteroid_ordinary_mountainous_sprite,
+					asteroid_strange_poor_sprite,
+
+					asteroid_strange_cracked_sprite,
+					asteroid_ordinary_wealthy_sprite,
+					asteroid_poor_mountainous_sprite,
+					asteroid_wealthy_cracked_sprite,
+					asteroid_ordinary_mountainous_sprite,
+					asteroid_strange_poor_sprite,
+
+					asteroid_swampy_with_gold_mines_sprite,
+					asteroid_unstable_explosive_ore_sprite,
+					asteroid_old_laboratory_sprite,
+					asteroid_lava_surface_sprite
+				},
+				{   // tier 3
+					asteroid_gold_interspersed_sprite,
+					asteroid_iron_interspersed_sprite,
+					asteroid_suspiciously_flat_sprite,
+
+					asteroid_gold_interspersed_sprite,
+					asteroid_iron_interspersed_sprite,
+					asteroid_suspiciously_flat_sprite,
+
+					asteroid_gold_interspersed_sprite,
+					asteroid_iron_interspersed_sprite,
+					asteroid_suspiciously_flat_sprite,
+
+					asteroid_strange_cracked_sprite,
+					asteroid_ordinary_wealthy_sprite,
+					asteroid_poor_mountainous_sprite,
+					asteroid_wealthy_cracked_sprite,
+					asteroid_ordinary_mountainous_sprite,
+					asteroid_strange_poor_sprite,
+
+					asteroid_strange_cracked_sprite,
+					asteroid_ordinary_wealthy_sprite,
+					asteroid_poor_mountainous_sprite,
+					asteroid_wealthy_cracked_sprite,
+					asteroid_ordinary_mountainous_sprite,
+					asteroid_strange_poor_sprite,
+
+					asteroid_swampy_with_gold_mines_sprite,
+					asteroid_unstable_explosive_ore_sprite,
+					asteroid_old_laboratory_sprite,
+					asteroid_lava_surface_sprite,
+
+					asteroid_drone_factory_sprite,
+					asteroid_rocket_launcher_sprite,
+					asteroid_ancient_laboratory_sprite,
+					asteroid_ancient_giant_gold_mine_sprite
 				}
-				if (!fixed_asteroids) {
-					cnt--;
-				}
-				else {
-					try_count--;
-				}
-			}
-			if (!cnt || !try_count) {
-				continue;
-			}
-			if (fixed_asteroids) {
-				cnt--;
-			}
-
-			Point new_pos = Point(x, y);
-
-			FactionList faction = null_faction;
-
-			//static std::vector<std::vector<SpriteType>> tier_list{   // old tier system
-			//	{   // tier 0
-			//		asteroid_gold_interspersed_sprite,
-			//		asteroid_iron_interspersed_sprite,
-			//		asteroid_suspiciously_flat_sprite 
-			//	},
-			//	{   // tier 1
-			//		asteroid_strange_cracked_sprite,
-			//		asteroid_ordinary_wealthy_sprite,
-			//		asteroid_poor_mountainous_sprite,
-			//		asteroid_wealthy_cracked_sprite,
-			//		asteroid_ordinary_mountainous_sprite,
-			//		asteroid_strange_poor_sprite
-			//	},
-			//	{   // tier 2
-			//		asteroid_swampy_with_gold_mines_sprite,
-			//		asteroid_unstable_explosive_ore_sprite,
-			//		asteroid_old_laboratory_sprite,
-			//		asteroid_lava_surface_sprite
-			//	},
-			//	{   // tier 3
-			//		asteroid_drone_factory_sprite,
-			//		asteroid_rocket_launcher_sprite,
-			//		asteroid_ancient_laboratory_sprite,
-			//		asteroid_ancient_giant_gold_mine_sprite
-			//	}
-			//};
-
-            static std::vector<std::vector<SpriteType>> tier_list {    // new tier system(old tiers mixed because of increased chance of special asteroids)
-                {   // tier 0
-                    asteroid_gold_interspersed_sprite,
-                    asteroid_iron_interspersed_sprite,
-                    asteroid_suspiciously_flat_sprite
-                },
-                {   // tier 1
-
-                    asteroid_gold_interspersed_sprite,
-                    asteroid_iron_interspersed_sprite,
-                    asteroid_suspiciously_flat_sprite,
-
-                    asteroid_gold_interspersed_sprite,
-                    asteroid_iron_interspersed_sprite,
-                    asteroid_suspiciously_flat_sprite,
-
-                    asteroid_strange_cracked_sprite,
-                    asteroid_ordinary_wealthy_sprite,
-                    asteroid_poor_mountainous_sprite,
-                    asteroid_wealthy_cracked_sprite,
-                    asteroid_ordinary_mountainous_sprite,
-                    asteroid_strange_poor_sprite
-                },
-                {   // tier 2
-                    asteroid_gold_interspersed_sprite,
-                    asteroid_iron_interspersed_sprite,
-                    asteroid_suspiciously_flat_sprite,
-
-                    asteroid_gold_interspersed_sprite,
-                    asteroid_iron_interspersed_sprite,
-                    asteroid_suspiciously_flat_sprite,
-
-                    asteroid_strange_cracked_sprite,
-                    asteroid_ordinary_wealthy_sprite,
-                    asteroid_poor_mountainous_sprite,
-                    asteroid_wealthy_cracked_sprite,
-                    asteroid_ordinary_mountainous_sprite,
-                    asteroid_strange_poor_sprite,
-
-                    asteroid_strange_cracked_sprite,
-                    asteroid_ordinary_wealthy_sprite,
-                    asteroid_poor_mountainous_sprite,
-                    asteroid_wealthy_cracked_sprite,
-                    asteroid_ordinary_mountainous_sprite,
-                    asteroid_strange_poor_sprite,
-
-                    asteroid_swampy_with_gold_mines_sprite,
-                    asteroid_unstable_explosive_ore_sprite,
-                    asteroid_old_laboratory_sprite,
-                    asteroid_lava_surface_sprite
-                },
-                {   // tier 3
-                    asteroid_gold_interspersed_sprite,
-                    asteroid_iron_interspersed_sprite,
-                    asteroid_suspiciously_flat_sprite,
-
-                    asteroid_gold_interspersed_sprite,
-                    asteroid_iron_interspersed_sprite,
-                    asteroid_suspiciously_flat_sprite,
-
-                    asteroid_gold_interspersed_sprite,
-                    asteroid_iron_interspersed_sprite,
-                    asteroid_suspiciously_flat_sprite,
-
-                    asteroid_strange_cracked_sprite,
-                    asteroid_ordinary_wealthy_sprite,
-                    asteroid_poor_mountainous_sprite,
-                    asteroid_wealthy_cracked_sprite,
-                    asteroid_ordinary_mountainous_sprite,
-                    asteroid_strange_poor_sprite,
-
-                    asteroid_strange_cracked_sprite,
-                    asteroid_ordinary_wealthy_sprite,
-                    asteroid_poor_mountainous_sprite,
-                    asteroid_wealthy_cracked_sprite,
-                    asteroid_ordinary_mountainous_sprite,
-                    asteroid_strange_poor_sprite,
-
-                    asteroid_swampy_with_gold_mines_sprite,
-                    asteroid_unstable_explosive_ore_sprite,
-                    asteroid_old_laboratory_sprite,
-                    asteroid_lava_surface_sprite,
-
-                    asteroid_drone_factory_sprite,
-                    asteroid_rocket_launcher_sprite,
-                    asteroid_ancient_laboratory_sprite,
-                    asteroid_ancient_giant_gold_mine_sprite
-                }
-            };
+			};
 
 			SpriteType asteroid_type = asteroid_sprite;
 
 			int special_asteroid_chance = rand() % 1000;
 			bool npc_asteroid_chance = (rand() % 1000) < 200;
-            npc_asteroid_chance = npc_asteroid_chance && game_mode == GameMode::adventure_mode;
+			npc_asteroid_chance = npc_asteroid_chance && game_mode == GameMode::adventure_mode;
 			if (npc_asteroid_chance) {
-				faction = neutral_faction;
 			}
 			else {
 				if (special_asteroid_chance < 100) {
@@ -817,40 +726,36 @@ private:
 					asteroid_type = tier_list[num][rand() % tier_list[num].size()];
 				}
 			}
-			
 
 			Object * object = new Object
 			(
-				new_pos, 
-				Point(), 
-				ObjectType::asteroid, 
-				CollisionType::asteroid_col, 
+				new_pos,
+				Point(),
+				ObjectType::asteroid,
+				CollisionType::asteroid_col,
 				VisualInfo
 				(
 					asteroid_type,
-					AnimationType::hold_anim, 
+					AnimationType::hold_anim,
 					1000000000
 				)
 			);
 			object->setAutoOrigin();
-			angle = rand() / (float)RAND_MAX * PI;
-			range = asteroid_speed;
-			x = cos(angle)*range, y = sin(angle)*range;
-			object->setSpeed(Point(x,y));
 			object->getUnitInfo()->setFaction(faction);
 			addObject(object, landscape_layer);
 
 			if (npc_asteroid_chance) {
-				object->initNPCInfo(new NPCInfo(WorldFactionList::Alliance_of_Ancient_Knowledge));
-				int base_npc_lvl = 
-                    (float)rand() / (float)(RAND_MAX + 1) * 
-                    (float)rand() / (float)(RAND_MAX + 1) * 
-                    (float)rand() / (float)(RAND_MAX + 1) * 
-                    (float)rand() / (float)(RAND_MAX + 1);
+				WorldFactionList w_fact = WorldFactionList(faction - FactionList::alliance_of_ancient_knowledge);
+				object->initNPCInfo(new NPCInfo(w_fact));
+				int base_npc_lvl =
+					(float)rand() / (float)(RAND_MAX + 1) *
+					(float)rand() / (float)(RAND_MAX + 1) *
+					(float)rand() / (float)(RAND_MAX + 1) *
+					(float)rand() / (float)(RAND_MAX + 1);
 
 				int special_mission_lvl_dif = rand() / (RAND_MAX + 1);
-                Mission base_mission = createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, base_npc_lvl);
-                Mission special_mission = createMission(WorldFactionList::Alliance_of_Ancient_Knowledge, 1 - (1 - base_npc_lvl) * special_mission_lvl_dif);
+				Mission base_mission = createMission(w_fact, base_npc_lvl);
+				Mission special_mission = createMission(w_fact, 1 - (1 - base_npc_lvl) * special_mission_lvl_dif);
 				if (!base_mission.isFailed()) {
 					static_cast<NPCInfo *>(object->getNPCInfo())->changeBaseMission(base_mission);
 				}
@@ -1251,11 +1156,14 @@ private:
 
 public:
 
-	Map(std::wstring mission_desc_path) : mission_stage_info(mission_desc_path) {}
+	Map(std::wstring mission_desc_path) : 
+		asteroid_gen(2500.0f, 500.0f, 0.0f, rand()),
+		mission_stage_info(mission_desc_path) {}
 
 	Map(std::string path, std::wstring mission_desc_path) : 
         objects(parseMap(path)), 
-        mission_stage_info(mission_desc_path) {
+        mission_stage_info(mission_desc_path),
+		asteroid_gen(2500.0f, 500.0f, 0.0f, rand()) {
 
 		for (int layer = 0; layer < objects.size(); layer++) {
 			for (int i = 0; i < objects[layer].size(); i++) {

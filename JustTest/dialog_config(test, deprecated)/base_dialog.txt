@@ -1,0 +1,183 @@
+dialog_node
+node_name start_description
+
+answer
+answer_text_id continue_phrase_GUI
+next_state_id greetings_phrase_npc
+conditions
+> fame_greater -50
+conditions_end
+side_effects
+side_effects_end
+
+answer
+answer_text_id continue_phrase_GUI
+next_state_id greetings_phrase_npc
+conditions
+> fame_notgreater -50
+conditions_end
+side_effects
+side_effects_end
+
+dialog_node_end
+
+dialog_node
+node_name greetings_phrase_npc
+
+answer
+answer_text_id positive_greetings_answer_player
+next_state_id positive_greetings_reaction_npc
+conditions
+conditions_end
+side_effects
+side_effects_end
+
+answer
+answer_text_id neutral_greetings_answer_player
+next_state_id neutral_greetings_reaction_npc
+conditions
+conditions_end
+side_effects
+side_effects_end
+
+answer
+answer_text_id negative_greetings_answer_player
+next_state_id negative_greetings_reaction_npc
+conditions
+conditions_end
+side_effects
+side_effects_end
+
+answer
+answer_text_id farewell_player
+next_state_id dialog_end
+conditions
+conditions_end
+side_effects
+side_effects_end
+
+answer
+answer_text_id reroll_phrase_GUI
+next_state_id greetings_phrase_npc
+conditions
+conditions_end
+side_effects
+side_effects_end
+
+dialog_node_end
+
+dialog_node
+node_name dialog_end
+
+answer
+answer_text_id continue_phrase_GUI
+next_state_id start_description
+conditions
+conditions_end
+side_effects
+side_effects_end
+
+dialog_node_end
+
+dialog_node
+node_name conversation_refuse
+
+answer
+answer_text_id continue_phrase_GUI
+next_state_id dialog_end
+conditions
+conditions_end
+side_effects
+side_effects_end
+
+dialog_node_end
+
+dialog_node
+node_name positive_greetings_reaction_npc
+
+answer
+answer_text_id continue_phrase_GUI
+next_state_id standart_question_npc
+conditions
+conditions_end
+side_effects
+side_effects_end
+
+dialog_node_end
+
+dialog_node
+node_name neutral_greetings_reaction_npc
+
+answer
+answer_text_id continue_phrase_GUI
+next_state_id standart_question_npc
+conditions
+conditions_end
+side_effects
+side_effects_end
+
+dialog_node_end
+
+dialog_node
+node_name negative_greetings_reaction_npc
+
+answer
+answer_text_id continue_phrase_GUI
+next_state_id standart_question_npc
+conditions
+conditions_end
+side_effects
+side_effects_end
+
+dialog_node_end
+
+
+dialog_node
+node_name standart_question_npc
+
+answer
+answer_text_id job_question_player
+next_state_id standart_question_npc
+conditions
+conditions_end
+side_effects
+side_effects_end
+
+answer
+answer_text_id rumors_question_player
+next_state_id rumors_refuse_npc
+conditions
+> fame_lower 0
+conditions_end
+side_effects
+side_effects_end
+
+answer
+answer_text_id rumors_question_player
+next_state_id rumors_refuse_npc
+conditions
+> fame_notlower 0
+conditions_end
+side_effects
+side_effects_end
+
+answer
+answer_text_id joke_phrase_GUI
+next_state_id random_joke_player
+conditions
+conditions_end
+side_effects
+side_effects_end
+
+answer
+answer_text_id farewell_player
+next_state_id dialog_end
+conditions
+conditions_end
+side_effects
+side_effects_end
+
+dialog_node_end
+
+
+file_end

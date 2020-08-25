@@ -1,0 +1,416 @@
+dialog_file_start
+
+phrase_start
+string |Вы видите на экране неизвестную вам модель протокольного дроида. Похоже, что он хочет общаться только дистанционно|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type start_description
+phrase_end
+
+phrase_start
+string |Ваш собеседник выглядит как необычный протокольный дроид. Может новая модель? К себе не приглашает, так что видимо будем общаться дистанционно|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type start_description
+phrase_end
+
+phrase_start
+string |На экране видно расплывчатое изображение какого-то дроида. 
+Попытка скрыть что-то или просто плохая камера? Кто знает|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type start_description
+phrase_end
+
+phrase_start
+string |Ваш собеседник выглядит как протокольный дроид. 
+Хотя некоторые запчасти опознать сложно|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type start_description
+phrase_end
+
+phrase_start
+string |Через передающее устройство вы видите протокольного дроида. 
+Похож на стандартную человекоподобную модель, но многие запчасти по внешнему виду 
+либо самодельные, либо переделанные запчасти с других дроидов|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type start_description
+phrase_end
+
+phrase_start
+string |Бип...Буп...завершение_разговора=true...Прощай, путник!|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type conversation_refuse_npc
+phrase_end
+
+phrase_start
+string |В мою программу заложен отказ от коммуникаций с обладателями такой репутации как Ваша. Прощайте|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type conversation_refuse_npc
+phrase_end
+
+phrase_start
+string |Выявлен потенциальный источник проблем. Протокол предписывает прекратить общение|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type conversation_refuse_npc
+phrase_end
+
+phrase_start
+string |Приветствую. Протокольный дроид D4QP, к вашим услугам|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type greetings_phrase_npc
+phrase_end
+
+phrase_start
+string |Добро пожаловать в этот сектор космоса. Я протокольный дроид D4QP, 
+знаю множество языков и протоколов общения. К вашим услугам|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type greetings_phrase_npc
+phrase_end
+
+phrase_start
+string |Здравствуйте. Протокольный дроид D4QP, к вашим услугам|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type greetings_phrase_npc
+phrase_end
+
+phrase_start
+string |Сбой программы приветствия... Salve advena!...
+<Непонятный звуковой сигнал>...Aloha, I B4QP, i kau lawelawe...
+Бип-Буп...Перезагрузка речевого модуля...Здравствуйте. Я D4QP, 
+протокольный дроид. К вашим услугам|
+conditions_start
+max_politeness -33
+conditions_end
+id protocol_droid
+phrase_type greetings_phrase_npc
+phrase_end
+
+phrase_start
+string |Всегда рад новым знакомствам. Не так часто удаётся пообщаться с кем-либо|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type positive_greetings_reaction_npc
+phrase_end
+
+phrase_start
+string |Всегда рад новым знакомствам. С такими задержками между новыми встречами и заржаветь можно|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type positive_greetings_reaction_npc
+phrase_end
+
+phrase_start
+string |Рад встрече. Протокол предписывает узнать, зачем вы решили начать коммуникативный процесс?|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type positive_greetings_reaction_npc
+phrase_end
+
+phrase_start
+string |Прошу простить, мне нужно обработать данные, секунду...
+<Странный шум, дроид начал чуть-чуть подергиваться, но почти сразу вернулся в норму>...
+Протокол предписывает испытывать радость при встрече с доброжелательным собеседником|
+conditions_start
+max_politeness -33
+conditions_end
+id protocol_droid
+phrase_type positive_greetings_reaction_npc
+phrase_end
+
+phrase_start
+string |Прошу простить, мне нужно обработать данные, секунду...
+<Странный шум, что-то похожее на дымку, дроид начал чуть-чуть подергиваться, но почти сразу вернулся в норму>...
+Извините за это, давайте продолжим разговор|
+conditions_start
+max_politeness -33
+conditions_end
+id protocol_droid
+phrase_type neutral_greetings_reaction_npc
+phrase_end
+
+phrase_start
+string |Коммуникативный успех нестабилен, но разговор имеет потенциал к продолжению. 
+Извините, всё время забываю голосовые комментарии внутренних процессов...|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type neutral_greetings_reaction_npc
+phrase_end
+
+phrase_start
+string |Протокол предписывает узнать цель вашего визита|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type neutral_greetings_reaction_npc
+phrase_end
+
+phrase_start
+string |Прошу простить, мне нужно обработать данные, секунду...
+<Странный шум, потом секунда тишины, дроид начал чуть-чуть подергиваться, но почти сразу вернулся в норму>...
+Прошу вернуться в линию разговора без грубостей|
+conditions_start
+max_politeness -33
+conditions_end
+id protocol_droid
+phrase_type negative_greetings_reaction_npc
+phrase_end
+
+phrase_start
+string |Прошу простить, если вам показалось, что я выразил неучтивость|
+conditions_start
+min_politeness 30
+conditions_end
+id protocol_droid
+phrase_type negative_greetings_reaction_npc
+phrase_end
+
+phrase_start
+string |Прошу вернуться к более миролюбивому тону разговора|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type negative_greetings_reaction_npc
+phrase_end
+
+phrase_start
+string |Зачем вы решили начать этот разговор?|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type standart_question_npc
+phrase_end
+
+phrase_start
+string |Чем вам может помочь обыкновенный протокольный дроид?|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type standart_question_npc
+phrase_end
+
+phrase_start
+string |Дальше коммуникация предполагает следующий шаг с вашей стороны. Перехожу в режим ожидания активности со стороны собеседника|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type standart_question_npc
+phrase_end
+
+phrase_start
+string |Хаха|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type random_positive_joke_reaction_npc
+phrase_end
+
+phrase_start
+string |Распознан юмор. Хаха|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type random_positive_joke_reaction_npc
+phrase_end
+
+phrase_start
+string |Ха-ха|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type random_positive_joke_reaction_npc
+phrase_end
+
+phrase_start
+string |В моем личном списке так называемых "шуток" эта займет не последнее место|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type random_positive_joke_reaction_npc
+phrase_end
+
+phrase_start
+string |Это была так называемая "шутка"? Я пока что их не очень хорошо распознаю. А еще я пытаюсь сам написать шутку. Вот, послушайте. Почему переводчик не перевел старушку через дорогу? У него другая программа. Ну как вам? Я двигаюсь в правильном направлении?|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type random_neutral_joke_reaction_npc
+phrase_end
+
+phrase_start
+string |Вы пошутили? Тогда по протоколу я должен был посмеяться. Ха-ха|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type random_neutral_joke_reaction_npc
+phrase_end
+
+phrase_start
+string |Вы пошутили? Предположим, что я не пропустил место, в котором нужно смеяться. Ха-ха|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type random_neutral_joke_reaction_npc
+phrase_end
+
+phrase_start
+string |Ха-ха... Вы же пошутили, да?|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type random_neutral_joke_reaction_npc
+phrase_end
+
+phrase_start
+string |Извините, но если это была шутка, то в мой список лучших она вряд ли попадет|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type random_negative_joke_reaction_npc
+phrase_end
+
+phrase_start
+string |Какой смысл был в этом тексте? Говорят, что иногда живые существа делают нечто подобное, но тогда подобный текст должен быть смешным, разве нет?|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type random_negative_joke_reaction_npc
+phrase_end
+
+phrase_start
+string |Какие-то странные данные. Вроде и показатель серьезности почти на нуле, но и никакого юмора я не уловил|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type random_negative_joke_reaction_npc
+phrase_end
+
+phrase_start
+string |Это одна из худших попыток пошутить, что я слышал...Ой...Я имел в виду, что мои протоколы не позволяют мне идентифицировать это как юмор|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type random_negative_joke_reaction_npc
+phrase_end
+
+phrase_start
+string |<Дроид немного дернулся и начал издавать странные звуки>...ЖЖЖ...Пффф...Кзтттт...Перезагрузка когнитивного модуля...Извините, такое редко случается. Обычно если я не могу распознать смысл фразы. Или от очень плохих шуток. Ой....|
+conditions_start
+max_politeness -33
+conditions_end
+id protocol_droid
+phrase_type random_negative_joke_reaction_npc
+phrase_end
+
+phrase_start
+string |Не понимаю о чем вы|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type rumors_refuse_npc
+phrase_end
+
+phrase_start
+string |Информацией подобного рода не располагаю|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type rumors_refuse_npc
+phrase_end
+
+phrase_start
+string |В моих базах данных ничего нет|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type rumors_refuse_npc
+phrase_end
+
+phrase_start
+string |Протокол не позволяет доверить тебе эту миссию|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type base_job_refuse_npc
+phrase_end
+
+phrase_start
+string |Протокол не позволяет доверить тебе миссию такого уровня важности|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type special_job_refuse_npc
+phrase_end
+
+phrase_start
+string |До свидания|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type farewell_npc
+phrase_end
+
+phrase_start
+string |Прощайте|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type farewell_npc
+phrase_end
+
+phrase_start
+string |До свидания, надеюсь снова с вами покоммуницировать|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type farewell_npc
+phrase_end
+
+phrase_start
+string |Прощайте, мистер Андерсон... Какой-то странный сбой. Извините, как я вас назвал?|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type farewell_npc
+phrase_end
+
+phrase_start
+string |Асталависта|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type farewell_npc
+phrase_end
+
+phrase_start
+string |Вы видите как собеседник исчезает с экрана, по которому идет непонятная рябь. К чему бы это?|
+conditions_start
+conditions_end
+id protocol_droid
+phrase_type dialog_end
+phrase_end
+
+dialog_file_end

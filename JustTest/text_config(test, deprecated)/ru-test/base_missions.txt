@@ -1,0 +1,75 @@
+dialog_file_start
+
+phrase_start
+string |Нужно доставить груз до назначенной точки. Класс опасности нулевой, класс ценности незначителен, пиратов можешь не бояться.|
+conditions_start
+conditions_end
+id test_courier
+phrase_type courier_current_desc_miss
+phrase_end
+
+phrase_start
+string |Доставь груз|
+conditions_start
+conditions_end
+id test_courier
+phrase_type courier_short_desc_miss
+phrase_end
+
+phrase_start
+string |Нужно доставить помеченный красным флажком груз в стандартном для технически сложных товаров контейнере до астероида, на котором живет мой друг. Координаты на твоем бортовой компьютере|
+conditions_start
+conditions_end
+id test_courier
+phrase_type courier_broad_desc_miss
+phrase_end
+
+phrase_start
+string |Защити астероид|
+conditions_start
+conditions_end
+id test_defence
+phrase_type defence_short_desc_miss
+phrase_end
+
+phrase_start
+string |Нужно найти по указанным координатам наших знакомых, которые оказались в рабстве у пиратов и вынуждены работать на них. После того как ты их найдешь, пираты скорей всего попытаются напасть на вас. Отбейте атаку и я заплачу|
+conditions_start
+conditions_end
+id test_defence
+phrase_type defence_broad_desc_miss
+phrase_end
+
+phrase_start
+string |Найди нужный астероид по указанным координатам|
+conditions_start
+conditions_end
+id test_defence
+phrase_type defence_cur_search_desc_miss
+phrase_end
+
+phrase_start
+string |Приготовьтесь к атаке|
+conditions_start
+conditions_end
+id test_defence
+phrase_type defence_cur_ready_desc_miss
+phrase_end
+
+phrase_start
+string |Враги уже близко|
+conditions_start
+conditions_end
+id test_defence
+phrase_type defence_cur_wave_start_desc_miss
+phrase_end
+
+phrase_start
+string |Защищайтесь|
+conditions_start
+conditions_end
+id test_defence
+phrase_type defence_cur_wave_active_desc_miss
+phrase_end
+
+dialog_file_end

@@ -124,6 +124,7 @@
     <ClInclude Include="AdditionalInfo.h" />
     <ClInclude Include="Analitics.h" />
     <ClInclude Include="AStarAlgorithm.h" />
+    <ClInclude Include="AsteroidGenerator.h" />
     <ClInclude Include="BackgroundGeneration.h" />
     <ClInclude Include="ButtonSelector.h" />
     <ClInclude Include="Collision.h" />
@@ -134,6 +135,7 @@
     <ClInclude Include="Event.h" />
     <ClInclude Include="EventBuffer.h" />
     <ClInclude Include="EventTypes.h" />
+    <ClInclude Include="FactionList.h" />
     <ClInclude Include="FameInfo.h" />
     <ClInclude Include="FileSearch.h" />
     <ClInclude Include="FPS.h" />
@@ -152,6 +154,7 @@
     <ClInclude Include="MissionStage.h" />
     <ClInclude Include="MissionVisualController.h" />
     <ClInclude Include="MusicManager.h" />
+    <ClInclude Include="Noise.h" />
     <ClInclude Include="NPCInfo.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectTypes.h" />

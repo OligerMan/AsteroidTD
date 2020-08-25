@@ -1523,16 +1523,13 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				}
 
 				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, A)) && ((frame_num - last_dialog_choice) > fps.getFPS())) {
-					
-					if (npc->getCurrentStage() != L"dialog_end") {
-						npc->nextTurn(chosen_answer);
-					}
-					else {
+
+					npc->nextTurn(npc->getDialogInfo().answers[chosen_answer].next_state_id);
+					if (npc->getCurrentStage() == L"dialog_end") {
 						game_status = game_hero_mode;
 						last_build = frame_num;
-						npc->nextTurn(0);
 					}
-					last_dialog_choice = frame_num+120;
+					last_dialog_choice = frame_num + 120;
 					chosen_answer = 0;
 				}
             }
@@ -1611,7 +1608,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				game_status = exit_to_desktop;
 			}
 			if (event.type == sf::Event::LostFocus) {
-				pause_game();
+				//pause_game();
 			}
 			if (event.type == sf::Event::MouseWheelScrolled) {
 				music_manager.setVolume(std::max(std::min(100.0f, music_manager.getVolume() + event.mouseWheelScroll.delta), 0.0f));
