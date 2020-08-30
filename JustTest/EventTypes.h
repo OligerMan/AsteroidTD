@@ -2,7 +2,7 @@
 
 #include "ObjectTypes.h"
 
-enum EventType{
+enum EventType {
 	null_event,
 	default_collision,
 	clicked,
