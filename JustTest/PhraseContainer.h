@@ -15,13 +15,6 @@
 struct Phrase {
     struct Conditions {
         std::wstring name, value;
-        enum {
-            lower,
-            not_greater,
-            equal,
-            not_lower,
-            greater
-        } sign;
     };
     std::wstring phrase, id;
 	int min_politeness = -100;

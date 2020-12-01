@@ -952,7 +952,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 										break;
 									}
 									last_build = frame_num;
-								}
+                                }
 							}
 
                         }

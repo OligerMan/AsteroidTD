@@ -16,6 +16,7 @@ class AdditionalInfo {
 	};
 
 	std::vector<void *> info_list;
+    UnitInfo u_i;
 
 public:
 
@@ -44,12 +45,16 @@ public:
 		info_list[collision_model] = new_col_model;
 	}
 
-	UnitInfo * getUnitInfo() {
+    UnitInfo * getUnitInfo() {
 		if (info_list.size() > unit_info) {
 			return static_cast<UnitInfo *>(info_list[unit_info]);
 		}
 		return nullptr;
 	}
+
+    UnitInfo * getUnitInfo() {
+        return &u_i;
+    }
 
 	void setUnitInfo(void * new_unit_info) {
 		if (info_list.size() <= unit_info) {
@@ -96,6 +101,11 @@ public:
 	}
 
 	void clear() {
+        for (auto i = info_list.begin(); i != info_list.end(); i++) {
+            if (*i) {
+                delete *i;
+            }
+        }
 		info_list.clear();
 	}
 };

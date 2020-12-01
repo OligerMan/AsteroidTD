@@ -21,10 +21,10 @@ public:
 
 	~Object() {
 		if (add_info.getCollisionModel()) {
-			delete add_info.getCollisionModel();
+			//delete add_info.getCollisionModel();
 		}
 		if (add_info.getUnitInfo()) {
-			delete add_info.getUnitInfo();
+			//delete add_info.getUnitInfo();
 		}
 		for (int i = 0; i < attached_objects.size(); i++) {
 			attached_objects[i]->deleteObject();

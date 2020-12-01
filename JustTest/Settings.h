@@ -85,7 +85,7 @@ private:
 		Setting("is_infinite", 0),
 		Setting("infinite_map_radius", 5000),
 		Setting("ranking_server", "oliger.ddns.net"),
-		Setting("start_gold", 2500),
+		Setting("start_gold", 25000),
 		Setting("nickname", ""),
         Setting("localisation_file", "dialog.cfg"),
 	};

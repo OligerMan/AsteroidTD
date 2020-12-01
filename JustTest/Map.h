@@ -707,7 +707,10 @@ private:
 
 			int special_asteroid_chance = rand() % 1000;
 			bool npc_asteroid_chance = (rand() % 1000) < 200;
-			npc_asteroid_chance = npc_asteroid_chance && game_mode == GameMode::adventure_mode;
+            if (game_mode != GameMode::adventure_mode) {
+                npc_asteroid_chance = 0;
+                faction = null_faction;
+            }
 			if (npc_asteroid_chance) {
 			}
 			else {
