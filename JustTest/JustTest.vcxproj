@@ -112,6 +112,7 @@
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <AdditionalIncludeDirectories>C:\Projects\AsteroidTD\JustTest\protoc_src;C:\Users\burn_\Documents\GitHub\AsteroidTD\JustTest\protoc_src;$(ProjectPath)\JustTest\protoc_src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -130,6 +131,7 @@
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionParser.h" />
     <ClInclude Include="ConvexHull.h" />
+    <ClInclude Include="DialogAdditionalInfo.h" />
     <ClInclude Include="DialogVisualController.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Event.h" />

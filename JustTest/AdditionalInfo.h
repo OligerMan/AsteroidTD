@@ -52,10 +52,6 @@ public:
 		return nullptr;
 	}
 
-    UnitInfo * getUnitInfo() {
-        return &u_i;
-    }
-
 	void setUnitInfo(void * new_unit_info) {
 		if (info_list.size() <= unit_info) {
 			info_list.resize(unit_info + 1);
@@ -101,10 +97,11 @@ public:
 	}
 
 	void clear() {
-        for (auto i = info_list.begin(); i != info_list.end(); i++) {
-            if (*i) {
-                delete *i;
-            }
+        if (info_list.size() > collision_model && info_list[collision_model]) {
+            delete static_cast<CollisionModel *>(info_list[collision_model]);
+        }
+        if (info_list.size() > unit_info && info_list[unit_info]) {
+            delete static_cast<UnitInfo *>(info_list[unit_info]);
         }
 		info_list.clear();
 	}

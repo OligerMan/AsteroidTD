@@ -10,7 +10,8 @@ enum EventType {
 	released,
 	create_new,
 	attack,       // 1st object is who attack, 2nd is who receive damage
-	message,       
+	message,
+    dialog_side_effect,
 	reward,
 
 	COUNT_EVENT

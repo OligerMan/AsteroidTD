@@ -4,6 +4,8 @@
 
 #include "PhraseContainer.h"
 #include "PlayerRPGProfile.h"
+#include "DialogAdditionalInfo.h"
+#include "ParserInput.h"
 
 struct DialogInfo {
     struct Answer {
@@ -22,6 +24,7 @@ struct DialogInfo {
 struct Answer {
 	std::wstring answer_text_id;
 	std::wstring next_state_id;
+    bool condition_not_flag = false;
 	std::vector<std::pair<std::wstring, std::wstring>> conditions;
 	std::vector<std::pair<std::wstring, std::wstring>> side_effects;
 
@@ -274,32 +277,103 @@ private:
 			int fame = prejudices + rpg_profile.getFactionFame(faction) + rpg_profile.getGlobalFame();
 			return fame > std::stoi(condition.second);
 		}
-		
-		return false;
+
+        std::wstring var_name;
+        std::size_t pos;
+        enum {
+            more_or_equal,
+            more,
+            less_or_equal,
+            less,
+            equal,
+            not_equal
+        } mode;
+
+        if ((pos = condition.first.find(L"_more_or_equal")) != std::string::npos) {
+            var_name = condition.first.substr(0, pos);
+            mode = more_or_equal;
+        }
+        else if ((pos = condition.first.find(L"_more")) != std::string::npos) {
+            var_name = condition.first.substr(0, pos);
+            mode = more;
+        }
+        else if ((pos = condition.first.find(L"_less_or_equal")) != std::string::npos) {
+            var_name = condition.first.substr(0, pos);
+            mode = less_or_equal;
+        }
+        else if ((pos = condition.first.find(L"_less")) != std::string::npos) {
+            var_name = condition.first.substr(0, pos);
+            mode = less;
+        }
+        else if ((pos = condition.first.find(L"_not_equal")) != std::string::npos) {
+            var_name = condition.first.substr(0, pos);
+            mode = not_equal;
+        }
+        else if ((pos = condition.first.find(L"_equal")) != std::string::npos) {
+            var_name = condition.first.substr(0, pos);
+            mode = equal;
+        }
+
+        std::wstring var = dialog_additional_info.getData(var_name);
+        if (var.size() != 0) {
+            int num = std::atoi(wstringToString(var).c_str());
+            if (num == 0 && var != L"0") {
+                if (mode == equal) {
+                    return var == condition.second;
+                }
+                if (mode == not_equal) {
+                    return var != condition.second;
+                }
+                return false;
+            }
+            int num2 = std::atoi(wstringToString(condition.second).c_str());
+            if (num2 == 0 && condition.second != L"0") {
+                return false;
+            }
+            switch (mode) {
+            case equal:
+                return num == num2;
+            case not_equal:
+                return num != num2;
+            case more_or_equal:
+                return num >= num2;
+            case more:
+                return num > num2;
+            case less_or_equal:
+                return num <= num2;
+            case less:
+                return num < num2;
+            default:
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
 	}
 
-	void initState(std::wstring state) {
-		auto new_state = dialog_state_list.find(state);
+    void initState(std::wstring state) {
+        auto new_state = dialog_state_list.find(state);
 
-		if (new_state != dialog_state_list.end()) {
-			addMainText(state);
+        if (new_state != dialog_state_list.end()) {
+            addMainText(state);
 
-			current_dialog_info.answers.clear();
-			for (int i = 0; i < new_state->second.size(); i++) {
-				bool answer_valid = true;
-				for (auto cond = new_state->second[i].conditions.begin(); cond != new_state->second[i].conditions.end(); cond++) {
-					if (!isValidCondition(*cond)) {
-						answer_valid = false;
-					}
-				}
-				if (answer_valid) {
-					addAnswer(new_state->second[i].answer_text_id, new_state->second[i].next_state_id);
-				}
-			}
+            current_dialog_info.answers.clear();
+            for (int i = 0; i < new_state->second.size(); i++) {
+                bool answer_valid = true;
+                for (auto cond = new_state->second[i].conditions.begin(); cond != new_state->second[i].conditions.end(); cond++) {
+                    if (!isValidCondition(*cond)) {
+                        answer_valid = false;
+                    }
+                }
+                if (answer_valid ^ new_state->second[i].condition_not_flag) {
+                    addAnswer(new_state->second[i].answer_text_id, new_state->second[i].next_state_id);
+                }
+            }
 
-			cur_dialog_state = new_state;
-		}
-	}
+            cur_dialog_state = new_state;
+        }
+    }
 
 public:
 

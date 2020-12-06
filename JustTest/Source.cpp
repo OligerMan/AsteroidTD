@@ -1075,7 +1075,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 								last_build = frame_num;
 							}
 						}
-						else if(game_map1.getClosestAsteroid()->getNPCInfo()){
+						else if (game_map1.getClosestAsteroid()->getNPCInfo()) {
 							game_status = dialog;
 							last_dialog_choice = frame_num;
 						}

@@ -116,8 +116,8 @@ public:
 	}
 
 	void drawObject(Object * object, sf::RenderWindow * window) {
-		int obj_type = object->getObjectSpriteType();
-		int anim_type = object->getObjectAnimationType();
+		volatile int obj_type = object->getObjectSpriteType();
+		volatile int anim_type = object->getObjectAnimationType();
 		int frame_num = object->getFrameNumber();
 
 		Point position = object->getPosition();

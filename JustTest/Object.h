@@ -401,6 +401,9 @@ public:
 };
 
 bool checkObjectCollision(Object * obj1, Object * obj2) {
+    if (!obj1->getCollisionModel() || !obj2->getCollisionModel()) {
+        return false;
+    }
 	if ((obj1->getCollisionModel()->getPosition() - obj2->getCollisionModel()->getPosition()).getLength() > (obj1->getCollisionModel()->getMaxRadius() + obj2->getCollisionModel()->getMaxRadius())) {
 		return false;
 	}

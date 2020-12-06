@@ -16,6 +16,7 @@
 #include "NPCInfo.h"
 #include "PhraseContainer.h"
 #include "AsteroidGenerator.h"
+#include "DialogAdditionalInfo.h"
 
 void fixCollision(Object * obj1, Object * obj2) {
 
@@ -486,62 +487,86 @@ private:
 			if (buffer_elem.getData(0) == nullptr) {
 				break;
 			}
-			Object
-				* obj1 = static_cast<Object *>(buffer_elem.getData(0)),
-				* obj2 = static_cast<Object *>(buffer_elem.getData(1));
 			double thresh = consts.getSpeedDamageThreshold();
 			double coef = consts.getSpeedDamageCoef();
 
-			UnitInfo * unit1 = obj1 ? obj1->getUnitInfo() : nullptr, * unit2 = obj2 ? obj2->getUnitInfo() : nullptr;
+            Object * obj1, *obj2;
+            UnitInfo * unit1, * unit2;
+            std::wstring * side_effect_id, *side_effect_value;
 			switch (buffer_elem.getEventType()) {
 			case null_event:
 				break;
 			case default_collision:
-				if (obj1->getObjectType() == ObjectType::bullet && obj2->getObjectType() == ObjectType::bullet) {
-					break;
-				}
-				if (obj1->getObjectType() == ObjectType::bullet && obj2->getObjectType() != ObjectType::asteroid) {
-					if (unit1 && unit2) {
-						Object * parent1 = (Object *)obj1->getParent();
-						if ((parent1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
-							event_buffer.addEvent(EventType::attack, parent1, obj2);
-							obj1->deleteObject();
-						}
-					}
-					else {
-						std::cout << "Bullet bug triggered" << std::endl;
-						if (obj1->isDeleted()) {
-							std::cout << "Supposed to be deleted" << std::endl;
-						}
-					}
-					
-				}
-				if (obj2->getObjectType() == ObjectType::bullet && obj1->getObjectType() != ObjectType::asteroid) {
-					obj2->deleteObject();
-					if (unit1 && unit2) {
-						if ((obj1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
-							event_buffer.addEvent(EventType::attack, (Object *)obj2->getParent(), obj1);
-						}
-					}
-					else {
-						std::cout << "Bullet bug triggered" << std::endl;
-						if (obj2->isDeleted()) {
-							std::cout << "Supposed to be deleted" << std::endl;
-						}
-					}
-					
-				}
-				break;
-			case attack:
-				if (unit1 != nullptr && unit2 != nullptr) {
-					float damage = unit1->getAttackDamage(1) * (unit1->isAffected(damage_buff) ? 2 : 1);
-					unit2->dealDamage(damage);
-					if ((obj1->getObjectType() == turret && obj1->getUnitInfo()->getFaction() == hero_faction)) {
-						unit2->dealDamage(damage * research_manager.getDomeLocalDamageBonusCoef() * unit1->getDomeCount());
-						unit1->grantHeal((1 + research_manager.getDomeLocalDamageBonusCoef() * unit1->getDomeCount()) * unit1->getAttackDamage(1) * research_manager.getTurretLifestealCoef() * (unit1->isAffected(damage_buff) ? 2 : 1));
-					}
-				}
-				break;
+            {
+                obj1 = static_cast<Object *>(buffer_elem.getData(0));
+                obj2 = static_cast<Object *>(buffer_elem.getData(1));
+                unit1 = obj1 ? obj1->getUnitInfo() : nullptr;
+                unit2 = unit2 = obj2 ? obj2->getUnitInfo() : nullptr;
+                if (obj1->getObjectType() == ObjectType::bullet && obj2->getObjectType() == ObjectType::bullet) {
+                    break;
+                }
+                if (obj1->getObjectType() == ObjectType::bullet && obj2->getObjectType() != ObjectType::asteroid) {
+                    if (unit1 && unit2) {
+                        Object * parent1 = (Object *)obj1->getParent();
+                        if ((parent1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
+                            event_buffer.addEvent(EventType::attack, parent1, obj2);
+                            obj1->deleteObject();
+                        }
+                    }
+                    else {
+                        std::cout << "Bullet bug triggered" << std::endl;
+                        if (obj1->isDeleted()) {
+                            std::cout << "Supposed to be deleted" << std::endl;
+                        }
+                    }
+
+                }
+                if (obj2->getObjectType() == ObjectType::bullet && obj1->getObjectType() != ObjectType::asteroid) {
+                    obj2->deleteObject();
+                    if (unit1 && unit2) {
+                        if ((obj1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
+                            event_buffer.addEvent(EventType::attack, (Object *)obj2->getParent(), obj1);
+                        }
+                    }
+                    else {
+                        std::cout << "Bullet bug triggered" << std::endl;
+                        if (obj2->isDeleted()) {
+                            std::cout << "Supposed to be deleted" << std::endl;
+                        }
+                    }
+
+                }
+                break;
+            }
+            case attack: 
+            {
+                obj1 = static_cast<Object *>(buffer_elem.getData(0));
+                obj2 = static_cast<Object *>(buffer_elem.getData(1));
+                unit1 = obj1 ? obj1->getUnitInfo() : nullptr;
+                unit2 = unit2 = obj2 ? obj2->getUnitInfo() : nullptr;
+                if (unit1 != nullptr && unit2 != nullptr) {
+                    float damage = unit1->getAttackDamage(1) * (unit1->isAffected(damage_buff) ? 2 : 1);
+                    unit2->dealDamage(damage);
+                    if ((obj1->getObjectType() == turret && obj1->getUnitInfo()->getFaction() == hero_faction)) {
+                        unit2->dealDamage(damage * research_manager.getDomeLocalDamageBonusCoef() * unit1->getDomeCount());
+                        unit1->grantHeal((1 + research_manager.getDomeLocalDamageBonusCoef() * unit1->getDomeCount()) * unit1->getAttackDamage(1) * research_manager.getTurretLifestealCoef() * (unit1->isAffected(damage_buff) ? 2 : 1));
+                    }
+                }
+                break;
+            }
+            case dialog_side_effect:
+            {
+                side_effect_id = static_cast<std::wstring *>(buffer_elem.getData(0));
+                side_effect_value = static_cast<std::wstring *>(buffer_elem.getData(1));
+                
+                // main part of side-effect handling
+
+                if (side_effect_id->substr(0, 4).compare(L"set_") == 0) {
+                    dialog_additional_info.setData(side_effect_id->substr(4), *side_effect_value);
+                }
+
+                break;
+            }
 			};
 		}
 	}
@@ -1211,6 +1236,9 @@ public:
 		if (objects.size() <= layer) {
 			objects.resize(layer + 1);
 		}
+        if (object->getObjectSpriteType() == null_sprite) {
+            std::cout << "wtf" << std::endl;
+        }
 		objects[layer].push_back(object);
 		last_clicked_object = object;
 	}
@@ -1478,8 +1506,8 @@ public:
 		}
 
 		int group_amount = std::min(5, enemy_lvl / 2) + sqrt(enemy_lvl);
-		int gunship_amount = enemy_lvl / 10;
-		int fighter_amount = std::max(1, enemy_lvl / 2 - 3 * gunship_amount);
+		int gunship_amount = enemy_lvl / 12 + (enemy_lvl > 24 ? (enemy_lvl - 24) / 6 : 0);
+		int fighter_amount = std::max(1, enemy_lvl / 2 - 3 * gunship_amount - (enemy_lvl > 10 ? (enemy_lvl - 10) / 4 : 0));
 
 		while (group_amount > 0) {
 			int nearest_point = rand() % convex.size();
