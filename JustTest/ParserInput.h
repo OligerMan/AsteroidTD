@@ -2,6 +2,8 @@
 
 #include <fstream>
 #include <iostream>
+#include <locale>
+#include <codecvt>
 
 #include "Settings.h"
 
