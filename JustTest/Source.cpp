@@ -18,9 +18,14 @@
 #include "ButtonSelector.h"
 
 #include <chrono>
+#include <SFML/Audio.hpp>
+
+#ifdef __linux__ 
+#elif _WIN32
 #include <Windows.h>
 #include <Xinput.h>
-#include <SFML\Audio.hpp>
+#else
+#endif
 
 enum XBOXGamepadButtons {
 	A,B,X,Y,LB,RB,BACK,START,LSTICK,RSTICK
@@ -501,18 +506,27 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				vibration_time = vibr_on_dmg_time;
 			}
 			if (vibration_time > 0) {
-				XINPUT_VIBRATION vibration;
-				ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
-				vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
-				vibration.wRightMotorSpeed = 65535; // use any value between 0-65535 here
-				XInputSetState(0, &vibration);
+#ifdef __linux__ 
+#elif _WIN32
+                XINPUT_VIBRATION vibration;
+                ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+                vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
+                vibration.wRightMotorSpeed = 65535; // use any value between 0-65535 here
+                XInputSetState(0, &vibration);
+#else
+#endif
+				
 			}
 			else {
-				XINPUT_VIBRATION vibration;
-				ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
-				vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
-				vibration.wRightMotorSpeed = 0; // use any value between 0-65535 here
-				XInputSetState(0, &vibration);
+#ifdef __linux__ 
+#elif _WIN32
+                XINPUT_VIBRATION vibration;
+                ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+                vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
+                vibration.wRightMotorSpeed = 65535; // use any value between 0-65535 here
+                XInputSetState(0, &vibration);
+#else
+#endif
 			}
 			hero_hp = hero_object->getUnitInfo()->getHealth();
 			// game cycle
@@ -1622,7 +1636,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 int main() {
 	HWND console_hWnd = GetConsoleWindow();
-	ShowWindow(console_hWnd, SW_HIDE);
+	//ShowWindow(console_hWnd, SW_HIDE);
 
 	phrase_container.parseFromFolder("text_config\\" + settings.getLocalisationFile());
 

@@ -3,7 +3,7 @@
 #include <string>
 
 
-#include <SFML\Audio.hpp>
+#include <SFML/Audio.hpp>
 
 class SoundManager {
     std::vector<sf::SoundBuffer> sound_buf_list;

@@ -3,8 +3,12 @@
 #include <thread>
 #include <vector>
 #include <string>
-#include <SFML\Network.hpp>
+#include <SFML/Network.hpp>
+#ifdef __linux__ 
+#elif _WIN32
 #include <Windows.h>
+#else
+#endif
 
 #include "PlayerStat.pb.h"
 #include "GameConstants.h"

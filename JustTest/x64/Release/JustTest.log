@@ -124,8 +124,8 @@ C:\Projects\AsteroidTD\JustTest\protoc_src\google/protobuf/has_bits.h(73): warni
   PlayerStat.pb.cc(326): note: see reference to function template instantiation 'void google::protobuf::internal::HasBits<1>::Or(const google::protobuf::internal::HasBits<1> &)' being compiled
   C:\Projects\AsteroidTD\JustTest\protoc_src\google/protobuf/has_bits.h(83): note: see reference to class template instantiation 'google::protobuf::internal::HasBits<1>' being compiled (compiling source file PlayerStat.pb.cc)
 C:\Projects\AsteroidTD\JustTest\protoc_src\google/protobuf/map_type_handler.h(474): warning C4800: 'google::protobuf::uint64': forcing value to bool 'true' or 'false' (performance warning) (compiling source file Source.cpp)
-c:\projects\asteroidtd\justtest\OnlineRank.h(43): warning C4267: 'argument': conversion from 'size_t' to 'google::protobuf::int32', possible loss of data (compiling source file Source.cpp)
-c:\projects\asteroidtd\justtest\OnlineRank.h(86): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data (compiling source file Source.cpp)
+c:\projects\asteroidtd\justtest\OnlineRank.h(47): warning C4267: 'argument': conversion from 'size_t' to 'google::protobuf::int32', possible loss of data (compiling source file Source.cpp)
+c:\projects\asteroidtd\justtest\OnlineRank.h(90): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data (compiling source file Source.cpp)
 c:\projects\asteroidtd\justtest\MissionInfo.h(23): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data (compiling source file Source.cpp)
 c:\projects\asteroidtd\justtest\PhraseContainer.h(86): warning C4129: '|': unrecognized character escape sequence (compiling source file Source.cpp)
 c:\projects\asteroidtd\justtest\PhraseContainer.h(91): warning C4129: '|': unrecognized character escape sequence (compiling source file Source.cpp)
@@ -274,7 +274,7 @@ c:\projects\asteroidtd\justtest\ResearchVisualController.h(123): warning C4244: 
 c:\projects\asteroidtd\justtest\ResearchVisualController.h(141): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data (compiling source file Source.cpp)
 c:\projects\asteroidtd\justtest\ResearchVisualController.h(142): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data (compiling source file Source.cpp)
 c:\projects\asteroidtd\justtest\ResearchVisualController.h(161): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data (compiling source file Source.cpp)
-c:\projects\asteroidtd\justtest\MusicManager.h(45): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data (compiling source file Source.cpp)
+c:\projects\asteroidtd\justtest\MusicManager.h(50): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data (compiling source file Source.cpp)
 c:\projects\asteroidtd\justtest\BackgroundGeneration.h(35): warning C4305: 'initializing': truncation from 'double' to 'float' (compiling source file Source.cpp)
 c:\projects\asteroidtd\justtest\BackgroundGeneration.h(46): warning C4305: 'initializing': truncation from 'double' to 'float' (compiling source file Source.cpp)
 c:\projects\asteroidtd\justtest\BackgroundGeneration.h(80): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data (compiling source file Source.cpp)
@@ -303,108 +303,108 @@ c:\projects\asteroidtd\justtest\MissionVisualController.h(106): warning C4244: '
 c:\projects\asteroidtd\justtest\MissionVisualController.h(107): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data (compiling source file Source.cpp)
 c:\projects\asteroidtd\justtest\MissionVisualController.h(113): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data (compiling source file Source.cpp)
 c:\projects\asteroidtd\justtest\MissionVisualController.h(116): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data (compiling source file Source.cpp)
-Source.cpp(38): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-Source.cpp(40): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-Source.cpp(45): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(52): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(53): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-Source.cpp(53): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(80): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(112): warning C4244: 'argument': conversion from '__int64' to 'int', possible loss of data
-Source.cpp(136): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(140): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-Source.cpp(372): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(402): warning C4244: 'argument': conversion from '__int64' to 'int', possible loss of data
-Source.cpp(520): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(522): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(540): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(543): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(546): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(566): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(569): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(570): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-Source.cpp(576): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(43): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+Source.cpp(45): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+Source.cpp(50): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(57): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(58): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+Source.cpp(58): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(85): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(117): warning C4244: 'argument': conversion from '__int64' to 'int', possible loss of data
+Source.cpp(141): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(145): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+Source.cpp(377): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(407): warning C4244: 'argument': conversion from '__int64' to 'int', possible loss of data
+Source.cpp(534): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(536): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(554): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(557): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(560): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(580): warning C4305: 'argument': truncation from 'double' to 'float'
 Source.cpp(583): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(586): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(584): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
 Source.cpp(590): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(593): warning C4305: 'argument': truncation from 'double' to 'float'
 Source.cpp(597): warning C4305: 'argument': truncation from 'double' to 'float'
 Source.cpp(600): warning C4305: 'argument': truncation from 'double' to 'float'
 Source.cpp(604): warning C4305: 'argument': truncation from 'double' to 'float'
 Source.cpp(607): warning C4305: 'argument': truncation from 'double' to 'float'
 Source.cpp(611): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(614): warning C4305: 'argument': truncation from 'double' to 'float'
 Source.cpp(618): warning C4305: 'argument': truncation from 'double' to 'float'
 Source.cpp(621): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(624): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(627): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(631): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(634): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(637): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(640): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(655): warning C4018: '<': signed/unsigned mismatch
-Source.cpp(656): warning C4018: '<': signed/unsigned mismatch
-Source.cpp(660): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(661): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(675): warning C4018: '<': signed/unsigned mismatch
-Source.cpp(676): warning C4018: '<': signed/unsigned mismatch
-Source.cpp(678): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-Source.cpp(681): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(682): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(697): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(698): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(755): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(758): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(761): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(764): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(767): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(770): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(773): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(776): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(779): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(782): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(785): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(788): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(791): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(794): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(797): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(800): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(803): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(806): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(913): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-Source.cpp(966): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-Source.cpp(1008): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-Source.cpp(1056): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-Source.cpp(1087): warning C4244: 'argument': conversion from '__int64' to 'int', possible loss of data
-Source.cpp(1124): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(1153): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(1154): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(1162): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(1163): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(1174): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(1175): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(1197): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(1198): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(1201): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(1203): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(1318): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-Source.cpp(1344): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(1345): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(1437): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(1522): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-Source.cpp(1634): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-Source.cpp(1634): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(1637): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-Source.cpp(1649): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-Source.cpp(1681): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-Source.cpp(1684): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(1688): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-Source.cpp(1779): warning C4305: 'argument': truncation from 'double' to 'float'
-Source.cpp(1870): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-Source.cpp(1871): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-Source.cpp(1977): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-Source.cpp(2044): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-Source.cpp(2046): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-Source.cpp(2088): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(625): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(632): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(635): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(638): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(641): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(645): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(648): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(651): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(654): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(669): warning C4018: '<': signed/unsigned mismatch
+Source.cpp(670): warning C4018: '<': signed/unsigned mismatch
+Source.cpp(674): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(675): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(689): warning C4018: '<': signed/unsigned mismatch
+Source.cpp(690): warning C4018: '<': signed/unsigned mismatch
+Source.cpp(692): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+Source.cpp(695): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(696): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(711): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(712): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(769): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(772): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(775): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(778): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(781): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(784): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(787): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(790): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(793): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(796): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(799): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(802): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(805): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(808): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(811): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(814): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(817): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(820): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(927): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(980): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(1022): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(1070): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(1101): warning C4244: 'argument': conversion from '__int64' to 'int', possible loss of data
+Source.cpp(1138): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(1167): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(1168): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(1176): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(1177): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(1188): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(1189): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(1211): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(1212): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(1215): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(1217): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(1332): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(1358): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(1359): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(1451): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(1536): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(1648): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+Source.cpp(1648): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(1651): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+Source.cpp(1663): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+Source.cpp(1695): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+Source.cpp(1698): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(1702): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+Source.cpp(1793): warning C4305: 'argument': truncation from 'double' to 'float'
+Source.cpp(1884): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+Source.cpp(1885): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source.cpp(1991): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+Source.cpp(2058): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Source.cpp(2060): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+Source.cpp(2102): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data (compiling source file Source.cpp)
   c:\projects\asteroidtd\justtest\AStarAlgorithm.h(49): note: see reference to function template instantiation 'std::pair<Point,int>::pair<Point,double&,void,0>(_Other1 &&,_Other2) noexcept' being compiled
           with
@@ -425,29 +425,26 @@ C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility(172): war
   JustTest.vcxproj -> C:\Projects\AsteroidTD\x64\Release\bf3.pdb (Full PDB)
 
 Project Performance Summary:
-    10422 ms  C:\Projects\AsteroidTD\JustTest\JustTest.vcxproj   1 calls
-              10422 ms  Rebuild                                    1 calls
+    10760 ms  C:\Projects\AsteroidTD\JustTest\JustTest.vcxproj   1 calls
+              10760 ms  Rebuild                                    1 calls
 
 Target Performance Summary:
         0 ms  CreateCustomManifestResourceNames          1 calls
-        0 ms  CoreClean                                  1 calls
-        0 ms  MakeDirsForXdcMake                         1 calls
-        0 ms  ComputeCLCompileGeneratedXDCFiles          1 calls
         0 ms  ResolveSDKReferences                       1 calls
         0 ms  CreateSatelliteAssemblies                  1 calls
         0 ms  GetReferenceAssemblyPaths                  1 calls
         0 ms  sfml-window_redist_init                    1 calls
-        0 ms  sfml-graphics_redist_init_2                1 calls
+        0 ms  MakeDirsForBscMake                         1 calls
         0 ms  DoLinkOutputFilesMatch                     1 calls
         0 ms  sfml-system_redist_init                    1 calls
         0 ms  _PrepareForReferenceResolution             1 calls
         0 ms  _Link                                      1 calls
         0 ms  BeforeRebuild                              1 calls
-        0 ms  sfml-network_redist_init_2                 1 calls
-        0 ms  _GenerateSatelliteAssemblyInputs           1 calls
         0 ms  sfml-window_redist_AfterBuild              1 calls
+        0 ms  AfterBuild                                 1 calls
         0 ms  sfml-network_redist_init                   1 calls
         0 ms  _ALink                                     1 calls
+        0 ms  sfml-audio_redist_init_2                   1 calls
         0 ms  ComputeRCGeneratedLinkInputs               1 calls
         0 ms  ComputeCLCompileGeneratedSbrFiles          1 calls
         0 ms  _CheckForCompileOutputs                    1 calls
@@ -460,12 +457,12 @@ Target Performance Summary:
         0 ms  sfml-graphics_redist_init                  1 calls
         0 ms  ComputeRCOutputs                           1 calls
         0 ms  AfterBuildGenerateSources                  1 calls
-        0 ms  AfterBuild                                 1 calls
+        0 ms  sfml-window_redist_init_2                  1 calls
+        0 ms  _Deploy                                    1 calls
+        0 ms  ComputeCLCompileGeneratedXDCFiles          1 calls
+        0 ms  MakeDirsForXdcMake                         1 calls
         0 ms  Clean                                      1 calls
-        0 ms  ComputeLinkImportLibraryOutputsForClean    1 calls
-        0 ms  GetResolvedWinMD                           1 calls
-        0 ms  sfml-audio_redist_AfterBuild_x64_and_v140_and_Release_and_dynamic   1 calls
-        0 ms  FinalizeBuildStatus                        1 calls
+        0 ms  sfml-system_redist_init_2                  1 calls
         0 ms  BeforeBuildGenerateSources                 1 calls
         0 ms  AfterResolveReferences                     1 calls
         0 ms  BeforeClean                                1 calls
@@ -480,34 +477,34 @@ Target Performance Summary:
         0 ms  ComputeReferenceCLInput                    1 calls
         0 ms  MakeDirsForResourceCompile                 1 calls
         0 ms  GetCopyToOutputDirectoryItems              1 calls
-        0 ms  BuildCompile                               1 calls
-        0 ms  PreBuildEvent                              1 calls
-        0 ms  CleanReferencedProjects                    1 calls
-        0 ms  AssignProjectConfiguration                 1 calls
-        0 ms  MakeDirsForMidl                            1 calls
-        0 ms  ExpandSDKReferences                        1 calls
-        0 ms  SelectCustomBuild                          1 calls
-        0 ms  sfml-window_redist_init_2                  1 calls
-        0 ms  AfterClCompile                             1 calls
-        0 ms  _Midl                                      1 calls
-        0 ms  _BscMake                                   1 calls
-        0 ms  ComputeCLGeneratedLinkInputs               1 calls
-        0 ms  ComputeCLInputPDBName                      1 calls
-        0 ms  sfml-graphics_redist_AfterBuild            1 calls
-        0 ms  _CopySourceItemsToOutputDirectory          1 calls
-        0 ms  sfml-system_redist_AfterBuild_x64          1 calls
-        0 ms  _Deploy                                    1 calls
-        0 ms  GetCopyToOutputDirectoryXamlAppDefs        1 calls
         0 ms  ComputeLinkInputsFromProject               1 calls
-        0 ms  _BuildLinkAction                           1 calls
-        0 ms  AfterMidl                                  1 calls
-        0 ms  EnsureNuGetPackageBuildImports             1 calls
+        0 ms  BuildCompile                               1 calls
+        0 ms  sfml-graphics_redist_AfterBuild            1 calls
+        0 ms  ComputeCLInputPDBName                      1 calls
+        0 ms  ComputeCLGeneratedLinkInputs               1 calls
+        0 ms  _BscMake                                   1 calls
+        0 ms  _Midl                                      1 calls
+        0 ms  sfml-system_redist_AfterBuild_x64          1 calls
+        0 ms  AfterClCompile                             1 calls
+        0 ms  SelectCustomBuild                          1 calls
+        0 ms  ExpandSDKReferences                        1 calls
+        0 ms  MakeDirsForMidl                            1 calls
+        0 ms  AssignProjectConfiguration                 1 calls
+        0 ms  CleanReferencedProjects                    1 calls
+        0 ms  PreBuildEvent                              1 calls
+        0 ms  GetResolvedWinMD                           1 calls
+        0 ms  _CopySourceItemsToOutputDirectory          1 calls
+        0 ms  ComputeMIDLGeneratedCompileInputs          1 calls
+        0 ms  GetCopyToOutputDirectoryXamlAppDefs        1 calls
         0 ms  SelectClCompile                            1 calls
+        0 ms  EnsureNuGetPackageBuildImports             1 calls
+        0 ms  sfml-system_redist_AfterBuild_x64_and_v140_and_Release_and_dynamic   1 calls
         0 ms  GetInstalledSDKLocations                   1 calls
         0 ms  CppClean                                   1 calls
         0 ms  _SelectedFiles                             1 calls
         0 ms  AfterLink                                  1 calls
         0 ms  _BuildCompileAction                        1 calls
+        0 ms  ComputeLegacyManifestEmbedding             1 calls
         0 ms  ComputeCustomBuildOutput                   1 calls
         0 ms  GetFrameworkPaths                          1 calls
         0 ms  PreLinkEvent                               1 calls
@@ -516,63 +513,66 @@ Target Performance Summary:
         0 ms  ResolvedXDCMake                            1 calls
         0 ms  ComputeCLOutputs                           1 calls
         0 ms  BeforeClCompile                            1 calls
+        0 ms  _PrepareForRebuild                         1 calls
         0 ms  PlatformPrepareForBuild                    1 calls
         0 ms  AfterBuildGenerateSourcesEvent             1 calls
         0 ms  ResolveReferences                          1 calls
         0 ms  MakeDirsForCl                              1 calls
         0 ms  sfml-network_redist_AfterBuild             1 calls
         0 ms  PostBuildEvent                             1 calls
-        0 ms  sfml-system_redist_AfterBuild              1 calls
+        0 ms  AfterMidl                                  1 calls
         0 ms  PrepareForRun                              1 calls
         0 ms  AfterClean                                 1 calls
         0 ms  _ClCompile                                 1 calls
         0 ms  sfml-window_redist_AfterBuild_x64_and_v140_and_Release_and_dynamic   1 calls
+        0 ms  _SplitProjectReferencesByFileExistence     1 calls
         0 ms  BuildLinkTraverse                          1 calls
         0 ms  sfml-network_redist_AfterBuild_x64_and_v140_and_Release_and_dynamic   1 calls
-        0 ms  _PrepareForRebuild                         1 calls
         0 ms  PGInstrumentedClean                        1 calls
-        0 ms  BeforeLink                                 1 calls
+        0 ms  _BuildLinkAction                           1 calls
         0 ms  PrepareResourceNames                       1 calls
-        0 ms  RegisterOutput                             1 calls
-        0 ms  BuildLink                                  1 calls
-        0 ms  AfterBuildCompileEvent                     1 calls
-        0 ms  _Xsd                                       1 calls
+        0 ms  BeforeLink                                 1 calls
         0 ms  Build                                      1 calls
+        0 ms  AfterBuildCompileEvent                     1 calls
+        0 ms  sfml-system_init                           1 calls
+        0 ms  BuildLink                                  1 calls
+        0 ms  _Xsd                                       1 calls
         0 ms  Rebuild                                    1 calls
         0 ms  ComputeLinkSwitches                        1 calls
         0 ms  ModifyUnitTestPlatformVersion              1 calls
-        0 ms  BeforeResolveReferences                    1 calls
         0 ms  BuildGenerateSourcesTraverse               1 calls
         0 ms  _ResourceCompile                           1 calls
-        0 ms  ResolveAssemblyReferences                  1 calls
+        0 ms  sfml-system_redist_AfterBuild              1 calls
+        0 ms  AfterRebuild                               1 calls
         0 ms  AfterResourceCompile                       1 calls
         0 ms  sfml-audio_redist_init                     1 calls
-        0 ms  AfterRebuild                               1 calls
-        0 ms  sfml-system_init                           1 calls
-        0 ms  sfml-audio_init                            1 calls
+        0 ms  ComputeManifestInputsTargets               1 calls
+        0 ms  ResolveAssemblyReferences                  1 calls
         0 ms  _XdcMake                                   1 calls
         0 ms  sfml-graphics_init                         1 calls
-        0 ms  sfml-system_redist_AfterBuild_x64_and_v140_and_Release_and_dynamic   1 calls
-        0 ms  ComputeManifestInputsTargets               1 calls
         0 ms  SplitResourcesByCulture                    1 calls
-        0 ms  ComputeMIDLGeneratedCompileInputs          1 calls
         0 ms  ComputeManifestGeneratedLinkerInputs       1 calls
-        1 ms  _CheckForInvalidConfigurationAndPlatform   1 calls
-        1 ms  WarnCompileDuplicatedFilename              1 calls
-        1 ms  ResolveProjectReferences                   1 calls
-        1 ms  MakeDirsForBscMake                         1 calls
-        1 ms  _PrepareForClean                           1 calls
+        0 ms  BeforeResolveReferences                    1 calls
+        0 ms  sfml-audio_init                            1 calls
+        0 ms  RegisterOutput                             1 calls
+        1 ms  _GenerateSatelliteAssemblyInputs           1 calls
+        1 ms  sfml-graphics_redist_init_2                1 calls
+        1 ms  sfml-network_redist_init_2                 1 calls
         1 ms  CopyFilesToOutputDirectory                 1 calls
-        1 ms  sfml-graphics_redist_AfterBuild_x64_and_v140_and_Release_and_dynamic   1 calls
-        1 ms  InitializeBuildStatus                      1 calls
-        1 ms  ComputeLegacyManifestEmbedding             1 calls
-        1 ms  sfml-system_redist_init_2                  1 calls
         1 ms  AssignTargetPaths                          1 calls
-        1 ms  sfml-audio_redist_init_2                   1 calls
+        1 ms  CoreClean                                  1 calls
+        1 ms  sfml-audio_redist_AfterBuild_x64_and_v140_and_Release_and_dynamic   1 calls
+        1 ms  FinalizeBuildStatus                        1 calls
         1 ms  MakeDirsForLink                            1 calls
-        1 ms  _SplitProjectReferencesByFileExistence     1 calls
-        2 ms  PrepareForBuild                            1 calls
+        1 ms  _PrepareForClean                           1 calls
+        1 ms  WarnCompileDuplicatedFilename              1 calls
+        1 ms  InitializeBuildStatus                      1 calls
+        1 ms  sfml-graphics_redist_AfterBuild_x64_and_v140_and_Release_and_dynamic   1 calls
+        1 ms  PrepareForBuild                            1 calls
+        1 ms  ResolveProjectReferences                   1 calls
+        1 ms  _CheckForInvalidConfigurationAndPlatform   1 calls
+        1 ms  ComputeLinkImportLibraryOutputsForClean    1 calls
         3 ms  SetCABuildNativeEnvironmentVariables       1 calls
-        4 ms  CoreCppClean                               1 calls
-     2989 ms  ClCompile                                  1 calls
-     7407 ms  Link                                       1 calls
+       10 ms  CoreCppClean                               1 calls
+     3168 ms  ClCompile                                  1 calls
+     7558 ms  Link                                       1 calls

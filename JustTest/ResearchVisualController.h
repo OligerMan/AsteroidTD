@@ -7,7 +7,7 @@
 #include "Settings.h"
 #include "Tutorial.h"
 
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 #include <string>
 #include <iostream>

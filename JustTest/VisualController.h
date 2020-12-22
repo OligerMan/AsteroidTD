@@ -6,7 +6,7 @@
 #include "FileSearch.h"
 #include "Settings.h"
 
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 #include <string>
 #include <iostream>

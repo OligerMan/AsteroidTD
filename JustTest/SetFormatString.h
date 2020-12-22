@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SFML\Graphics.hpp"
+#include "SFML/Graphics.hpp"
 
 void setFormatString(std::string raw_string, sf::Text & test_text, unsigned int width, unsigned int height, unsigned int base_character_size, sf::RenderWindow & window) {
 	std::string output;

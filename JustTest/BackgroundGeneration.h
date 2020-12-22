@@ -10,7 +10,7 @@
 #include "FileSearch.h"
 #include "FPS.h"
 
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 class BackgroundManager {
 public:

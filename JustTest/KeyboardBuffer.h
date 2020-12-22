@@ -4,8 +4,12 @@
 #include <thread>
 #include <vector>
 #include <chrono>
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
+#ifdef __linux__ 
+#elif _WIN32
 #include <Windows.h>
+#else
+#endif
 
 class KeyboardBuffer {
 	std::string buffer;

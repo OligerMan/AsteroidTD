@@ -4,9 +4,14 @@
 #include <string>
 #include <thread>
 #include <random>
-#include <Windows.h>
 
-#include <SFML\Audio.hpp>
+#ifdef __linux__ 
+#elif _WIN32
+#include <Windows.h>
+#else
+#endif
+
+#include <SFML/Audio.hpp>
 
 #include "FileSearch.h"
 

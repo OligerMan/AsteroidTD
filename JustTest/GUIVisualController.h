@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 #include "FileSearch.h"
 #include "GameStatus.h"
