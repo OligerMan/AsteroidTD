@@ -4,7 +4,8 @@
 #include <vector>
 #include <string>
 #include <SFML/Network.hpp>
-#ifdef __linux__ 
+#ifdef __linux__ || __APPLE__
+#include <unistd.h>
 #elif _WIN32
 #include <Windows.h>
 #else
@@ -57,7 +58,13 @@ public:
 
 	void launchUpdateWorker() {
 		auto rank_updater = [&]() {
-			while (game_status == nickname_enter && !settings.getNickname().size()) { Sleep(1000); }
+			while (game_status == nickname_enter && !settings.getNickname().size()) { 
+#ifdef __linux__ || __APPLE__
+				sleep(1);
+#elif _WIN32
+				Sleep(1000);
+#endif 
+			}
 			if (socket.connect("oliger.ddns.net", 50000) != sf::Socket::Done) {
 				std::cout << "Socket connect fail" << std::endl;
 				return;
@@ -118,18 +125,34 @@ public:
 
 	void reboot() {
 		online = false;
-		while (!online) { Sleep(10); }
+		while (!online) { 
+#ifdef __linux__ || __APPLE__
+			usleep(10000);
+#elif _WIN32
+			Sleep(10);
+#endif 
+		}
 		launchUpdateWorker();
 	}
 
 	void launchSelfRankUpdateWorker() {
 		auto self_rank_updater = [&]() {
-			while (game_status == nickname_enter) { Sleep(1000); }
+			while (game_status == nickname_enter) { 
+#ifdef __linux__ || __APPLE__
+				sleep(1);
+#elif _WIN32
+				Sleep(1000);
+#endif
+			}
 			while (true) {
 				if (!dead && online) {
 					selfRankUpdate(true);
 				}
+#ifdef __linux__ || __APPLE__
+				sleep(1);
+#elif _WIN32
 				Sleep(1000);
+#endif 
 			}
 		};
 

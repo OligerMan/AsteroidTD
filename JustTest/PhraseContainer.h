@@ -175,7 +175,7 @@ public:
     void parseFromFolder(std::string path) {
         std::vector<std::string> * path_list = getFileList(path);
         for (auto i = path_list->begin(); i != path_list->end(); i++) {
-            parseFromFile(path + "\\" + *i);
+            parseFromFile(path + path_separator + *i);
         }
     }
 

@@ -91,9 +91,10 @@ class MissionStageInfo {
 
 public:
 
-    MissionStageInfo(std::wstring path) {
+    MissionStageInfo(std::string path) {
 
-        std::wifstream mission_file(path);
+        std::wifstream mission_file;
+        mission_file.open(path);
         if (!mission_file.is_open()) {
             return;
         }

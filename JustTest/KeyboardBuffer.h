@@ -5,7 +5,8 @@
 #include <vector>
 #include <chrono>
 #include <SFML/Graphics.hpp>
-#ifdef __linux__ 
+#ifdef __linux__ || __APPLE__
+#include <unistd.h>
 #elif _WIN32
 #include <Windows.h>
 #else
@@ -247,7 +248,11 @@ public:
 						
 					}
 				}
+#ifdef __linux__ || __APPLE__
+				usleep(10000);
+#elif _WIN32
 				Sleep(10);
+#endif
 			}
 			
 		};

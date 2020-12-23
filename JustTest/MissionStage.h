@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
 
 #include "MissionInfo.h"
 #include "PhraseContainer.h"

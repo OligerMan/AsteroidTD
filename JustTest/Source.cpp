@@ -20,7 +20,9 @@
 #include <chrono>
 #include <SFML/Audio.hpp>
 
-#ifdef __linux__ 
+#ifdef __linux__ || __APPLE__ 
+#include <unistd.h>
+#include <X11/Xlib.h>
 #elif _WIN32
 #include <Windows.h>
 #include <Xinput.h>
@@ -36,15 +38,15 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	sf::Texture main_background_texture, research_background_texture, game_over_background_texture;
 	sf::Sprite main_background_sprite, research_background_sprite, game_over_background_sprite;
 
-	main_background_texture.loadFromFile("background/main_background.png");
-	research_background_texture.loadFromFile("background/research_background.png");
+	//main_background_texture.loadFromFile("background" + path_separator + "main_background.png");
+	//research_background_texture.loadFromFile("background" + path_separator + "research_background.png");
 
-	main_background_sprite.setTexture(main_background_texture);
-	main_background_sprite.setOrigin(sf::Vector2f((int)main_background_texture.getSize().x / 2, (int)main_background_texture.getSize().y / 2));
-	research_background_sprite.setTexture(research_background_texture);
-	research_background_sprite.setOrigin(sf::Vector2f((int)research_background_texture.getSize().x / 2, (int)research_background_texture.getSize().y / 2));
+	//main_background_sprite.setTexture(main_background_texture);
+	//main_background_sprite.setOrigin(sf::Vector2f((int)main_background_texture.getSize().x / 2, (int)main_background_texture.getSize().y / 2));
+	//research_background_sprite.setTexture(research_background_texture);
+	//research_background_sprite.setOrigin(sf::Vector2f((int)research_background_texture.getSize().x / 2, (int)research_background_texture.getSize().y / 2));
 
-	game_over_background_texture.loadFromFile("background/game_over_background.png");
+	game_over_background_texture.loadFromFile("background" + path_separator + "game_over_background.png");
 	game_over_background_sprite.setTexture(game_over_background_texture);
 	game_over_background_sprite.setPosition(0, 0);
 	game_over_background_sprite.setScale(sf::Vector2f(window.getSize().x / game_over_background_texture.getSize().x, window.getSize().y / game_over_background_texture.getSize().y));
@@ -70,9 +72,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 	int last_shot = 0;
 
-	GameStatus prev_game_status = pause;
+	GameStatus prev_game_status = game_pause;
 
-	Map game_map1("maps/" + map_name + ".map", L"mission.cfg");
+	Map game_map1("maps/" + map_name + ".map", "mission.cfg");
 
 	resource_manager.clear(settings.getStartGold(), 5);
     research_manager.initResearch("research.cfg");
@@ -116,7 +118,11 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			if (game_status == game_hero_mode || game_status == game_strategic_mode) {
 				rank.addGameplayTime(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - round_start).count());
 				round_start = std::chrono::steady_clock::now();
+#ifdef __linux__ || __APPLE__
+				sleep(1);
+#elif _WIN32
 				Sleep(1000);
+#endif
 			}
 		}
 	};
@@ -359,14 +365,14 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	buttons.resize(BUTTONS_NAME_LIST_SIZE);
 
 	buttons[retry].pos = Point(960, 300);
-	buttons[retry].texture_default.loadFromFile("menu_buttons\\retry.png");
-	buttons[retry].texture_selected.loadFromFile("menu_buttons\\retry_selected.png");
+	buttons[retry].texture_default.loadFromFile("menu_buttons" + path_separator + "retry.png");
+	buttons[retry].texture_selected.loadFromFile("menu_buttons" + path_separator + "retry_selected.png");
 	buttons[retry].sprite.setTexture(buttons[retry].texture_default);
 	buttons[retry].advice_string = try_again_title;
 
 	buttons[menu].pos = Point(960, 500);
-	buttons[menu].texture_default.loadFromFile("menu_buttons\\menu.png");
-	buttons[menu].texture_selected.loadFromFile("menu_buttons\\menu_selected.png");
+	buttons[menu].texture_default.loadFromFile("menu_buttons" + path_separator + "menu.png");
+	buttons[menu].texture_selected.loadFromFile("menu_buttons" + path_separator + "menu_selected.png");
 	buttons[menu].sprite.setTexture(buttons[menu].texture_default);
 	buttons[menu].advice_string = go_back_to_menu_title;
 
@@ -377,20 +383,20 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	button_selector.initButtonList(ButtonSelector::game_over, 500, PI / 3, game_over_buttons_pos);
 
 	buttons[pause_continue].pos = Point(0, -250);
-	buttons[pause_continue].texture_default.loadFromFile("menu_buttons\\pause_continue.png");
-	buttons[pause_continue].texture_selected.loadFromFile("menu_buttons\\pause_continue_selected.png");
+	buttons[pause_continue].texture_default.loadFromFile("menu_buttons" + path_separator + "pause_continue.png");
+	buttons[pause_continue].texture_selected.loadFromFile("menu_buttons" + path_separator + "pause_continue_selected.png");
 	buttons[pause_continue].sprite.setTexture(buttons[pause_continue].texture_default);
 	buttons[pause_continue].advice_string = continue_game_title;
 
 	buttons[pause_to_menu].pos = Point();
-	buttons[pause_to_menu].texture_default.loadFromFile("menu_buttons\\pause_to_menu.png");
-	buttons[pause_to_menu].texture_selected.loadFromFile("menu_buttons\\pause_to_menu_selected.png");
+	buttons[pause_to_menu].texture_default.loadFromFile("menu_buttons" + path_separator + "pause_to_menu.png");
+	buttons[pause_to_menu].texture_selected.loadFromFile("menu_buttons" + path_separator + "pause_to_menu_selected.png");
 	buttons[pause_to_menu].sprite.setTexture(buttons[pause_to_menu].texture_default);
 	buttons[pause_to_menu].advice_string = go_to_menu_title;
 
 	buttons[pause_to_desktop].pos = Point(0, 250);
-	buttons[pause_to_desktop].texture_default.loadFromFile("menu_buttons\\pause_to_desktop.png");
-	buttons[pause_to_desktop].texture_selected.loadFromFile("menu_buttons\\pause_to_desktop_selected.png");
+	buttons[pause_to_desktop].texture_default.loadFromFile("menu_buttons" + path_separator + "pause_to_desktop.png");
+	buttons[pause_to_desktop].texture_selected.loadFromFile("menu_buttons" + path_separator + "pause_to_desktop_selected.png");
 	buttons[pause_to_desktop].sprite.setTexture(buttons[pause_to_desktop].texture_default);
 	buttons[pause_to_desktop].advice_string = go_to_desktop_title;
 
@@ -399,9 +405,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 
 	auto pause_game = [&]() {
-		if (game_status != pause && tutorial.isWorkingOnStep(tutorial.pause_tutorial)) {
+		if (game_status != game_pause && tutorial.isWorkingOnStep(tutorial.pause_tutorial)) {
 			prev_game_status = game_status;
-			game_status = pause;
+			game_status = game_pause;
 			last_pause = frame_num;
 			window.setView(view2);
 			rank.addGameplayTime(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - round_start).count());
@@ -413,12 +419,12 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	};
 
 	auto unpause_game = [&]() {
-		if (game_status == pause) {
+		if (game_status == game_pause) {
 			game_status = prev_game_status;
 			if (game_status == research) {
 				game_status = game_hero_mode;
 			}
-			prev_game_status = pause;
+			prev_game_status = game_pause;
 			round_start = std::chrono::steady_clock::now();
 			if (game_status == game_hero_mode) {
 				window.setView(view1);
@@ -479,19 +485,19 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			}
 		}
 
-		if (game_status == game_hero_mode || game_status == game_strategic_mode || game_status == pause) {
+		if (game_status == game_hero_mode || game_status == game_strategic_mode || game_status == game_pause) {
 			
 			if (tutorial.isWorkingOnStep(tutorial.no_tutorial)) {
 				game_frame_num++;
 			}
 			
-			if (!(game_status == game_strategic_mode || game_status == pause)) {
-				main_background_sprite.setPosition(main_back_pos);
-                main_background_sprite.setScale(sf::Vector2f(3, 3));
+			if (!(game_status == game_strategic_mode || game_status == game_pause)) {
+				//main_background_sprite.setPosition(main_back_pos);
+                //main_background_sprite.setScale(sf::Vector2f(3, 3));
 			}
 			else {
-                main_background_sprite.setPosition(strategic_back_pos);
-                main_background_sprite.setScale(sf::Vector2f(8, 8));
+                //main_background_sprite.setPosition(strategic_back_pos);
+                //main_background_sprite.setScale(sf::Vector2f(8, 8));
 			}
 
 			if (game_status == game_hero_mode) {
@@ -506,7 +512,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				vibration_time = vibr_on_dmg_time;
 			}
 			if (vibration_time > 0) {
-#ifdef __linux__ 
+#ifdef __linux__ || __APPLE__ 
 #elif _WIN32
                 XINPUT_VIBRATION vibration;
                 ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
@@ -518,7 +524,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				
 			}
 			else {
-#ifdef __linux__ 
+#ifdef __linux__ || __APPLE__  
 #elif _WIN32
                 XINPUT_VIBRATION vibration;
                 ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
@@ -560,7 +566,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				gui_manager.setText(skills_interact_sign, 0.01, skill_status_sign, skill_pos, 30);
 			}
 
-			if (game_status != pause && tutorial.isWorkingOnStep(tutorial.no_tutorial) && game_mode == GameMode::infinity_mode) {
+			if (game_status != game_pause && tutorial.isWorkingOnStep(tutorial.no_tutorial) && game_mode == GameMode::infinity_mode) {
 				if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - last_wave).count() > wave_delay) {
 					wave_count++;
 					if (!(game_status == game_strategic_mode)) {
@@ -725,7 +731,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			sf::Vector2i window_pos = window.getPosition();
 			cursor_pos = Point(mouse_pos.x - window.getSize().x / 2 - window.getPosition().x, mouse_pos.y - window.getSize().y / 2 - window.getPosition().y);
 
-			if (game_status != pause) {
+			if (game_status != game_pause) {
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
 					if (!gui_manager.processFrame(cursor_pos, viewport_pos)) {
 						game_map1.processFrame(cursor_pos + viewport_pos, viewport_pos);
@@ -874,7 +880,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					}
 				}
 
-				if (game_status != pause) {
+				if (game_status != game_pause) {
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
 						new_speed = Point(static_cast<int>(sf::Mouse::getPosition().x) - static_cast<int>(window.getSize().x / 2), static_cast<int>(sf::Mouse::getPosition().y) - static_cast<int>(window.getSize().y / 2));
 						hero_object->setAnimationType(move_anim); 
@@ -1105,7 +1111,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					}
 				}
 				if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || sf::Joystick::isButtonPressed(0, START)) && (frame_num - last_pause) > fps.getFPS() / 4 && (tutorial.isWorkingOnStep(tutorial.pause_tutorial) || tutorial.isWorkingOnStep(tutorial.unpause_tutorial))) {
-					if (game_status != pause) {
+					if (game_status != game_pause) {
 						pause_game();
 					}
 				}
@@ -1191,14 +1197,14 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				background_manager.processFrame(diff, view1.getCenter());
 			}
 
-			if (!(game_status == game_strategic_mode || game_status == pause)) {
+			if (!(game_status == game_strategic_mode || game_status == game_pause)) {
 				window.setView(view1);
 			}
 			else {
 				window.setView(view2);
 			}
 
-			if (game_status == pause) {
+			if (game_status == game_pause) {
 				bool is_input_state = false;
 				for (int i = pause_continue; i <= pause_to_desktop; i++) {
 					if (i == chosen_button) {
@@ -1339,12 +1345,15 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			
 		}
 		if (game_status == game_over) {
-
+#ifdef __linux__ || __APPLE__  
+#elif _WIN32
             XINPUT_VIBRATION vibration;
             ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
             vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
             vibration.wRightMotorSpeed = 0; // use any value between 0-65535 here
             XInputSetState(0, &vibration);
+#else
+#endif
 
 			window.setView(view4);
 			for (int i = retry; i <= menu; i++) {
@@ -1635,15 +1644,19 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 }
 
 int main() {
+#ifdef __linux__ || __APPLE__  
+#elif _WIN32
 	HWND console_hWnd = GetConsoleWindow();
 	//ShowWindow(console_hWnd, SW_HIDE);
+#else
+#endif
 
-	phrase_container.parseFromFolder("text_config\\" + settings.getLocalisationFile());
+	phrase_container.parseFromFolder("text_config" + path_separator + settings.getLocalisationFile());
 
 	sf::ContextSettings context_settings;
 	context_settings.antialiasingLevel = 8;
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-	sf::RenderWindow window(sf::VideoMode(settings.getWindowWidth(), settings.getWindowHeight()), "AsteroidTD", sf::Style::None, context_settings);
+	sf::RenderWindow window(sf::VideoMode(settings.getWindowWidth(), settings.getWindowHeight()), "AsteroidTD", sf::Style::Fullscreen, context_settings);
 
 	sf::View main_view(sf::Vector2f((int)window.getSize().x / 2, (int)window.getSize().y / 2), sf::Vector2f(window.getSize().x, window.getSize().y));      // main menu view
 	window.setView(main_view);
@@ -1666,9 +1679,16 @@ int main() {
 		std::cout << "Settings file error, enabling default settings" << std::endl;
 		settings.setDefaults();
 	}
-
+#ifdef __linux__ || __APPLE__  
+	Display * xdisplay = XOpenDisplay(NULL);
+	Screen * screen_info = DefaultScreenOfDisplay(xdisplay);
+	int screenW = screen_info->width;
+	int screenH = screen_info->height;
+#elif _WIN32
 	int screenW = GetSystemMetrics(SM_CXSCREEN);
 	int screenH = GetSystemMetrics(SM_CYSCREEN);
+#else
+#endif
 	window.setSize(sf::Vector2u(screenW, screenH));
 	window.setPosition(sf::Vector2i(0, 0));
 
@@ -1724,32 +1744,32 @@ int main() {
 	buttons.resize(BUTTONS_NAME_LIST_SIZE);
 
 	buttons[infinity_mode_button].pos = Point(window.getView().getSize().x / 2 - 300 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
-	buttons[infinity_mode_button].texture_default.loadFromFile("menu_buttons\\inf_mode.png");
-	buttons[infinity_mode_button].texture_selected.loadFromFile("menu_buttons\\inf_mode_selected.png");
+	buttons[infinity_mode_button].texture_default.loadFromFile("menu_buttons" + path_separator + "inf_mode.png");
+	buttons[infinity_mode_button].texture_selected.loadFromFile("menu_buttons" + path_separator + "inf_mode_selected.png");
 	buttons[infinity_mode_button].sprite.setTexture(buttons[infinity_mode_button].texture_default);
 	buttons[infinity_mode_button].radius = 75 * window.getView().getSize().y / 1080;
     std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(L"start_inf_mode_GUI", 0);
 	buttons[infinity_mode_button].advice_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
     buttons[adventure_mode_button].pos = Point(window.getView().getSize().x / 2 - 100 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
-    buttons[adventure_mode_button].texture_default.loadFromFile("menu_buttons\\adv_mode.png");
-    buttons[adventure_mode_button].texture_selected.loadFromFile("menu_buttons\\adv_mode_selected.png");
+    buttons[adventure_mode_button].texture_default.loadFromFile("menu_buttons" + path_separator + "adv_mode.png");
+    buttons[adventure_mode_button].texture_selected.loadFromFile("menu_buttons" + path_separator + "adv_mode_selected.png");
     buttons[adventure_mode_button].sprite.setTexture(buttons[adventure_mode_button].texture_default);
     buttons[adventure_mode_button].radius = 75 * window.getView().getSize().y / 1080;
     buffer = phrase_container.getPhraseBuffer(L"start_adv_mode_GUI", 0);
     buttons[adventure_mode_button].advice_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
 	buttons[settings_button].pos = Point(window.getView().getSize().x / 2 + 100 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
-	buttons[settings_button].texture_default.loadFromFile("menu_buttons\\settings.png");
-	buttons[settings_button].texture_selected.loadFromFile("menu_buttons\\settings_selected.png");
+	buttons[settings_button].texture_default.loadFromFile("menu_buttons" + path_separator + "settings.png");
+	buttons[settings_button].texture_selected.loadFromFile("menu_buttons" + path_separator + "settings_selected.png");
 	buttons[settings_button].sprite.setTexture(buttons[settings_button].texture_default);
 	buttons[settings_button].radius = 75 * window.getView().getSize().y / 1080;
     buffer = phrase_container.getPhraseBuffer(L"settings_menu_GUI", 0);
 	buttons[settings_button].advice_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
 	buttons[shutdown_button].pos = Point(window.getView().getSize().x / 2 + 300 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
-	buttons[shutdown_button].texture_default.loadFromFile("menu_buttons\\shutdown.png");
-	buttons[shutdown_button].texture_selected.loadFromFile("menu_buttons\\shutdown_selected.png");
+	buttons[shutdown_button].texture_default.loadFromFile("menu_buttons" + path_separator + "shutdown.png");
+	buttons[shutdown_button].texture_selected.loadFromFile("menu_buttons" + path_separator + "shutdown_selected.png");
 	buttons[shutdown_button].sprite.setTexture(buttons[shutdown_button].texture_default);
 	buttons[shutdown_button].radius = 75 * window.getView().getSize().y / 1080;
     buffer = phrase_container.getPhraseBuffer(L"shutdown_GUI", 0);
@@ -1864,12 +1884,15 @@ int main() {
 		frame_num++;
 
 		window.setView(main_view);
-
+#ifdef __linux__ || __APPLE__  
+#elif _WIN32
         XINPUT_VIBRATION vibration;
         ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
         vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
         vibration.wRightMotorSpeed = 0; // use any value between 0-65535 here
         XInputSetState(0, &vibration);
+#else
+#endif
 
 		if (window.hasFocus()) {
 			if (game_status == main_menu) {

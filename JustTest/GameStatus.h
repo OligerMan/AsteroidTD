@@ -6,7 +6,7 @@ enum GameStatus {
 	game_hero_mode,
 	game_strategic_mode,
 	research,
-	pause,
+	game_pause,
     dialog,
 	mission_menu,
 	completed_mission_menu,

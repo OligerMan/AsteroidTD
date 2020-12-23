@@ -102,10 +102,11 @@ private:
 		current_dialog_info.main_text = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 	};
 
-	std::map<std::wstring, std::vector<Answer>> getDialogStateFromFile(std::wstring path) {
+	std::map<std::wstring, std::vector<Answer>> getDialogStateFromFile(std::string path) {
 		std::map<std::wstring, std::vector<Answer>> output;
 
-		std::wifstream dialog_file(path);
+		std::wifstream dialog_file;
+		dialog_file.open(path);
 		std::wstring input;
 		
 		while (true) {
@@ -380,7 +381,8 @@ public:
 
 	NPCInfo(WorldFactionList faction, std::wstring personal_id) : faction(faction), personal_id(personal_id), base_mission_info(0), special_mission_info(0) {
         setDefaultSettings();
-		dialog_state_list = getDialogStateFromFile(L"dialog_config\\" + personal_id + L".txt");
+		
+		dialog_state_list = getDialogStateFromFile("dialog_config\\" + wstringToString(personal_id) + ".txt");
 
 		cur_dialog_state = dialog_state_list.find(L"start_description");
 	}

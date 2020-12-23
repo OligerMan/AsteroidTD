@@ -8,7 +8,7 @@ class DialogAdditionalInfo {
 
 public:
 
-    void setData(std::wstring & id, std::wstring & value) {
+    void setData(std::wstring id, std::wstring & value) {
         auto iter = data.find(id);
         if (iter == data.end()) {
             data[id] = value;

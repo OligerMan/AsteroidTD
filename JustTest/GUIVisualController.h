@@ -60,7 +60,7 @@ class GUIVisualController{
 			}
 
 			//get animation set
-			std::vector<std::string> * anim_set = getFileList(path + "\\" + (*object_names)[obj_cnt]);
+			std::vector<std::string> * anim_set = getFileList(path + path_separator + (*object_names)[obj_cnt]);
 			std::vector<std::vector<sf::Texture>> object_textures;
 
 			texture_buffer[is_object_type_exists((*object_names)[obj_cnt])].resize((int)COUNT_ANIMATION);
@@ -70,14 +70,14 @@ class GUIVisualController{
 				}
 
 				//get sprites set
-				std::vector<std::string> * textures_set = getFileList(path + "\\" + ((*object_names)[obj_cnt] + "\\" + (*anim_set)[anim_cnt]));
+				std::vector<std::string> * textures_set = getFileList(path + path_separator + ((*object_names)[obj_cnt] + path_separator + (*anim_set)[anim_cnt]));
 				std::vector<sf::Texture> animation(textures_set->size());
 
 				for (int i = 0; i < textures_set->size(); i++) {
 					if (settings.isSpriteDebugOutputEnabled()) {
 						std::cout << "        >> Sprite " << (*textures_set)[i] << " is loading" << std::endl;
 					}
-					std::string sprite_path = (path + "\\" + ((*object_names)[obj_cnt] + "\\" + (*anim_set)[anim_cnt] + "\\" + (*textures_set)[i])).c_str();
+					std::string sprite_path = (path + path_separator + ((*object_names)[obj_cnt] + path_separator + (*anim_set)[anim_cnt] + path_separator + (*textures_set)[i])).c_str();
 					animation[i].loadFromFile(sprite_path);
 				}
 				if (is_animation_type_exists((*anim_set)[anim_cnt]) != -1 && is_object_type_exists((*object_names)[obj_cnt]) != -1) {
@@ -100,24 +100,24 @@ class GUIVisualController{
 			skills_sprite[i].resize(SKILL_STATE_AMOUNT);
 		}
 
-		skills_texture[dome_struct][ready].loadFromFile("skill_sprite\\dome\\ready.png");
-		skills_texture[dome_struct][not_enough_money].loadFromFile("skill_sprite\\dome\\notready.png");
-		skills_texture[turret_struct][ready].loadFromFile("skill_sprite\\turret\\ready.png");
-		skills_texture[turret_struct][not_enough_money].loadFromFile("skill_sprite\\turret\\notready.png");
-		skills_texture[gold_struct][ready].loadFromFile("skill_sprite\\gold\\ready.png");
-		skills_texture[gold_struct][not_enough_money].loadFromFile("skill_sprite\\gold\\notready.png");
-		skills_texture[science_struct][ready].loadFromFile("skill_sprite\\science\\ready.png");
-		skills_texture[science_struct][not_enough_money].loadFromFile("skill_sprite\\science\\notready.png");
-		skills_texture[rocket_skill][ready].loadFromFile("skill_sprite\\rocket\\ready.png");
-		skills_texture[rocket_skill][not_enough_money].loadFromFile("skill_sprite\\rocket\\notready.png");
-		skills_texture[speed_boost_skill][ready].loadFromFile("skill_sprite\\speed\\ready.png");
-		skills_texture[speed_boost_skill][not_enough_money].loadFromFile("skill_sprite\\speed\\notready.png");
-		skills_texture[attack_buff_skill][ready].loadFromFile("skill_sprite\\attack\\ready.png");
-		skills_texture[attack_buff_skill][not_enough_money].loadFromFile("skill_sprite\\attack\\notready.png");
-		skills_texture[heal_skill][ready].loadFromFile("skill_sprite\\heal\\ready.png");
-		skills_texture[heal_skill][not_enough_money].loadFromFile("skill_sprite\\heal\\notready.png");
-		skills_texture[dialog_start][ready].loadFromFile("skill_sprite\\dialog_start\\ready.png");
-		skills_texture[dialog_start][not_enough_money].loadFromFile("skill_sprite\\dialog_start\\ready.png");
+		skills_texture[dome_struct][ready].loadFromFile("skill_sprite" + path_separator + "dome" + path_separator + "ready.png");
+		skills_texture[dome_struct][not_enough_money].loadFromFile("skill_sprite" + path_separator + "dome" + path_separator + "notready.png");
+		skills_texture[turret_struct][ready].loadFromFile("skill_sprite" + path_separator + "turret" + path_separator + "ready.png");
+		skills_texture[turret_struct][not_enough_money].loadFromFile("skill_sprite" + path_separator + "turret" + path_separator + "notready.png");
+		skills_texture[gold_struct][ready].loadFromFile("skill_sprite" + path_separator + "gold" + path_separator + "ready.png");
+		skills_texture[gold_struct][not_enough_money].loadFromFile("skill_sprite" + path_separator + "gold" + path_separator + "notready.png");
+		skills_texture[science_struct][ready].loadFromFile("skill_sprite" + path_separator + "science" + path_separator + "ready.png");
+		skills_texture[science_struct][not_enough_money].loadFromFile("skill_sprite" + path_separator + "science" + path_separator + "notready.png");
+		skills_texture[rocket_skill][ready].loadFromFile("skill_sprite" + path_separator + "rocket" + path_separator + "ready.png");
+		skills_texture[rocket_skill][not_enough_money].loadFromFile("skill_sprite" + path_separator + "rocket" + path_separator + "notready.png");
+		skills_texture[speed_boost_skill][ready].loadFromFile("skill_sprite" + path_separator + "speed" + path_separator + "ready.png");
+		skills_texture[speed_boost_skill][not_enough_money].loadFromFile("skill_sprite" + path_separator + "speed" + path_separator + "notready.png");
+		skills_texture[attack_buff_skill][ready].loadFromFile("skill_sprite" + path_separator + "attack" + path_separator + "ready.png");
+		skills_texture[attack_buff_skill][not_enough_money].loadFromFile("skill_sprite" + path_separator + "attack" + path_separator + "notready.png");
+		skills_texture[heal_skill][ready].loadFromFile("skill_sprite" + path_separator + "heal" + path_separator + "ready.png");
+		skills_texture[heal_skill][not_enough_money].loadFromFile("skill_sprite" + path_separator + "heal" + path_separator + "notready.png");
+		skills_texture[dialog_start][ready].loadFromFile("skill_sprite" + path_separator + "dialog_start" + path_separator + "ready.png");
+		skills_texture[dialog_start][not_enough_money].loadFromFile("skill_sprite" + path_separator + "dialog_start" + path_separator + "ready.png");
 
 		for (int i = 0; i < SKILL_AMOUNT; i++) {
 			for (int j = 0; j < SKILL_STATE_AMOUNT; j++) {
@@ -195,7 +195,7 @@ public:
 	}
 
 	bool processFrame(sf::RenderWindow * window, std::vector<std::vector<Object *>> * objects, std::vector<std::pair<sf::Text *, int>> & text, Point viewport_pos, float hero_hp_percent) {  // render for GUI elements
-		if (game_status == pause || game_status == game_strategic_mode) {
+		if (game_status == game_pause || game_status == game_strategic_mode) {
 			hero_hp_percent = 0;
 		}
 

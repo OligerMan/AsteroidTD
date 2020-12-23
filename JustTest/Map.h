@@ -501,7 +501,7 @@ private:
                 obj1 = static_cast<Object *>(buffer_elem.getData(0));
                 obj2 = static_cast<Object *>(buffer_elem.getData(1));
                 unit1 = obj1 ? obj1->getUnitInfo() : nullptr;
-                unit2 = unit2 = obj2 ? obj2->getUnitInfo() : nullptr;
+                unit2 = obj2 ? obj2->getUnitInfo() : nullptr;
                 if (obj1->getObjectType() == ObjectType::bullet && obj2->getObjectType() == ObjectType::bullet) {
                     break;
                 }
@@ -543,7 +543,7 @@ private:
                 obj1 = static_cast<Object *>(buffer_elem.getData(0));
                 obj2 = static_cast<Object *>(buffer_elem.getData(1));
                 unit1 = obj1 ? obj1->getUnitInfo() : nullptr;
-                unit2 = unit2 = obj2 ? obj2->getUnitInfo() : nullptr;
+                unit2 = obj2 ? obj2->getUnitInfo() : nullptr;
                 if (unit1 != nullptr && unit2 != nullptr) {
                     float damage = unit1->getAttackDamage(1) * (unit1->isAffected(damage_buff) ? 2 : 1);
                     unit2->dealDamage(damage);
@@ -1184,11 +1184,11 @@ private:
 
 public:
 
-	Map(std::wstring mission_desc_path) : 
+	Map(std::string mission_desc_path) : 
 		asteroid_gen(2500.0f, 500.0f, 0.0f, rand()),
 		mission_stage_info(mission_desc_path) {}
 
-	Map(std::string path, std::wstring mission_desc_path) : 
+	Map(std::string path, std::string mission_desc_path) : 
         objects(parseMap(path)), 
         mission_stage_info(mission_desc_path),
 		asteroid_gen(2500.0f, 500.0f, 0.0f, rand()) {

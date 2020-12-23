@@ -13,7 +13,7 @@ struct Point {
 	
 	Point & operator = (const Point & p) = default;
 
-	Point operator+(Point & b) {
+	Point operator+(Point b) {
 		Point point = *this;
 		point.x += b.x;
 		point.y += b.y;
@@ -21,7 +21,7 @@ struct Point {
 		return point;
 	}
 
-	Point operator-(Point & b) {
+	Point operator-(Point b) {
 		Point point = *this;
 		point.x -= b.x;
 		point.y -= b.y;
@@ -45,12 +45,12 @@ struct Point {
 		return point;
 	}
 
-	void operator+=(Point & b) {
+	void operator+=(Point b) {
 		x += b.x;
 		y += b.y;
 	}
 
-	void operator-=(Point & b) {
+	void operator-=(Point b) {
 		x -= b.x;
 		y -= b.y;
 	}
@@ -65,7 +65,7 @@ struct Point {
 		y /= b;
 	}
 
-	bool operator!=(Point & b) {
+	bool operator!=(Point b) {
 		if (b.x == x && b.y == y) {
 			return false;
 		}
@@ -74,7 +74,7 @@ struct Point {
 		}
 	}
 
-	bool operator==(Point & b) {
+	bool operator==(Point b) {
 		if (b.x == x && b.y == y) {
 			return true;
 		}

@@ -125,9 +125,9 @@ private:
 		texture_buffer.resize(background_elem_names.size());
 		for (int obj_cnt = 0; obj_cnt < object_names->size(); obj_cnt++) {
             if (settings.isSpriteDebugOutputEnabled()) {
-                std::cout << " --- Background sprite " << (path + "\\" + (*object_names)[obj_cnt]) << " loading -- " << std::endl;
+                std::cout << " --- Background sprite " << (path + path_separator + (*object_names)[obj_cnt]) << " loading -- " << std::endl;
             }
-			std::vector<std::string> * textures_set = getFileList(path + "\\" + (*object_names)[obj_cnt]);
+			std::vector<std::string> * textures_set = getFileList(path + path_separator + (*object_names)[obj_cnt]);
 			std::vector<sf::Texture> animation(textures_set->size());
 
             if (settings.isSpriteDebugOutputEnabled()) {
@@ -135,9 +135,9 @@ private:
             }
 
 			for (int i = 0; i < textures_set->size(); i++) {
-				std::string sprite_path = (path + "\\" + ((*object_names)[obj_cnt] + "\\" + (*textures_set)[i])).c_str();
+				std::string sprite_path = (path + path_separator + ((*object_names)[obj_cnt] + path_separator + (*textures_set)[i])).c_str();
                 if (settings.isSpriteDebugOutputEnabled()) {
-                    std::cout << " ---- sprite " << (path + "\\" + ((*object_names)[obj_cnt] + "\\" + (*textures_set)[i])) << " ---- " << std::endl;
+                    std::cout << " ---- sprite " << (path + path_separator + ((*object_names)[obj_cnt] + path_separator + (*textures_set)[i])) << " ---- " << std::endl;
                 }
 				animation[i].loadFromFile(sprite_path);
 			}

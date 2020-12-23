@@ -37,7 +37,7 @@ class VisualController {
 			}
 
 			//get animation set
-			std::vector<std::string> * anim_set = getFileList(path + "\\" + (*object_names)[obj_cnt]);
+			std::vector<std::string> * anim_set = getFileList(path + path_separator + (*object_names)[obj_cnt]);
 			std::vector<std::vector<sf::Texture>> object_textures;
 
 			texture_buffer[is_sprite_type_exists((*object_names)[obj_cnt])].resize((int)COUNT_ANIMATION);
@@ -47,14 +47,14 @@ class VisualController {
 				}
 
 				//get sprites set
-				std::vector<std::string> * textures_set = getFileList(path + "\\" + ((*object_names)[obj_cnt] + "\\" + (*anim_set)[anim_cnt]));
+				std::vector<std::string> * textures_set = getFileList(path + path_separator + ((*object_names)[obj_cnt] + path_separator + (*anim_set)[anim_cnt]));
 				std::vector<sf::Texture> animation(textures_set->size());
 
 				for (int i = 0; i < textures_set->size(); i++) {
 					if (settings.isSpriteDebugOutputEnabled()) {
 						std::cout << "        >> Sprite " << (*textures_set)[i] << " is loading" << std::endl;
 					}
-					std::string sprite_path = (path + "\\" + ((*object_names)[obj_cnt] + "\\" + (*anim_set)[anim_cnt] + "\\" + (*textures_set)[i])).c_str();
+					std::string sprite_path = (path + path_separator + ((*object_names)[obj_cnt] + path_separator + (*anim_set)[anim_cnt] + path_separator + (*textures_set)[i])).c_str();
 					animation[i].loadFromFile(sprite_path);
 				}
 				if (is_animation_type_exists((*anim_set)[anim_cnt]) != -1 && is_sprite_type_exists((*object_names)[obj_cnt]) != -1) {

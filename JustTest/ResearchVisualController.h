@@ -37,9 +37,9 @@ class ResearchVisualController {
 			}
 
 			sf::Texture active, notactive, unlocked;
-			active.loadFromFile(path + "\\" + (*research_names)[res_cnt] + "\\" + "active.png");
-			notactive.loadFromFile(path + "\\" + (*research_names)[res_cnt] + "\\" + "notactive.png");
-			unlocked.loadFromFile(path + "\\" + (*research_names)[res_cnt] + "\\" + "unlocked.png");
+			active.loadFromFile(path + path_separator + (*research_names)[res_cnt] + path_separator + "active.png");
+			notactive.loadFromFile(path + path_separator + (*research_names)[res_cnt] + path_separator + "notactive.png");
+			unlocked.loadFromFile(path + path_separator + (*research_names)[res_cnt] + path_separator + "unlocked.png");
 
 			int res_id = research_manager.stringToResearch((*research_names)[res_cnt]);
 
