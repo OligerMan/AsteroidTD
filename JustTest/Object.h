@@ -9,7 +9,7 @@ class Object {
 
 	CollisionType object_col_type = null_col;
 	VisualInfo vis_info;
-	ObjectType object_type_info;
+	ObjectType object_type_info = null;
 	AdditionalInfo add_info;
 
 	bool deleted = false;
