@@ -11,11 +11,14 @@ enum SpriteType {
 	science_sprite,
 	gold_sprite,
 	bullet_sprite,
+    bombard_bullet_sprite,
 
 	alien_fighter_sprite,
 	alien_turret1_sprite,
 	alien_gunship_sprite,
 	alien_turret2_sprite,
+    alien_bombard_sprite,
+    alien_turret3_sprite,
 
 	asteroid_gold_interspersed_sprite,
 	asteroid_iron_interspersed_sprite,
@@ -65,6 +68,8 @@ void sprite_type_init() {
 	sprite_type[alien_turret1_sprite] = "alien_turret1";
 	sprite_type[alien_gunship_sprite] = "alien_gunship";
 	sprite_type[alien_turret2_sprite] = "alien_turret2";
+    sprite_type[alien_bombard_sprite] = "alien_bombard";
+    sprite_type[alien_turret3_sprite] = "alien_turret3";
 	sprite_type[asteroid_gold_interspersed_sprite] = "asteroid_gold_interspersed";
 	sprite_type[asteroid_iron_interspersed_sprite] = "asteroid_iron_interspersed";
 	sprite_type[asteroid_suspiciously_flat_sprite] = "asteroid_suspiciously_flat";

@@ -952,6 +952,25 @@ private:
 			addObject(object, main_layer);
 			base->attachObject(object);
 			break;
+        case alien_bombard:
+            object = new Object
+            (
+                base->getPosition() + Point(-77, 0),
+                Point(),
+                ObjectType::alien_turret3,
+                CollisionType::alien_turret3_col,
+                VisualInfo
+                (
+                    SpriteType::alien_turret3_sprite,
+                    AnimationType::hold_anim,
+                    1000000000
+                )
+            );
+            object->setAutoOrigin();
+            object->getUnitInfo()->setFaction(aggressive_faction);
+            addObject(object, main_layer);
+            base->attachObject(object);
+            break;
 		}
 	}
 

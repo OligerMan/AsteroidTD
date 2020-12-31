@@ -1,0 +1,15 @@
+max_hp 1500
+inf_hp 0
+default_speed 0
+
+attack1_range 1200
+attack1_damage 500
+attack1_delay 1500
+attack1_cooldown 1500
+
+anger_range 2000
+
+is_effects_allowed 1
+turn_speed 1
+
+unit_info_end
