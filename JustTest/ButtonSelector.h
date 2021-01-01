@@ -15,10 +15,14 @@ struct ButtonList {
 	std::chrono::time_point<std::chrono::steady_clock> last_choice = std::chrono::steady_clock::now();
 	int delay = 1000;   // in milliseconds
 	float angle = PI / 4;
+    float button_radius = 120;
 };
 
 class ButtonSelector {
 	std::vector<ButtonList> buffer;
+    int mouse_delay = 1000;   // in milliseconds
+    std::chrono::time_point<std::chrono::steady_clock> last_mouse_move = std::chrono::steady_clock::now();
+    Point last_mouse_pos;
 
 public:
 
@@ -28,9 +32,10 @@ public:
 		game_over,
 		mission_list,
 		completed_mission_list,
+        pause_buttons
 	};
 
-	void processButtonBuffer(int buf_num) {
+	void processButtonBuffer(int buf_num, Point mouse_pos) {
 		bool is_input_state = false;
 		bool is_keyboard_input = false;
 		Point move_vector;
@@ -101,6 +106,18 @@ public:
 				buffer[buf_num].last_choice = std::chrono::steady_clock::now();
 			}
 		}
+        int mouse_last_move_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - last_mouse_move).count();
+        if (mouse_last_move_time < mouse_delay) {
+            for (int i = 0; i < buffer[buf_num].button_list.size(); i++) {
+                if ((buffer[buf_num].button_list[i] - mouse_pos).getLength() < buffer[buf_num].button_radius) {
+                    buffer[buf_num].cur_index = i;
+                }
+            }
+        }
+        if (last_mouse_pos != mouse_pos) {
+            last_mouse_pos = mouse_pos;
+            last_mouse_move = std::chrono::steady_clock::now();
+        }
 		if (!is_input_state) {
 			buffer[buf_num].last_choice = std::chrono::steady_clock::now() - std::chrono::seconds(500);
 		}
@@ -113,7 +130,7 @@ public:
 		return buffer[buf_num];
 	}
 
-	void initButtonList(int buf_num, int new_delay, float new_angle, std::vector<Point> positions) {
+	void initButtonList(int buf_num, int new_delay, float new_angle, std::vector<Point> positions, float button_radius = 120) {
 		if (buf_num < 0) {
 			return;
 		}

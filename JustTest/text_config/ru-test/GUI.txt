@@ -223,6 +223,22 @@ phrase_type go_to_desktop_title_GUI
 phrase_end
 
 phrase_start
+string |уменьшить громкость|
+conditions_start
+conditions_end
+id common
+phrase_type volume_down_title_GUI
+phrase_end
+
+phrase_start
+string |увеличить громкость|
+conditions_start
+conditions_end
+id common
+phrase_type volume_up_title_GUI
+phrase_end
+
+phrase_start
 string |Награда|
 conditions_start
 conditions_end
