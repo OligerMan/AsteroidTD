@@ -17,6 +17,7 @@
 #include "PhraseContainer.h"
 #include "AsteroidGenerator.h"
 #include "DialogAdditionalInfo.h"
+#include "ObjectBaseConfiguration.h"
 
 void fixCollision(Object * obj1, Object * obj2) {
 
@@ -287,7 +288,7 @@ private:
 				int faction1 = object1->getUnitInfo()->getFaction();
 
 				ObjectType type = object1->getObjectType();
-				if (type == dome || type == science || type == gold || object1->getObjectSpriteType() == bullet_sprite) {
+				if (type == dome || type == science || type == gold || object1->getObjectSpriteType() == bullet_sprite || object1->getObjectSpriteType() == bombard_bullet_sprite) {
 					continue;
 				}
 
@@ -377,17 +378,22 @@ private:
 						if (object1->getUnitInfo()->attackReady(1)) {
 							Point bullet_pos = object1->getPosition() + Point(cos((object1->getAngle() - 90) / 180 * PI), sin((object1->getAngle() - 90) / 180 * PI)) * 95;
 							SpriteType bullet_type = bullet_sprite;
+                            CollisionType bullet_col_type = bullet_col;
 							switch (object1->getObjectType()) {
 							case rocket_launcher:
 								bullet_type = rocket_sprite;
 								break;
+                            case alien_turret3:
+                                bullet_type = bombard_bullet_sprite;
+                                bullet_col_type = bombard_bullet_col;
+                                break;
 							}
 							Object * object = new Object
 							(
 								bullet_pos,
 								Point(),
 								ObjectType::bullet,
-								CollisionType::bullet_col,
+                                bullet_col_type,
 								VisualInfo
 								(
 									bullet_type,
@@ -802,25 +808,14 @@ private:
 		}
 	}
 
-	void spawnEnemyGroup(int fighter_amount, int gunship_amount, Point pos, std::vector<Object *> * enemy_list = nullptr) {
+	void spawnEnemyGroup(int fighter_amount, int gunship_amount, int bombard_amount, Point pos, std::vector<Object *> * enemy_list = nullptr) {
 
 		for (int i = 0; i < fighter_amount; i++) {
 			float angle = ((float)i / fighter_amount) * 2 * PI;
-			Point new_pos = pos + Point(cos(angle), sin(angle)) * (350 + fighter_amount * 10);
+			Point new_pos = pos + Point(cos(angle), sin(angle)) * (300 + fighter_amount * 10);
 
-			Object * object = new Object
-			(
-				new_pos,
-				Point(),
-				ObjectType::alien_fighter,
-				CollisionType::alien_fighter_col,
-				VisualInfo
-				(
-					SpriteType::alien_fighter_sprite,
-					AnimationType::hold_anim,
-					1000000000
-				)
-			);
+            Object * object = getBaseObject(alien_fighter);
+            object->setPosition(new_pos);
 			object->setAutoOrigin();
 			object->getUnitInfo()->setFaction(aggressive_faction);
 			addObject(object, landscape_layer);
@@ -832,21 +827,10 @@ private:
 
 		for (int i = 0; i < gunship_amount; i++) {
 			float angle = ((float)i / gunship_amount) * 2 * PI;
-			Point new_pos = pos + Point(cos(angle), sin(angle)) * (500 + gunship_amount * 10);
+			Point new_pos = pos + Point(cos(angle), sin(angle)) * (450 + gunship_amount * 10);
 
-			Object * object = new Object
-			(
-				new_pos,
-				Point(),
-				ObjectType::alien_gunship,
-				CollisionType::alien_gunship_col,
-				VisualInfo
-				(
-					SpriteType::alien_gunship_sprite,
-					AnimationType::hold_anim,
-					1000000000
-				)
-			);
+            Object * object = getBaseObject(alien_gunship);
+            object->setPosition(new_pos);
 			object->setAutoOrigin();
 			object->getUnitInfo()->setFaction(aggressive_faction);
 			addObject(object, landscape_layer);
@@ -855,117 +839,69 @@ private:
             }
 			setTurretArray(object);
 		}
+
+        for (int i = 0; i < bombard_amount; i++) {
+            float angle = ((float)i / bombard_amount) * 2 * PI;
+            Point new_pos = pos + Point(cos(angle), sin(angle)) * (600 + bombard_amount * 10);
+
+            Object * object = getBaseObject(alien_bombard);
+            object->setPosition(new_pos);
+            object->setAutoOrigin();
+            object->getUnitInfo()->setFaction(aggressive_faction);
+            addObject(object, landscape_layer);
+            if (enemy_list) {
+                enemy_list->push_back(object);
+            }
+            setTurretArray(object);
+        }
 	}
 
 	void setTurretArray(Object * base) {
 		Object * object;
 		switch (base->getObjectType()) {
 		case alien_fighter:
-			object = new Object
-			(
-				base->getPosition(),
-				Point(),
-				ObjectType::alien_turret2,
-				CollisionType::alien_turret1_col,
-				VisualInfo
-				(
-					SpriteType::alien_turret1_sprite,
-					AnimationType::hold_anim,
-					1000000000
-				)
-			);
+			object = getBaseObject(alien_turret1);
+            object->setPosition(base->getPosition());
 			object->setAutoOrigin();
 			object->getUnitInfo()->setFaction(aggressive_faction);
 			addObject(object, main_layer);
 			base->attachObject(object);
 			break;
 		case alien_gunship:
-			object = new Object
-			(
-				base->getPosition() + Point(-77, 0),
-				Point(),
-				ObjectType::alien_turret2,
-				CollisionType::alien_turret2_col,
-				VisualInfo
-				(
-					SpriteType::alien_turret2_sprite,
-					AnimationType::hold_anim,
-					1000000000
-				)
-			);
+            object = getBaseObject(alien_turret2);
+            object->setPosition(base->getPosition() + Point(-77, 0));
 			object->setAutoOrigin();
 			object->getUnitInfo()->setFaction(aggressive_faction);
 			addObject(object, main_layer);
 			base->attachObject(object);
 
-			object = new Object
-			(
-				base->getPosition() + Point(74, 0),
-				Point(),
-				ObjectType::alien_turret2,
-				CollisionType::alien_turret2_col,
-				VisualInfo
-				(
-					SpriteType::alien_turret2_sprite,
-					AnimationType::hold_anim,
-					1000000000
-				)
-			);
+			
+            object = getBaseObject(alien_turret2);
+            object->setPosition(base->getPosition() + Point(74, 0));
 			object->setAutoOrigin();
 			object->getUnitInfo()->setFaction(aggressive_faction);
 			addObject(object, main_layer);
 			base->attachObject(object);
 
-			object = new Object
-			(
-				base->getPosition() + Point(69, -45),
-				Point(),
-				ObjectType::alien_turret2,
-				CollisionType::alien_turret2_col,
-				VisualInfo
-				(
-					SpriteType::alien_turret2_sprite,
-					AnimationType::hold_anim,
-					1000000000
-				)
-			);
+			
+            object = getBaseObject(alien_turret2);
+            object->setPosition(base->getPosition() + Point(69, -45));
 			object->setAutoOrigin();
 			object->getUnitInfo()->setFaction(aggressive_faction);
 			addObject(object, main_layer);
 			base->attachObject(object);
 
-			object = new Object
-			(
-				base->getPosition() + Point(-73, -45),
-				Point(),
-				ObjectType::alien_turret2,
-				CollisionType::alien_turret2_col,
-				VisualInfo
-				(
-					SpriteType::alien_turret2_sprite,
-					AnimationType::hold_anim,
-					1000000000
-				)
-			);
+
+            object = getBaseObject(alien_turret2);
+            object->setPosition(base->getPosition() + Point(-73, -45));
 			object->setAutoOrigin();
 			object->getUnitInfo()->setFaction(aggressive_faction);
 			addObject(object, main_layer);
 			base->attachObject(object);
 			break;
         case alien_bombard:
-            object = new Object
-            (
-                base->getPosition() + Point(-77, 0),
-                Point(),
-                ObjectType::alien_turret3,
-                CollisionType::alien_turret3_col,
-                VisualInfo
-                (
-                    SpriteType::alien_turret3_sprite,
-                    AnimationType::hold_anim,
-                    1000000000
-                )
-            );
+            object = getBaseObject(alien_turret3);
+            object->setPosition(base->getPosition() + Point(0, -60));
             object->setAutoOrigin();
             object->getUnitInfo()->setFaction(aggressive_faction);
             addObject(object, main_layer);
@@ -1190,7 +1126,8 @@ private:
                         int enemy_lvl = *static_cast<float *>(objective.data);
                         int gunship_amount = enemy_lvl / 10;
                         int fighter_amount = std::max(1, enemy_lvl / 2 - 2 * gunship_amount);
-                        spawnEnemyGroup(fighter_amount, gunship_amount, new_spawn_point, &enemy_list);
+                        int bombard_amount = 0;
+                        spawnEnemyGroup(fighter_amount, gunship_amount, bombard_amount, new_spawn_point, &enemy_list);
 						enemy_wave_list.insert(std::pair<unsigned long long, std::vector<Object *>>(cur_miss->getID(), enemy_list));
 					}
                     break;
@@ -1361,73 +1298,11 @@ public:
 		}
 		switch (type) {
 		case turret:
-			object = new Object
-			(
-				base->getPosition(),
-				Point(),
-				ObjectType::turret,
-				CollisionType::turret_col,
-				VisualInfo
-				(
-					SpriteType::turret_sprite,
-					AnimationType::hold_anim,
-					1000000000
-				)
-			);
-			object->setAutoOrigin();
-			object->setSpeed(base->getSpeed());
-			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
-			break;
-		case dome:
-			object = new Object
-			(
-				base->getPosition(),
-				Point(),
-				ObjectType::dome,
-				CollisionType::dome_col,
-				VisualInfo
-				(
-					SpriteType::dome_sprite,
-					AnimationType::hold_anim,
-					1000000000
-				)
-			);
-			object->setAutoOrigin();
-			object->setSpeed(base->getSpeed());
-			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
-			break;
-		case science:
-			object = new Object
-			(
-				base->getPosition(),
-				Point(),
-				ObjectType::science,
-				CollisionType::science_col,
-				VisualInfo
-				(
-					SpriteType::science_sprite,
-					AnimationType::hold_anim,
-					1000000000
-				)
-			);
-			object->setAutoOrigin();
-			object->setSpeed(base->getSpeed());
-			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
-			break;
-		case gold:
-			object = new Object
-			(
-				base->getPosition(),
-				Point(),
-				ObjectType::gold,
-				CollisionType::gold_col,
-				VisualInfo
-				(
-					SpriteType::gold_sprite,
-					AnimationType::hold_anim,
-					1000000000
-				)
-			);
+        case dome:
+        case science:
+        case gold:
+            object = getBaseObject(type);
+            object->setPosition(base->getPosition());
 			object->setAutoOrigin();
 			object->setSpeed(base->getSpeed());
 			object->getUnitInfo()->setFaction(base->getUnitInfo()->getFaction());
@@ -1527,6 +1402,7 @@ public:
 		int group_amount = std::min(5, enemy_lvl / 2) + sqrt(enemy_lvl);
 		int gunship_amount = enemy_lvl / 12 + (enemy_lvl > 24 ? (enemy_lvl - 24) / 6 : 0);
 		int fighter_amount = std::max(1, enemy_lvl / 2 - 3 * gunship_amount - (enemy_lvl > 10 ? (enemy_lvl - 10) / 4 : 0));
+        int bombard_amount = enemy_lvl > 15 ? (enemy_lvl - 15) / 10 : 0;
 
 		while (group_amount > 0) {
 			int nearest_point = rand() % convex.size();
@@ -1546,12 +1422,9 @@ public:
 				continue;
 			}
 
-
-			spawnEnemyGroup(fighter_amount, gunship_amount, new_spawn_point);
+            spawnEnemyGroup(fighter_amount, gunship_amount, bombard_amount, new_spawn_point);
 			group_amount--;
 		}
-		
-
 	}
 
 	void setAsteroidBuff(Effect effect, Object * asteroid) {

@@ -197,7 +197,7 @@ public:
 				for (int i = 0; i < 24; i++) {
 					hp_circle[i].color = getColor(hp / max_hp);
 				}
-				if (object->getObjectType() != hero && object->getObjectType() != alien_turret1 && object->getObjectType() != alien_turret2) {
+				if (object->getObjectType() != hero && object->getObjectType() != alien_turret1 && object->getObjectType() != alien_turret2 && object->getObjectType() != alien_turret3) {
 					window->draw(hp_sign);
 					window->draw(hp_circle, ceil(24.0 * hp / max_hp), sf::Lines);
 				}

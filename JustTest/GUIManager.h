@@ -58,20 +58,17 @@ class GUIManager {
 						if (gui_elements[layer][i] != last_clicked_object) {
 
 							gui_event_buffer.addEvent(clicked, gui_elements[layer][i], nullptr);
-							//std::cout << "Click" << std::endl;
 
 							last_clicked_object = gui_elements[layer][i];
 						}
 						else {
 							gui_event_buffer.addEvent(pressed, gui_elements[layer][i], nullptr);
-							//std::cout << "Press" << std::endl;
 						}
 						delete cursor;
 						return true;
 					}
 					else if (last_clicked_object == gui_elements[layer][i]) {
 						gui_event_buffer.addEvent(released, gui_elements[layer][i], nullptr);
-						//std::cout << "Release" << std::endl;
 
 						last_clicked_object = nullptr;
 					}

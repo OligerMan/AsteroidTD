@@ -159,6 +159,7 @@
     <ClInclude Include="Noise.h" />
     <ClInclude Include="NPCInfo.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="ObjectBaseConfiguration.h" />
     <ClInclude Include="ObjectTypes.h" />
     <ClInclude Include="OnlineRank.h" />
     <ClInclude Include="ParserInput.h" />
