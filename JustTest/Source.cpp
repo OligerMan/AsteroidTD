@@ -355,11 +355,6 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 	enum buttons_name {
 		retry,
 		menu,
-		pause_continue,
-		pause_to_menu,
-		pause_to_desktop,
-        pause_volume_down,
-        pause_volume_up,
 
 		BUTTONS_NAME_LIST_SIZE
 	};
@@ -383,6 +378,17 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 		buttons[menu].pos
 	};
 	button_selector.initButtonList(ButtonSelector::game_over, 500, PI / 3, game_over_buttons_pos);
+
+    enum pause_buttons_name {
+        pause_continue,
+        pause_to_menu,
+        pause_to_desktop,
+        pause_volume_down,
+        pause_volume_up,
+
+        PAUSE_BUTTONS_NAME_LIST_SIZE
+    };
+    buttons.resize(PAUSE_BUTTONS_NAME_LIST_SIZE);
 
 	buttons[pause_continue].pos = Point(0, -250);
 	buttons[pause_continue].texture_default.loadFromFile("menu_buttons" + path_separator + "pause_continue.png");
@@ -414,10 +420,13 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
     buttons[pause_volume_down].sprite.setTexture(buttons[pause_volume_down].texture_default);
     buttons[pause_volume_down].advice_string = volume_down_title;
 
-    std::vector<Point> buttons_pos;
-    for (int i = 0; i < buttons.size(); i++) {
-        buttons_pos.push_back(buttons[i].pos);
-    }
+    std::vector<Point> buttons_pos = {
+        buttons[pause_continue].pos,
+        buttons[pause_to_menu].pos,
+        buttons[pause_to_desktop].pos,
+        buttons[pause_volume_down].pos,
+        buttons[pause_volume_up].pos
+    };
     button_selector.initButtonList(ButtonSelector::pause_buttons, 1000, PI / 4, buttons_pos);
 
 	int chosen_button = retry;  // in game over menu
@@ -546,7 +555,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
                 XINPUT_VIBRATION vibration;
                 ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
                 vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
-                vibration.wRightMotorSpeed = 65535; // use any value between 0-65535 here
+                vibration.wRightMotorSpeed = 0; // use any value between 0-65535 here
                 XInputSetState(0, &vibration);
 #else
 #endif
@@ -1237,38 +1246,6 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				}
 				title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
 
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && window.hasFocus()) {
-
-					/*Point cursor_pos;
-					sf::Vector2i mouse_pos = sf::Mouse::getPosition();
-					sf::Vector2i window_pos = window.getPosition();
-					cursor_pos = Point(mouse_pos.x - window.getPosition().x, mouse_pos.y - window.getPosition().y);
-					for (int i = pause_continue; i <= pause_volume_up; i++) {
-						if ((cursor_pos - buttons[i].pos).getLength() <= buttons[i].radius) {
-							if (i == pause_continue) {
-								unpause_game();
-								is_input_state = true;
-							}
-							if (i == pause_to_menu) {
-								game_status = main_menu;
-								return;
-							}
-							if (i == pause_to_desktop) {
-								game_status = exit_to_desktop;
-								return;
-							}
-                            if (i == pause_volume_down && (frame_num - last_volume_change) > fps.getFPS() / 4) {
-                                music_manager.setVolume(std::max(0.0f, music_manager.getVolume() - 5.0f));
-                                last_volume_change = frame_num;
-                            }
-                            if (i == pause_volume_up && (frame_num - last_volume_change) > fps.getFPS() / 4) {
-                                music_manager.setVolume(std::min(100.0f, music_manager.getVolume() + 5.0f));
-                                last_volume_change = frame_num;
-                            }
-						}
-					}*/
-				}
-
                 button_selector.processButtonBuffer(ButtonSelector::pause_buttons, cursor_pos);
                 chosen_button = button_selector.getButtonList(ButtonSelector::pause_buttons).cur_index;
 
@@ -1300,79 +1277,6 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
                         last_volume_change = frame_num;
                     }
 				}
-				////
-				//Point move_vector;
-				//if (window.hasFocus()) {
-				//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
-				//		sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
-				//		sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
-				//		sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-
-				//		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-				//			move_vector += Point(0, -1);
-				//		}
-				//		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-				//			move_vector += Point(-1, 0);
-				//		}
-				//		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-				//			move_vector += Point(0, 1);
-				//		}
-				//		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-				//			move_vector += Point(1, 0);
-				//		}
-				//	}
-				//	else if (sf::Joystick::isConnected(0)) {         // gamepad input
-
-				//		move_vector = Point(
-				//			sf::Joystick::getAxisPosition(0, sf::Joystick::X),
-				//			sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
-
-				//		if (abs(move_vector.x) < 5 && abs(move_vector.y) < 5) {
-				//			move_vector = Point();
-				//		}
-				//	}
-				//}
-				//
-				//move_vector.normalize();
-
-				//if (move_vector.x != 0 || move_vector.y != 0) {
-
-				//	int next_menu_button = -1;
-				//	double min_distance = 1e9;
-
-				//	for (int i = pause_continue; i <= pause_volume_up; i++) {
-				//		double angle_diff =
-				//			(std::atan2(move_vector.x, move_vector.y) -
-				//				std::atan2(
-				//					buttons[i].pos.x - buttons[chosen_button].pos.x,
-				//					buttons[i].pos.y - buttons[chosen_button].pos.y));
-
-				//		if (abs(angle_diff) > 0.000001) {     // angle_diff is not close to zero
-				//			if (abs(angle_diff) > abs(angle_diff + 2 * PI)) {
-				//				angle_diff += 2 * PI;
-				//			}
-				//			if (abs(angle_diff) > abs(angle_diff - 2 * PI)) {
-				//				angle_diff -= 2 * PI;
-				//			}
-				//		}
-				//		if (abs(angle_diff) <= PI / 4.0) {
-				//			if (min_distance > (buttons[i].pos - buttons[chosen_button].pos).getLength() && (buttons[i].pos - buttons[chosen_button].pos).getLength() > 0.01 /*not close to zero*/) {
-				//				next_menu_button = i;
-				//				min_distance = (buttons[i].pos - buttons[chosen_button].pos).getLength();
-				//			}
-				//		}
-				//	}
-
-
-				//	if ((next_menu_button != -1) && ((frame_num - last_menu_choice) > fps.getFPS() / 2) && tutorial.isWorkingOnStep(Tutorial::no_tutorial)) {
-				//		chosen_button = next_menu_button;
-				//		last_menu_choice = frame_num;
-				//	}
-				//	is_input_state = true;
-				//}
-				//if (!is_input_state) {
-				//	last_menu_choice = frame_num - fps.getFPS();
-				//}
 				for (int i = pause_continue; i <= pause_volume_up; i++) {
 					window.draw(buttons[i].sprite);
 				}
