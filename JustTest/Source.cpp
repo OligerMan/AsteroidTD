@@ -388,6 +388,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
         PAUSE_BUTTONS_NAME_LIST_SIZE
     };
+    buttons.clear();
     buttons.resize(PAUSE_BUTTONS_NAME_LIST_SIZE);
 
 	buttons[pause_continue].pos = Point(0, -250);
@@ -429,7 +430,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
     };
     button_selector.initButtonList(ButtonSelector::pause_buttons, 1000, PI / 4, buttons_pos);
 
-	int chosen_button = retry;  // in game over menu
+	int chosen_button = 0;  // in game over menu
     int chosen_answer = 0;   // for dialogs
 
 
@@ -1587,7 +1588,7 @@ int main() {
 #ifdef __linux__ || __APPLE__  
 #elif _WIN32
 	HWND console_hWnd = GetConsoleWindow();
-	//ShowWindow(console_hWnd, SW_HIDE);
+	ShowWindow(console_hWnd, SW_HIDE);
 #else
 #endif
 
@@ -1764,6 +1765,7 @@ int main() {
         setting_ranking_title,
         setting_win_width_title,
         setting_win_height_title,
+        setting_volume_title,
         setting_local_file_title,
         setting_discard_title,
         setting_exit_title,
@@ -1785,6 +1787,9 @@ int main() {
 
         buffer = phrase_container.getPhraseBuffer(L"setting_win_height_title_GUI", 0);
         setting_win_height_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+        buffer = phrase_container.getPhraseBuffer(L"setting_volume_title_GUI", 0);
+        setting_volume_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
         buffer = phrase_container.getPhraseBuffer(L"setting_local_file_title_GUI", 0);
         setting_local_file_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
@@ -1945,9 +1950,12 @@ int main() {
 					if (settings_list[i] == "window_width") {
                         settings_sign.setString(setting_win_width_title);
 					}
-					if (settings_list[i] == "window_height") {
+                    if (settings_list[i] == "window_height") {
                         settings_sign.setString(setting_win_height_title);
-					}
+                    }
+                    if (settings_list[i] == "volume") {
+                        settings_sign.setString(setting_volume_title);
+                    }
                     if (settings_list[i] == "localisation_file") {
                         settings_sign.setString(setting_local_file_title);
                     }
@@ -2009,7 +2017,10 @@ int main() {
 							settings.setSetting(settings_list[chosen_setting], keyboard_buffer.getBuffer());
 							if (settings_list[chosen_setting] == "nickname" || settings_list[chosen_setting] == "ranking_server") {
 								rank.reboot();
-							}
+                            }
+                            else if (settings_list[chosen_setting] == "volume") {
+                                music_manager.setVolume(settings.getVolume());
+                            }
 						}
 						key_pressed = true;
 					}

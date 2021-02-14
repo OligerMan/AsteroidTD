@@ -87,6 +87,14 @@ phrase_type setting_win_height_title_GUI
 phrase_end
 
 phrase_start
+string |Громкость: |
+conditions_start
+conditions_end
+id common
+phrase_type setting_volume_title_GUI
+phrase_end
+
+phrase_start
 string |Файл локализации: |
 conditions_start
 conditions_end

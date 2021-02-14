@@ -50,6 +50,7 @@ public:
 	enum settings_name {
 		window_height,
 		window_width,
+        volume,
 		sprt_debug,
 		error_output,
 		gamepad_debug,
@@ -71,7 +72,8 @@ public:
 private:
 	std::vector<Setting> set = {
 		Setting("window_height", 720),
-		Setting("window_width", 1200),
+        Setting("window_width", 1200),
+        Setting("volume", 30),
 		Setting("sprt_debug", 0),
 		Setting("error_output", 0),
 		Setting("gamepad_debug", 0),
@@ -106,7 +108,8 @@ public:
 		settings_input << "error_output " << set[error_output].value << std::endl;
 		settings_input << "sprt_debug " << set[sprt_debug].value << std::endl;
 		settings_input << "window_height " << set[window_height].value << std::endl;
-		settings_input << "window_width " << set[window_width].value << std::endl;
+        settings_input << "window_width " << set[window_width].value << std::endl;
+        settings_input << "volume " << set[volume].value << std::endl;
 		settings_input << "collision_debug " << set[collision_debug].value << std::endl;
 		settings_input << "gamepad_debug " << set[gamepad_debug].value << std::endl;
 		settings_input << "navigation_debug " << set[navigation_debug].value << std::endl;
@@ -209,7 +212,8 @@ public:
 			std::string("nickname"),
 			std::string("ranking_server"),
 			std::string("window_width"),
-			std::string("window_height"),
+            std::string("window_height"),
+            std::string("volume"),
             std::string("localisation_file")
 		};
 		return output;
@@ -227,13 +231,21 @@ public:
 		set[window_height].setValue(new_window_height);
 	}
 
-	int getWindowWidth() {
-		return set[window_width].value_i;
-	}
+    int getWindowWidth() {
+        return set[window_width].value_i;
+    }
 
-	void setWindowWidth(int new_window_width) {
-		set[window_width].setValue(new_window_width);
-	}
+    void setWindowWidth(int new_window_width) {
+        set[window_width].setValue(new_window_width);
+    }
+
+    int getVolume() {
+        return set[volume].value_i;
+    }
+
+    void setVolume(int new_volume) {
+        set[volume].setValue(new_volume);
+    }
 
 	bool isSpriteDebugOutputEnabled() {
 		return set[sprt_debug].value_i;

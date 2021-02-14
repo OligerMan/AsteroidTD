@@ -15,13 +15,14 @@
 #include <SFML/Audio.hpp>
 
 #include "FileSearch.h"
+#include "Settings.h"
 
 class MusicManager {
 	std::vector<sf::Music *> playlist;
 	std::vector<std::string> track_name;
 	int current_track = 0;
 	bool play_state = true;
-	float current_volume = 30.0f;
+	int current_volume = 30;
 
 	std::random_device r;
 	std::default_random_engine generator;
@@ -37,6 +38,7 @@ class MusicManager {
 public:
 
 	MusicManager(std::string path) {
+        current_volume = settings.getVolume();
 		track_name = *getFileList(path);
 		playlist.resize(track_name.size());
 		for (int i = 0; i < playlist.size(); i++) {
@@ -84,8 +86,9 @@ public:
 		playlist[current_track]->play();
 	}
 
-	void setVolume(float volume) {
+	void setVolume(int volume) {
 		playlist[current_track]->setVolume(volume);
+        settings.setVolume(volume);
 		current_volume = volume;
 	}
 

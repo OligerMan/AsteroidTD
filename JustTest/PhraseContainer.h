@@ -179,7 +179,7 @@ public:
         }
     }
 
-    std::vector<std::wstring> getPhraseBuffer(std::wstring type, int politeness, std::wstring id = L"") {
+    std::vector<std::wstring> getPhraseBuffer(std::wstring type, int politeness = 0, std::wstring id = L"") {
         std::vector<std::wstring> output;
         bool id_spec_phrase = false;
         auto iter = new_phrase_buffer.find(type);
