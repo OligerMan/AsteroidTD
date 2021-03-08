@@ -379,6 +379,7 @@ private:
 							Point bullet_pos = object1->getPosition() + Point(cos((object1->getAngle() - 90) / 180 * PI), sin((object1->getAngle() - 90) / 180 * PI)) * 95;
 							SpriteType bullet_type = bullet_sprite;
                             CollisionType bullet_col_type = bullet_col;
+                            Object * die_object = nullptr;
 							switch (object1->getObjectType()) {
 							case rocket_launcher:
 								bullet_type = rocket_sprite;
@@ -386,6 +387,19 @@ private:
                             case alien_turret3:
                                 bullet_type = bombard_bullet_sprite;
                                 bullet_col_type = bombard_bullet_col;
+                                die_object = new Object
+                                (
+                                    bullet_pos,
+                                    Point(),
+                                    ObjectType::bombard_bullet_explosion,
+                                    CollisionType::bombard_bullet_explosion_col,
+                                    VisualInfo
+                                    (
+                                        bombard_bullet_explosion_sprite,
+                                        AnimationType::hold_anim,
+                                        10000000
+                                    )
+                                );
                                 break;
 							}
 							Object * object = new Object
@@ -475,6 +489,11 @@ private:
 							rank.addKills(1);
 						}
 						smth_cleaned = true;
+                        Object * die_object = objects[layer][i]->getDieObject();
+                        if (die_object != nullptr) {
+                            die_object->setPosition(objects[layer][i]->getPosition());
+                            addObject(die_object, layer);
+                        }
 						delete objects[layer][i];
 						objects[layer].erase(objects[layer].begin() + i);
 					}

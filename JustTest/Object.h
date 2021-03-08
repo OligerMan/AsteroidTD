@@ -11,6 +11,7 @@ class Object {
 	VisualInfo vis_info;
 	ObjectType object_type_info = null;
 	AdditionalInfo add_info;
+    Object * die_object = nullptr;   // object created after desruction of main object. Allows to perform chain transformation of objects
 
 	bool deleted = false;
 	bool discovered = false;
@@ -397,6 +398,14 @@ public:
         if (!add_info.getNPCInfo()) {
             add_info.setNPCInfo(npc_info);
         }
+    }
+
+    Object * getDieObject() {
+        return die_object;
+    }
+
+    void setDieObject(Object * new_die_object) {
+        die_object = new_die_object;
     }
 };
 

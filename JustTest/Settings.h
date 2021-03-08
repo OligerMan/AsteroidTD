@@ -20,6 +20,9 @@ public:
 			catch (std::invalid_argument exc) {
 				value_i = 0;
 			}
+            catch (std::out_of_range exc) {
+                value_i = 0;
+            }
 		}
 
 		void setValue(int value) {
@@ -195,6 +198,9 @@ public:
 		for (int i = 0; i < set.size(); i++) {
 			if (name == set[i].name) {
 				set[i].setValue(value);
+                if (name == "volume") {
+                    set[i].setValue(std::max(std::min(set[i].value_i, 100), 0));
+                }
 				return;
 			}
 		}

@@ -352,6 +352,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 		float radius = 75;
 		std::wstring advice_string;
 	};
+
 	enum buttons_name {
 		retry,
 		menu,
