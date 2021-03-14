@@ -201,7 +201,7 @@
     <ClInclude Include="DialogAdditionalInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectBaseConfiguration.h">
+    <ClInclude Include="ObjectFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

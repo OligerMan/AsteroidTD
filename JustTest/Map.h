@@ -17,7 +17,7 @@
 #include "PhraseContainer.h"
 #include "AsteroidGenerator.h"
 #include "DialogAdditionalInfo.h"
-#include "ObjectBaseConfiguration.h"
+#include "ObjectFactory.h"
 
 void fixCollision(Object * obj1, Object * obj2) {
 
@@ -833,7 +833,7 @@ private:
 			float angle = ((float)i / fighter_amount) * 2 * PI;
 			Point new_pos = pos + Point(cos(angle), sin(angle)) * (300 + fighter_amount * 10);
 
-            Object * object = getBaseObject(alien_fighter);
+            Object * object = object_factory.getObject({ alien_fighter });
             object->setPosition(new_pos);
 			object->setAutoOrigin();
 			object->getUnitInfo()->setFaction(aggressive_faction);
@@ -848,7 +848,7 @@ private:
 			float angle = ((float)i / gunship_amount) * 2 * PI;
 			Point new_pos = pos + Point(cos(angle), sin(angle)) * (450 + gunship_amount * 10);
 
-            Object * object = getBaseObject(alien_gunship);
+            Object * object = object_factory.getObject({ alien_gunship });
             object->setPosition(new_pos);
 			object->setAutoOrigin();
 			object->getUnitInfo()->setFaction(aggressive_faction);
@@ -863,7 +863,7 @@ private:
             float angle = ((float)i / bombard_amount) * 2 * PI;
             Point new_pos = pos + Point(cos(angle), sin(angle)) * (600 + bombard_amount * 10);
 
-            Object * object = getBaseObject(alien_bombard);
+            Object * object = object_factory.getObject({ alien_bombard });
             object->setPosition(new_pos);
             object->setAutoOrigin();
             object->getUnitInfo()->setFaction(aggressive_faction);
@@ -879,7 +879,7 @@ private:
 		Object * object;
 		switch (base->getObjectType()) {
 		case alien_fighter:
-			object = getBaseObject(alien_turret1);
+			object = object_factory.getObject({ alien_turret1 });
             object->setPosition(base->getPosition());
 			object->setAutoOrigin();
 			object->getUnitInfo()->setFaction(aggressive_faction);
@@ -887,23 +887,23 @@ private:
 			base->attachObject(object);
 			break;
 		case alien_gunship:
-            object = getBaseObject(alien_turret2);
+            object = object_factory.getObject({ alien_turret2 });
             object->setPosition(base->getPosition() + Point(-77, 0));
 			object->setAutoOrigin();
 			object->getUnitInfo()->setFaction(aggressive_faction);
 			addObject(object, main_layer);
 			base->attachObject(object);
 
-			
-            object = getBaseObject(alien_turret2);
+
+            object = object_factory.getObject({ alien_turret2 });
             object->setPosition(base->getPosition() + Point(74, 0));
 			object->setAutoOrigin();
 			object->getUnitInfo()->setFaction(aggressive_faction);
 			addObject(object, main_layer);
 			base->attachObject(object);
 
-			
-            object = getBaseObject(alien_turret2);
+
+            object = object_factory.getObject({ alien_turret2 });
             object->setPosition(base->getPosition() + Point(69, -45));
 			object->setAutoOrigin();
 			object->getUnitInfo()->setFaction(aggressive_faction);
@@ -911,7 +911,7 @@ private:
 			base->attachObject(object);
 
 
-            object = getBaseObject(alien_turret2);
+            object = object_factory.getObject({ alien_turret2 });
             object->setPosition(base->getPosition() + Point(-73, -45));
 			object->setAutoOrigin();
 			object->getUnitInfo()->setFaction(aggressive_faction);
@@ -919,7 +919,7 @@ private:
 			base->attachObject(object);
 			break;
         case alien_bombard:
-            object = getBaseObject(alien_turret3);
+            object = object_factory.getObject({ alien_turret3 });
             object->setPosition(base->getPosition() + Point(0, -60));
             object->setAutoOrigin();
             object->getUnitInfo()->setFaction(aggressive_faction);
@@ -1320,7 +1320,7 @@ public:
         case dome:
         case science:
         case gold:
-            object = getBaseObject(type);
+            object = object_factory.getObject({ type });
             object->setPosition(base->getPosition());
 			object->setAutoOrigin();
 			object->setSpeed(base->getSpeed());

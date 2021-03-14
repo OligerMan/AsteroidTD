@@ -542,11 +542,13 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			if (vibration_time > 0) {
 #ifdef __linux__ || __APPLE__ 
 #elif _WIN32
-                XINPUT_VIBRATION vibration;
-                ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
-                vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
-                vibration.wRightMotorSpeed = 65535; // use any value between 0-65535 here
-                XInputSetState(0, &vibration);
+                if (sf::Joystick::isConnected(0)) {
+                    XINPUT_VIBRATION vibration;
+                    ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+                    vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
+                    vibration.wRightMotorSpeed = 65535; // use any value between 0-65535 here
+                    XInputSetState(0, &vibration);
+                }
 #else
 #endif
 				
@@ -554,11 +556,13 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			else {
 #ifdef __linux__ || __APPLE__  
 #elif _WIN32
-                XINPUT_VIBRATION vibration;
-                ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
-                vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
-                vibration.wRightMotorSpeed = 0; // use any value between 0-65535 here
-                XInputSetState(0, &vibration);
+                if (sf::Joystick::isConnected(0)) {
+                    XINPUT_VIBRATION vibration;
+                    ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+                    vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
+                    vibration.wRightMotorSpeed = 0; // use any value between 0-65535 here
+                    XInputSetState(0, &vibration);
+                }
 #else
 #endif
 			}
@@ -852,7 +856,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					}
 				}
 			}
-
+            bool move_activity = false;
 			if (hero_object != nullptr) {           // input
 				if (sf::Joystick::isConnected(0)) {         // gamepad input
 
@@ -865,7 +869,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					}
 					else {
 						if (game_status == game_hero_mode) {
-							hero_object->setAnimationType(move_anim);
+                            move_activity = true;
 						}
 					}
 
@@ -882,25 +886,25 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
 					new_speed += Point(0, -1);
 					if (!(game_status == game_strategic_mode)) {
-						hero_object->setAnimationType(move_anim);
+                        move_activity = true;
 					}
 				}
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
 					new_speed += Point(-1, 0);
 					if (!(game_status == game_strategic_mode)) {
-						hero_object->setAnimationType(move_anim);
+                        move_activity = true;
 					}
 				}
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
 					new_speed += Point(0, 1);
 					if (!(game_status == game_strategic_mode)) {
-						hero_object->setAnimationType(move_anim);
+                        move_activity = true;
 					}
 				}
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
 					new_speed += Point(1, 0);
 					if (!(game_status == game_strategic_mode)) {
-						hero_object->setAnimationType(move_anim);
+                        move_activity = true;
 					}
 				}
 
@@ -1186,6 +1190,13 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 						hero_object->setSpeed(speed.getNormal() * consts.getMaxHeroSpeed());
 					}
 					hero_object->setAngle(atan2(speed.y, speed.x) / PI * 180);
+
+                    if (hero_object->getSpeed().getLength() < 3 && !move_activity) {
+                        hero_object->setAnimationType(hold_anim);
+                    }
+                    else {
+                        hero_object->setAnimationType(move_anim);
+                    }
 				}
 			}
 			else if (game_status == game_strategic_mode) {
@@ -1201,7 +1212,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
                 }
                 else {
                     hero_object->setSpeed(Point());
-                    hero_object->setAnimationType(hold_anim);
+                    //hero_object->setAnimationType(hold_anim);
                     new_speed = new_speed.getNormal() * consts.getStrategicCameraSpeed() * consts.getFPSLock() / fps.getFPS();
                     view2.setCenter(view2.getCenter() + sf::Vector2f(new_speed.x, new_speed.y));
                     strategic_back_pos = strategic_back_pos + sf::Vector2f(new_speed.x * 0.95, new_speed.y * 0.95);
@@ -1289,11 +1300,13 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 		if (game_status == game_over) {
 #ifdef __linux__ || __APPLE__  
 #elif _WIN32
-            XINPUT_VIBRATION vibration;
-            ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
-            vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
-            vibration.wRightMotorSpeed = 0; // use any value between 0-65535 here
-            XInputSetState(0, &vibration);
+            if (sf::Joystick::isConnected(0)) {
+                XINPUT_VIBRATION vibration;
+                ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+                vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
+                vibration.wRightMotorSpeed = 0; // use any value between 0-65535 here
+                XInputSetState(0, &vibration);
+            }
 #else
 #endif
 
@@ -1837,11 +1850,13 @@ int main() {
 		window.setView(main_view);
 #ifdef __linux__ || __APPLE__  
 #elif _WIN32
-        XINPUT_VIBRATION vibration;
-        ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
-        vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
-        vibration.wRightMotorSpeed = 0; // use any value between 0-65535 here
-        XInputSetState(0, &vibration);
+        if (sf::Joystick::isConnected(0)) {
+            XINPUT_VIBRATION vibration;
+            ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+            vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
+            vibration.wRightMotorSpeed = 0; // use any value between 0-65535 here
+            XInputSetState(0, &vibration);
+        }
 #else
 #endif
 
