@@ -359,27 +359,27 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 		BUTTONS_NAME_LIST_SIZE
 	};
-	std::vector<Button> buttons;
-	buttons.resize(BUTTONS_NAME_LIST_SIZE);
+	std::vector<Button> buttons_game_over;
+	buttons_game_over.resize(BUTTONS_NAME_LIST_SIZE);
 
-	buttons[retry].pos = Point(960, 300);
-	buttons[retry].texture_default.loadFromFile("menu_buttons" + path_separator + "retry.png");
-	buttons[retry].texture_selected.loadFromFile("menu_buttons" + path_separator + "retry_selected.png");
-	buttons[retry].sprite.setTexture(buttons[retry].texture_default);
-	buttons[retry].advice_string = try_again_title;
+	buttons_game_over[retry].pos = Point(-200, -150);
+	buttons_game_over[retry].texture_default.loadFromFile("menu_buttons" + path_separator + "retry.png");
+	buttons_game_over[retry].texture_selected.loadFromFile("menu_buttons" + path_separator + "retry_selected.png");
+	buttons_game_over[retry].sprite.setTexture(buttons_game_over[retry].texture_default);
+	buttons_game_over[retry].advice_string = try_again_title;
 
-	buttons[menu].pos = Point(960, 500);
-	buttons[menu].texture_default.loadFromFile("menu_buttons" + path_separator + "menu.png");
-	buttons[menu].texture_selected.loadFromFile("menu_buttons" + path_separator + "menu_selected.png");
-	buttons[menu].sprite.setTexture(buttons[menu].texture_default);
-	buttons[menu].advice_string = go_back_to_menu_title;
+	buttons_game_over[menu].pos = Point(200, -150);
+	buttons_game_over[menu].texture_default.loadFromFile("menu_buttons" + path_separator + "menu.png");
+	buttons_game_over[menu].texture_selected.loadFromFile("menu_buttons" + path_separator + "menu_selected.png");
+	buttons_game_over[menu].sprite.setTexture(buttons_game_over[menu].texture_default);
+	buttons_game_over[menu].advice_string = go_back_to_menu_title;
 
 	std::vector<Point> game_over_buttons_pos = {
-		buttons[retry].pos,
-		buttons[menu].pos
+		buttons_game_over[retry].pos,
+		buttons_game_over[menu].pos
 	};
 	button_selector.initButtonList(ButtonSelector::game_over, 500, PI / 3, game_over_buttons_pos);
-
+	std::vector<Button> buttons;
     enum pause_buttons_name {
         pause_continue,
         pause_to_menu,
@@ -1311,21 +1311,22 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 #endif
 
 			window.setView(view4);
+			ButtonList button_list = button_selector.getButtonList(ButtonSelector::game_over);
 			for (int i = retry; i <= menu; i++) {
 				if (i == chosen_button) {
-					buttons[i].sprite.setTexture(buttons[i].texture_selected);
+					buttons_game_over[i].sprite.setTexture(buttons_game_over[i].texture_selected);
 				}
 				else {
-					buttons[i].sprite.setTexture(buttons[i].texture_default);
+					buttons_game_over[i].sprite.setTexture(buttons_game_over[i].texture_default);
 				}
-				buttons[i].sprite.setScale(sf::Vector2f(buttons[i].radius * 2 / buttons[i].sprite.getTexture()->getSize().x * window.getView().getSize().x / 1920, buttons[i].radius * 2 / buttons[i].sprite.getTexture()->getSize().y * window.getView().getSize().y / 1080));
-				buttons[i].sprite.setOrigin(sf::Vector2f(buttons[i].sprite.getTexture()->getSize().x / 2, buttons[i].sprite.getTexture()->getSize().y / 2));
-				buttons[i].sprite.setPosition(sf::Vector2f(buttons[i].pos.x * window.getView().getSize().x / 1920, buttons[i].pos.y * window.getView().getSize().y / 1080));
+				buttons_game_over[i].sprite.setScale(sf::Vector2f(buttons_game_over[i].radius * 2 / buttons_game_over[i].sprite.getTexture()->getSize().x * window.getView().getSize().x / 1920, buttons_game_over[i].radius * 2 / buttons_game_over[i].sprite.getTexture()->getSize().y * window.getView().getSize().y / 1080));
+				buttons_game_over[i].sprite.setOrigin(sf::Vector2f(buttons_game_over[i].sprite.getTexture()->getSize().x / 2, buttons_game_over[i].sprite.getTexture()->getSize().y / 2));
+				buttons_game_over[i].sprite.setPosition(sf::Vector2f(window.getView().getSize().x / 2 + buttons_game_over[i].pos.x * window.getView().getSize().x / 1920, window.getView().getSize().y / 2 + buttons_game_over[i].pos.y * window.getView().getSize().y / 1080));
 			}
 
-			title.setString(keyboard_press_title + buttons[chosen_button].advice_string);
+			title.setString(keyboard_press_title + buttons_game_over[chosen_button].advice_string);
 			if (sf::Joystick::isConnected(0)) {
-				title.setString(gamepad_press_title + buttons[chosen_button].advice_string);
+				title.setString(gamepad_press_title + buttons_game_over[chosen_button].advice_string);
 			}
 			title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
 
@@ -1334,9 +1335,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				Point cursor_pos;
 				sf::Vector2i mouse_pos = sf::Mouse::getPosition();
 				sf::Vector2i window_pos = window.getPosition();
-				cursor_pos = Point(mouse_pos.x - window.getPosition().x, mouse_pos.y - window.getPosition().y);
+				cursor_pos = Point(mouse_pos.x - window.getPosition().x - window.getView().getSize().x / 2, mouse_pos.y - window.getPosition().y - window.getView().getSize().y / 2);
 				for (int i = retry; i <= menu; i++) {
-					if ((cursor_pos - buttons[i].pos).getLength() <= buttons[i].radius) {
+					if ((cursor_pos - buttons_game_over[i].pos).getLength() <= buttons_game_over[i].radius) {
 						if (i == retry) {
 							game_status = game_hero_mode;
 							return;
@@ -1367,7 +1368,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			background_manager.processFrame(Point(1, 0), Point());
 			window.draw(game_over_background_sprite);
 			for (int i = retry; i <= menu; i++) {
-				window.draw(buttons[i].sprite);
+				window.draw(buttons_game_over[i].sprite);
 			}
 			window.draw(title);
 		}
