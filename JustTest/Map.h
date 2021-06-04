@@ -132,6 +132,9 @@ private:
 	float gen_radius = 8500, cam_radius = 5500, min_range = 1500, max_range = 2700, asteroid_speed = 0;
 	int asteroid_amount = 50, max_try_count = 100;
 	bool save_out_range = true, fixed_asteroids = true;
+	double enemy_power_coef = 1;
+	long long power_cnt = 0;
+	const double power_inc_coef = 1.0002;
 
     MissionStageInfo mission_stage_info;
 
@@ -1143,8 +1146,8 @@ private:
                         float angle = (float)(rand() % 1024) / 512 * PI;
                         Point new_spawn_point = hero_object->getPosition() + Point(cos(angle), sin(angle)) * (consts.getDefenceMissionEnemySpawnRange() + 0.1);
                         int enemy_lvl = *static_cast<float *>(objective.data);
-                        int gunship_amount = enemy_lvl / 10;
-                        int fighter_amount = std::max(1, enemy_lvl / 2 - 2 * gunship_amount);
+                        int gunship_amount = enemy_lvl / 8;
+                        int fighter_amount = std::max(1, std::min(enemy_lvl / 3 - 2 * gunship_amount + 5, enemy_lvl / 2));
                         int bombard_amount = 0;
                         spawnEnemyGroup(fighter_amount, gunship_amount, bombard_amount, new_spawn_point, &enemy_list);
 						enemy_wave_list.insert(std::pair<unsigned long long, std::vector<Object *>>(cur_miss->getID(), enemy_list));
@@ -1214,6 +1217,10 @@ public:
         if (object->getObjectSpriteType() == null_sprite) {
             std::cout << "wtf" << std::endl;
         }
+		if (object->getObjectType() != bullet && object->getUnitInfo() != nullptr && object->getUnitInfo()->getFaction() == FactionList::aggressive_faction) {
+			object->getUnitInfo()->damageRescale(enemy_power_coef);
+			object->getUnitInfo()->maxHealthRescale(enemy_power_coef);
+		}
 		objects[layer].push_back(object);
 		last_clicked_object = object;
 	}
@@ -1236,6 +1243,11 @@ public:
 		}
 
 		rebuildMap(view_pos, gen_radius, cam_radius, save_out_range, 1, asteroid_amount, min_range, max_range);
+
+		power_cnt++;
+		if (power_cnt % 50 == 0) {
+			enemy_power_coef *= power_inc_coef;
+		}
 	}
 
 	Object * getHero() {
@@ -1460,5 +1472,9 @@ public:
 	void saveToFile(std::string path) {
 		std::ifstream save(path);
 
+	}
+
+	double getEnemyPowerCoef() {
+		return enemy_power_coef;
 	}
 };

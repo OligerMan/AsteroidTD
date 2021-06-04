@@ -15,9 +15,9 @@ class Constants {
 
 	const float base_gold_income = 0.004;
 	const float base_research_income = 0.0005;
-	const float base_turret_price = 100;
+	const float base_turret_price = 150;
 	const float base_science_price = 100;
-	const float base_gold_price = 100;
+	const float base_gold_price = 125;
 	const float base_dome_price = 500;
 
 	const float attack_abil_price = 3;

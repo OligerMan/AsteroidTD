@@ -175,6 +175,14 @@ phrase_type skills_ability_sign_GUI
 phrase_end
 
 phrase_start
+string |Сила врагов: |
+conditions_start
+conditions_end
+id common
+phrase_type enemy_power_sign_GUI
+phrase_end
+
+phrase_start
 string |Нажми 4/А для разговора|
 conditions_start
 conditions_end

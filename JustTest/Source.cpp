@@ -152,6 +152,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
         skills_build_sign,
         skills_ability_sign,
         skills_interact_sign,
+		enemy_power_sign,
         new_wave_sign,
         message_sign,
         keyboard_press_title,
@@ -221,8 +222,10 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
         skills_build_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
         buffer = phrase_container.getPhraseBuffer(L"skills_ability_sign_GUI", 0);
         skills_ability_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
-        buffer = phrase_container.getPhraseBuffer(L"skills_interact_sign_GUI", 0);
-        skills_interact_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+		buffer = phrase_container.getPhraseBuffer(L"skills_interact_sign_GUI", 0);
+		skills_interact_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+		buffer = phrase_container.getPhraseBuffer(L"enemy_power_sign_GUI", 0);
+		enemy_power_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
         buffer = phrase_container.getPhraseBuffer(L"new_wave_sign_GUI", 0);
         new_wave_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
         buffer = phrase_container.getPhraseBuffer(L"message_sign_GUI", 0);
@@ -586,6 +589,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
             Point skill_pos = Point(
                 window.getView().getSize().x / 2 / 1.2 - 250 * window.getView().getSize().x / 1920, 
                 (int)window.getView().getSize().y / 2 / 1.2 + 10 * window.getView().getSize().x / 1920);
+			Point enemy_power_pos = Point(
+				-window.getView().getSize().x / 2 / 1.2 + 10 * window.getView().getSize().x / 1920,
+				(int)window.getView().getSize().y / 2 / 1.2 + 10 * window.getView().getSize().x / 1920);
 
 			if (skills_mode == set1) {
                 
@@ -597,6 +603,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			else {
 				gui_manager.setText(skills_interact_sign, 0.01, skill_status_sign, skill_pos, 30);
 			}
+			gui_manager.setText(enemy_power_sign + std::to_wstring(game_map1.getEnemyPowerCoef()).substr(0,4), 0.01, power_sign, enemy_power_pos, 30);
 
 			if (game_status != game_pause && tutorial.isWorkingOnStep(tutorial.no_tutorial) && game_mode == GameMode::infinity_mode) {
 				if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - last_wave).count() > wave_delay) {
