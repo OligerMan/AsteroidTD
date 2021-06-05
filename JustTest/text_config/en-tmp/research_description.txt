@@ -1,0 +1,515 @@
+dialog_file_start
+
+phrase_start
+string |+10% turret damage@+10% turret max health(only for new structures)|
+conditions_start
+conditions_end
+id common
+phrase_type turret_init_research_desc
+phrase_end
+
+phrase_start
+string |+25% turret damage|
+conditions_start
+conditions_end
+id common
+phrase_type turret_dmg1_research_desc
+phrase_end
+
+phrase_start
+string |+60% turret damage|
+conditions_start
+conditions_end
+id common
+phrase_type turret_dmg2_research_desc
+phrase_end
+
+phrase_start
+string |+100% turret damage|
+conditions_start
+conditions_end
+id common
+phrase_type turret_dmg3_research_desc
+phrase_end
+
+phrase_start
+string |+50% turret attack speed|
+conditions_start
+conditions_end
+id common
+phrase_type turret_asp1_research_desc
+phrase_end
+
+phrase_start
+string |+75% turret attack speed|
+conditions_start
+conditions_end
+id common
+phrase_type turret_asp2_research_desc
+phrase_end
+
+phrase_start
+string |+25% max health(only for new turrets)|
+conditions_start
+conditions_end
+id common
+phrase_type turret_mhp1_research_desc
+phrase_end
+
+phrase_start
+string |+60% max health(only for new turrets)|
+conditions_start
+conditions_end
+id common
+phrase_type turret_mhp2_research_desc
+phrase_end
+
+phrase_start
+string |+125% max health(only for new turrets)|
+conditions_start
+conditions_end
+id common
+phrase_type turret_mhp3_research_desc
+phrase_end
+
+phrase_start
+string |x2 regeneration for turrets|
+conditions_start
+conditions_end
+id common
+phrase_type turret_regen1_research_desc
+phrase_end
+
+phrase_start
+string |x3 regeneration for turrets|
+conditions_start
+conditions_end
+id common
+phrase_type turret_regen2_research_desc
+phrase_end
+
+phrase_start
+string |10% damage reduction|
+conditions_start
+conditions_end
+id common
+phrase_type turret_dmg_red1_research_desc
+phrase_end
+
+phrase_start
+string |15% damage reduction|
+conditions_start
+conditions_end
+id common
+phrase_type turret_dmg_red2_research_desc
+phrase_end
+
+phrase_start
+string |20% damage reduction|
+conditions_start
+conditions_end
+id common
+phrase_type turret_dmg_red3_research_desc
+phrase_end
+
+phrase_start
+string |25% damage reduction|
+conditions_start
+conditions_end
+id common
+phrase_type turret_dmg_red4_research_desc
+phrase_end
+
+phrase_start
+string |5% lifesteal(damage to self-heal)|
+conditions_start
+conditions_end
+id common
+phrase_type turret_lfsteal1_research_desc
+phrase_end
+
+phrase_start
+string |10% lifesteal(damage to self-heal)|
+conditions_start
+conditions_end
+id common
+phrase_type turret_lfsteal2_research_desc
+phrase_end
+
+phrase_start
+string |15% lifesteal(damage to self-heal)|
+conditions_start
+conditions_end
+id common
+phrase_type turret_lfsteal3_research_desc
+phrase_end
+
+phrase_start
+string |+10% turret range|
+conditions_start
+conditions_end
+id common
+phrase_type turret_range1_research_desc
+phrase_end
+
+phrase_start
+string |+15% turret range|
+conditions_start
+conditions_end
+id common
+phrase_type turret_range2_research_desc
+phrase_end
+
+phrase_start
+string |+20% turret range|
+conditions_start
+conditions_end
+id common
+phrase_type turret_range3_research_desc
+phrase_end
+
+phrase_start
+string |+25% turret range|
+conditions_start
+conditions_end
+id common
+phrase_type turret_range4_research_desc
+phrase_end
+
+phrase_start
+string |ULTIMATE TURRET FORM:@x6 damage@100% lifesteal@50% damage reduction@+50% range@x11 max health@x11 regeneration|
+conditions_start
+conditions_end
+id common
+phrase_type turret_ultimate_research_desc
+phrase_end
+
+phrase_start
+string |+10% regeneration for all structures on same asteroid@+10% dome max health(only for new structures)@+10% extra health for all structures on same asteroid@(for every dome)@(only for new structures)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_init_research_desc
+phrase_end
+
+phrase_start
+string |+25% regeneration for all structures on same asteroid|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_regen1_research_desc
+phrase_end
+
+phrase_start
+string |+60% regeneration for all structures on same asteroid|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_regen2_research_desc
+phrase_end
+
+phrase_start
+string |+100% regeneration for all structures on same asteroid|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_regen3_research_desc
+phrase_end
+
+phrase_start
+string |+25% extra health for all structures on same asteroid@(for every dome)@(only for new structures)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_hp1_research_desc
+phrase_end
+
+phrase_start
+string |+65% extra health for all structures on same asteroid@(for every dome)@(only for new structures)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_hp2_research_desc
+phrase_end
+
+phrase_start
+string |+150% extra health for all structures on same asteroid@(for every dome)@(only for new structures)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_hp3_research_desc
+phrase_end
+
+phrase_start
+string |+25% dome max health@(only for new structures)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_mhp1_research_desc
+phrase_end
+
+phrase_start
+string |+60% dome max health@(only for new structures)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_mhp2_research_desc
+phrase_end
+
+phrase_start
+string |+100% dome max health@(only for new structures)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_mhp3_research_desc
+phrase_end
+
+phrase_start
+string |+2% extra damage reduction for all structures on same asteroid@(only for new structures)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_dmg_red1_research_desc
+phrase_end
+
+phrase_start
+string |+3% extra damage reduction for all structures on same asteroid@(only for new structures)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_dmg_red2_research_desc
+phrase_end
+
+phrase_start
+string |+4% extra damage reduction for all structures on same asteroid@(only for new structures)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_dmg_red3_research_desc
+phrase_end
+
+phrase_start
+string |+5% extra damage for all turrets on same asteroid@(for every dome)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_dmg1_research_desc
+phrase_end
+
+phrase_start
+string |+10% extra damage for all turrets on same asteroid@(for every dome)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_dmg2_research_desc
+phrase_end
+
+phrase_start
+string |+15% extra damage for all turrets on same asteroid@(for every dome)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_dmg3_research_desc
+phrase_end
+
+phrase_start
+string |+5% extra research income for all science stations on same asteroid@(for every dome)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_ri1_research_desc
+phrase_end
+
+phrase_start
+string |+10% extra research income for all science stations on same asteroid@(for every dome)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_ri2_research_desc
+phrase_end
+
+phrase_start
+string |+15% extra research income for all science stations on same asteroid@(for every dome)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_ri3_research_desc
+phrase_end
+
+phrase_start
+string |+5% extra gold income for all gold mines on same asteroid@(for every dome)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_gi1_research_desc
+phrase_end
+
+phrase_start
+string |+10% extra gold income for all gold mines on same asteroid@(for every dome)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_gi2_research_desc
+phrase_end
+
+phrase_start
+string |+15% extra gold income for all gold mines on same asteroid@(for every dome)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_gi3_research_desc
+phrase_end
+
+phrase_start
+string |ULTIMATE DOME FORM:@x4 extra health for all structures on same asteroid@+5% extra damage reduction for all structures on same asteroid@+50% extra damage for all turrets on same asteroid@+50% extra research income for all science stations on same asteroid@+50% extra gold income for all gold mines on same asteroid@x6 extra health for all structures on same asteroid@x6 dome max health|
+conditions_start
+conditions_end
+id common
+phrase_type dome_ultimate_research_desc
+phrase_end
+
+phrase_start
+string |+10% research income@+10% science stations max health(only for new structures)|
+conditions_start
+conditions_end
+id common
+phrase_type science_init_research_desc
+phrase_end
+
+phrase_start
+string |+25% research income|
+conditions_start
+conditions_end
+id common
+phrase_type science_inc1_research_desc
+phrase_end
+
+phrase_start
+string |+60% research income|
+conditions_start
+conditions_end
+id common
+phrase_type science_inc2_research_desc
+phrase_end
+
+phrase_start
+string |+100% research income|
+conditions_start
+conditions_end
+id common
+phrase_type science_inc3_research_desc
+phrase_end
+
+phrase_start
+string |+25% science stations max health(only for new structures)|
+conditions_start
+conditions_end
+id common
+phrase_type science_mhp1_research_desc
+phrase_end
+
+phrase_start
+string |+60% science stations max health(only for new structures)|
+conditions_start
+conditions_end
+id common
+phrase_type science_mhp2_research_desc
+phrase_end
+
+phrase_start
+string |+100% science stations max health(only for new structures)|
+conditions_start
+conditions_end
+id common
+phrase_type science_mhp3_research_desc
+phrase_end
+
+phrase_start
+string |x2 science stations regeneration|
+conditions_start
+conditions_end
+id common
+phrase_type science_regen1_research_desc
+phrase_end
+
+phrase_start
+string |x3 science stations regeneration|
+conditions_start
+conditions_end
+id common
+phrase_type science_regen2_research_desc
+phrase_end
+
+phrase_start
+string |+10% gold income@+10% gold mines max health(only for new structures)|
+conditions_start
+conditions_end
+id common
+phrase_type gold_init_research_desc
+phrase_end
+
+phrase_start
+string |+25% gold income|
+conditions_start
+conditions_end
+id common
+phrase_type gold_inc1_research_desc
+phrase_end
+
+phrase_start
+string |+60% gold income|
+conditions_start
+conditions_end
+id common
+phrase_type gold_inc2_research_desc
+phrase_end
+
+phrase_start
+string |+100% gold income|
+conditions_start
+conditions_end
+id common
+phrase_type gold_inc3_research_desc
+phrase_end
+
+phrase_start
+string |+25% gold mines max health(only for new structures)|
+conditions_start
+conditions_end
+id common
+phrase_type gold_mhp1_research_desc
+phrase_end
+
+phrase_start
+string |+60% gold mines max health(only for new structures)|
+conditions_start
+conditions_end
+id common
+phrase_type gold_mhp2_research_desc
+phrase_end
+
+phrase_start
+string |+100% gold mines max health(only for new structures)|
+conditions_start
+conditions_end
+id common
+phrase_type gold_mhp3_research_desc
+phrase_end
+
+phrase_start
+string |x2 gold mines regeneration|
+conditions_start
+conditions_end
+id common
+phrase_type gold_regen1_research_desc
+phrase_end
+
+phrase_start
+string |x3 gold mines regeneration|
+conditions_start
+conditions_end
+id common
+phrase_type gold_regen2_research_desc
+phrase_end
+
+dialog_file_end

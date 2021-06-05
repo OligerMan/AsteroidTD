@@ -1,0 +1,515 @@
+dialog_file_start
+
+phrase_start
+string |+10% урона турелей@+10% прочности(для новых построек)|
+conditions_start
+conditions_end
+id common
+phrase_type turret_init_research_desc
+phrase_end
+
+phrase_start
+string |+25% урона турелей|
+conditions_start
+conditions_end
+id common
+phrase_type turret_dmg1_research_desc
+phrase_end
+
+phrase_start
+string |+60% урона турелей|
+conditions_start
+conditions_end
+id common
+phrase_type turret_dmg2_research_desc
+phrase_end
+
+phrase_start
+string |+100% урона турелей|
+conditions_start
+conditions_end
+id common
+phrase_type turret_dmg3_research_desc
+phrase_end
+
+phrase_start
+string |+50% скорости атаки|
+conditions_start
+conditions_end
+id common
+phrase_type turret_asp1_research_desc
+phrase_end
+
+phrase_start
+string |+75% скорости атаки|
+conditions_start
+conditions_end
+id common
+phrase_type turret_asp2_research_desc
+phrase_end
+
+phrase_start
+string |+25% прочности(для новых построек)|
+conditions_start
+conditions_end
+id common
+phrase_type turret_mhp1_research_desc
+phrase_end
+
+phrase_start
+string |+60% прочности(для новых построек)|
+conditions_start
+conditions_end
+id common
+phrase_type turret_mhp2_research_desc
+phrase_end
+
+phrase_start
+string |+125% прочности(для новых построек)|
+conditions_start
+conditions_end
+id common
+phrase_type turret_mhp3_research_desc
+phrase_end
+
+phrase_start
+string |x2 регенерации турели|
+conditions_start
+conditions_end
+id common
+phrase_type turret_regen1_research_desc
+phrase_end
+
+phrase_start
+string |x3 регенерации турели|
+conditions_start
+conditions_end
+id common
+phrase_type turret_regen2_research_desc
+phrase_end
+
+phrase_start
+string |10% снижения урона|
+conditions_start
+conditions_end
+id common
+phrase_type turret_dmg_red1_research_desc
+phrase_end
+
+phrase_start
+string |15% снижения урона|
+conditions_start
+conditions_end
+id common
+phrase_type turret_dmg_red2_research_desc
+phrase_end
+
+phrase_start
+string |20% снижения урона|
+conditions_start
+conditions_end
+id common
+phrase_type turret_dmg_red3_research_desc
+phrase_end
+
+phrase_start
+string |25% снижения урона|
+conditions_start
+conditions_end
+id common
+phrase_type turret_dmg_red4_research_desc
+phrase_end
+
+phrase_start
+string |5% вампиризма(урона в самолечение)|
+conditions_start
+conditions_end
+id common
+phrase_type turret_lfsteal1_research_desc
+phrase_end
+
+phrase_start
+string |10% вампиризма(урона в самолечение)|
+conditions_start
+conditions_end
+id common
+phrase_type turret_lfsteal2_research_desc
+phrase_end
+
+phrase_start
+string |15% вампиризма(урона в самолечение)|
+conditions_start
+conditions_end
+id common
+phrase_type turret_lfsteal3_research_desc
+phrase_end
+
+phrase_start
+string |+10% радиуса атаки|
+conditions_start
+conditions_end
+id common
+phrase_type turret_range1_research_desc
+phrase_end
+
+phrase_start
+string |+15% радиуса атаки|
+conditions_start
+conditions_end
+id common
+phrase_type turret_range2_research_desc
+phrase_end
+
+phrase_start
+string |+20% радиуса атаки|
+conditions_start
+conditions_end
+id common
+phrase_type turret_range3_research_desc
+phrase_end
+
+phrase_start
+string |+25% радиуса атаки|
+conditions_start
+conditions_end
+id common
+phrase_type turret_range4_research_desc
+phrase_end
+
+phrase_start
+string |СУПЕР ФОРМА ТУРЕЛИ:@x6 урона@100% вампиризма@50% снижения урона@+50% радиуса атаки@x11 прочности@x11 регенерации|
+conditions_start
+conditions_end
+id common
+phrase_type turret_ultimate_research_desc
+phrase_end
+
+phrase_start
+string |+10% регенерации для всех построек на том же астероиде@+10% прочности(для новых построек)@+10% доп прочности для всех построек на том же астероиде@(за каждый купол)@(для новых построек)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_init_research_desc
+phrase_end
+
+phrase_start
+string |+25% регенерации для всех построек на том же астероиде|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_regen1_research_desc
+phrase_end
+
+phrase_start
+string |+60% регенерации для всех построек на том же астероиде|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_regen2_research_desc
+phrase_end
+
+phrase_start
+string |+100% регенерации для всех построек на том же астероиде|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_regen3_research_desc
+phrase_end
+
+phrase_start
+string |+25% доп прочности для всех построек на том же астероиде@(за каждый купол)@(для новых построек)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_hp1_research_desc
+phrase_end
+
+phrase_start
+string |+65% доп прочности для всех построек на том же астероиде@(за каждый купол)@(для новых построек)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_hp2_research_desc
+phrase_end
+
+phrase_start
+string |+150% доп прочности для всех построек на том же астероиде@(за каждый купол)@(для новых построек)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_hp3_research_desc
+phrase_end
+
+phrase_start
+string |+25% прочности@(для новых построек)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_mhp1_research_desc
+phrase_end
+
+phrase_start
+string |+60% прочности@(для новых построек)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_mhp2_research_desc
+phrase_end
+
+phrase_start
+string |+100% прочности@(для новых построек)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_mhp3_research_desc
+phrase_end
+
+phrase_start
+string |+2% доп снижения урона для всех построек на том же астероиде@(за каждый купол)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_dmg_red1_research_desc
+phrase_end
+
+phrase_start
+string |+3% доп снижения урона для всех построек на том же астероиде@(за каждый купол)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_dmg_red2_research_desc
+phrase_end
+
+phrase_start
+string |+4% доп снижения урона для всех построек на том же астероиде@(за каждый купол)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_dmg_red3_research_desc
+phrase_end
+
+phrase_start
+string |+5% доп урона для всех турелей на том же астероиде@(за каждый купол)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_dmg1_research_desc
+phrase_end
+
+phrase_start
+string |+10% доп урона для всех турелей на том же астероиде@(за каждый купол)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_dmg2_research_desc
+phrase_end
+
+phrase_start
+string |+15% доп урона для всех турелей на том же астероиде@(за каждый купол)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_dmg3_research_desc
+phrase_end
+
+phrase_start
+string |+5% доп исследований для всех научных станций на том же астероиде@(за каждый купол)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_ri1_research_desc
+phrase_end
+
+phrase_start
+string |+10% доп исследований для всех научных станций на том же астероиде@(за каждый купол)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_ri2_research_desc
+phrase_end
+
+phrase_start
+string |+15% доп исследований для всех научных станций на том же астероиде@(за каждый купол)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_ri3_research_desc
+phrase_end
+
+phrase_start
+string |+5% доп золота для всех золотых шахт на том же астероиде@(за каждый купол)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_gi1_research_desc
+phrase_end
+
+phrase_start
+string |+10% доп золота для всех золотых шахт на том же астероиде@(за каждый купол)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_gi2_research_desc
+phrase_end
+
+phrase_start
+string |+15% доп золота для всех золотых шахт на том же астероиде@(за каждый купол)|
+conditions_start
+conditions_end
+id common
+phrase_type dome_g_gi3_research_desc
+phrase_end
+
+phrase_start
+string |СУПЕР ФОРМА КУПОЛА:@x4 доп прочности для всех построек на том же астероиде@+5% доп снижения урона для всех построек на том же астероиде@+50% доп урона для всех турелей на том же астероиде@+50% доп исследований для всех научных станций на том же астероиде@+50% доп золота для всех золотых шахт на том же астероиде@x6 прочности|
+conditions_start
+conditions_end
+id common
+phrase_type dome_ultimate_research_desc
+phrase_end
+
+phrase_start
+string |+10% очков исследований@+10% прочности(для новых построек)|
+conditions_start
+conditions_end
+id common
+phrase_type science_init_research_desc
+phrase_end
+
+phrase_start
+string |+25% очков исследований|
+conditions_start
+conditions_end
+id common
+phrase_type science_inc1_research_desc
+phrase_end
+
+phrase_start
+string |+60% очков исследований|
+conditions_start
+conditions_end
+id common
+phrase_type science_inc2_research_desc
+phrase_end
+
+phrase_start
+string |+100% очков исследований|
+conditions_start
+conditions_end
+id common
+phrase_type science_inc3_research_desc
+phrase_end
+
+phrase_start
+string |+25% прочности(для новых построек)|
+conditions_start
+conditions_end
+id common
+phrase_type science_mhp1_research_desc
+phrase_end
+
+phrase_start
+string |+60% прочности(для новых построек)|
+conditions_start
+conditions_end
+id common
+phrase_type science_mhp2_research_desc
+phrase_end
+
+phrase_start
+string |+100% прочности(для новых построек)|
+conditions_start
+conditions_end
+id common
+phrase_type science_mhp3_research_desc
+phrase_end
+
+phrase_start
+string |x2 регенерации|
+conditions_start
+conditions_end
+id common
+phrase_type science_regen1_research_desc
+phrase_end
+
+phrase_start
+string |x3 регенерации|
+conditions_start
+conditions_end
+id common
+phrase_type science_regen2_research_desc
+phrase_end
+
+phrase_start
+string |+10% золота@+10% прочности(для новых построек)|
+conditions_start
+conditions_end
+id common
+phrase_type gold_init_research_desc
+phrase_end
+
+phrase_start
+string |+25% золота|
+conditions_start
+conditions_end
+id common
+phrase_type gold_inc1_research_desc
+phrase_end
+
+phrase_start
+string |+60% золота|
+conditions_start
+conditions_end
+id common
+phrase_type gold_inc2_research_desc
+phrase_end
+
+phrase_start
+string |+100% золота|
+conditions_start
+conditions_end
+id common
+phrase_type gold_inc3_research_desc
+phrase_end
+
+phrase_start
+string |+25% прочности(для новых построек)|
+conditions_start
+conditions_end
+id common
+phrase_type gold_mhp1_research_desc
+phrase_end
+
+phrase_start
+string |+60% прочности(для новых построек)|
+conditions_start
+conditions_end
+id common
+phrase_type gold_mhp2_research_desc
+phrase_end
+
+phrase_start
+string |+100% прочности(для новых построек)|
+conditions_start
+conditions_end
+id common
+phrase_type gold_mhp3_research_desc
+phrase_end
+
+phrase_start
+string |x2 регенерации|
+conditions_start
+conditions_end
+id common
+phrase_type gold_regen1_research_desc
+phrase_end
+
+phrase_start
+string |x3 регенерации|
+conditions_start
+conditions_end
+id common
+phrase_type gold_regen2_research_desc
+phrase_end
+
+dialog_file_end

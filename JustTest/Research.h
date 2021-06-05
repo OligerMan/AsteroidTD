@@ -93,7 +93,8 @@ struct ResearchNode {
     ResearchList type;
     Point pos;
     std::vector<ResearchList> parents;
-	std::string description;
+	//std::string description;
+	std::wstring description_id;
 };
 
 class ResearchManager {
@@ -102,74 +103,74 @@ class ResearchManager {
 	Point graph_size;
 	Point left_up_graph_corner;
 
-    std::vector<std::string> research_name = {
-		"turret_init",
-		"turret_dmg1",    // dmg = damage
-		"turret_dmg2",
-		"turret_dmg3",
-		"turret_asp1",    // asp = attack speed
-		"turret_asp2",
-		"turret_mhp1",    // mhp = max health points
-		"turret_mhp2",
-		"turret_mhp3",
-		"turret_regen1",
-		"turret_regen2",
-		"turret_dmg_red1",     // damage reduction
-		"turret_dmg_red2",
-		"turret_dmg_red3",
-		"turret_dmg_red4",
-		"turret_lfsteal1",
-		"turret_lfsteal2",
-		"turret_lfsteal3",
-		"turret_range1",
-		"turret_range2",
-		"turret_range3",
-		"turret_range4",
-		"turret_ultimate",
+    std::vector<std::wstring> research_name = {
+		L"turret_init",
+		L"turret_dmg1",    // dmg = damage
+		L"turret_dmg2",
+		L"turret_dmg3",
+		L"turret_asp1",    // asp = attack speed
+		L"turret_asp2",
+		L"turret_mhp1",    // mhp = max health points
+		L"turret_mhp2",
+		L"turret_mhp3",
+		L"turret_regen1",
+		L"turret_regen2",
+		L"turret_dmg_red1",     // damage reduction
+		L"turret_dmg_red2",
+		L"turret_dmg_red3",
+		L"turret_dmg_red4",
+		L"turret_lfsteal1",
+		L"turret_lfsteal2",
+		L"turret_lfsteal3",
+		L"turret_range1",
+		L"turret_range2",
+		L"turret_range3",
+		L"turret_range4",
+		L"turret_ultimate",
 
-		"dome_init",
-		"dome_g_regen1",
-		"dome_g_regen2",
-		"dome_g_regen3",
-		"dome_g_hp1",
-		"dome_g_hp2",
-		"dome_g_hp3",
-		"dome_mhp1",
-		"dome_mhp2",
-		"dome_mhp3",
-		"dome_g_dmg_red1",  // local damage reduction
-		"dome_g_dmg_red2",
-		"dome_g_dmg_red3",
-		"dome_g_dmg1",
-		"dome_g_dmg2",
-		"dome_g_dmg3",
-		"dome_g_ri1",     // ri = research income
-		"dome_g_ri2",
-		"dome_g_ri3",
-		"dome_g_gi1",     // gi = gold income
-		"dome_g_gi2",
-		"dome_g_gi3",
-		"dome_ultimate",
+		L"dome_init",
+		L"dome_g_regen1",
+		L"dome_g_regen2",
+		L"dome_g_regen3",
+		L"dome_g_hp1",
+		L"dome_g_hp2",
+		L"dome_g_hp3",
+		L"dome_mhp1",
+		L"dome_mhp2",
+		L"dome_mhp3",
+		L"dome_g_dmg_red1",  // local damage reduction
+		L"dome_g_dmg_red2",
+		L"dome_g_dmg_red3",
+		L"dome_g_dmg1",
+		L"dome_g_dmg2",
+		L"dome_g_dmg3",
+		L"dome_g_ri1",     // ri = research income
+		L"dome_g_ri2",
+		L"dome_g_ri3",
+		L"dome_g_gi1",     // gi = gold income
+		L"dome_g_gi2",
+		L"dome_g_gi3",
+		L"dome_ultimate",
 
-		"science_init",
-		"science_inc1",   // inc = income
-		"science_inc2",
-		"science_inc3",
-		"science_mhp1",
-		"science_mhp2",
-		"science_mhp3",
-		"science_regen1",
-		"science_regen2",
+		L"science_init",
+		L"science_inc1",   // inc = income
+		L"science_inc2",
+		L"science_inc3",
+		L"science_mhp1",
+		L"science_mhp2",
+		L"science_mhp3",
+		L"science_regen1",
+		L"science_regen2",
 
-		"gold_init",
-		"gold_inc1",
-		"gold_inc2",
-		"gold_inc3",
-		"gold_mhp1",
-		"gold_mhp2",
-		"gold_mhp3",
-		"gold_regen1",
-		"gold_regen2"
+		L"gold_init",
+		L"gold_inc1",
+		L"gold_inc2",
+		L"gold_inc3",
+		L"gold_mhp1",
+		L"gold_mhp2",
+		L"gold_mhp3",
+		L"gold_regen1",
+		L"gold_regen2"
     };
 
     /*
@@ -197,7 +198,7 @@ class ResearchManager {
 	}
 public: 
 
-	ResearchList stringToResearch(std::string string) {
+	ResearchList stringToResearch(std::wstring string) {
 		for (int i = 0; i < research_name.size(); i++) {
 			if (research_name[i] == string) {
 				return (ResearchList)i;
@@ -206,11 +207,11 @@ public:
 		return RESEARCH_COUNT;
 	}
 
-	std::string researchTypeToString(ResearchList type) {
+	std::wstring researchTypeToString(ResearchList type) {
 		if (type >= 0 && type < research_name.size()) {
 			return research_name[type];
 		}
-		return "";
+		return L"";
 	}
 
 	void setGraphSize() {
@@ -235,18 +236,18 @@ public:
 		research_list.clear();
 		graph.clear();
 
-        std::ifstream input_file;
+        std::wifstream input_file;
         input_file.open(path);
 
-		std::string string;
+		std::wstring string;
 
 		graph.resize(research_name.size());
 		research_list.resize(research_name.size());
 			
 		while (true) {
 			input_file >> string;
-			if (string != "research_start") {
-				if (string == "") {
+			if (string != L"research_start") {
+				if (string == L"") {
 					input_file.close();
 					return;
 				}
@@ -257,10 +258,10 @@ public:
 				return;
 			}
 			input_file >> string;
-			if (string == "research_end") {
+			if (string == L"research_end") {
 				break;
 			}
-			if (string != "type") {
+			if (string != L"type") {
 				if (settings.isErrorOutputEnabled()) {
 					std::cout << "Missing type of research" << std::endl;
 				}
@@ -284,7 +285,7 @@ public:
 			research_node->type = type;
 
 			input_file >> string;
-			if (string != "cost") {
+			if (string != L"cost") {
 				if (settings.isErrorOutputEnabled()) {
 					std::cout << "Missing cost of research" << std::endl;
 				}
@@ -294,7 +295,7 @@ public:
 
 			research->cost = getFloat(input_file);
 			input_file >> string;
-			if (string != "pos") {
+			if (string != L"pos") {
 				if (settings.isErrorOutputEnabled()) {
 					std::cout << "Missing position of research button" << std::endl;
 				}
@@ -305,14 +306,14 @@ public:
 			research_node->pos.y = getFloat(input_file);
 
 			input_file >> string;
-			if (string != "description") {
+			if (string != L"description") {
 				if (settings.isErrorOutputEnabled()) {
 					std::cout << "Missing research's description block" << std::endl;
 				}
 				input_file.close();
 				return;
 			}
-			while (input_file.get() != '\|') {}
+			/*while (input_file.get() != '\|') {}
 			string.clear();
 			while (true) {
 				unsigned char input_char = input_file.get();
@@ -324,10 +325,11 @@ public:
 				}
 				string.push_back(input_char);
 			}
-			research_node->description = string;
+			research_node->description = string;*/
+			input_file >> research_node->description_id;
 
 			input_file >> string;
-			if (string != "parent_start") {
+			if (string != L"parent_start") {
 				if (settings.isErrorOutputEnabled()) {
 					std::cout << "Missing research's parent block" << std::endl;
 				}
@@ -337,7 +339,7 @@ public:
 
 			while (true) {
 				input_file >> string;
-				if (string == "parent_end") {
+				if (string == L"parent_end") {
 					break;
 				}
 				ResearchList parent_type = stringToResearch(string);
@@ -351,7 +353,7 @@ public:
 				research_node->parents.push_back(parent_type);
 			}
 			input_file >> string;
-			if (string != "research_end") {
+			if (string != L"research_end") {
 				if (settings.isErrorOutputEnabled()) {
 					std::cout << "Research's description end not found" << std::endl;
 				}
@@ -403,7 +405,7 @@ public:
 		return graph;
 	}
 
-	std::vector<std::string> getResearchName() {
+	std::vector<std::wstring> getResearchName() {
 		return research_name;
 	}
 

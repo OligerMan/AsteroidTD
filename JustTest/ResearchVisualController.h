@@ -41,7 +41,7 @@ class ResearchVisualController {
 			notactive.loadFromFile(path + path_separator + (*research_names)[res_cnt] + path_separator + "notactive.png");
 			unlocked.loadFromFile(path + path_separator + (*research_names)[res_cnt] + path_separator + "unlocked.png");
 
-			int res_id = research_manager.stringToResearch((*research_names)[res_cnt]);
+			int res_id = research_manager.stringToResearch(stringToWstring((*research_names)[res_cnt]));
 
 			texture_buffer[res_id].push_back(notactive);
 			texture_buffer[res_id].push_back(active);
@@ -64,7 +64,11 @@ class ResearchVisualController {
 		cost_sign.setString("Research points: " + std::to_string((int)resource_manager.getResearch()) +"\nCost: " + std::to_string((int)research_manager.getResearch((ResearchList)cur_research_index)->cost) + " research points");
 		cost_sign.setOrigin(-viewport_pos);
 		cost_sign.setCharacterSize(40 * window->getView().getSize().y / 1080);
-		description.setString(research_manager.getResearchNode((ResearchList)cur_research_index)->description);
+
+		auto tmp = research_manager.getResearchNode((ResearchList)cur_research_index);
+		std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(tmp->description_id);
+		description.setString(buffer[rand() * buffer.size() / (RAND_MAX + 1)]);
+
 		description.setOrigin(-viewport_pos + sf::Vector2f(0, description.getGlobalBounds().height));
 		description.setCharacterSize(40 * window->getView().getSize().y / 1080);
 
