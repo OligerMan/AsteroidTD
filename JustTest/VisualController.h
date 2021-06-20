@@ -146,6 +146,9 @@ public:
 			for (int i = 0; i < (*objects)[layer].size(); i++) {
 				Object * object = (*objects)[layer][i];
 				double radius = object->getCollisionModel()->getMaxRadius() * window->getSize().y / 1080;
+				if (object->getObjectType() == asteroid) {
+					radius *= 1.05;
+				}
 				float hp = (float)object->getUnitInfo()->getHealth();
 				float max_hp = (float)object->getUnitInfo()->getMaxHealth();
 
@@ -167,39 +170,49 @@ public:
 
 					return sf::Color(color_min.r + ratio * (color_max.r - color_min.r), color_min.g + ratio * (color_max.g - color_min.g), color_min.b + ratio * (color_max.b - color_min.b));
 				};
-				sf::Vertex hp_circle[] =
-				{
-					sf::Vertex(sf::Vector2f(pos.x + sin(0) * radius, pos.y + cos(0) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12) * radius, pos.y + cos(PI * 2 / 12) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12) * radius, pos.y + cos(PI * 2 / 12) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 2) * radius, pos.y + cos(PI * 2 / 12 * 2) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 2) * radius, pos.y + cos(PI * 2 / 12 * 2) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 3) * radius, pos.y + cos(PI * 2 / 12 * 3) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 3) * radius, pos.y + cos(PI * 2 / 12 * 3) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 4) * radius, pos.y + cos(PI * 2 / 12 * 4) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 4) * radius, pos.y + cos(PI * 2 / 12 * 4) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 5) * radius, pos.y + cos(PI * 2 / 12 * 5) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 5) * radius, pos.y + cos(PI * 2 / 12 * 5) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 6) * radius, pos.y + cos(PI * 2 / 12 * 6) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 6) * radius, pos.y + cos(PI * 2 / 12 * 6) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 7) * radius, pos.y + cos(PI * 2 / 12 * 7) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 7) * radius, pos.y + cos(PI * 2 / 12 * 7) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 8) * radius, pos.y + cos(PI * 2 / 12 * 8) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 8) * radius, pos.y + cos(PI * 2 / 12 * 8) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 9) * radius, pos.y + cos(PI * 2 / 12 * 9) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 9) * radius, pos.y + cos(PI * 2 / 12 * 9) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 10) * radius, pos.y + cos(PI * 2 / 12 * 10) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 10) * radius, pos.y + cos(PI * 2 / 12 * 10) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 11) * radius, pos.y + cos(PI * 2 / 12 * 11) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(PI * 2 / 12 * 11) * radius, pos.y + cos(PI * 2 / 12 * 11) * radius)),
-					sf::Vertex(sf::Vector2f(pos.x + sin(0) * radius, pos.y + cos(0) * radius)),
-				};
-				for (int i = 0; i < 24; i++) {
-					hp_circle[i].color = getColor(hp / max_hp);
+
+				const int point_cnt = 100;
+				int point_limit = ceil(float(point_cnt * 2) * hp / max_hp);
+				sf::VertexArray hp_circle(sf::Lines, point_cnt * 2);
+
+				hp_circle[0].position = sf::Vector2f(pos.x + sin(0) * radius, pos.y + cos(0) * radius);
+				for (int i = 1; i < point_cnt; i++) {
+					hp_circle[i * 2 - 1].position = sf::Vector2f(pos.x + sin(PI * 2 / point_cnt * i) * radius, pos.y + cos(PI * 2 / point_cnt * i) * radius);
+					hp_circle[i * 2].position = sf::Vector2f(pos.x + sin(PI * 2 / point_cnt * i) * radius, pos.y + cos(PI * 2 / point_cnt * i) * radius);
+				}
+				hp_circle[point_cnt * 2 - 1].position = sf::Vector2f(pos.x + sin(0) * radius, pos.y + cos(0) * radius);
+				
+
+				for (int k = 0; k < point_cnt * 2; k++) {
+					hp_circle[k].color = sf::Color(0, 0, 0, 0);
+				}
+				for (int k = 0; k < int(ceil(float(point_cnt * hp / max_hp)) * 2); k++) {
+					hp_circle[k].color = getColor(hp / max_hp);
 				}
 				if (object->getObjectType() != hero && object->getObjectType() != alien_turret1 && object->getObjectType() != alien_turret2 && object->getObjectType() != alien_turret3) {
 					window->draw(hp_sign);
-					window->draw(hp_circle, ceil(24.0 * hp / max_hp), sf::Lines);
+					window->draw(hp_circle);
+				}
+				if (object->getObjectType() == asteroid && object->getUnitInfo() && object->getUnitInfo()->getFaction() == hero_faction) {
+					float ratio = object->getUnitInfo()->getAsteroidResources() / consts.getBaseAsteroidGold();
+					const int point_cnt_gold = point_cnt * 100;
+					int point_limit = ceil(float(point_cnt_gold * 2) * ratio);
+					sf::VertexArray gold_circle(sf::Lines, point_cnt_gold * 2);
+
+					gold_circle[0].position = sf::Vector2f(pos.x + sin(0) * radius, pos.y + cos(0) * radius);
+					for (int i = 1; i < point_cnt_gold; i++) {
+						gold_circle[i * 2 - 1].position = sf::Vector2f(pos.x + sin(PI * 2 / point_cnt_gold * i) * radius, pos.y + cos(PI * 2 / point_cnt_gold * i) * radius);
+						gold_circle[i * 2].position = sf::Vector2f(pos.x + sin(PI * 2 / point_cnt_gold * i) * radius, pos.y + cos(PI * 2 / point_cnt_gold * i) * radius);
+					}
+					gold_circle[point_cnt_gold * 2 - 1].position = sf::Vector2f(pos.x + sin(0) * radius, pos.y + cos(0) * radius);
+
+					for (int k = 0; k < point_cnt_gold * 2; k++) {
+						gold_circle[k].color = sf::Color(0, 0, 0, 0);
+					}
+					for (int k = 0; k < int(ceil(float(point_cnt_gold * ratio)) * 2); k++) {
+						gold_circle[k].color = sf::Color(0, 255, 255);
+					}
+					window->draw(gold_circle);
 				}
 			}
 		}

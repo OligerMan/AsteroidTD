@@ -13,12 +13,13 @@ class Constants {
 	const float fps_lock = 240;
 	const double interaction_distance = 600;
 
-	const float base_gold_income = 0.004;
+	const float base_gold_income = 0.005;
 	const float base_research_income = 0.0005;
 	const float base_turret_price = 150;
 	const float base_science_price = 100;
 	const float base_gold_price = 125;
 	const float base_dome_price = 500;
+	const float base_asteroid_gold = 10000;
 
 	const float attack_abil_price = 3;
 	const float speed_buff_price = 30;
@@ -30,7 +31,7 @@ class Constants {
 	const float minimal_flight_range = 450;
 
 	const float dome_heal = 0.1;
-	const float hero_heal = 1;
+	const float hero_heal = 100;
 
 	const float fire_damage = 0.25;
 	const float regen_buff = 0.06;
@@ -224,7 +225,12 @@ public:
         return defence_reward_coef;
     }
 
-    const char * getDefaultFontPath() {
-        return default_font;
-    }
+	const char * getDefaultFontPath() {
+		return default_font;
+	}
+
+	const float getBaseAsteroidGold() {
+		return base_asteroid_gold;
+	}
+
 } consts;

@@ -90,6 +90,7 @@ class UnitInfo {
 	bool inf_endur = true;
 
 	int dome_cnt = 0;   // for applying researches
+	float aster_res = consts.getBaseAsteroidGold();
 
 	std::vector<AttackInfo> attack;
 
@@ -516,6 +517,18 @@ public:
 		for (int i = 0; i < attack.size(); i++) {
 			attack[i].damage *= coef;
 		}
+	}
+
+	float getAsteroidResources() {
+		return aster_res;
+	}
+
+	void setAsteroidResources(float new_res) {
+		aster_res = new_res;
+	}
+
+	void changeAsteroidResources(float res_diff) {
+		aster_res += res_diff;
 	}
 };
 

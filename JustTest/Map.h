@@ -134,7 +134,7 @@ private:
 	bool save_out_range = true, fixed_asteroids = true;
 	double enemy_power_coef = 1;
 	long long power_cnt = 0;
-	const double power_inc_coef = 1.0002;
+	const double power_inc_coef = 1.00014;
 
     MissionStageInfo mission_stage_info;
 
@@ -946,6 +946,9 @@ private:
 					cnt++;
 				}
 			}
+			if (attach->size() == 0 || cnt == 0) {
+				objects[landscape_layer][i]->setFaction(null_faction);
+			}
 			if (objects[landscape_layer][i]->getUnitInfo() && objects[landscape_layer][i]->getUnitInfo()->getFaction() == hero_faction) {
 				if (objects[landscape_layer][i]->getAttached()->size() >= 7) {
 					switch (objects[landscape_layer][i]->getObjectSpriteType()) {
@@ -999,11 +1002,14 @@ private:
 					switch ((*attach)[j]->getObjectType()) {
 					case gold:
 						(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getGoldRegenCoef());
-						resource_manager.addGold(
-							consts.getBaseGoldIncome() *
-							(research_manager.getGoldIncomeCoef() + cnt * research_manager.getDomeLocalGoldIncomeCoef()) *
-							gold_coef *
-							consts.getFPSLock() / fps.getFPS());
+						if (objects[landscape_layer][i]->getUnitInfo()->getAsteroidResources() > 0) {
+							double gold_diff = consts.getBaseGoldIncome() *
+								(research_manager.getGoldIncomeCoef() + cnt * research_manager.getDomeLocalGoldIncomeCoef()) *
+								gold_coef *
+								consts.getFPSLock() / fps.getFPS();
+							resource_manager.addGold(gold_diff);
+							objects[landscape_layer][i]->getUnitInfo()->changeAsteroidResources(-gold_diff);
+						}
 						break;
 					case science:
 						(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getScienceRegenCoef() * consts.getFPSLock() / fps.getFPS());
@@ -1215,7 +1221,7 @@ public:
 			objects.resize(layer + 1);
 		}
         if (object->getObjectSpriteType() == null_sprite) {
-            std::cout << "wtf" << std::endl;
+            //std::cout << "wtf" << std::endl;
         }
 		if (object->getObjectType() != bullet && object->getUnitInfo() != nullptr && object->getUnitInfo()->getFaction() == FactionList::aggressive_faction) {
 			object->getUnitInfo()->damageRescale(enemy_power_coef);
@@ -1430,10 +1436,13 @@ public:
 			convex_hull(convex);
 		}
 
-		int group_amount = std::min(5, enemy_lvl / 2) + sqrt(enemy_lvl);
-		int gunship_amount = enemy_lvl / 12 + (enemy_lvl > 24 ? (enemy_lvl - 24) / 6 : 0);
+		int group_amount = std::min(4, enemy_lvl / 2) + sqrt(enemy_lvl);
+		/*int gunship_amount = enemy_lvl / 12 + (enemy_lvl > 24 ? (enemy_lvl - 24) / 6 : 0);
 		int fighter_amount = std::max(1, enemy_lvl / 2 - 3 * gunship_amount - (enemy_lvl > 10 ? (enemy_lvl - 10) / 4 : 0));
-        int bombard_amount = enemy_lvl > 15 ? (enemy_lvl - 15) / 10 : 0;
+        int bombard_amount = enemy_lvl > 15 ? (enemy_lvl - 15) / 10 : 0;*/
+		int gunship_amount = enemy_lvl / 15 + (enemy_lvl > 24 ? (enemy_lvl - 24) / 6 : 0);
+		int fighter_amount = std::max(1, enemy_lvl / 3 - 3 * gunship_amount - (enemy_lvl > 12 ? (enemy_lvl - 12) / 4 : 0));
+		int bombard_amount = enemy_lvl > 15 ? (enemy_lvl - 15) / 10 : 0;
 
 		while (group_amount > 0) {
 			int nearest_point = rand() % convex.size();
