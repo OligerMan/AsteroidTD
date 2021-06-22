@@ -31,7 +31,7 @@ class Constants {
 	const float minimal_flight_range = 450;
 
 	const float dome_heal = 0.1;
-	const float hero_heal = 100;
+	const float hero_heal = 1;
 
 	const float fire_damage = 0.25;
 	const float regen_buff = 0.06;

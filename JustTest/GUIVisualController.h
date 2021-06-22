@@ -194,7 +194,7 @@ public:
 		return is_active;
 	}
 
-	bool processFrame(sf::RenderWindow * window, std::vector<std::vector<Object *>> * objects, std::vector<std::pair<sf::Text *, int>> & text, Point viewport_pos, float hero_hp_percent) {  // render for GUI elements
+	bool processFrame(sf::RenderWindow * window, std::vector<std::vector<Object *>> * objects, std::vector<std::pair<sf::Text *, int>> & text, Point viewport_pos, float hero_hp_percent, float demolition_price) {  // render for GUI elements
 		if (game_status == game_pause || game_status == game_strategic_mode) {
 			hero_hp_percent = 0;
 		}
@@ -305,13 +305,13 @@ public:
                 skill_price_sign.setPosition(skills_sprite[rocket_skill][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
                 window->draw(skill_price_sign);
 
-                if (resource_manager.isEnoughGold(consts.getHealBuffPrice())) {
+				if (demolition_price > 0.0000001/*eps*/) {
                     window->draw(skills_sprite[heal_skill][ready]);
                 }
                 else {
                     window->draw(skills_sprite[heal_skill][not_enough_money]);
                 }
-                skill_price_sign.setString(std::to_string((int)consts.getHealBuffPrice()));
+                skill_price_sign.setString(std::to_string((int)demolition_price));
                 skill_price_sign.setPosition(skills_sprite[heal_skill][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
                 window->draw(skill_price_sign);
             }

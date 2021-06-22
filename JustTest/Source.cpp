@@ -708,7 +708,8 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				is_game_cycle = visual_ctrl.processFrame(&window, game_map1.getObjectsBuffer());
 				float hero_hp = hero_object->getUnitInfo()->getHealth() / hero_object->getUnitInfo()->getMaxHealth();
 
-				is_game_cycle = gui_visual_ctrl.processFrame(&window, gui_manager.getObjectsBuffer(), gui_manager.getGUIText(), viewport_pos, hero_hp) && is_game_cycle;
+				float demolition_price = game_map1.getClosestAsteroid() == nullptr ? 0 : game_map1.getClosestAsteroid()->getAttachedPrice() / 2;
+				is_game_cycle = gui_visual_ctrl.processFrame(&window, gui_manager.getObjectsBuffer(), gui_manager.getGUIText(), viewport_pos, hero_hp, demolition_price) && is_game_cycle;
 				if (settings.isCollisionDebugMode()) {
 
 					for (int x = 0; x < window.getSize().x; x += 3) {
@@ -1096,19 +1097,25 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					}
 					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) || sf::Joystick::isButtonPressed(0, A)) && (frame_num - last_build) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */ && (tutorial.isWorkingOnStep(tutorial.build_mode_science_tutorial) || tutorial.isWorkingOnStep(tutorial.using_skills_heal_tutorial))) {
 						if (skills_mode == set1) {
-							// heal for asteroid and self
+							//// heal for asteroid and self
+							//if (game_map1.getClosestAsteroid() != nullptr) {
+							//	if (resource_manager.spendGold(consts.getHealBuffPrice())) {
+							//		game_map1.setAsteroidBuff(Effect(1, const_heal), game_map1.getClosestAsteroid());
+							//		game_map1.setAsteroidBuff(Effect(1200, regen_buff), game_map1.getClosestAsteroid());
+							//		if (tutorial.isWorkingOnStep(tutorial.using_skills_heal_tutorial)) {
+							//			tutorial.nextStep();
+							//		}
+							//	}
+							//}
+							//hero_object->setEffect(Effect(1, const_heal));
+							//hero_object->setEffect(Effect(1200, regen_buff));
+							//last_build = frame_num + consts.getFPSLock();
+							
+							// wipe all structures from asteroid
 							if (game_map1.getClosestAsteroid() != nullptr) {
-								if (resource_manager.spendGold(consts.getHealBuffPrice())) {
-									game_map1.setAsteroidBuff(Effect(1, const_heal), game_map1.getClosestAsteroid());
-									game_map1.setAsteroidBuff(Effect(1200, regen_buff), game_map1.getClosestAsteroid());
-									if (tutorial.isWorkingOnStep(tutorial.using_skills_heal_tutorial)) {
-										tutorial.nextStep();
-									}
-								}
+								resource_manager.addGold(game_map1.getClosestAsteroid()->getAttachedPrice() / 2);
+								game_map1.getClosestAsteroid()->wipeAttached();
 							}
-							hero_object->setEffect(Effect(1, const_heal));
-							hero_object->setEffect(Effect(1200, regen_buff));
-							last_build = frame_num + consts.getFPSLock();
 						}
 						else if (skills_mode == set2) {
 							if (game_map1.getClosestAsteroid()) {

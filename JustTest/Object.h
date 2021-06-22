@@ -407,6 +407,34 @@ public:
     void setDieObject(Object * new_die_object) {
         die_object = new_die_object;
     }
+
+	float getAttachedPrice() {
+		float output = 0;
+		for (int i = 0; i < attached_objects.size(); i++) {
+			switch (attached_objects[i]->getObjectType()) {
+			case gold:
+				output += consts.getBaseGoldPrice();
+				break;
+			case science:
+				output += consts.getBaseSciencePrice();
+				break;
+			case dome:
+				output += consts.getBaseDomePrice();
+				break;
+			case turret:
+				output += consts.getBaseTurretPrice();
+				break;
+			}
+		}
+		return output;
+	}
+
+	void wipeAttached() {
+		for (int i = 0; i < attached_objects.size(); i++) {
+			attached_objects[i]->deleteObject();
+		}
+		attached_objects.clear();
+	}
 };
 
 bool checkObjectCollision(Object * obj1, Object * obj2) {
