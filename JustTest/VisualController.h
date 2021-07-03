@@ -189,7 +189,13 @@ public:
 				for (int k = 0; k < int(ceil(float(point_cnt * hp / max_hp)) * 2); k++) {
 					hp_circle[k].color = getColor(hp / max_hp);
 				}
-				if (object->getObjectType() != hero && object->getObjectType() != alien_turret1 && object->getObjectType() != alien_turret2 && object->getObjectType() != alien_turret3) {
+				if (object->getObjectType() != hero && 
+                    object->getObjectType() != alien_turret1 &&
+                    object->getObjectType() != alien_turret2 &&
+                    object->getObjectType() != alien_turret3 &&
+                    object->getObjectType() != drone &&
+                    object->getObjectType() != drone_turret) {
+
 					window->draw(hp_sign);
 					window->draw(hp_circle);
 				}

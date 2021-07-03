@@ -211,7 +211,7 @@ private:
 	void processCollisionFrame(){
 		for (int cnt = 0; cnt < objects.size(); cnt++) {
 			for (int i = 0; i < objects[cnt].size(); i++) {
-				if (objects[cnt][i]->getCollisionModel()->isStatic() || objects[cnt][i]->getObjectType() == alien_turret1) {
+				if (objects[cnt][i]->getCollisionModel()->isStatic() || objects[cnt][i]->getObjectType() == alien_turret1 || objects[cnt][i]->getObjectType() == drone_turret) {
 					continue;
 				}
 				if (objects[cnt][i] != hero_object) {
@@ -223,7 +223,16 @@ private:
 					for (int j = 0; j < objects[cnt].size(); j++) {
 						if (i != j) {
 							ObjectType type = objects[cnt][j]->getObjectType();
-							if (type == bullet || type == dome || type == turret || type == science || type == gold || type == alien_turret1) {
+							if (
+                                type == bullet || 
+                                type == dome || 
+                                type == turret || 
+                                type == science ||
+                                type == gold ||
+                                type == alien_turret1 ||
+                                type == alien_turret2 ||
+                                type == alien_turret3 ||
+                                type == drone_turret) {
 								continue;
 							}
 							if (checkObjectCollision(objects[cnt][i], objects[cnt][j])) {
@@ -241,6 +250,13 @@ private:
 							}
 						}
 					}
+                    for (int j = 0; j < objects[main_layer].size(); j++) {
+                        if (objects[main_layer][j]->getObjectType() == drone) {
+                            if ((objects[main_layer][j]->getUnitInfo()->getFaction() != objects[cnt][i]->getUnitInfo()->getFaction()) && checkObjectCollision(objects[cnt][i], objects[main_layer][j])) {
+                                event_buffer.addEvent(EventType::default_collision, objects[cnt][i], objects[main_layer][j]);
+                            }
+                        }
+                    }
 				}
 			}
 		}
@@ -294,6 +310,13 @@ private:
 				if (type == dome || type == science || type == gold || object1->getObjectSpriteType() == bullet_sprite || object1->getObjectSpriteType() == bombard_bullet_sprite) {
 					continue;
 				}
+
+                // drone
+                if (type == drone) {
+                    Object * parent = (Object *)object1->getParent();
+                    object1->setSpeed((object1->getPosition() - parent->getPosition()).getRotated(-90).getNormal() * object1->getUnitInfo()->getDefaultSpeed());
+                    continue;
+                }
 
 				// turn to closest enemy
 				if (faction1 != FactionList::null_faction) {
@@ -670,7 +693,9 @@ private:
 				{   // tier 0
 					asteroid_gold_interspersed_sprite,
 					asteroid_iron_interspersed_sprite,
-					asteroid_suspiciously_flat_sprite
+					asteroid_suspiciously_flat_sprite,
+
+                    asteroid_drone_factory_sprite,
 				},
 				{   // tier 1
 
@@ -1236,7 +1261,8 @@ public:
 		processObjectSpeed();
 		processCollisionFrame();
 		updateClosestAsteroid();
-		processDomeBonuses();
+		processDomeBonuses(); 
+        processDroneFactory();
 		processUnitAI();
 		processEventBuffer();
 		garbageCollector();
@@ -1310,18 +1336,19 @@ public:
 			if (((*base->getAttached())[i]->getPosition() - base->getPosition()).getLength() <= 150) {
 				inner_ring.push_back((*base->getAttached())[i]);
 			}
-			else {
+			else if ((*base->getAttached())[i]->getObjectType() != drone){
 				outer_ring.push_back((*base->getAttached())[i]);
 			}
 		}
 		Object * object = nullptr;
-		if (inner_ring.size() >= 7 && 
+		if ((inner_ring.size() >= 7 || 
+            base->getObjectSpriteType() == asteroid_drone_factory_sprite) &&
 			(
 				outer_ring.size() >= 10 || 
 				base->getObjectSpriteType() == asteroid_old_laboratory_sprite || 
 				base->getObjectSpriteType() == asteroid_ancient_laboratory_sprite || 
 				base->getObjectSpriteType() == asteroid_ancient_giant_gold_mine_sprite || 
-				base->getObjectSpriteType() == asteroid_drone_factory_sprite || 
+				/*base->getObjectSpriteType() == asteroid_drone_factory_sprite || */
 				base->getObjectSpriteType() == asteroid_rocket_launcher_sprite)) {
 
 			return false;
@@ -1374,7 +1401,7 @@ public:
 		// rebuild structures list
 
 		float base_angle = 0;
-		if (type == turret) {
+		if (type == turret || (type == dome && base->getObjectSpriteType() == asteroid_drone_factory_sprite)) {
 			if (outer_ring.size() >= 10) {
 				inner_ring.push_back(object);
 				base_angle = (float)(rand() % 1024) / 512 * PI;
@@ -1490,6 +1517,37 @@ public:
     void processDroneFactory() {
         for (int i = 0; i < objects[landscape_layer].size(); i++) {
             Object * obj = objects[landscape_layer][i];
+
+            if (obj->getObjectType() == asteroid) {
+                if (obj->getObjectSpriteType() == asteroid_drone_factory_sprite && obj->getAttached()->size() >= 10 && obj->getAttached()->size() <= (10 + consts.getDroneCount())) {
+                    if (obj->getUnitInfo() && obj->getUnitInfo()->getFaction() == hero_faction) {
+                        if (obj->getDroneCooldown() < 0) {
+
+                            Object * new_drone = object_factory.getObject({ drone });
+                            new_drone->setPosition(obj->getPosition());
+                            new_drone->setAutoOrigin();
+                            new_drone->setSpeed(obj->getSpeed());
+                            new_drone->getUnitInfo()->setFaction(obj->getUnitInfo()->getFaction());
+
+                            Object * new_turret = object_factory.getObject({ drone_turret });
+                            new_turret->setPosition(obj->getPosition());
+                            new_turret->setAutoOrigin();
+                            new_turret->setSpeed(obj->getSpeed());
+                            new_turret->getUnitInfo()->setFaction(obj->getUnitInfo()->getFaction());
+
+                            new_drone->attachObject(new_turret);
+                            new_drone->setParent((void *)obj);
+                            obj->attachObject(new_drone);
+                            obj->droneAttachmentFix();
+                            addObject(new_drone, main_layer);
+                            addObject(new_turret, main_layer);
+
+                            obj->setDroneCooldown();
+                        }
+                        obj->droneCooldownDecrement();
+                    }
+                }
+            }
         }
     }
 };

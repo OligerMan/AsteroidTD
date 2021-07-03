@@ -1617,7 +1617,7 @@ int main() {
 #ifdef __linux__ || __APPLE__  
 #elif _WIN32
 	HWND console_hWnd = GetConsoleWindow();
-	ShowWindow(console_hWnd, SW_HIDE);
+	//ShowWindow(console_hWnd, SW_HIDE);
 #else
 #endif
 

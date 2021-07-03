@@ -200,9 +200,33 @@ private:
                 )
             );
         case drone:
-            return new Object();
+            return new Object
+            (
+                Point(),
+                Point(),
+                ObjectType::drone,
+                CollisionType::drone_col,
+                VisualInfo
+                (
+                    SpriteType::drone_sprite,
+                    AnimationType::hold_anim,
+                    1000000000
+                )
+            );
         case drone_turret:
-            return new Object();
+            return new Object
+            (
+                Point(),
+                Point(),
+                ObjectType::drone_turret,
+                CollisionType::drone_turret_col,
+                VisualInfo
+                (
+                    SpriteType::drone_turret_sprite,
+                    AnimationType::hold_anim,
+                    1000000000
+                )
+            );
         case rocket_launcher:
             return new Object();
         default:

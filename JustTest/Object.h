@@ -442,6 +442,10 @@ public:
         return attachment_fixed;
     }
 
+    void setAttachmentFixState(bool state) {
+        attachment_fixed = state;
+    }
+
     void droneAttachmentFix() {
         if (this->getObjectSpriteType() == asteroid_drone_factory_sprite) {
             int cnt = 0;
@@ -452,13 +456,16 @@ public:
                     cnt++;
                 }
             }
+            int k = 0;
             for (int i = 0; i < this->attached_objects.size(); i++) {
                 Object * obj = attached_objects[i];
 
                 if (obj->getObjectType() == drone) {
                     float radius = obj->getCollisionModel()->getMaxRadius() + this->getCollisionModel()->getMaxRadius() + consts.getDroneFlightAddRange();
-                    float angle = PI * 2 * i / this->attached_objects.size();
+                    float angle = PI * (double)2 * (double)k / (double)cnt;
                     obj->setPosition(this->getPosition() + Point(cos(angle), sin(angle)) * radius);
+                    std::cout << "Drone: " << obj->getPosition().x << " " << obj->getPosition().y << std::endl;
+                    k++;
                 }
             }
         }
@@ -470,6 +477,10 @@ public:
 
     void setDroneCooldown() {
         drone_factory_cooldown = consts.getDroneCooldown();
+    }
+
+    void droneCooldownDecrement() {
+        drone_factory_cooldown -= fps.getFPS() / consts.getFPSLock();
     }
 };
 

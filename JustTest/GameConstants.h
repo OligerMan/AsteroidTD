@@ -21,7 +21,7 @@ class Constants {
 	const float base_dome_price = 500;
 	const float base_asteroid_gold = 10000;
 
-    const float drone_cooldown = 1200;
+    const float drone_cooldown = 120;
     const int drone_count = 20;
 
 	const float attack_abil_price = 3;
@@ -32,7 +32,7 @@ class Constants {
 	const float infinity_mode_enemy_spawn_range = 10000;
     const float defence_mission_enemy_spawn_range = 2500;
 	const float minimal_flight_range = 450;
-    const float drone_flight_add_range = 30;
+    const float drone_flight_add_range = 100;
 
 	const float dome_heal = 0.1;
 	const float hero_heal = 1;
