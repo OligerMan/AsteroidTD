@@ -1413,7 +1413,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 			res_visual_ctrl.processFrame(&window, view3.getCenter(), cur_research_index);
 
-			button_selector.processButtonBuffer(ButtonSelector::research, cursor_pos);
+			button_selector.processButtonBuffer(ButtonSelector::research, Point());
 			cur_research_index = button_selector.getButtonList(ButtonSelector::research).cur_index;
 			
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, A) || (sf::Mouse::isButtonPressed(sf::Mouse::Left) && window.hasFocus())) {
@@ -1709,7 +1709,7 @@ int main() {
 	};
 	enum buttons_name {
 		infinity_mode_button,
-        adventure_mode_button,
+        /*adventure_mode_button,*/
 		settings_button,
 		shutdown_button,
 
@@ -1718,7 +1718,7 @@ int main() {
 	std::vector<MenuButton> buttons;
 	buttons.resize(BUTTONS_NAME_LIST_SIZE);
 
-	buttons[infinity_mode_button].pos = Point(window.getView().getSize().x / 2 - 300 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
+	buttons[infinity_mode_button].pos = Point(window.getView().getSize().x / 2 - 250 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
 	buttons[infinity_mode_button].texture_default.loadFromFile("menu_buttons" + path_separator + "inf_mode.png");
 	buttons[infinity_mode_button].texture_selected.loadFromFile("menu_buttons" + path_separator + "inf_mode_selected.png");
 	buttons[infinity_mode_button].sprite.setTexture(buttons[infinity_mode_button].texture_default);
@@ -1726,15 +1726,15 @@ int main() {
     std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(L"start_inf_mode_GUI", 0);
 	buttons[infinity_mode_button].advice_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-    buttons[adventure_mode_button].pos = Point(window.getView().getSize().x / 2 - 100 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
+    /*buttons[adventure_mode_button].pos = Point(window.getView().getSize().x / 2 - 100 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
     buttons[adventure_mode_button].texture_default.loadFromFile("menu_buttons" + path_separator + "adv_mode.png");
     buttons[adventure_mode_button].texture_selected.loadFromFile("menu_buttons" + path_separator + "adv_mode_selected.png");
     buttons[adventure_mode_button].sprite.setTexture(buttons[adventure_mode_button].texture_default);
     buttons[adventure_mode_button].radius = 75 * window.getView().getSize().y / 1080;
     buffer = phrase_container.getPhraseBuffer(L"start_adv_mode_GUI", 0);
-    buttons[adventure_mode_button].advice_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+    buttons[adventure_mode_button].advice_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];*/
 
-	buttons[settings_button].pos = Point(window.getView().getSize().x / 2 + 100 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
+	buttons[settings_button].pos = Point(window.getView().getSize().x / 2 + 0 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
 	buttons[settings_button].texture_default.loadFromFile("menu_buttons" + path_separator + "settings.png");
 	buttons[settings_button].texture_selected.loadFromFile("menu_buttons" + path_separator + "settings_selected.png");
 	buttons[settings_button].sprite.setTexture(buttons[settings_button].texture_default);
@@ -1742,7 +1742,7 @@ int main() {
     buffer = phrase_container.getPhraseBuffer(L"settings_menu_GUI", 0);
 	buttons[settings_button].advice_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
 
-	buttons[shutdown_button].pos = Point(window.getView().getSize().x / 2 + 300 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
+	buttons[shutdown_button].pos = Point(window.getView().getSize().x / 2 + 250 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
 	buttons[shutdown_button].texture_default.loadFromFile("menu_buttons" + path_separator + "shutdown.png");
 	buttons[shutdown_button].texture_selected.loadFromFile("menu_buttons" + path_separator + "shutdown_selected.png");
 	buttons[shutdown_button].sprite.setTexture(buttons[shutdown_button].texture_default);
@@ -1911,11 +1911,11 @@ int main() {
                                 game_mode = GameMode::infinity_mode;
 								is_input_state = true;
 							}
-                            if (i == adventure_mode_button) {
+                            /*if (i == adventure_mode_button) {
                                 game_status = game_hero_mode;
                                 game_mode = GameMode::adventure_mode;
                                 is_input_state = true;
-                            }
+                            }*/
 							if (i == settings_button) {
 								game_status = settings_menu;
                                 resetStrings();
@@ -1935,11 +1935,11 @@ int main() {
 							game_status = game_hero_mode;
 							is_input_state = true;
 						}
-                        if (chosen_button == adventure_mode_button) {
+                        /*if (chosen_button == adventure_mode_button) {
                             game_status = game_hero_mode;
                             game_mode = GameMode::adventure_mode;
                             is_input_state = true;
-                        }
+                        }*/
 						if (chosen_button == settings_button) {
 							game_status = settings_menu;
 							is_input_state = true;

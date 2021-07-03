@@ -1486,4 +1486,10 @@ public:
 	double getEnemyPowerCoef() {
 		return enemy_power_coef;
 	}
+
+    void processDroneFactory() {
+        for (int i = 0; i < objects[landscape_layer].size(); i++) {
+            Object * obj = objects[landscape_layer][i];
+        }
+    }
 };

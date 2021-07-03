@@ -21,6 +21,9 @@ class Constants {
 	const float base_dome_price = 500;
 	const float base_asteroid_gold = 10000;
 
+    const float drone_cooldown = 1200;
+    const int drone_count = 20;
+
 	const float attack_abil_price = 3;
 	const float speed_buff_price = 30;
 	const float damage_buff_price = 50;
@@ -29,6 +32,7 @@ class Constants {
 	const float infinity_mode_enemy_spawn_range = 10000;
     const float defence_mission_enemy_spawn_range = 2500;
 	const float minimal_flight_range = 450;
+    const float drone_flight_add_range = 30;
 
 	const float dome_heal = 0.1;
 	const float hero_heal = 1;
@@ -232,5 +236,17 @@ public:
 	const float getBaseAsteroidGold() {
 		return base_asteroid_gold;
 	}
+
+    const float getDroneFlightAddRange() {
+        return drone_flight_add_range;
+    }
+
+    const float getDroneCooldown() {
+        return drone_cooldown;
+    }
+
+    const int getDroneCount() {
+        return drone_count;
+    }
 
 } consts;

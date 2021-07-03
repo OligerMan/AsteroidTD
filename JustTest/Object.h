@@ -17,6 +17,8 @@ class Object {
 	bool discovered = false;
 	std::vector<Object *> attached_objects;
 	int time_left = -1;
+    bool attachment_fixed = true;
+    float drone_factory_cooldown = 0;
 
 public:
 
@@ -435,6 +437,40 @@ public:
 		}
 		attached_objects.clear();
 	}
+
+    bool attachmentFixed() {
+        return attachment_fixed;
+    }
+
+    void droneAttachmentFix() {
+        if (this->getObjectSpriteType() == asteroid_drone_factory_sprite) {
+            int cnt = 0;
+            for (int i = 0; i < this->attached_objects.size(); i++) {
+                Object * obj = attached_objects[i];
+
+                if (obj->getObjectType() == drone) {
+                    cnt++;
+                }
+            }
+            for (int i = 0; i < this->attached_objects.size(); i++) {
+                Object * obj = attached_objects[i];
+
+                if (obj->getObjectType() == drone) {
+                    float radius = obj->getCollisionModel()->getMaxRadius() + this->getCollisionModel()->getMaxRadius() + consts.getDroneFlightAddRange();
+                    float angle = PI * 2 * i / this->attached_objects.size();
+                    obj->setPosition(this->getPosition() + Point(cos(angle), sin(angle)) * radius);
+                }
+            }
+        }
+    }
+
+    float getDroneCooldown() {
+        return drone_factory_cooldown;
+    }
+
+    void setDroneCooldown() {
+        drone_factory_cooldown = consts.getDroneCooldown();
+    }
 };
 
 bool checkObjectCollision(Object * obj1, Object * obj2) {
