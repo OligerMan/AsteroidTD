@@ -250,13 +250,13 @@ private:
 							}
 						}
 					}
-                    for (int j = 0; j < objects[main_layer].size(); j++) {
+                    /*for (int j = 0; j < objects[main_layer].size(); j++) {
                         if (objects[main_layer][j]->getObjectType() == drone) {
                             if ((objects[main_layer][j]->getUnitInfo()->getFaction() != objects[cnt][i]->getUnitInfo()->getFaction()) && checkObjectCollision(objects[cnt][i], objects[main_layer][j])) {
                                 event_buffer.addEvent(EventType::default_collision, objects[cnt][i], objects[main_layer][j]);
                             }
                         }
-                    }
+                    }*/
 				}
 			}
 		}
@@ -314,7 +314,16 @@ private:
                 // drone
                 if (type == drone) {
                     Object * parent = (Object *)object1->getParent();
-                    object1->setSpeed((object1->getPosition() - parent->getPosition()).getRotated(-90).getNormal() * object1->getUnitInfo()->getDefaultSpeed());
+                    Point speed = (object1->getPosition() - parent->getPosition()).getRotated(-90).getNormal() * object1->getUnitInfo()->getDefaultSpeed();
+                    float radius = object1->getCollisionModel()->getMaxRadius() + parent->getCollisionModel()->getMaxRadius() + consts.getDroneFlightAddRange();
+                    speed += (object1->getPosition() - parent->getPosition()).getNormal() * (radius - (object1->getPosition() - parent->getPosition()).getLength()) * 0.005;
+                    for (int i = 0; i < parent->getAttached()->size(); i++) {
+                        Object * tmp = (*parent->getAttached())[i];
+                        if (tmp->getObjectType() == drone && tmp->getPosition() != object1->getPosition()) {
+                            speed += (object1->getPosition() - tmp->getPosition()).getNormal() / (object1->getPosition() - tmp->getPosition()).getLength() * 25;
+                        }
+                    }
+                    object1->setSpeed(speed);
                     continue;
                 }
 
@@ -693,9 +702,7 @@ private:
 				{   // tier 0
 					asteroid_gold_interspersed_sprite,
 					asteroid_iron_interspersed_sprite,
-					asteroid_suspiciously_flat_sprite,
-
-                    asteroid_drone_factory_sprite,
+					asteroid_suspiciously_flat_sprite
 				},
 				{   // tier 1
 
@@ -737,7 +744,7 @@ private:
 					asteroid_ordinary_mountainous_sprite,
 					asteroid_strange_poor_sprite,
 
-					asteroid_swampy_with_gold_mines_sprite,
+					//asteroid_swampy_with_gold_mines_sprite,
 					asteroid_unstable_explosive_ore_sprite,
 					asteroid_old_laboratory_sprite,
 					asteroid_lava_surface_sprite
@@ -769,7 +776,7 @@ private:
 					asteroid_ordinary_mountainous_sprite,
 					asteroid_strange_poor_sprite,
 
-					asteroid_swampy_with_gold_mines_sprite,
+					//asteroid_swampy_with_gold_mines_sprite,
 					asteroid_unstable_explosive_ore_sprite,
 					asteroid_old_laboratory_sprite,
 					asteroid_lava_surface_sprite,
@@ -1524,13 +1531,13 @@ public:
                         if (obj->getDroneCooldown() < 0) {
 
                             Object * new_drone = object_factory.getObject({ drone });
-                            new_drone->setPosition(obj->getPosition());
+                            new_drone->setPosition(obj->getPosition() + Point(0, new_drone->getCollisionModel()->getMaxRadius() + obj->getCollisionModel()->getMaxRadius() + consts.getDroneFlightAddRange()));
                             new_drone->setAutoOrigin();
                             new_drone->setSpeed(obj->getSpeed());
                             new_drone->getUnitInfo()->setFaction(obj->getUnitInfo()->getFaction());
 
                             Object * new_turret = object_factory.getObject({ drone_turret });
-                            new_turret->setPosition(obj->getPosition());
+                            new_turret->setPosition(obj->getPosition() + Point(0, new_drone->getCollisionModel()->getMaxRadius() + obj->getCollisionModel()->getMaxRadius() + consts.getDroneFlightAddRange()));
                             new_turret->setAutoOrigin();
                             new_turret->setSpeed(obj->getSpeed());
                             new_turret->getUnitInfo()->setFaction(obj->getUnitInfo()->getFaction());
@@ -1538,8 +1545,8 @@ public:
                             new_drone->attachObject(new_turret);
                             new_drone->setParent((void *)obj);
                             obj->attachObject(new_drone);
-                            obj->droneAttachmentFix();
-                            addObject(new_drone, main_layer);
+                            //obj->droneAttachmentFix();
+                            addObject(new_drone, landscape_layer);
                             addObject(new_turret, main_layer);
 
                             obj->setDroneCooldown();
