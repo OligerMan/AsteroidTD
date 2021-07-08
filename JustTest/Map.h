@@ -1530,9 +1530,8 @@ public:
 		int fighter_amount = std::max(1, enemy_lvl / 2 - 3 * gunship_amount - (enemy_lvl > 10 ? (enemy_lvl - 10) / 4 : 0));
         int bombard_amount = enemy_lvl > 15 ? (enemy_lvl - 15) / 10 : 0;*/
 		int gunship_amount = enemy_lvl / 15 + (enemy_lvl > 24 ? (enemy_lvl - 24) / 6 : 0);
-		int fighter_amount = std::max(1, enemy_lvl / 3 - 3 * gunship_amount - (enemy_lvl > 12 ? (enemy_lvl - 12) / 4 : 0))-1;
-        //int bombard_amount = (enemy_lvl > 15 ? (enemy_lvl - 15) / 10 : 0);
-        int bombard_amount = (enemy_lvl > 15 ? (enemy_lvl - 15) / 10 : 0) + 1;
+		int fighter_amount = std::max(1, enemy_lvl / 3 - 3 * gunship_amount - (enemy_lvl > 12 ? (enemy_lvl - 12) / 4 : 0));
+        int bombard_amount = (enemy_lvl > 15 ? (enemy_lvl - 15) / 10 : 0);
 
 		while (group_amount > 0) {
 			int nearest_point = rand() % convex.size();
