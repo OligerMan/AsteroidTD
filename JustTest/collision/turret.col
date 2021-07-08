@@ -5,6 +5,6 @@ collision_start
 
 element body
     position 0 0
-	radius 60
+	radius 55
 
 collision_end

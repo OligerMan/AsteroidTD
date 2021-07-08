@@ -1026,7 +1026,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 							}
 						}
 						else if (skills_mode == set2) {
-							if (game_map1.getClosestAsteroid()) {
+							/*if (game_map1.getClosestAsteroid()) {
 								int type = game_map1.getClosestAsteroid()->getObjectSpriteType();
 								if (type != asteroid_drone_factory_sprite && 
 									type != asteroid_swampy_with_gold_mines_sprite && 
@@ -1051,7 +1051,31 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 									}
 									last_build = frame_num;
 								}
-							}
+							}*/
+                            if (game_map1.getClosestAsteroid()) {
+                                int type = game_map1.getClosestAsteroid()->getObjectSpriteType();
+                                if (type != asteroid_unstable_explosive_ore_sprite &&
+                                    type != asteroid_old_laboratory_sprite &&
+                                    type != asteroid_ancient_laboratory_sprite &&
+                                    type != asteroid_ancient_giant_gold_mine_sprite) {
+
+                                    int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
+                                    switch (faction) {
+                                    case hero_faction:
+                                        if (resource_manager.spendGold(consts.getBaseGoldPrice())) {
+                                            if (!game_map1.addStructure(game_map1.getClosestAsteroid(), gold)) {
+                                                resource_manager.addGold(consts.getBaseGoldPrice());
+                                            }
+                                            game_map1.getClosestAsteroid()->setFaction(hero_faction);
+                                            if (tutorial.isWorkingOnStep(tutorial.build_mode_gold_tutorial)) {
+                                                tutorial.nextStep();
+                                            }
+                                        }
+                                        break;
+                                    }
+                                    last_build = frame_num;
+                                }
+                            }
 						}
 					}
 					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) || sf::Joystick::isButtonPressed(0, B)) && (frame_num - last_build) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */ && (tutorial.isWorkingOnStep(tutorial.build_mode_gold_tutorial) || tutorial.isWorkingOnStep(tutorial.using_skills_damage_tutorial))) {
@@ -1069,7 +1093,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 							}
 						}
 						else if (skills_mode == set2) {
-							if (game_map1.getClosestAsteroid()) {
+							/*if (game_map1.getClosestAsteroid()) {
 								int type = game_map1.getClosestAsteroid()->getObjectSpriteType();
 								if (type != asteroid_unstable_explosive_ore_sprite &&
 									type != asteroid_old_laboratory_sprite &&
@@ -1092,7 +1116,33 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 									}
 									last_build = frame_num;
 								}
-							}
+							}*/
+                            if (game_map1.getClosestAsteroid()) {
+                                int type = game_map1.getClosestAsteroid()->getObjectSpriteType();
+                                if (type != asteroid_drone_factory_sprite &&
+                                    type != asteroid_swampy_with_gold_mines_sprite &&
+                                    type != asteroid_rocket_launcher_sprite &&
+                                    type != asteroid_old_laboratory_sprite &&
+                                    type != asteroid_ancient_laboratory_sprite &&
+                                    type != asteroid_ancient_giant_gold_mine_sprite) {
+
+                                    int faction = game_map1.getClosestAsteroid()->getUnitInfo()->getFaction();
+                                    switch (faction) {
+                                    case hero_faction:
+                                        if (resource_manager.spendGold(consts.getBaseTurretPrice())) {
+                                            if (!game_map1.addStructure(game_map1.getClosestAsteroid(), turret)) {
+                                                resource_manager.addGold(consts.getBaseTurretPrice());
+                                            }
+                                            game_map1.getClosestAsteroid()->setFaction(hero_faction);
+                                            if (tutorial.isWorkingOnStep(tutorial.build_mode_turret_tutorial)) {
+                                                tutorial.nextStep();
+                                            }
+                                        }
+                                        break;
+                                    }
+                                    last_build = frame_num;
+                                }
+                            }
 						}
 					}
 					if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) || sf::Joystick::isButtonPressed(0, A)) && (frame_num - last_build) > fps.getFPS() / 4 /* 0.25 sec delay for changing view again */ && (tutorial.isWorkingOnStep(tutorial.build_mode_science_tutorial) || tutorial.isWorkingOnStep(tutorial.using_skills_heal_tutorial))) {

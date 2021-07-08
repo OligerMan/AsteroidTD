@@ -5,6 +5,7 @@
 #include "Map.h"
 #include "FileSearch.h"
 #include "Settings.h"
+#include "GameStatus.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -160,7 +161,7 @@ public:
 
 				Point pos = object->getPosition() * window->getSize().y / 1080;
 				hp_sign.setPosition(pos.x, pos.y);
-				hp_sign.setString((int)hp ? std::to_string((int)hp) : "");
+				hp_sign.setString(((int)hp && game_status != game_strategic_mode) ? std::to_string((int)hp) : "");
 				hp_sign.setOrigin(hp_sign.getLocalBounds().width / 2, hp_sign.getLocalBounds().height / 2);
 				hp_sign.setCharacterSize(30 * window->getSize().y / 1080);
 				

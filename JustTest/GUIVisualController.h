@@ -31,12 +31,12 @@ class GUIVisualController{
 	enum {
 		dome_struct,
 		gold_struct,
+        turret_struct,
 		science_struct,
-		turret_struct,
 		rocket_skill,
+        speed_boost_skill,
 		attack_buff_skill,
 		heal_skill,
-		speed_boost_skill,
 
 		dialog_start,
 
@@ -139,7 +139,7 @@ class GUIVisualController{
 
 	void setSkillsIconPosition(sf::RenderWindow * window) {
 		for (int i = 0; i < skills_texture.size(); i++) {
-			Point center = Point(window->getView().getSize().x / 2 - (consts.getSkillsIconSize() + consts.getSkillsIconShiftRadius() + consts.getSkillsIconBorder()) * window->getView().getSize().x / 1920, window->getView().getSize().y / 2 - (consts.getSkillsIconSize() + consts.getSkillsIconShiftRadius() + consts.getSkillsIconBorder()) * window->getView().getSize().y / 1080);
+			Point center = Point(window->getView().getSize().x / 2 - (4 * consts.getSkillsIconSize() + consts.getSkillsIconBorder() / 2) * window->getView().getSize().x / 1920, window->getView().getSize().y / 2 - (consts.getSkillsIconSize() + consts.getSkillsIconBorder()) * window->getView().getSize().y / 1080);
 			for (int j = 0; j < skills_texture[0].size(); j++) {
 				skills_sprite[i][j].setTexture(skills_texture[i][j]);
 				sf::Vector2u v = skills_texture[i][j].getSize();
@@ -148,7 +148,8 @@ class GUIVisualController{
 				if (v.x != 0 && v.y != 0) {
 					skills_sprite[i][j].setScale(coef / v.x, coef / v.y);
 				}
-				Point pos = center + Point(cos((float)(i % 4) / 4.0 * PI * 2 - PI / 2), sin((float)(i % 4) / 4.0 * PI * 2 - PI / 2)) * consts.getSkillsIconShiftRadius() * window->getView().getSize().y / 1080;
+                //Point pos = center + Point(cos((float)(i % 4) / 4.0 * PI * 2 - PI / 2), sin((float)(i % 4) / 4.0 * PI * 2 - PI / 2)) * consts.getSkillsIconShiftRadius() * window->getView().getSize().y / 1080;
+                Point pos = center + Point(i % 4, 0) * consts.getSkillsIconShiftRadius() * window->getView().getSize().y / 1080;
 				if (i == dialog_start) {
 					pos = center - Point(1, 1) * consts.getSkillsIconSize();
 				}
@@ -285,6 +286,15 @@ public:
                 skill_price_sign.setPosition(skills_sprite[attack_buff_skill][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
                 window->draw(skill_price_sign);
 
+                if (sf::Joystick::isConnected(0)) {
+                    skill_price_sign.setString("B");
+                }
+                else {
+                    skill_price_sign.setString("3");
+                }
+                skill_price_sign.setPosition(skills_sprite[attack_buff_skill][ready].getPosition() - sf::Vector2f(0, consts.getSkillsIconSize() + 15) - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
+                window->draw(skill_price_sign);
+
                 if (resource_manager.isEnoughGold(consts.getSpeedBuffPrice())) {
                     window->draw(skills_sprite[speed_boost_skill][ready]);
                 }
@@ -293,6 +303,15 @@ public:
                 }
                 skill_price_sign.setString(std::to_string((int)consts.getSpeedBuffPrice()));
                 skill_price_sign.setPosition(skills_sprite[speed_boost_skill][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
+                window->draw(skill_price_sign);
+
+                if (sf::Joystick::isConnected(0)) {
+                    skill_price_sign.setString("X");
+                }
+                else {
+                    skill_price_sign.setString("2");
+                }
+                skill_price_sign.setPosition(skills_sprite[speed_boost_skill][ready].getPosition() - sf::Vector2f(0, consts.getSkillsIconSize() + 15) - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
                 window->draw(skill_price_sign);
 
                 if (resource_manager.isEnoughGold(consts.getAttackAbilityPrice())) {
@@ -305,6 +324,15 @@ public:
                 skill_price_sign.setPosition(skills_sprite[rocket_skill][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
                 window->draw(skill_price_sign);
 
+                if (sf::Joystick::isConnected(0)) {
+                    skill_price_sign.setString("Y");
+                }
+                else {
+                    skill_price_sign.setString("1");
+                }
+                skill_price_sign.setPosition(skills_sprite[rocket_skill][ready].getPosition() - sf::Vector2f(0, consts.getSkillsIconSize() + 15) - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
+                window->draw(skill_price_sign);
+
 				if (demolition_price > 0.0000001/*eps*/) {
                     window->draw(skills_sprite[heal_skill][ready]);
                 }
@@ -313,6 +341,15 @@ public:
                 }
                 skill_price_sign.setString(std::to_string((int)demolition_price));
                 skill_price_sign.setPosition(skills_sprite[heal_skill][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
+                window->draw(skill_price_sign);
+
+                if (sf::Joystick::isConnected(0)) {
+                    skill_price_sign.setString("A");
+                }
+                else {
+                    skill_price_sign.setString("4");
+                }
+                skill_price_sign.setPosition(skills_sprite[heal_skill][ready].getPosition() - sf::Vector2f(0, consts.getSkillsIconSize() + 15) - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
                 window->draw(skill_price_sign);
             }
             else if (skills_mode == SkillsMode::set2) {
@@ -326,6 +363,15 @@ public:
                 skill_price_sign.setPosition(skills_sprite[dome_struct][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
                 window->draw(skill_price_sign);
 
+                if (sf::Joystick::isConnected(0)) {
+                    skill_price_sign.setString("Y");
+                }
+                else {
+                    skill_price_sign.setString("1");
+                }
+                skill_price_sign.setPosition(skills_sprite[dome_struct][ready].getPosition() - sf::Vector2f(0, consts.getSkillsIconSize() + 15) - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
+                window->draw(skill_price_sign);
+
                 if (resource_manager.isEnoughGold(consts.getBaseSciencePrice())) {
                     window->draw(skills_sprite[science_struct][ready]);
                 }
@@ -334,6 +380,15 @@ public:
                 }
                 skill_price_sign.setString(std::to_string((int)consts.getBaseSciencePrice()));
                 skill_price_sign.setPosition(skills_sprite[science_struct][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
+                window->draw(skill_price_sign);
+
+                if (sf::Joystick::isConnected(0)) {
+                    skill_price_sign.setString("A");
+                }
+                else {
+                    skill_price_sign.setString("4");
+                }
+                skill_price_sign.setPosition(skills_sprite[science_struct][ready].getPosition() - sf::Vector2f(0, consts.getSkillsIconSize() + 15) - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
                 window->draw(skill_price_sign);
 
                 if (resource_manager.isEnoughGold(consts.getBaseGoldPrice())) {
@@ -346,6 +401,15 @@ public:
                 skill_price_sign.setPosition(skills_sprite[gold_struct][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
                 window->draw(skill_price_sign);
 
+                if (sf::Joystick::isConnected(0)) {
+                    skill_price_sign.setString("X");
+                }
+                else {
+                    skill_price_sign.setString("2");
+                }
+                skill_price_sign.setPosition(skills_sprite[gold_struct][ready].getPosition() - sf::Vector2f(0, consts.getSkillsIconSize() + 15) - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
+                window->draw(skill_price_sign);
+
                 if (resource_manager.isEnoughGold(consts.getBaseTurretPrice())) {
                     window->draw(skills_sprite[turret_struct][ready]);
                 }
@@ -354,6 +418,15 @@ public:
                 }
                 skill_price_sign.setString(std::to_string((int)consts.getBaseTurretPrice()));
                 skill_price_sign.setPosition(skills_sprite[turret_struct][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
+                window->draw(skill_price_sign);
+
+                if (sf::Joystick::isConnected(0)) {
+                    skill_price_sign.setString("B");
+                }
+                else {
+                    skill_price_sign.setString("3");
+                }
+                skill_price_sign.setPosition(skills_sprite[turret_struct][ready].getPosition() - sf::Vector2f(0, consts.getSkillsIconSize() + 15) - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
                 window->draw(skill_price_sign);
 			}
 			else {

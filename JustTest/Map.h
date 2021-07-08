@@ -753,7 +753,7 @@ private:
 				{   // tier 0
 					asteroid_gold_interspersed_sprite,
 					asteroid_iron_interspersed_sprite,
-					asteroid_suspiciously_flat_sprite
+					asteroid_suspiciously_flat_sprite,
 				},
 				{   // tier 1
 
@@ -1416,6 +1416,10 @@ public:
 			return false;
 		}
 
+        if (base->getObjectSpriteType() == asteroid_drone_factory_sprite && (type == gold || type == science || type == turret)) {
+            return false;
+        }
+
 		int dome_amount = 0;
 		for (int i = 0; i < base->getAttached()->size(); i++) {
 			if ((*base->getAttached())[i]->getObjectType() == dome) {
@@ -1526,12 +1530,10 @@ public:
 		}
 
 		int group_amount = std::min(4, enemy_lvl / 2) + sqrt(enemy_lvl);
-		/*int gunship_amount = enemy_lvl / 12 + (enemy_lvl > 24 ? (enemy_lvl - 24) / 6 : 0);
-		int fighter_amount = std::max(1, enemy_lvl / 2 - 3 * gunship_amount - (enemy_lvl > 10 ? (enemy_lvl - 10) / 4 : 0));
-        int bombard_amount = enemy_lvl > 15 ? (enemy_lvl - 15) / 10 : 0;*/
+
 		int gunship_amount = enemy_lvl / 15 + (enemy_lvl > 24 ? (enemy_lvl - 24) / 6 : 0);
-		int fighter_amount = std::max(1, enemy_lvl / 3 - 3 * gunship_amount - (enemy_lvl > 12 ? (enemy_lvl - 12) / 4 : 0));
-        int bombard_amount = (enemy_lvl > 15 ? (enemy_lvl - 15) / 10 : 0);
+		int fighter_amount = std::max(1, enemy_lvl / 3 - 3 * gunship_amount - (enemy_lvl > 12 ? (enemy_lvl - 12) / 4 : 0)) - 1;
+        int bombard_amount = (enemy_lvl > 15 ? (enemy_lvl - 15) / 10 : 0) + 1;
 
 		while (group_amount > 0) {
 			int nearest_point = rand() % convex.size();
@@ -1600,7 +1602,7 @@ public:
                             new_drone->attachObject(new_turret);
                             new_drone->setParent((void *)obj);
                             obj->attachObject(new_drone);
-                            //obj->droneAttachmentFix();
+
                             addObject(new_drone, landscape_layer);
                             addObject(new_turret, main_layer);
 
@@ -1618,6 +1620,15 @@ public:
             Object * obj = objects[main_layer][i];
             if (obj->getObjectType() == bombard_bullet_explosion_hit) {
                 obj->deleteObject();
+            }
+        }
+    }
+
+    void processBombardBulletSpin() {
+        for (int i = 0; i < objects[main_layer].size(); i++) {
+            Object * obj = objects[main_layer][i];
+            if (obj->getObjectType() == bombard_bullet) {
+                obj->setAngle(obj->getAngle() + 0.1 * consts.getFPSLock() / fps.getFPS());
             }
         }
     }

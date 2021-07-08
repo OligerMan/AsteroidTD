@@ -5,6 +5,6 @@ collision_start
 
 element static_obj_circle
     position 0 0
-    radius 25
+    radius 40
 
 collision_end

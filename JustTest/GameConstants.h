@@ -21,8 +21,8 @@ class Constants {
 	const float base_dome_price = 500;
 	const float base_asteroid_gold = 10000;
 
-    const float drone_cooldown = 120;
-    const int drone_count = 20;
+    const float drone_cooldown = 1200;
+    const int drone_count = 15;
 
 	const float attack_abil_price = 3;
 	const float speed_buff_price = 30;
@@ -44,7 +44,7 @@ class Constants {
 
 	const float skills_icon_size = 120;
 	const float skills_icon_shift_radius = 100;
-	const float skills_icon_border = 75;
+	const float skills_icon_border = 80;
 
 	const float research_icon_size = 120;
 	const float research_icon_border = 100;

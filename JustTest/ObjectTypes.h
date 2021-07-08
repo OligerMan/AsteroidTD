@@ -150,6 +150,6 @@ std::vector<int> lifetime{
     -1, // alien_turret3
 	-1, // drone
     -1, // drone_turret
-    160, // bombard_bullet_explosion
+    540, // bombard_bullet_explosion
     100, // bombard_bullet_explosion_hit
 };

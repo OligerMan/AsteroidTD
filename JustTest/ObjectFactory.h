@@ -73,7 +73,7 @@ private:
                 (
                     SpriteType::dome_sprite,
                     AnimationType::hold_anim,
-                    1000000000
+                    360
                 )
             );
         case science:
@@ -87,7 +87,7 @@ private:
                 (
                     SpriteType::science_sprite,
                     AnimationType::hold_anim,
-                    1000000000
+                    60
                 )
             );
         case gold:
@@ -101,7 +101,7 @@ private:
                 (
                     SpriteType::gold_sprite,
                     AnimationType::hold_anim,
-                    1000000000
+                    60
                 )
             );
         case bullet:
@@ -213,7 +213,7 @@ private:
                 (
                     SpriteType::drone_sprite,
                     AnimationType::hold_anim,
-                    1000000000
+                    60
                 )
             );
         case drone_turret:
@@ -266,7 +266,7 @@ private:
                 (
                     SpriteType::bombard_bullet_explosion_sprite,
                     AnimationType::hold_anim,
-                    16
+                    15
                 )
             );
             output->setAutoOrigin();
