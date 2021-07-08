@@ -25,9 +25,15 @@ void fixCollision(Object * obj1, Object * obj2) {
 		return;
 	}
 
-	if (obj1->getObjectType() == ObjectType::bullet || obj2->getObjectType() == ObjectType::bullet) {
-		return;
-	}
+    if (obj1->getObjectType() == ObjectType::bullet || obj2->getObjectType() == ObjectType::bullet) {
+        return;
+    }
+    if (obj1->getObjectType() == ObjectType::bombard_bullet_explosion || obj2->getObjectType() == ObjectType::bombard_bullet_explosion) {
+        return;
+    }
+    if (obj1->getObjectType() == ObjectType::bombard_bullet_explosion_hit || obj2->getObjectType() == ObjectType::bombard_bullet_explosion_hit) {
+        return;
+    }
 	bool force_move = obj1->getCollisionModel()->isStatic() && obj2->getCollisionModel()->isStatic();
 	const double min_speed = 0.001;
 
@@ -211,7 +217,11 @@ private:
 	void processCollisionFrame(){
 		for (int cnt = 0; cnt < objects.size(); cnt++) {
 			for (int i = 0; i < objects[cnt].size(); i++) {
-				if (objects[cnt][i]->getCollisionModel()->isStatic() || objects[cnt][i]->getObjectType() == alien_turret1 || objects[cnt][i]->getObjectType() == drone_turret) {
+				if (
+                    objects[cnt][i]->getCollisionModel()->isStatic() || 
+                    objects[cnt][i]->getObjectType() == alien_turret1 ||
+                    objects[cnt][i]->getObjectType() == drone_turret ||
+                    objects[cnt][i]->getObjectType() == bombard_bullet_explosion) {
 					continue;
 				}
 				if (objects[cnt][i] != hero_object) {
@@ -219,7 +229,7 @@ private:
 						event_buffer.addEvent(EventType::default_collision, objects[cnt][i], hero_object);
 					}
 				}
-				if (objects[cnt][i]->getObjectType() != ObjectType::bullet) {
+				if (objects[cnt][i]->getObjectType() != ObjectType::bullet && objects[cnt][i]->getObjectType() != ObjectType::bombard_bullet_explosion_hit) {
 					for (int j = 0; j < objects[cnt].size(); j++) {
 						if (i != j) {
 							ObjectType type = objects[cnt][j]->getObjectType();
@@ -232,7 +242,8 @@ private:
                                 type == alien_turret1 ||
                                 type == alien_turret2 ||
                                 type == alien_turret3 ||
-                                type == drone_turret) {
+                                type == drone_turret ||
+                                type == bombard_bullet_explosion) {
 								continue;
 							}
 							if (checkObjectCollision(objects[cnt][i], objects[cnt][j])) {
@@ -244,7 +255,7 @@ private:
 				}
 				else {
 					for (int j = 0; j < objects[landscape_layer].size(); j++) {
-						if (objects[landscape_layer][j]->getObjectType() != asteroid && objects[landscape_layer][j]->getObjectType() != bullet) {
+						if (objects[landscape_layer][j]->getObjectType() != asteroid && (objects[landscape_layer][j]->getObjectType() != bullet && objects[landscape_layer][j]->getObjectType() != bombard_bullet_explosion_hit)) {
 							if ((objects[landscape_layer][j]->getUnitInfo()->getFaction() != objects[cnt][i]->getUnitInfo()->getFaction()) && checkObjectCollision(objects[cnt][i], objects[landscape_layer][j])) {
 								event_buffer.addEvent(EventType::default_collision, objects[cnt][i], objects[landscape_layer][j]);
 							}
@@ -342,8 +353,8 @@ private:
 									}
 								}
 								int faction2 = object2->getUnitInfo()->getFaction();
-
-								if (areEnemies((FactionList)faction1, (FactionList)faction2)) {
+                                type = object2->getObjectType();
+								if (areEnemies((FactionList)faction1, (FactionList)faction2) || ((FactionList)faction1 == aggressive_faction && (type == dome || type == science || type == gold || type == turret))) {
 
 									
 									if (!(object1->getObjectType() == ObjectType::hero) && (object1->canObjectAttack() || object1->getUnitInfo()->getDefaultSpeed() > 0.0001)) {
@@ -416,11 +427,11 @@ private:
                             CollisionType bullet_col_type = bullet_col;
                             Object * die_object = nullptr;
 							switch (object1->getObjectType()) {
-							case rocket_launcher:
+							/*case rocket_launcher:
 								bullet_type = rocket_sprite;
-								break;
+								break;*/
                             case alien_turret3:
-                                bullet_type = bombard_bullet_sprite;
+                                /*bullet_type = bombard_bullet_sprite;
                                 bullet_col_type = bombard_bullet_col;
                                 die_object = new Object
                                 (
@@ -434,27 +445,39 @@ private:
                                         AnimationType::hold_anim,
                                         10000000
                                     )
-                                );
+                                );*/
                                 break;
 							}
-							Object * object = new Object
-							(
-								bullet_pos,
-								Point(),
-								ObjectType::bullet,
-                                bullet_col_type,
-								VisualInfo
-								(
-									bullet_type,
-									AnimationType::hold_anim,
-									1000000000
-								)
-							);
+                            Object * object;
+                            if (object1->getObjectType() != alien_turret3) {
+                                object = new Object
+                                (
+                                    bullet_pos,
+                                    Point(),
+                                    ObjectType::bullet,
+                                    bullet_col_type,
+                                    VisualInfo
+                                    (
+                                        bullet_type,
+                                        AnimationType::hold_anim,
+                                        1000000000
+                                    )
+                                );
+                            }
+                            else {
+                                object = object_factory.getObject({ bombard_bullet });
+                                object->setPosition(bullet_pos);
+                                object->getDieObject()->setAutoOrigin();
+                                object->getDieObject()->setParent(object1);
+                                object->getDieObject()->getUnitInfo()->setFaction(object1->getUnitInfo()->getFaction());
+                                object->getDieObject()->getDieObject()->setAutoOrigin();
+                            }
+                            
 							object->getUnitInfo()->setFaction(object1->getUnitInfo()->getFaction());
 							object->setParent(object1);     // to remember who is shooting
 							object->setAutoOrigin();
 							object->setAngle(object1->getAngle());
-							object->setSpeed(Point(cos((object1->getAngle() - 90) / 180 * PI), sin((object1->getAngle() - 90) / 180 * PI)) * 15);
+                            object->setSpeed(Point(cos((object1->getAngle() - 90) / 180 * PI), sin((object1->getAngle() - 90) / 180 * PI)) * 15);
 							
 							addObject(object, main_layer);
 
@@ -526,7 +549,6 @@ private:
 						smth_cleaned = true;
                         Object * die_object = objects[layer][i]->getDieObject();
                         if (die_object != nullptr) {
-                            die_object->setPosition(objects[layer][i]->getPosition());
                             addObject(die_object, layer);
                         }
 						delete objects[layer][i];
@@ -565,7 +587,7 @@ private:
                 if (obj1->getObjectType() == ObjectType::bullet && obj2->getObjectType() == ObjectType::bullet) {
                     break;
                 }
-                if (obj1->getObjectType() == ObjectType::bullet && obj2->getObjectType() != ObjectType::asteroid) {
+                if ((obj1->getObjectType() == ObjectType::bullet) && obj2->getObjectType() != ObjectType::asteroid) {
                     if (unit1 && unit2) {
                         Object * parent1 = (Object *)obj1->getParent();
                         if ((parent1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
@@ -581,8 +603,37 @@ private:
                     }
 
                 }
-                if (obj2->getObjectType() == ObjectType::bullet && obj1->getObjectType() != ObjectType::asteroid) {
+                if ((obj2->getObjectType() == ObjectType::bullet) && obj1->getObjectType() != ObjectType::asteroid) {
                     obj2->deleteObject();
+                    if (unit1 && unit2) {
+                        if ((obj1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
+                            event_buffer.addEvent(EventType::attack, (Object *)obj2->getParent(), obj1);
+                        }
+                    }
+                    else {
+                        std::cout << "Bullet bug triggered" << std::endl;
+                        if (obj2->isDeleted()) {
+                            std::cout << "Supposed to be deleted" << std::endl;
+                        }
+                    }
+
+                }
+                if ((obj1->getObjectType() == ObjectType::bombard_bullet_explosion_hit) && obj2->getObjectType() != ObjectType::asteroid) {
+                    if (unit1 && unit2) {
+                        Object * parent1 = (Object *)obj1->getParent();
+                        if ((parent1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
+                            event_buffer.addEvent(EventType::attack, parent1, obj2);
+                        }
+                    }
+                    else {
+                        std::cout << "Bullet bug triggered" << std::endl;
+                        if (obj1->isDeleted()) {
+                            std::cout << "Supposed to be deleted" << std::endl;
+                        }
+                    }
+
+                }
+                if ((obj2->getObjectType() == ObjectType::bombard_bullet_explosion_hit) && obj1->getObjectType() != ObjectType::asteroid) {
                     if (unit1 && unit2) {
                         if ((obj1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
                             event_buffer.addEvent(EventType::attack, (Object *)obj2->getParent(), obj1);
@@ -782,7 +833,7 @@ private:
 					asteroid_lava_surface_sprite,
 
 					asteroid_drone_factory_sprite,
-					asteroid_rocket_launcher_sprite,
+					//asteroid_rocket_launcher_sprite,
 					asteroid_ancient_laboratory_sprite,
 					asteroid_ancient_giant_gold_mine_sprite
 				}
@@ -1033,7 +1084,7 @@ private:
 					}
 					switch ((*attach)[j]->getObjectType()) {
 					case gold:
-						(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getGoldRegenCoef());
+						(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getGoldRegenCoef() * consts.getFPSLock() / fps.getFPS());
 						if (objects[landscape_layer][i]->getUnitInfo()->getAsteroidResources() > 0) {
 							double gold_diff = consts.getBaseGoldIncome() *
 								(research_manager.getGoldIncomeCoef() + cnt * research_manager.getDomeLocalGoldIncomeCoef()) *
@@ -1054,6 +1105,9 @@ private:
 					case turret:
 						(*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal() * research_manager.getTurretRegenCoef() * consts.getFPSLock() / fps.getFPS());
 						break;
+                    case dome:
+                        (*attach)[j]->getUnitInfo()->grantHeal(consts.getDomeHeal());
+                        break;
 					}
 				}
 			}
@@ -1272,6 +1326,7 @@ public:
         processDroneFactory();
 		processUnitAI();
 		processEventBuffer();
+        processExplosionHitDelete();
 		garbageCollector();
 		processDiscovery(view_pos);
 		checkObjective();
@@ -1475,8 +1530,9 @@ public:
 		int fighter_amount = std::max(1, enemy_lvl / 2 - 3 * gunship_amount - (enemy_lvl > 10 ? (enemy_lvl - 10) / 4 : 0));
         int bombard_amount = enemy_lvl > 15 ? (enemy_lvl - 15) / 10 : 0;*/
 		int gunship_amount = enemy_lvl / 15 + (enemy_lvl > 24 ? (enemy_lvl - 24) / 6 : 0);
-		int fighter_amount = std::max(1, enemy_lvl / 3 - 3 * gunship_amount - (enemy_lvl > 12 ? (enemy_lvl - 12) / 4 : 0));
-		int bombard_amount = enemy_lvl > 15 ? (enemy_lvl - 15) / 10 : 0;
+		int fighter_amount = std::max(1, enemy_lvl / 3 - 3 * gunship_amount - (enemy_lvl > 12 ? (enemy_lvl - 12) / 4 : 0))-1;
+        //int bombard_amount = (enemy_lvl > 15 ? (enemy_lvl - 15) / 10 : 0);
+        int bombard_amount = (enemy_lvl > 15 ? (enemy_lvl - 15) / 10 : 0) + 1;
 
 		while (group_amount > 0) {
 			int nearest_point = rand() % convex.size();
@@ -1554,6 +1610,15 @@ public:
                         obj->droneCooldownDecrement();
                     }
                 }
+            }
+        }
+    }
+
+    void processExplosionHitDelete() {
+        for (int i = 0; i < objects[main_layer].size(); i++) {
+            Object * obj = objects[main_layer][i];
+            if (obj->getObjectType() == bombard_bullet_explosion_hit) {
+                obj->deleteObject();
             }
         }
     }

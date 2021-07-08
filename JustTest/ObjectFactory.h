@@ -23,6 +23,9 @@ public:
 
 private:
     Object * getBaseObject(ObjectType object_type) {
+        Object * output;
+        Object * explosion_hit;
+        Object * explosion_effect;
         switch (object_type)
         {
         case null:
@@ -226,9 +229,53 @@ private:
                     AnimationType::hold_anim,
                     1000000000
                 )
-            );
+            );/*
         case rocket_launcher:
-            return new Object();
+            return new Object();*/
+        case bombard_bullet:
+            output = new Object(
+                Point(),
+                Point(),
+                ObjectType::bullet,
+                CollisionType::bombard_bullet_col,
+                VisualInfo
+                (
+                    SpriteType::bombard_bullet_sprite,
+                    AnimationType::hold_anim,
+                    1000000000
+                )
+            );
+            explosion_hit = new Object(
+                Point(),
+                Point(),
+                ObjectType::bombard_bullet_explosion_hit,
+                CollisionType::bombard_bullet_explosion_col,
+                VisualInfo
+                (
+                    SpriteType::null_sprite,
+                    AnimationType::hold_anim,
+                    1000000000
+                )
+            );
+            explosion_effect = new Object(
+                Point(),
+                Point(),
+                ObjectType::bombard_bullet_explosion,
+                CollisionType::bombard_bullet_explosion_col,
+                VisualInfo
+                (
+                    SpriteType::bombard_bullet_explosion_sprite,
+                    AnimationType::hold_anim,
+                    16
+                )
+            );
+            output->setAutoOrigin();
+            explosion_hit->setAutoOrigin();
+            explosion_effect->setAutoOrigin();
+
+            explosion_hit->setDieObject(explosion_effect);
+            output->setDieObject(explosion_hit);
+            return output;
         default:
             return nullptr;
         }

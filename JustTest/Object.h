@@ -23,6 +23,9 @@ class Object {
 public:
 
 	~Object() {
+        if (die_object) {
+            die_object->setPosition(this->getPosition());
+        }
 		if (add_info.getCollisionModel()) {
 			//delete add_info.getCollisionModel();
 		}
@@ -97,7 +100,7 @@ public:
 	) {
 		object_type_info = new_object_type;
 
-		add_info.setCollisionModel(new CollisionModel(collision_info_set[new_object_type]));
+		add_info.setCollisionModel(new CollisionModel(collision_info_set[obj_col_type]));
 		add_info.getCollisionModel()->setPosition(point);
 		add_info.getCollisionModel()->setOrigin(origin);
 
@@ -178,7 +181,7 @@ public:
 	}
 
 	Point getPosition() {
-		if (isDeleted() || !add_info.getCollisionModel()) {
+		if (!add_info.getCollisionModel()) {
 			return Point();
 		}
 		return add_info.getCollisionModel()->getPosition();
@@ -313,7 +316,13 @@ public:
 	}
 
 	bool garbageCollector() {   // returns true if something worked
-		time_left -= consts.getFPSLock() / fps.getFPS();
+        if (float(time_left) > consts.getFPSLock() / fps.getFPS()) {
+            time_left -= consts.getFPSLock() / fps.getFPS();
+        }
+        else if (time_left >= 0){
+            time_left = 0;
+        }
+
 		bool cleaned = false;
 		if (this->isDeleted() || this->getUnitInfo() == nullptr || this->getUnitInfo()->isDead()) {
 			this->deleteObject();
