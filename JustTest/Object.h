@@ -473,7 +473,6 @@ public:
                     float radius = obj->getCollisionModel()->getMaxRadius() + this->getCollisionModel()->getMaxRadius() + consts.getDroneFlightAddRange();
                     float angle = PI * (double)2 * (double)k / (double)cnt;
                     obj->setPosition(this->getPosition() + Point(cos(angle), sin(angle)) * radius);
-                    std::cout << "Drone: " << obj->getPosition().x << " " << obj->getPosition().y << std::endl;
                     k++;
                 }
             }

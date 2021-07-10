@@ -63,7 +63,6 @@ public:
 
     Objective getObjective() override {
         Objective output;
-        std::cout << "kek" << std::endl;
         if (objective) {
             output.type = Objective::point;
             output.data = objective;

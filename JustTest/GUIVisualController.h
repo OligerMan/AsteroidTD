@@ -226,7 +226,10 @@ public:
 				sprite->setRotation(angle);
 				sprite->setScale(sf::Vector2f(window->getView().getSize().x / 1920, window->getView().getSize().y / 1080));
 				
-				window->draw(*sprite);
+
+                if (!cinematic_mode) {
+                    window->draw(*sprite);
+                }
 			}
 		}
 
@@ -277,14 +280,23 @@ public:
 
             if (skills_mode == SkillsMode::set1) {
                 if (resource_manager.isEnoughGold(consts.getDamageBuffPrice())) {
-                    window->draw(skills_sprite[attack_buff_skill][ready]);
+
+                    if (!cinematic_mode) {
+                        window->draw(skills_sprite[attack_buff_skill][ready]);
+                    }
                 }
                 else {
-                    window->draw(skills_sprite[attack_buff_skill][not_enough_money]);
+
+                    if (!cinematic_mode) {
+                        window->draw(skills_sprite[attack_buff_skill][not_enough_money]);
+                    }
                 }
                 skill_price_sign.setString(std::to_string((int)consts.getDamageBuffPrice()));
                 skill_price_sign.setPosition(skills_sprite[attack_buff_skill][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
-                window->draw(skill_price_sign);
+
+                if (!cinematic_mode) {
+                    window->draw(skill_price_sign);
+                }
 
                 if (sf::Joystick::isConnected(0)) {
                     skill_price_sign.setString("B");
@@ -293,17 +305,26 @@ public:
                     skill_price_sign.setString("3");
                 }
                 skill_price_sign.setPosition(skills_sprite[attack_buff_skill][ready].getPosition() - sf::Vector2f(0, consts.getSkillsIconSize() + 15) - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
-                window->draw(skill_price_sign);
+
+                if (!cinematic_mode) {
+                    window->draw(skill_price_sign);
+                }
 
                 if (resource_manager.isEnoughGold(consts.getSpeedBuffPrice())) {
-                    window->draw(skills_sprite[speed_boost_skill][ready]);
+                    if (!cinematic_mode) {
+                        window->draw(skills_sprite[speed_boost_skill][ready]);
+                    }
                 }
                 else {
-                    window->draw(skills_sprite[speed_boost_skill][not_enough_money]);
+                    if (!cinematic_mode) {
+                        window->draw(skills_sprite[speed_boost_skill][not_enough_money]);
+                    }
                 }
                 skill_price_sign.setString(std::to_string((int)consts.getSpeedBuffPrice()));
                 skill_price_sign.setPosition(skills_sprite[speed_boost_skill][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
-                window->draw(skill_price_sign);
+                if (!cinematic_mode) {
+                    window->draw(skill_price_sign);
+                }
 
                 if (sf::Joystick::isConnected(0)) {
                     skill_price_sign.setString("X");
@@ -312,17 +333,26 @@ public:
                     skill_price_sign.setString("2");
                 }
                 skill_price_sign.setPosition(skills_sprite[speed_boost_skill][ready].getPosition() - sf::Vector2f(0, consts.getSkillsIconSize() + 15) - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
-                window->draw(skill_price_sign);
+                if (!cinematic_mode) {
+                    window->draw(skill_price_sign);
+                }
 
                 if (resource_manager.isEnoughGold(consts.getAttackAbilityPrice())) {
-                    window->draw(skills_sprite[rocket_skill][ready]);
+                    if (!cinematic_mode) {
+                        window->draw(skills_sprite[rocket_skill][ready]);
+                    }
                 }
                 else {
-                    window->draw(skills_sprite[rocket_skill][not_enough_money]);
+                    if (!cinematic_mode) {
+                        window->draw(skills_sprite[rocket_skill][not_enough_money]);
+                    }
                 }
                 skill_price_sign.setString(std::to_string((int)consts.getAttackAbilityPrice()));
                 skill_price_sign.setPosition(skills_sprite[rocket_skill][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
-                window->draw(skill_price_sign);
+
+                if (!cinematic_mode) {
+                    window->draw(skill_price_sign);
+                }
 
                 if (sf::Joystick::isConnected(0)) {
                     skill_price_sign.setString("Y");
@@ -331,17 +361,26 @@ public:
                     skill_price_sign.setString("1");
                 }
                 skill_price_sign.setPosition(skills_sprite[rocket_skill][ready].getPosition() - sf::Vector2f(0, consts.getSkillsIconSize() + 15) - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
-                window->draw(skill_price_sign);
+
+                if (!cinematic_mode) {
+                    window->draw(skill_price_sign);
+                }
 
 				if (demolition_price > 0.0000001/*eps*/) {
-                    window->draw(skills_sprite[heal_skill][ready]);
+                    if (!cinematic_mode) {
+                        window->draw(skills_sprite[heal_skill][ready]);
+                    }
                 }
                 else {
-                    window->draw(skills_sprite[heal_skill][not_enough_money]);
+                    if (!cinematic_mode) {
+                        window->draw(skills_sprite[heal_skill][not_enough_money]);
+                    }
                 }
                 skill_price_sign.setString(std::to_string((int)demolition_price));
                 skill_price_sign.setPosition(skills_sprite[heal_skill][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
-                window->draw(skill_price_sign);
+                if (!cinematic_mode) {
+                    window->draw(skill_price_sign);
+                }
 
                 if (sf::Joystick::isConnected(0)) {
                     skill_price_sign.setString("A");
@@ -350,18 +389,27 @@ public:
                     skill_price_sign.setString("4");
                 }
                 skill_price_sign.setPosition(skills_sprite[heal_skill][ready].getPosition() - sf::Vector2f(0, consts.getSkillsIconSize() + 15) - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
-                window->draw(skill_price_sign);
+
+                if (!cinematic_mode) {
+                    window->draw(skill_price_sign);
+                }
             }
             else if (skills_mode == SkillsMode::set2) {
                 if (resource_manager.isEnoughGold(consts.getBaseDomePrice())) {
-                    window->draw(skills_sprite[dome_struct][ready]);
+                    if (!cinematic_mode) {
+                        window->draw(skills_sprite[dome_struct][ready]);
+                    }
                 }
                 else {
-                    window->draw(skills_sprite[dome_struct][not_enough_money]);
+                    if (!cinematic_mode) {
+                        window->draw(skills_sprite[dome_struct][not_enough_money]);
+                    }
                 }
                 skill_price_sign.setString(std::to_string((int)consts.getBaseDomePrice()));
                 skill_price_sign.setPosition(skills_sprite[dome_struct][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
-                window->draw(skill_price_sign);
+                if (!cinematic_mode) {
+                    window->draw(skill_price_sign);
+                }
 
                 if (sf::Joystick::isConnected(0)) {
                     skill_price_sign.setString("Y");
@@ -370,17 +418,27 @@ public:
                     skill_price_sign.setString("1");
                 }
                 skill_price_sign.setPosition(skills_sprite[dome_struct][ready].getPosition() - sf::Vector2f(0, consts.getSkillsIconSize() + 15) - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
-                window->draw(skill_price_sign);
+
+                if (!cinematic_mode) {
+                    window->draw(skill_price_sign);
+                }
 
                 if (resource_manager.isEnoughGold(consts.getBaseSciencePrice())) {
-                    window->draw(skills_sprite[science_struct][ready]);
+                    if (!cinematic_mode) {
+                        window->draw(skills_sprite[science_struct][ready]);
+                    }
                 }
                 else {
-                    window->draw(skills_sprite[science_struct][not_enough_money]);
+                    if (!cinematic_mode) {
+                        window->draw(skills_sprite[science_struct][not_enough_money]);
+                    }
                 }
                 skill_price_sign.setString(std::to_string((int)consts.getBaseSciencePrice()));
                 skill_price_sign.setPosition(skills_sprite[science_struct][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
-                window->draw(skill_price_sign);
+
+                if (!cinematic_mode) {
+                    window->draw(skill_price_sign);
+                }
 
                 if (sf::Joystick::isConnected(0)) {
                     skill_price_sign.setString("A");
@@ -389,17 +447,27 @@ public:
                     skill_price_sign.setString("4");
                 }
                 skill_price_sign.setPosition(skills_sprite[science_struct][ready].getPosition() - sf::Vector2f(0, consts.getSkillsIconSize() + 15) - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
-                window->draw(skill_price_sign);
+
+                if (!cinematic_mode) {
+                    window->draw(skill_price_sign);
+                }
 
                 if (resource_manager.isEnoughGold(consts.getBaseGoldPrice())) {
-                    window->draw(skills_sprite[gold_struct][ready]);
+                    if (!cinematic_mode) {
+                        window->draw(skills_sprite[gold_struct][ready]);
+                    }
                 }
                 else {
-                    window->draw(skills_sprite[gold_struct][not_enough_money]);
+                    if (!cinematic_mode) {
+                        window->draw(skills_sprite[gold_struct][not_enough_money]);
+                    }
                 }
                 skill_price_sign.setString(std::to_string((int)consts.getBaseGoldPrice()));
                 skill_price_sign.setPosition(skills_sprite[gold_struct][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
-                window->draw(skill_price_sign);
+
+                if (!cinematic_mode) {
+                    window->draw(skill_price_sign);
+                }
 
                 if (sf::Joystick::isConnected(0)) {
                     skill_price_sign.setString("X");
@@ -408,17 +476,27 @@ public:
                     skill_price_sign.setString("2");
                 }
                 skill_price_sign.setPosition(skills_sprite[gold_struct][ready].getPosition() - sf::Vector2f(0, consts.getSkillsIconSize() + 15) - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
-                window->draw(skill_price_sign);
+
+                if (!cinematic_mode) {
+                    window->draw(skill_price_sign);
+                }
 
                 if (resource_manager.isEnoughGold(consts.getBaseTurretPrice())) {
-                    window->draw(skills_sprite[turret_struct][ready]);
+                    if (!cinematic_mode) {
+                        window->draw(skills_sprite[turret_struct][ready]);
+                    }
                 }
                 else {
-                    window->draw(skills_sprite[turret_struct][not_enough_money]);
+                    if (!cinematic_mode) {
+                        window->draw(skills_sprite[turret_struct][not_enough_money]);
+                    }
                 }
                 skill_price_sign.setString(std::to_string((int)consts.getBaseTurretPrice()));
                 skill_price_sign.setPosition(skills_sprite[turret_struct][ready].getPosition() - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
-                window->draw(skill_price_sign);
+
+                if (!cinematic_mode) {
+                    window->draw(skill_price_sign);
+                }
 
                 if (sf::Joystick::isConnected(0)) {
                     skill_price_sign.setString("B");
@@ -427,10 +505,16 @@ public:
                     skill_price_sign.setString("3");
                 }
                 skill_price_sign.setPosition(skills_sprite[turret_struct][ready].getPosition() - sf::Vector2f(0, consts.getSkillsIconSize() + 15) - sf::Vector2f(skill_price_sign.getLocalBounds().width / 2, skill_price_sign.getLocalBounds().height / 2));
-                window->draw(skill_price_sign);
+
+                if (!cinematic_mode) {
+                    window->draw(skill_price_sign);
+                }
 			}
 			else {
-				window->draw(skills_sprite[dialog_start][ready]);
+
+                if (!cinematic_mode) {
+                    window->draw(skills_sprite[dialog_start][ready]);
+                }
 			}
         }
 
@@ -439,7 +523,9 @@ public:
 		hp_rectangle.setPosition(sf::Vector2f(-(int)window->getView().getSize().x / 2, window->getView().getSize().y * 19 / 40));
 		hp_rectangle.setOrigin(-viewport_pos.x, -viewport_pos.y);
 		hp_rectangle.setFillColor(sf::Color(0,122,204));
-		window->draw(hp_rectangle);
+        if (!cinematic_mode) {
+            window->draw(hp_rectangle);
+        }
 
 		// skill icons draw
 		

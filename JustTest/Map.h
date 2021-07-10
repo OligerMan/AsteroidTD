@@ -590,7 +590,8 @@ private:
                 if ((obj1->getObjectType() == ObjectType::bullet) && obj2->getObjectType() != ObjectType::asteroid) {
                     if (unit1 && unit2) {
                         Object * parent1 = (Object *)obj1->getParent();
-                        if ((parent1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
+                        //if ((parent1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
+                        if ((obj1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
                             event_buffer.addEvent(EventType::attack, parent1, obj2);
                             obj1->deleteObject();
                         }
@@ -621,7 +622,8 @@ private:
                 if ((obj1->getObjectType() == ObjectType::bombard_bullet_explosion_hit) && obj2->getObjectType() != ObjectType::asteroid) {
                     if (unit1 && unit2) {
                         Object * parent1 = (Object *)obj1->getParent();
-                        if ((parent1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
+                        //if ((parent1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
+                        if ((obj1->getUnitInfo()->getFaction() != obj2->getUnitInfo()->getFaction())) {
                             event_buffer.addEvent(EventType::attack, parent1, obj2);
                         }
                     }
@@ -1532,8 +1534,8 @@ public:
 		int group_amount = std::min(4, enemy_lvl / 2) + sqrt(enemy_lvl);
 
 		int gunship_amount = enemy_lvl / 15 + (enemy_lvl > 24 ? (enemy_lvl - 24) / 6 : 0);
-		int fighter_amount = std::max(1, enemy_lvl / 3 - 3 * gunship_amount - (enemy_lvl > 12 ? (enemy_lvl - 12) / 4 : 0)) - 1;
-        int bombard_amount = (enemy_lvl > 15 ? (enemy_lvl - 15) / 10 : 0) + 1;
+		int fighter_amount = std::max(1, enemy_lvl / 3 - 3 * gunship_amount - (enemy_lvl > 12 ? (enemy_lvl - 12) / 4 : 0));
+        int bombard_amount = (enemy_lvl > 15 ? (enemy_lvl - 15) / 10 : 0);
 
 		while (group_amount > 0) {
 			int nearest_point = rand() % convex.size();

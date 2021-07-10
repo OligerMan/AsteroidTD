@@ -29,3 +29,4 @@ enum GameMode {
 GameStatus game_status;
 SkillsMode skills_mode;
 GameMode game_mode;
+bool cinematic_mode = false;

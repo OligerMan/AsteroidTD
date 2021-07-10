@@ -13,13 +13,13 @@ class Constants {
 	const float fps_lock = 240;
 	const double interaction_distance = 600;
 
-	const float base_gold_income = 0.005;
+	const float base_gold_income = 0.0045;
 	const float base_research_income = 0.0005;
 	const float base_turret_price = 150;
 	const float base_science_price = 100;
 	const float base_gold_price = 125;
 	const float base_dome_price = 500;
-	const float base_asteroid_gold = 10000;
+	const float base_asteroid_gold = 7500;
 
     const float drone_cooldown = 1200;
     const int drone_count = 15;
@@ -54,7 +54,7 @@ class Constants {
 	const float hero_view_scale = 2;
 	const float strategic_view_scale = 5;
 
-	const float tier_range = 5000;
+	const float tier_range = 3000;
 	const float discovery_range = 10000;
 
 	const float minimal_mission_price = 100;

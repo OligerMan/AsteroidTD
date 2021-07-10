@@ -513,7 +513,10 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				global_event_buffer.erase(global_event_buffer.begin() + i);
 				break;
 			case EventType::message:
-				gui_manager.forceSetTopSign(message_sign + L": " + *static_cast<std::wstring *>(global_event_buffer[i].getData(0)), 5);
+
+                if (!cinematic_mode) {
+                    gui_manager.forceSetTopSign(message_sign + L": " + *static_cast<std::wstring *>(global_event_buffer[i].getData(0)), 5);
+                }
 				global_event_buffer.erase(global_event_buffer.begin() + i);
 				break;
 			}
@@ -571,10 +574,12 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			}
 			hero_hp = hero_object->getUnitInfo()->getHealth();
 			// game cycle
-            Point gold_pos = Point(-(int)window.getView().getSize().x / 2 / 1.2, -(int)window.getView().getSize().y / 2 / 1.2);
-			gui_manager.setText(gold_sign_wstring + std::to_wstring((int)resource_manager.getGold()), 0.01, gold_sign, gold_pos, 30);
-            Point res_pos = Point(-(int)window.getView().getSize().x / 2 / 1.2, -(int)window.getView().getSize().y / 2 / 1.2 + 55 * window.getView().getSize().y / 1080);
-			gui_manager.setText(research_sign_wstring + std::to_wstring((int)resource_manager.getResearch()), 0.01, research_sign, res_pos, 30);
+            if (!cinematic_mode) {
+                Point gold_pos = Point(-(int)window.getView().getSize().x / 2 / 1.2, -(int)window.getView().getSize().y / 2 / 1.2);
+                gui_manager.setText(gold_sign_wstring + std::to_wstring((int)resource_manager.getGold()), 0.01, gold_sign, gold_pos, 30);
+                Point res_pos = Point(-(int)window.getView().getSize().x / 2 / 1.2, -(int)window.getView().getSize().y / 2 / 1.2 + 55 * window.getView().getSize().y / 1080);
+                gui_manager.setText(research_sign_wstring + std::to_wstring((int)resource_manager.getResearch()), 0.01, research_sign, res_pos, 30);
+            }
 
 			if (game_map1.getClosestAsteroid() && game_map1.getClosestAsteroid()->getNPCInfo()) {
 				if (skills_mode != npc_dialog) {
@@ -593,17 +598,20 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				-window.getView().getSize().x / 2 / 1.2 + 10 * window.getView().getSize().x / 1920,
 				(int)window.getView().getSize().y / 2 / 1.2 + 10 * window.getView().getSize().x / 1920);
 
-			if (skills_mode == set1) {
-                
-				gui_manager.setText(skills_ability_sign, 0.01, skill_status_sign, skill_pos, 30);
-			}
-			else if(skills_mode == set2) {
-				gui_manager.setText(skills_build_sign, 0.01, skill_status_sign, skill_pos, 30);
-			}
-			else {
-				gui_manager.setText(skills_interact_sign, 0.01, skill_status_sign, skill_pos, 30);
-			}
-			gui_manager.setText(enemy_power_sign + std::to_wstring(game_map1.getEnemyPowerCoef()).substr(0,4), 0.01, power_sign, enemy_power_pos, 30);
+
+            if (!cinematic_mode) {
+                if (skills_mode == set1) {
+
+                    gui_manager.setText(skills_ability_sign, 0.01, skill_status_sign, skill_pos, 30);
+                }
+                else if (skills_mode == set2) {
+                    gui_manager.setText(skills_build_sign, 0.01, skill_status_sign, skill_pos, 30);
+                }
+                else {
+                    gui_manager.setText(skills_interact_sign, 0.01, skill_status_sign, skill_pos, 30);
+                }
+                gui_manager.setText(enemy_power_sign + std::to_wstring(game_map1.getEnemyPowerCoef()).substr(0, 4), 0.01, power_sign, enemy_power_pos, 30);
+            }
 
 			if (game_status != game_pause && tutorial.isWorkingOnStep(tutorial.no_tutorial) && game_mode == GameMode::infinity_mode) {
 				if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - last_wave).count() > wave_delay) {
@@ -614,7 +622,10 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					else {
 						game_map1.spawnEnemy(wave_count, Point(view2.getCenter().x, view2.getCenter().y));
 					}
-					gui_manager.forceSetTopSign(new_wave_sign + L"(" + std::to_wstring(wave_count) + L")", 5);
+
+                    if (!cinematic_mode) {
+                        gui_manager.forceSetTopSign(new_wave_sign + L"(" + std::to_wstring(wave_count) + L")", 5);
+                    }
 					last_wave = std::chrono::steady_clock::now();
 				}
 			}
@@ -806,62 +817,64 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			if (!(game_status == game_strategic_mode)) {
 				Object * closest_asteroid = game_map1.getClosestAsteroid();
 				if (closest_asteroid != nullptr && game_frame_num > 1500) {
-					switch (closest_asteroid->getObjectSpriteType()) {
-					case asteroid:
-						gui_manager.setTopSign(aster_basic_sign, 0.01);
-						break;
-					case asteroid_gold_interspersed_sprite:
-						gui_manager.setTopSign(aster_gold_inter_sign, 0.01);
-						break;
-					case asteroid_iron_interspersed_sprite:
-						gui_manager.setTopSign(aster_iron_inter_sign, 0.01);
-						break;
-					case asteroid_suspiciously_flat_sprite:
-						gui_manager.setTopSign(aster_susp_flat_sign, 0.01);
-						break;
-					case asteroid_strange_cracked_sprite:
-						gui_manager.setTopSign(aster_str_crack_sign, 0.01);
-						break;
-					case asteroid_ordinary_wealthy_sprite:
-						gui_manager.setTopSign(aster_ord_wealthy_sign, 0.01);
-						break;
-					case asteroid_poor_mountainous_sprite:
-						gui_manager.setTopSign(aster_poor_mount_sign, 0.01);
-						break;
-					case asteroid_wealthy_cracked_sprite:
-						gui_manager.setTopSign(aster_wealthy_crack_sign, 0.01);
-						break;
-					case asteroid_ordinary_mountainous_sprite:
-						gui_manager.setTopSign(aster_ord_mount_sign, 0.01);
-						break;
-					case asteroid_strange_poor_sprite:
-						gui_manager.setTopSign(aster_str_poor_sign, 0.01);
-						break;
-					case asteroid_swampy_with_gold_mines_sprite:
-						gui_manager.setTopSign(aster_swamp_gold_sign, 0.01);
-						break;
-					case asteroid_unstable_explosive_ore_sprite:
-						gui_manager.setTopSign(aster_unstab_expl_sign, 0.01);
-						break;
-					case asteroid_old_laboratory_sprite:
-						gui_manager.setTopSign(aster_old_lab_sign, 0.01);
-						break;
-					case asteroid_lava_surface_sprite:
-						gui_manager.setTopSign(aster_lava_surf_sign, 0.01);
-						break;
-					case asteroid_drone_factory_sprite:
-						gui_manager.setTopSign(aster_drone_sign, 0.01);
-						break;
-					case asteroid_rocket_launcher_sprite:
-						gui_manager.setTopSign(aster_rocket_sign, 0.01);
-						break;
-					case asteroid_ancient_laboratory_sprite:
-						gui_manager.setTopSign(aster_anc_lab_sign, 0.01);
-						break;
-					case asteroid_ancient_giant_gold_mine_sprite:
-						gui_manager.setTopSign(aster_anc_mine_sign, 0.01);
-						break;
-					}
+                    if (!cinematic_mode) {
+                        switch (closest_asteroid->getObjectSpriteType()) {
+                        case asteroid:
+                            gui_manager.setTopSign(aster_basic_sign, 0.01);
+                            break;
+                        case asteroid_gold_interspersed_sprite:
+                            gui_manager.setTopSign(aster_gold_inter_sign, 0.01);
+                            break;
+                        case asteroid_iron_interspersed_sprite:
+                            gui_manager.setTopSign(aster_iron_inter_sign, 0.01);
+                            break;
+                        case asteroid_suspiciously_flat_sprite:
+                            gui_manager.setTopSign(aster_susp_flat_sign, 0.01);
+                            break;
+                        case asteroid_strange_cracked_sprite:
+                            gui_manager.setTopSign(aster_str_crack_sign, 0.01);
+                            break;
+                        case asteroid_ordinary_wealthy_sprite:
+                            gui_manager.setTopSign(aster_ord_wealthy_sign, 0.01);
+                            break;
+                        case asteroid_poor_mountainous_sprite:
+                            gui_manager.setTopSign(aster_poor_mount_sign, 0.01);
+                            break;
+                        case asteroid_wealthy_cracked_sprite:
+                            gui_manager.setTopSign(aster_wealthy_crack_sign, 0.01);
+                            break;
+                        case asteroid_ordinary_mountainous_sprite:
+                            gui_manager.setTopSign(aster_ord_mount_sign, 0.01);
+                            break;
+                        case asteroid_strange_poor_sprite:
+                            gui_manager.setTopSign(aster_str_poor_sign, 0.01);
+                            break;
+                        case asteroid_swampy_with_gold_mines_sprite:
+                            gui_manager.setTopSign(aster_swamp_gold_sign, 0.01);
+                            break;
+                        case asteroid_unstable_explosive_ore_sprite:
+                            gui_manager.setTopSign(aster_unstab_expl_sign, 0.01);
+                            break;
+                        case asteroid_old_laboratory_sprite:
+                            gui_manager.setTopSign(aster_old_lab_sign, 0.01);
+                            break;
+                        case asteroid_lava_surface_sprite:
+                            gui_manager.setTopSign(aster_lava_surf_sign, 0.01);
+                            break;
+                        case asteroid_drone_factory_sprite:
+                            gui_manager.setTopSign(aster_drone_sign, 0.01);
+                            break;
+                        case asteroid_rocket_launcher_sprite:
+                            gui_manager.setTopSign(aster_rocket_sign, 0.01);
+                            break;
+                        case asteroid_ancient_laboratory_sprite:
+                            gui_manager.setTopSign(aster_anc_lab_sign, 0.01);
+                            break;
+                        case asteroid_ancient_giant_gold_mine_sprite:
+                            gui_manager.setTopSign(aster_anc_mine_sign, 0.01);
+                            break;
+                        }
+                    }
 				}
 			}
             bool move_activity = false;
@@ -1224,7 +1237,17 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					}
 				}
 
-				if ((abs(sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z)) > 80) || sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)) {
+                if ((abs(sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z)) > 80) || sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) && (frame_num - last_mode_change) > fps.getFPS()) {
+                    if (cinematic_mode) {
+                        cinematic_mode = false;
+                    }
+                    else {
+                        cinematic_mode = true;
+                    }
+                    last_mode_change = frame_num;
+                }
+
+				/*if ((abs(sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z)) > 80) || sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)) {
 					std::vector<std::string> rank_list;
 					if (sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z) > 0 || sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
 						rank_list = rank.getTopKillList();
@@ -1235,7 +1258,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					for (int i = 0; i < rank_list.size(); i++) {
 						gui_manager.setText(rank_list[i], 0.01, rank_start + i, Point(-window.getView().getSize().x / 2 + 100, -300 + 50 * i), 40);
 					}
-				}
+				}*/
 			}
 
 			if (game_status == game_hero_mode) {
@@ -1317,9 +1340,13 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					buttons[i].sprite.setPosition(sf::Vector2f(buttons[i].pos.x * window.getView().getSize().x / 1920 + viewport_pos.x, buttons[i].pos.y * window.getView().getSize().y / 1080 + viewport_pos.y));
 				}
 
-				gui_manager.forceSetTopSign(keyboard_press_title + buttons[chosen_button].advice_string, 0.01);
+                if (!cinematic_mode) {
+                    gui_manager.forceSetTopSign(keyboard_press_title + buttons[chosen_button].advice_string, 0.01);
+                }
 				if (sf::Joystick::isConnected(0)) {
-					gui_manager.forceSetTopSign(gamepad_press_title + buttons[chosen_button].advice_string, 0.01);
+                    if (!cinematic_mode) {
+                        gui_manager.forceSetTopSign(gamepad_press_title + buttons[chosen_button].advice_string, 0.01);
+                    }
 				}
 				title.setOrigin(title.getGlobalBounds().width / 2, title.getGlobalBounds().height / 2);
 
@@ -1667,7 +1694,7 @@ int main() {
 #ifdef __linux__ || __APPLE__  
 #elif _WIN32
 	HWND console_hWnd = GetConsoleWindow();
-	//ShowWindow(console_hWnd, SW_HIDE);
+	ShowWindow(console_hWnd, SW_HIDE);
 #else
 #endif
 

@@ -27,7 +27,7 @@ phrase_type aster_iron_inter_GUI
 phrase_end
 
 phrase_start
-string |Подозрительно гладкий
+string |Подозрительно гладкий астероид
 (+10% скорости исследования)|
 conditions_start
 conditions_end
@@ -83,7 +83,7 @@ phrase_type aster_ord_mount_GUI
 phrase_end
 
 phrase_start
-string |Странный астероид с залежами золота
+string |Странный астероид с истощенными залежами золота
 (-25% добычи золота, +20% скорости исследования)|
 conditions_start
 conditions_end

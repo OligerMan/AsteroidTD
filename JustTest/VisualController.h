@@ -197,8 +197,10 @@ public:
                     object->getObjectType() != drone &&
                     object->getObjectType() != drone_turret) {
 
-					window->draw(hp_sign);
-					window->draw(hp_circle);
+                    if (!cinematic_mode) {
+                        window->draw(hp_sign);
+                        window->draw(hp_circle);
+                    }
 				}
 				if (object->getObjectType() == asteroid && object->getUnitInfo() && object->getUnitInfo()->getFaction() == hero_faction) {
 					float ratio = object->getUnitInfo()->getAsteroidResources() / consts.getBaseAsteroidGold();
@@ -219,7 +221,10 @@ public:
 					for (int k = 0; k < int(ceil(float(point_cnt_gold * ratio)) * 2); k++) {
 						gold_circle[k].color = sf::Color(0, 255, 255);
 					}
-					window->draw(gold_circle);
+
+                    if (!cinematic_mode) {
+                        window->draw(gold_circle);
+                    }
 				}
 			}
 		}
@@ -247,7 +252,10 @@ public:
                 for (int i = 0; i < 8; i++) {
                     arrow[i].color = sf::Color::Red;
                 }
-				window->draw(arrow, 8, sf::Lines);
+
+                if (!cinematic_mode) {
+                    window->draw(arrow, 8, sf::Lines);
+                }
 			}
 		}
 
@@ -276,7 +284,10 @@ public:
                 for (int i = 0; i < 8; i++) {
                     arrow[i].color = sf::Color(120, 100, 255);
                 }
-				window->draw(arrow, 8, sf::Lines);
+
+                if (!cinematic_mode) {
+                    window->draw(arrow, 8, sf::Lines);
+                }
 			}
 		}
 
