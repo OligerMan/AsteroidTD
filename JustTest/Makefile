@@ -16,6 +16,7 @@ protoc:
 
 
 osxapp:
+	make all
 	mkdir -p ../AsteroidTD.app/Contents/MacOS
 	mkdir -p ../AsteroidTD.app/Contents/Resources
 	cp -f ../macosx/Info.plist ../AsteroidTD.app/Contents/Info.plist
