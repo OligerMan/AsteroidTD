@@ -1,0 +1,12 @@
+"Installscript"
+{
+	"version"	"2"
+	"chmod"
+	{
+		"0"
+		{
+			"file"	"AsteroidTD.app/Contents/MacOS/asteroid"
+			"mode"	"755"
+		}
+	}
+}
