@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include <SFML/Network.hpp>
-#ifdef __linux__ || __APPLE__
+#if  defined(__linux__) || defined(__APPLE__)
 #include <unistd.h>
 #elif _WIN32
 #include <Windows.h>
@@ -59,7 +59,7 @@ public:
 	void launchUpdateWorker() {
 		auto rank_updater = [&]() {
 			while (game_status == nickname_enter && !settings.getNickname().size()) { 
-#ifdef __linux__ || __APPLE__
+#if  defined(__linux__) || defined(__APPLE__)
 				sleep(1);
 #elif _WIN32
 				Sleep(1000);
@@ -126,7 +126,7 @@ public:
 	void reboot() {
 		online = false;
 		while (!online) { 
-#ifdef __linux__ || __APPLE__
+#if  defined(__linux__) || defined(__APPLE__)
 			usleep(10000);
 #elif _WIN32
 			Sleep(10);
@@ -138,7 +138,7 @@ public:
 	void launchSelfRankUpdateWorker() {
 		auto self_rank_updater = [&]() {
 			while (game_status == nickname_enter) { 
-#ifdef __linux__ || __APPLE__
+#if  defined(__linux__) || defined(__APPLE__)
 				sleep(1);
 #elif _WIN32
 				Sleep(1000);
@@ -148,7 +148,7 @@ public:
 				if (!dead && online) {
 					selfRankUpdate(true);
 				}
-#ifdef __linux__ || __APPLE__
+#if  defined(__linux__) || defined(__APPLE__)
 				sleep(1);
 #elif _WIN32
 				Sleep(1000);

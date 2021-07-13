@@ -79,8 +79,8 @@ public:
 
 			for (int i = 0; i < buffer[buf_num].button_list.size(); i++) {
 				double angle_diff =
-					(std::atan2(move_vector.x, move_vector.y) -
-						std::atan2(
+					(atan2(move_vector.x, move_vector.y) -
+						atan2(
 							buffer[buf_num].button_list[i].x - buffer[buf_num].button_list[buffer[buf_num].cur_index].x,
 							buffer[buf_num].button_list[i].y - buffer[buf_num].button_list[buffer[buf_num].cur_index].y));
 

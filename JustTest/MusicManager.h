@@ -5,7 +5,7 @@
 #include <thread>
 #include <random>
 
-#ifdef __linux__ || __APPLE__
+#if  defined(__linux__) || defined(__APPLE__)
 #include <unistd.h>
 #elif _WIN32
 #include <Windows.h>
@@ -56,7 +56,7 @@ public:
     void shutdown() {
         working = false;
         while (!main_cycle_down) {
-#ifdef __linux__ || __APPLE__
+#if  defined(__linux__) || defined(__APPLE__)
             usleep(10000);
 #elif _WIN32
 			Sleep(10);
@@ -115,7 +115,7 @@ public:
 						play_state = false;
 					}
 				}
-#ifdef __linux__ || __APPLE__
+#if  defined(__linux__) || defined(__APPLE__)
 				usleep(200000);
 #elif _WIN32
 				Sleep(200);

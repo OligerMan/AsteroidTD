@@ -377,7 +377,7 @@ private:
 												object1->getUnitInfo()->setEnemy(nullptr);
 											}
 											else {
-												double angle_diff = -(std::atan2(vect.x, vect.y) * 180.0 / PI + object1->getAngle() + 180);
+												double angle_diff = -(atan2(vect.x, vect.y) * 180.0 / PI + object1->getAngle() + 180);
 												if (abs(angle_diff) > 0.000001) {     // angle_diff is not close to zero
 													if (abs(angle_diff) > abs(angle_diff + 360.0)) {
 														angle_diff += 360.0;

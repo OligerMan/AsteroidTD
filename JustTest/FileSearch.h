@@ -5,7 +5,7 @@
 #include <vector>
 #include <stdio.h>
 
-#ifdef __linux__ || __APPLE__
+#if defined(__linux__) || defined(__APPLE__)
 #define path_separator std::string("/")
 #elif _WIN32
 #define path_separator std::string("\\")
@@ -17,7 +17,7 @@ std::vector<std::string> * getFileList(std::string folder) {
 
 	FILE * pipe;
 	char buf[BUFSIZ];
-#ifdef __linux__ || __APPLE__
+#if  defined(__linux__) || defined(__APPLE__)
 	if ((pipe = popen(("ls " + folder).c_str(), "r")) == NULL) {
 #elif _WIN32
 	if ((pipe = _popen(("dir " + folder + " /B /N").c_str(), "r")) == NULL) {
@@ -30,7 +30,7 @@ std::vector<std::string> * getFileList(std::string folder) {
 		buffer.pop_back();
 		output->push_back(buffer);
 	}
-#ifdef __linux__ || __APPLE__
+#if  defined(__linux__) || defined(__APPLE__)
 	pclose(pipe);
 #elif _WIN32
 	_pclose(pipe);

@@ -20,7 +20,7 @@
 #include <chrono>
 #include <SFML/Audio.hpp>
 
-#ifdef __linux__ || __APPLE__ 
+#if  defined(__linux__) || defined(__APPLE__) 
 #include <unistd.h>
 #include <X11/Xlib.h>
 #elif _WIN32
@@ -112,7 +112,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			if (game_status == game_hero_mode || game_status == game_strategic_mode) {
 				rank.addGameplayTime(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - round_start).count());
 				round_start = std::chrono::steady_clock::now();
-#ifdef __linux__ || __APPLE__
+#if  defined(__linux__) || defined(__APPLE__)
 				sleep(1);
 #elif _WIN32
 				Sleep(1000);
@@ -546,7 +546,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				vibration_time = vibr_on_dmg_time;
 			}
 			if (vibration_time > 0) {
-#ifdef __linux__ || __APPLE__ 
+#if  defined(__linux__) || defined(__APPLE__) 
 #elif _WIN32
                 if (sf::Joystick::isConnected(0)) {
                     XINPUT_VIBRATION vibration;
@@ -560,7 +560,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				
 			}
 			else {
-#ifdef __linux__ || __APPLE__  
+#if  defined(__linux__) || defined(__APPLE__)  
 #elif _WIN32
                 if (sf::Joystick::isConnected(0)) {
                     XINPUT_VIBRATION vibration;
@@ -1389,7 +1389,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			
 		}
 		if (game_status == game_over) {
-#ifdef __linux__ || __APPLE__  
+#if  defined(__linux__) || defined(__APPLE__)  
 #elif _WIN32
             if (sf::Joystick::isConnected(0)) {
                 XINPUT_VIBRATION vibration;
@@ -1561,8 +1561,8 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 
 					for (int i = 0; i < npc->getDialogInfo().answers.size(); i++) {
 						double angle_diff =
-							(std::atan2(move_vector.x, move_vector.y) -
-								std::atan2(
+							(atan2(move_vector.x, move_vector.y) -
+								atan2(
 									0,
 									i - chosen_answer));
 
@@ -1691,7 +1691,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 }
 
 int main() {
-#ifdef __linux__ || __APPLE__  
+#if  defined(__linux__) || defined(__APPLE__)  
 #elif _WIN32
 	HWND console_hWnd = GetConsoleWindow();
 	ShowWindow(console_hWnd, SW_HIDE);
@@ -1703,7 +1703,7 @@ int main() {
 	sf::ContextSettings context_settings;
 	context_settings.antialiasingLevel = 8;
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-#ifdef __linux__ || __APPLE__ 
+#if  defined(__linux__) || defined(__APPLE__) 
     sf::RenderWindow window(sf::VideoMode(settings.getWindowWidth(), settings.getWindowHeight()), "AsteroidTD", sf::Style::Fullscreen, context_settings);
 #elif _WIN32
     sf::RenderWindow window(sf::VideoMode(settings.getWindowWidth(), settings.getWindowHeight()), "AsteroidTD", sf::Style::None, context_settings);
@@ -1731,7 +1731,7 @@ int main() {
 		std::cout << "Settings file error, enabling default settings" << std::endl;
 		settings.setDefaults();
 	}
-#ifdef __linux__ || __APPLE__  
+#if  defined(__linux__) || defined(__APPLE__)  
 	Display * xdisplay = XOpenDisplay(NULL);
 	Screen * screen_info = DefaultScreenOfDisplay(xdisplay);
 	int screenW = screen_info->width;
@@ -1940,7 +1940,7 @@ int main() {
 		frame_num++;
 
 		window.setView(main_view);
-#ifdef __linux__ || __APPLE__  
+#if  defined(__linux__) || defined(__APPLE__)  
 #elif _WIN32
         if (sf::Joystick::isConnected(0)) {
             XINPUT_VIBRATION vibration;
