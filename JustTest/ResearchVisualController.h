@@ -61,12 +61,22 @@ class ResearchVisualController {
 	}
 
 	void drawResearchInfo(sf::RenderWindow * window, sf::Vector2f viewport_pos, int cur_research_index) {
-		cost_sign.setString("Research points: " + std::to_string((int)resource_manager.getResearch()) +"\nCost: " + std::to_string((int)research_manager.getResearch((ResearchList)cur_research_index)->cost) + " research points");
+        std::wstring research_points_str, research_cost_str, research_cost_end_str_1, research_cost_end_str;
+        std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(L"research_points_GUI");
+        research_points_str = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(L"research_cost_GUI");
+        research_cost_str = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(L"research_cost_end_str_GUI");
+        research_cost_end_str = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        buffer = phrase_container.getPhraseBuffer(L"research_cost_end_str_1_GUI");
+        research_cost_end_str_1 = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+
+		cost_sign.setString(research_points_str + std::to_wstring((int)resource_manager.getResearch()) + L"\n" + research_cost_str + std::to_wstring((int)research_manager.getResearch((ResearchList)cur_research_index)->cost) + ((int)research_manager.getResearch((ResearchList)cur_research_index)->cost == 1 ? research_cost_end_str_1 : research_cost_end_str));
 		cost_sign.setOrigin(-viewport_pos);
 		cost_sign.setCharacterSize(40 * window->getView().getSize().y / 1080);
 
 		auto tmp = research_manager.getResearchNode((ResearchList)cur_research_index);
-		std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(tmp->description_id);
+		buffer = phrase_container.getPhraseBuffer(tmp->description_id);
 		description.setString(buffer[rand() * buffer.size() / (RAND_MAX + 1)]);
 
 		description.setOrigin(-viewport_pos + sf::Vector2f(0, description.getGlobalBounds().height));

@@ -294,4 +294,37 @@ id common
 phrase_type compl_no_miss_broad_sign_GUI
 phrase_end
 
+phrase_start
+string |Очки исследований: |
+conditions_start
+conditions_end
+id common
+phrase_type research_points_GUI
+phrase_end
+
+phrase_start
+string |Стоимость: |
+conditions_start
+conditions_end
+id common
+phrase_type research_cost_GUI
+phrase_end
+
+phrase_start
+string | очков исследований|
+conditions_start
+conditions_end
+id common
+phrase_type research_cost_end_str_GUI
+phrase_end
+
+phrase_start
+string | очко исследований|
+conditions_start
+conditions_end
+id common
+phrase_type research_cost_end_str_1_GUI
+phrase_end
+
+
 dialog_file_end
