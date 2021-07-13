@@ -1,8 +1,16 @@
 COMPILER=g++
-CFLAGS=-std=c++17 -lstdc++ -lprotobuf -lpthread -lm -lX11 -o
+CFLAGS=-std=c++17 -lstdc++ -lprotobuf -lpthread -lm -lX11 -fsanitize=address -o
 SFMLFLAGS=-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network
 BUILDFILES=Source.cpp PlayerStat.pb.cc
 OUT=asteroid
+CURDIR=${PWD}
+PROTOC_SUFFIX=*.proto
+PROTOC_OPTS=--cpp_out=$(CURDIR) --proto_path=$(CURDIR)
 
-build:
+all: protoc
 	$(COMPILER) $(BUILDFILES) $(CFLAGS) $(OUT) $(SFMLFLAGS)
+
+
+protoc:
+	protoc $(PROTOC_OPTS) $(PROTOC_SUFFIX)
+

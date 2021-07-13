@@ -1,4 +1,5 @@
-
+*.pb.cc
+*.pb.h
 *.log
 *.tlog
 *.lastbuildstate
