@@ -8,3 +8,12 @@
 *.db
 *.db
 AsteroidTD.app/**
+x64/Release/bf3.exe
+x64/Release/bf3.iobj
+x64/Release/bf3.ipdb
+*.dll
+JustTest.VC.db
+JustTest.VC.db
+JustTest.VC.db
+JustTest/x64/Release/PlayerStat.pb.obj
+JustTest/x64/Release/Source.obj
