@@ -19,7 +19,13 @@ osxapp:
 	make all
 	mkdir -p ../AsteroidTD.app/Contents/MacOS
 	mkdir -p ../AsteroidTD.app/Contents/Resources
-	cp -f ../macosx/Info.plist ../AsteroidTD.app/Contents/Info.plist
-	cp -f ../macosx/installscript_osx.vdf ../AsteroidTD.app/installscript_osx.vdf
+	cp -f ./macosx/Info.plist ../AsteroidTD.app/Contents/Info.plist
+	cp -f ./macosx/installscript_osx.vdf ../AsteroidTD.app/installscript_osx.vdf
 	cp -rf $(CURDIR)/* ../AsteroidTD.app/Contents/Resources/
 	cp -f $(CURDIR)/asteroid ../AsteroidTD.app/Contents/MacOS/asteroid
+
+clean:
+	rm -rf ../AsteroidTD.app
+	rm -f $(CURDIR)/asteroid
+	rm -f $(CURDIR)/PlayerStat.pb.cc $(CURDIR)/PlayerStat.pb.h
+	rm -rf $(CURDIR)/x64
