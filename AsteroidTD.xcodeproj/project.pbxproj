@@ -1,0 +1,553 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 53;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		471E07D526A189D300297648 /* Background in Resources */ = {isa = PBXBuildFile; fileRef = 471E07CA26A189D300297648 /* Background */; };
+		471E07D626A189D300297648 /* Collision in Resources */ = {isa = PBXBuildFile; fileRef = 471E07CB26A189D300297648 /* Collision */; };
+		471E07D826A189D300297648 /* Maps in Resources */ = {isa = PBXBuildFile; fileRef = 471E07CD26A189D300297648 /* Maps */; };
+		471E07D926A189D300297648 /* Menu_buttons in Resources */ = {isa = PBXBuildFile; fileRef = 471E07CE26A189D300297648 /* Menu_buttons */; };
+		471E07DA26A189D300297648 /* Music in Resources */ = {isa = PBXBuildFile; fileRef = 471E07CF26A189D300297648 /* Music */; };
+		471E07DB26A189D300297648 /* Redactor_resources in Resources */ = {isa = PBXBuildFile; fileRef = 471E07D026A189D300297648 /* Redactor_resources */; };
+		471E07DC26A189D300297648 /* Research_sprites in Resources */ = {isa = PBXBuildFile; fileRef = 471E07D126A189D300297648 /* Research_sprites */; };
+		471E07DD26A189D300297648 /* Skill_sprite in Resources */ = {isa = PBXBuildFile; fileRef = 471E07D226A189D300297648 /* Skill_sprite */; };
+		471E07DF26A189D300297648 /* Sprites in Resources */ = {isa = PBXBuildFile; fileRef = 471E07D426A189D300297648 /* Sprites */; };
+		471E07E326A18C5400297648 /* Config in Resources */ = {isa = PBXBuildFile; fileRef = 471E07E226A18C5400297648 /* Config */; };
+		471E07E726A18D8500297648 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 471E07E626A18D8500297648 /* Images.xcassets */; };
+		471E07F026A1962C00297648 /* Headers in Resources */ = {isa = PBXBuildFile; fileRef = 471E07EF26A1962C00297648 /* Headers */; };
+		4745D7B226A17FD500789C4C /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4745D7B126A17FD500789C4C /* ResourcePath.mm */; };
+		4745D7B526A17FD500789C4C /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4745D7B426A17FD500789C4C /* main.cpp */; };
+		4745DC1426A183AD00789C4C /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4745D7BD26A17FD500789C4C /* icon.png */; };
+		4745DC1526A183AF00789C4C /* cute_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4745D7B726A17FD500789C4C /* cute_image.jpg */; };
+		4745DC1726A183CA00789C4C /* nice_music.ogg in Resources */ = {isa = PBXBuildFile; fileRef = 4745D7B926A17FD500789C4C /* nice_music.ogg */; };
+		4745DC1826A183DC00789C4C /* 18888.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4745D93526A182AF00789C4C /* 18888.ttf */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		471E07ED26A1948200297648 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4745D7A326A17FD500789C4C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 471E07E926A191F500297648;
+			remoteInfo = PlayerStat;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		471E07CA26A189D300297648 /* Background */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Background; sourceTree = "<group>"; };
+		471E07CB26A189D300297648 /* Collision */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Collision; sourceTree = "<group>"; };
+		471E07CD26A189D300297648 /* Maps */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Maps; sourceTree = "<group>"; };
+		471E07CE26A189D300297648 /* Menu_buttons */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Menu_buttons; sourceTree = "<group>"; };
+		471E07CF26A189D300297648 /* Music */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Music; sourceTree = "<group>"; };
+		471E07D026A189D300297648 /* Redactor_resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Redactor_resources; sourceTree = "<group>"; };
+		471E07D126A189D300297648 /* Research_sprites */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Research_sprites; sourceTree = "<group>"; };
+		471E07D226A189D300297648 /* Skill_sprite */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Skill_sprite; sourceTree = "<group>"; };
+		471E07D426A189D300297648 /* Sprites */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Sprites; sourceTree = "<group>"; };
+		471E07E026A18B3A00297648 /* AsteroidTD-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "AsteroidTD-Info.plist"; path = "AsteroidTD/AsteroidTD-Info.plist"; sourceTree = SOURCE_ROOT; };
+		471E07E226A18C5400297648 /* Config */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Config; sourceTree = "<group>"; };
+		471E07E626A18D8500297648 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		471E07E826A1912A00297648 /* Protobuf */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Protobuf; sourceTree = "<group>"; };
+		471E07EF26A1962C00297648 /* Headers */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Headers; sourceTree = "<group>"; };
+		4745D7AC26A17FD500789C4C /* AsteroidTD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AsteroidTD.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4745D7B126A17FD500789C4C /* ResourcePath.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ResourcePath.mm; sourceTree = "<group>"; };
+		4745D7B326A17FD500789C4C /* ResourcePath.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ResourcePath.hpp; sourceTree = "<group>"; };
+		4745D7B426A17FD500789C4C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		4745D7B726A17FD500789C4C /* cute_image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cute_image.jpg; sourceTree = "<group>"; };
+		4745D7B926A17FD500789C4C /* nice_music.ogg */ = {isa = PBXFileReference; lastKnownFileType = file; path = nice_music.ogg; sourceTree = "<group>"; };
+		4745D7BD26A17FD500789C4C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		4745D93226A182AF00789C4C /* shot.ogg */ = {isa = PBXFileReference; lastKnownFileType = file; path = shot.ogg; sourceTree = "<group>"; };
+		4745D93526A182AF00789C4C /* 18888.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 18888.ttf; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4745D7A826A17FD500789C4C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4745D7A226A17FD500789C4C = {
+			isa = PBXGroup;
+			children = (
+				4745D7AE26A17FD500789C4C /* AsteroidTD */,
+				4745D7AD26A17FD500789C4C /* Products */,
+				4745D7C426A1802C00789C4C /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		4745D7AD26A17FD500789C4C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4745D7AC26A17FD500789C4C /* AsteroidTD.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4745D7AE26A17FD500789C4C /* AsteroidTD */ = {
+			isa = PBXGroup;
+			children = (
+				471E07E826A1912A00297648 /* Protobuf */,
+				4745D7B126A17FD500789C4C /* ResourcePath.mm */,
+				4745D7B326A17FD500789C4C /* ResourcePath.hpp */,
+				471E07E626A18D8500297648 /* Images.xcassets */,
+				4745D7B426A17FD500789C4C /* main.cpp */,
+				471E07EF26A1962C00297648 /* Headers */,
+				4745D7B626A17FD500789C4C /* Resources */,
+				471E07E026A18B3A00297648 /* AsteroidTD-Info.plist */,
+			);
+			path = AsteroidTD;
+			sourceTree = "<group>";
+		};
+		4745D7B626A17FD500789C4C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				471E07E226A18C5400297648 /* Config */,
+				471E07CA26A189D300297648 /* Background */,
+				471E07CB26A189D300297648 /* Collision */,
+				471E07CD26A189D300297648 /* Maps */,
+				471E07CE26A189D300297648 /* Menu_buttons */,
+				471E07CF26A189D300297648 /* Music */,
+				471E07D026A189D300297648 /* Redactor_resources */,
+				471E07D126A189D300297648 /* Research_sprites */,
+				471E07D226A189D300297648 /* Skill_sprite */,
+				471E07D426A189D300297648 /* Sprites */,
+				4745D93526A182AF00789C4C /* 18888.ttf */,
+				4745D93226A182AF00789C4C /* shot.ogg */,
+				4745D7B926A17FD500789C4C /* nice_music.ogg */,
+				4745D7B726A17FD500789C4C /* cute_image.jpg */,
+				4745D7BD26A17FD500789C4C /* icon.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		4745D7C426A1802C00789C4C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		471E07E926A191F500297648 /* PlayerStat */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION) --cpp_out=$(PROJECT_DIR)/AsteroidTD/Protobuf --proto_path=$(PROJECT_DIR)/AsteroidTD/Protobuf $(PROJECT_DIR)/AsteroidTD/Protobuf/PlayerStat.proto";
+			buildConfigurationList = 471E07EA26A191F500297648 /* Build configuration list for PBXLegacyTarget "PlayerStat" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/local/bin/protoc;
+			buildWorkingDirectory = /Users/rave/Projects.localized/Game/AsteroidTD/AsteroidTD/Protobuf;
+			dependencies = (
+			);
+			name = PlayerStat;
+			passBuildSettingsInEnvironment = 1;
+			productName = protobuf;
+		};
+/* End PBXLegacyTarget section */
+
+/* Begin PBXNativeTarget section */
+		4745D7AB26A17FD500789C4C /* AsteroidTD */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4745D7C126A17FD500789C4C /* Build configuration list for PBXNativeTarget "AsteroidTD" */;
+			buildPhases = (
+				4745D7A726A17FD500789C4C /* Sources */,
+				4745D7A826A17FD500789C4C /* Frameworks */,
+				4745D7A926A17FD500789C4C /* Resources */,
+				4745D7AA26A17FD500789C4C /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				471E07EE26A1948200297648 /* PBXTargetDependency */,
+			);
+			name = AsteroidTD;
+			productName = AsteroidTD;
+			productReference = 4745D7AC26A17FD500789C4C /* AsteroidTD.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4745D7A326A17FD500789C4C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1300;
+				ORGANIZATIONNAME = ISPRAS;
+				TargetAttributes = {
+					471E07E926A191F500297648 = {
+						CreatedOnToolsVersion = 13.0;
+					};
+					4745D7AB26A17FD500789C4C = {
+						CreatedOnToolsVersion = 13.0;
+					};
+				};
+			};
+			buildConfigurationList = 4745D7A626A17FD500789C4C /* Build configuration list for PBXProject "AsteroidTD" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4745D7A226A17FD500789C4C;
+			productRefGroup = 4745D7AD26A17FD500789C4C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4745D7AB26A17FD500789C4C /* AsteroidTD */,
+				471E07E926A191F500297648 /* PlayerStat */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4745D7A926A17FD500789C4C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				471E07DA26A189D300297648 /* Music in Resources */,
+				471E07E726A18D8500297648 /* Images.xcassets in Resources */,
+				471E07E326A18C5400297648 /* Config in Resources */,
+				471E07F026A1962C00297648 /* Headers in Resources */,
+				4745DC1726A183CA00789C4C /* nice_music.ogg in Resources */,
+				471E07D826A189D300297648 /* Maps in Resources */,
+				471E07DD26A189D300297648 /* Skill_sprite in Resources */,
+				471E07D626A189D300297648 /* Collision in Resources */,
+				4745DC1426A183AD00789C4C /* icon.png in Resources */,
+				4745DC1526A183AF00789C4C /* cute_image.jpg in Resources */,
+				471E07DC26A189D300297648 /* Research_sprites in Resources */,
+				471E07D926A189D300297648 /* Menu_buttons in Resources */,
+				471E07D526A189D300297648 /* Background in Resources */,
+				471E07DB26A189D300297648 /* Redactor_resources in Resources */,
+				4745DC1826A183DC00789C4C /* 18888.ttf in Resources */,
+				471E07DF26A189D300297648 /* Sprites in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4745D7AA26A17FD500789C4C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 8;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "# This shell script simply copies required SFML dylibs/frameworks into the application bundle frameworks folder.\n# If you're using static libraries (which is not recommended) you should remove this script from your project.\n\n# SETTINGS\nSFML_DEPENDENCIES_INSTALL_PREFIX=\"/Users/SFML/Desktop/packaging/tmp/install/Library/Frameworks\"\nCMAKE_INSTALL_FRAMEWORK_PREFIX=\"/Users/SFML/Desktop/packaging/tmp/install/Library/Frameworks\"\nCMAKE_INSTALL_LIB_PREFIX=\"/Users/SFML/Desktop/packaging/tmp/install/Library/Frameworks/lib\"\nFRAMEWORKS_FULL_PATH=\"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH/\"\n\n# Are we building a project that uses frameworks or dylibs?\ncase \"$SFML_BINARY_TYPE\" in\n    DYLIBS)\n        frameworks=\"false\"\n        ;;\n    *)\n        frameworks=\"true\"\n        ;;\nesac\n\n# Echoes to stderr\nerror () # $* message to display\n{\n    echo $* 1>&2\n    exit 2\n}\n\nassert () # $1 is a boolean, $2...N is an error message\n{\n    if [ $# -lt 2 ]\n    then\n        error \"Internal error in assert: not enough args\"\n    fi\n\n    if [ $1 -ne 0 ]\n    then\n        shift\n        error \"$*\"\n    fi\n}\n\nforce_remove () # $@ is some paths\n{\n    test $# -ge 1\n    assert $? \"force_remove() requires at least one parameter\"\n    rm -fr $@\n    assert $? \"couldn't remove $@\"\n}\n\ncopy () # $1 is a source, $2 is a destination\n{\n    test $# -eq 2\n    assert $? \"copy() requires two parameters\"\n    ditto \"$1\" \"$2\"\n    assert $? \"couldn't copy $1 to $2\"\n}\n\nrequire () # $1 is a SFML module like 'system' or 'audio'\n{\n    dest=\"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH/\"\n\n    if [ -z \"$1\" ]\n    then\n        error \"require() requires one parameter!\"\n    else\n        # clean potentially old stuff\n        force_remove \"$dest/libsfml-$1\"*\n        force_remove \"$dest/sfml-$1.framework\"\n\n        # copy SFML libraries\n        if [ \"$frameworks\" = \"true\" ]\n        then\n            source=\"$CMAKE_INSTALL_FRAMEWORK_PREFIX/sfml-$1.framework\"\n            target=\"sfml-$1.framework\"\n        elif [ \"$SFML_LINK_DYLIBS_SUFFIX\" = \"-d\" ]\n        then\n            source=\"$CMAKE_INSTALL_LIB_PREFIX/libsfml-$1-d.dylib\"\n            target=\"`readlink $source`\"\n        else\n            source=\"$CMAKE_INSTALL_LIB_PREFIX/libsfml-$1.dylib\"\n            target=\"`readlink $source`\"\n        fi\n\n        copy \"$source\" \"$dest/$target\"\n\n        # copy extra dependencies\n        if [ \"$1\" = \"audio\" ]\n        then\n            # copy \"FLAC\" \"ogg\" \"vorbis\" \"vorbisenc\" \"vorbisfile\" \"OpenAL\" frameworks too\n            for f in \"FLAC\" \"ogg\" \"vorbis\" \"vorbisenc\" \"vorbisfile\" \"OpenAL\"\n            do\n                copy \"$SFML_DEPENDENCIES_INSTALL_PREFIX/$f.framework\" \"$dest/$f.framework\"\n            done\n        elif [ \"$1\" = \"graphics\" ]\n        then\n            copy \"$SFML_DEPENDENCIES_INSTALL_PREFIX/freetype.framework\" \"$dest/freetype.framework\"\n        fi\n    fi\n}\n\nif [ -n \"$SFML_SYSTEM\" ]\nthen\n    require \"system\"\nfi\n\nif [ -n \"$SFML_AUDIO\" ]\nthen\n    require \"audio\"\nfi\n\nif [ -n \"$SFML_NETWORK\" ]\nthen\n    require \"network\"\nfi\n\nif [ -n \"$SFML_WINDOW\" ]\nthen\n    require \"window\"\nfi\n\nif [ -n \"$SFML_GRAPHICS\" ]\nthen\n    require \"graphics\"\nfi\n\n                \n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4745D7A726A17FD500789C4C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4745D7B526A17FD500789C4C /* main.cpp in Sources */,
+				4745D7B226A17FD500789C4C /* ResourcePath.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		471E07EE26A1948200297648 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 471E07E926A191F500297648 /* PlayerStat */;
+			targetProxy = 471E07ED26A1948200297648 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		471E07EB26A191F500297648 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		471E07EC26A191F500297648 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		4745D7BF26A17FD500789C4C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++11";
+				CLANG_CXX_LIBRARY = "libc++";
+				FRAMEWORK_SEARCH_PATHS = (
+					/Library/Frameworks/,
+					"$(inherited)",
+				);
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include/,
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib/,
+					"$(inherited)",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"$(SFML_SYSTEM)",
+					"$(SFML_WINDOW)",
+					"$(SFML_GRAPHICS)",
+					"$(SFML_AUDIO)",
+					"$(SFML_NETWORK)",
+				);
+				SFML_AUDIO = "$(SFML_LINK_PREFIX) sfml-audio$(SFML_LINK_SUFFIX)";
+				SFML_BINARY_TYPE = FRAMEWORKS;
+				SFML_GRAPHICS = "$(SFML_LINK_PREFIX) sfml-graphics$(SFML_LINK_SUFFIX)";
+				SFML_LINK_DYLIBS_PREFIX = "-l";
+				SFML_LINK_DYLIBS_SUFFIX = "";
+				SFML_LINK_FRAMEWORKS_PREFIX = "-framework";
+				SFML_LINK_FRAMEWORKS_SUFFIX = "";
+				SFML_LINK_PREFIX = "$(SFML_LINK_$(SFML_BINARY_TYPE)_PREFIX)";
+				SFML_LINK_SUFFIX = "$(SFML_LINK_$(SFML_BINARY_TYPE)_SUFFIX)";
+				SFML_NETWORK = "$(SFML_LINK_PREFIX) sfml-network$(SFML_LINK_SUFFIX)";
+				SFML_SYSTEM = "$(SFML_LINK_PREFIX) sfml-system$(SFML_LINK_SUFFIX)";
+				SFML_WINDOW = "$(SFML_LINK_PREFIX) sfml-window$(SFML_LINK_SUFFIX)";
+				SUPPORTED_PLATFORMS = macosx;
+			};
+			name = Debug;
+		};
+		4745D7C026A17FD500789C4C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++11";
+				CLANG_CXX_LIBRARY = "libc++";
+				FRAMEWORK_SEARCH_PATHS = (
+					/Library/Frameworks/,
+					"$(inherited)",
+				);
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include/,
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib/,
+					"$(inherited)",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"$(SFML_SYSTEM)",
+					"$(SFML_WINDOW)",
+					"$(SFML_GRAPHICS)",
+					"$(SFML_AUDIO)",
+					"$(SFML_NETWORK)",
+				);
+				SFML_AUDIO = "$(SFML_LINK_PREFIX) sfml-audio$(SFML_LINK_SUFFIX)";
+				SFML_BINARY_TYPE = FRAMEWORKS;
+				SFML_GRAPHICS = "$(SFML_LINK_PREFIX) sfml-graphics$(SFML_LINK_SUFFIX)";
+				SFML_LINK_DYLIBS_PREFIX = "-l";
+				SFML_LINK_DYLIBS_SUFFIX = "";
+				SFML_LINK_FRAMEWORKS_PREFIX = "-framework";
+				SFML_LINK_FRAMEWORKS_SUFFIX = "";
+				SFML_LINK_PREFIX = "$(SFML_LINK_$(SFML_BINARY_TYPE)_PREFIX)";
+				SFML_LINK_SUFFIX = "$(SFML_LINK_$(SFML_BINARY_TYPE)_SUFFIX)";
+				SFML_NETWORK = "$(SFML_LINK_PREFIX) sfml-network$(SFML_LINK_SUFFIX)";
+				SFML_SYSTEM = "$(SFML_LINK_PREFIX) sfml-system$(SFML_LINK_SUFFIX)";
+				SFML_WINDOW = "$(SFML_LINK_PREFIX) sfml-window$(SFML_LINK_SUFFIX)";
+				SUPPORTED_PLATFORMS = macosx;
+			};
+			name = Release;
+		};
+		4745D7C226A17FD500789C4C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = "0.3.0.1-mac";
+				INFOPLIST_FILE = "AsteroidTD/AsteroidTD-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MARKETING_VERSION = 0.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ubsefor.asteroidTD;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USE_HEADERMAP = NO;
+			};
+			name = Debug;
+		};
+		4745D7C326A17FD500789C4C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = "0.3.0.1-mac";
+				INFOPLIST_FILE = "AsteroidTD/AsteroidTD-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MARKETING_VERSION = 0.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ubsefor.asteroidTD;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USE_HEADERMAP = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		471E07EA26A191F500297648 /* Build configuration list for PBXLegacyTarget "PlayerStat" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				471E07EB26A191F500297648 /* Debug */,
+				471E07EC26A191F500297648 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4745D7A626A17FD500789C4C /* Build configuration list for PBXProject "AsteroidTD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4745D7BF26A17FD500789C4C /* Debug */,
+				4745D7C026A17FD500789C4C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4745D7C126A17FD500789C4C /* Build configuration list for PBXNativeTarget "AsteroidTD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4745D7C226A17FD500789C4C /* Debug */,
+				4745D7C326A17FD500789C4C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4745D7A326A17FD500789C4C /* Project object */;
+}

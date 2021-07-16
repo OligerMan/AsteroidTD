@@ -1,0 +1,27 @@
+settings_start
+    is_static 0
+settings_end
+collision_start
+
+element body
+    position 12 0
+    radius 43
+
+element body
+    position 72 0
+    radius 10
+
+element fire
+    position -72 0
+    radius 10
+
+element wing1
+    position 30 -65
+    radius 10
+
+element wing1
+    position 30 65
+    radius 10
+
+
+collision_end

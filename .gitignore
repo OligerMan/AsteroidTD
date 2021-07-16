@@ -8,3 +8,6 @@
 *.db
 *.db
 AsteroidTD.app/**
+DerivedData
+.DS_Store
+Build

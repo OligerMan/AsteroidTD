@@ -1,0 +1,16 @@
+settings_start
+    is_static 0
+settings_end
+collision_start
+
+
+element front
+    position 0 12
+	radius 100
+
+element back
+    position 0 -12
+	radius 100
+
+
+collision_end
