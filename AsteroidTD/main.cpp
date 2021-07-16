@@ -17,24 +17,25 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
-#include "Headers/VisualController.h"
+#include "Headers/Utils/VisualController.h"
 #include "Headers/GUI/GUIVisualController.h"
 #include "Headers/GUI/GUIManager.h"
-#include "ResourceManager.h"
-#include "FPS.h"
-#include "GameStatus.h"
-#include "Research.h"
-#include "ResearchVisualController.h"
-#include "Tutorial.h"
-#include "OnlineRank.h"
-#include "KeyboardBuffer.h"
-#include "MusicManager.h"
-#include "BackgroundGeneration.h"
-#include "PhraseContainer.h"
-#include "NPCInfo.h"
-#include "DialogVisualController.h"
-#include "MissionVisualController.h"
-#include "ButtonSelector.h"
+#include "Headers/Game/ResourceManager.h"
+#include "Headers/Utils/FPS.h"
+#include "Headers/Game/GameStatus.h"
+#include "Headers/Game/Research.h"
+#include "Headers/GUI/ResearchVisualController.h"
+#include "Headers/Game/Tutorial.h"
+#include "Headers/Addons/OnlineRank.h"
+#include "Headers/Utils/KeyboardBuffer.h"
+#include "Headers/Utils/MusicManager.h"
+#include "Headers/Generator/BackgroundGeneration.h"
+#include "Headers/GUI/PhraseContainer.h"
+#include "Headers/Game/NPCInfo.h"
+#include "Headers/Game/DialogVisualController.h"
+#include "Headers/Game/MissionVisualController.h"
+#include "Headers/Geometry/ButtonSelector.h"
+#include "ResourcePath.hpp"
 
 #include <chrono>
 #include <SFML/Audio.hpp>
@@ -51,7 +52,11 @@
 // Here is a small helper for you! Have a look.
 #include "ResourcePath.hpp"
 
-int main(int, char const**)
+enum XBOXGamepadButtons {
+    A,B,X,Y,LB,RB,BACK,START,LSTICK,RSTICK
+};
+
+int __main(int, char const**)
 {
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "SFML window");
@@ -121,21 +126,13 @@ int main(int, char const**)
     return EXIT_SUCCESS;
 }
 
-
-#if 0
-
-
-enum XBOXGamepadButtons {
-    A,B,X,Y,LB,RB,BACK,START,LSTICK,RSTICK
-};
-
 void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController & visual_ctrl, GUIVisualController & gui_visual_ctrl, ResearchVisualController & res_visual_ctrl, MusicManager & music_manager) {
     
     sf::Texture main_background_texture, research_background_texture, game_over_background_texture;
     sf::Sprite main_background_sprite, research_background_sprite, game_over_background_sprite;
     
     
-    game_over_background_texture.loadFromFile("background" + path_separator + "game_over_background.png");
+    game_over_background_texture.loadFromFile(resourcePath() + "Background" + path_separator + "game_over_background.png");
     game_over_background_sprite.setTexture(game_over_background_texture);
     game_over_background_sprite.setPosition(0, 0);
     game_over_background_sprite.setScale(sf::Vector2f(window.getSize().x / game_over_background_texture.getSize().x, window.getSize().y / game_over_background_texture.getSize().y));
@@ -164,10 +161,10 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
     
     GameStatus prev_game_status = game_pause;
     
-    Map game_map1("maps/" + map_name + ".map", "mission.cfg");
+    Map game_map1(resourcePath() + "Maps/" + map_name + ".map", resourcePath() + "Config/mission.cfg");
     
     resource_manager.clear(settings.getStartGold(), 5);
-    research_manager.initResearch("research.cfg");
+    research_manager.initResearch(resourcePath() + "Config/research.cfg");
     research_manager.setGraphSize();
     
     std::vector<Point> research_pos;
@@ -315,131 +312,131 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
     
     auto resetStrings = [&]() {
         buffer = phrase_container.getPhraseBuffer(L"skills_build_sign_GUI", 0);
-        skills_build_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        skills_build_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"skills_ability_sign_GUI", 0);
-        skills_ability_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        skills_ability_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"skills_interact_sign_GUI", 0);
-        skills_interact_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        skills_interact_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"enemy_power_sign_GUI", 0);
-        enemy_power_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        enemy_power_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"new_wave_sign_GUI", 0);
-        new_wave_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        new_wave_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"message_sign_GUI", 0);
-        message_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        message_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         
         buffer = phrase_container.getPhraseBuffer(L"keyboard_press_title_GUI", 0);
-        keyboard_press_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        keyboard_press_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"gamepad_press_title_GUI", 0);
-        gamepad_press_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        gamepad_press_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         
         buffer = phrase_container.getPhraseBuffer(L"try_again_title_GUI", 0);
-        try_again_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        try_again_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"go_back_to_menu_title_GUI", 0);
-        go_back_to_menu_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        go_back_to_menu_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"continue_game_title_GUI", 0);
-        continue_game_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        continue_game_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"go_to_menu_title_GUI", 0);
-        go_to_menu_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        go_to_menu_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"go_to_desktop_title_GUI", 0);
-        go_to_desktop_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        go_to_desktop_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"volume_down_title_GUI", 0);
-        volume_down_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        volume_down_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"volume_up_title_GUI", 0);
-        volume_up_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        volume_up_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"gold_sign_GUI", 0);
-        gold_sign_wstring = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        gold_sign_wstring = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"research_sign_GUI", 0);
-        research_sign_wstring = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        research_sign_wstring = buffer[rand() * buffer.size() / (RAND_MAX)];
         
         buffer = phrase_container.getPhraseBuffer(L"aster_basic_GUI", 0);
-        aster_basic_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        aster_basic_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"aster_gold_inter_GUI", 0);
-        aster_gold_inter_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        aster_gold_inter_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"aster_iron_inter_GUI", 0);
-        aster_iron_inter_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        aster_iron_inter_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"aster_susp_flat_GUI", 0);
-        aster_susp_flat_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        aster_susp_flat_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         
         buffer = phrase_container.getPhraseBuffer(L"aster_str_crack_GUI", 0);
-        aster_str_crack_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        aster_str_crack_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"aster_ord_wealthy_GUI", 0);
-        aster_ord_wealthy_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        aster_ord_wealthy_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"aster_poor_mount_GUI", 0);
-        aster_poor_mount_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        aster_poor_mount_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"aster_wealthy_crack_GUI", 0);
-        aster_wealthy_crack_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        aster_wealthy_crack_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"aster_ord_mount_GUI", 0);
-        aster_ord_mount_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        aster_ord_mount_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"aster_str_poor_GUI", 0);
-        aster_str_poor_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        aster_str_poor_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         
         buffer = phrase_container.getPhraseBuffer(L"aster_swamp_gold_GUI", 0);
-        aster_swamp_gold_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        aster_swamp_gold_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"aster_unstab_expl_GUI", 0);
-        aster_unstab_expl_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        aster_unstab_expl_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"aster_old_lab_GUI", 0);
-        aster_old_lab_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        aster_old_lab_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"aster_lava_surf_GUI", 0);
-        aster_lava_surf_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        aster_lava_surf_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         
         buffer = phrase_container.getPhraseBuffer(L"aster_drone_GUI", 0);
-        aster_drone_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        aster_drone_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"aster_rocket_GUI", 0);
-        aster_rocket_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        aster_rocket_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"aster_anc_lab_GUI", 0);
-        aster_anc_lab_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        aster_anc_lab_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"aster_anc_mine_GUI", 0);
-        aster_anc_mine_sign = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        aster_anc_mine_sign = buffer[rand() * buffer.size() / (RAND_MAX)];
         
         buffer = phrase_container.getPhraseBuffer(L"tutorial_base_desc", 0);
-        tutorial_base_desc = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_base_desc = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_move", 0);
-        tutorial_move = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_move = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_view", 0);
-        tutorial_view = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_view = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_dome", 0);
-        tutorial_dome = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_dome = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_dome_desc", 0);
-        tutorial_dome_desc = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_dome_desc = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_turret", 0);
-        tutorial_turret = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_turret = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_turret_desc", 0);
-        tutorial_turret_desc = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_turret_desc = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_gold", 0);
-        tutorial_gold = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_gold = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_gold_desc", 0);
-        tutorial_gold_desc = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_gold_desc = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_science", 0);
-        tutorial_science = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_science = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_science_desc", 0);
-        tutorial_science_desc = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_science_desc = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_skill_mode", 0);
-        tutorial_skill_mode = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_skill_mode = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_rocket", 0);
-        tutorial_rocket = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_rocket = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_speed", 0);
-        tutorial_speed = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_speed = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_damage", 0);
-        tutorial_damage = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_damage = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_heal", 0);
-        tutorial_heal = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_heal = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_research", 0);
-        tutorial_research = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_research = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_research_close", 0);
-        tutorial_research_close = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_research_close = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_pause", 0);
-        tutorial_pause = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_pause = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_unpause", 0);
-        tutorial_unpause = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_unpause = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_end", 0);
-        tutorial_end = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_end = buffer[rand() * buffer.size() / (RAND_MAX)];
         
         buffer = phrase_container.getPhraseBuffer(L"tutorial_for_next_step", 0);
-        tutorial_for_next_step = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_for_next_step = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_move_pts_left", 0);
-        tutorial_move_pts_left = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_move_pts_left = buffer[rand() * buffer.size() / (RAND_MAX)];
         buffer = phrase_container.getPhraseBuffer(L"tutorial_times_left", 0);
-        tutorial_times_left = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        tutorial_times_left = buffer[rand() * buffer.size() / (RAND_MAX)];
     };
     
     resetStrings();
@@ -462,14 +459,14 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
     buttons_game_over.resize(BUTTONS_NAME_LIST_SIZE);
     
     buttons_game_over[retry].pos = Point(-200, -150);
-    buttons_game_over[retry].texture_default.loadFromFile("menu_buttons" + path_separator + "retry.png");
-    buttons_game_over[retry].texture_selected.loadFromFile("menu_buttons" + path_separator + "retry_selected.png");
+    buttons_game_over[retry].texture_default.loadFromFile(resourcePath() + "Menu_buttons" + path_separator + "retry.png");
+    buttons_game_over[retry].texture_selected.loadFromFile(resourcePath() + "Menu_buttons" + path_separator + "retry_selected.png");
     buttons_game_over[retry].sprite.setTexture(buttons_game_over[retry].texture_default);
     buttons_game_over[retry].advice_string = try_again_title;
     
     buttons_game_over[menu].pos = Point(200, -150);
-    buttons_game_over[menu].texture_default.loadFromFile("menu_buttons" + path_separator + "menu.png");
-    buttons_game_over[menu].texture_selected.loadFromFile("menu_buttons" + path_separator + "menu_selected.png");
+    buttons_game_over[menu].texture_default.loadFromFile(resourcePath() + "Menu_buttons" + path_separator + "menu.png");
+    buttons_game_over[menu].texture_selected.loadFromFile(resourcePath() + "Menu_buttons" + path_separator + "menu_selected.png");
     buttons_game_over[menu].sprite.setTexture(buttons_game_over[menu].texture_default);
     buttons_game_over[menu].advice_string = go_back_to_menu_title;
     
@@ -492,32 +489,32 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
     buttons.resize(PAUSE_BUTTONS_NAME_LIST_SIZE);
     
     buttons[pause_continue].pos = Point(0, -250);
-    buttons[pause_continue].texture_default.loadFromFile("menu_buttons" + path_separator + "pause_continue.png");
-    buttons[pause_continue].texture_selected.loadFromFile("menu_buttons" + path_separator + "pause_continue_selected.png");
+    buttons[pause_continue].texture_default.loadFromFile(resourcePath() + "Menu_buttons" + path_separator + "pause_continue.png");
+    buttons[pause_continue].texture_selected.loadFromFile(resourcePath() + "Menu_buttons" + path_separator + "pause_continue_selected.png");
     buttons[pause_continue].sprite.setTexture(buttons[pause_continue].texture_default);
     buttons[pause_continue].advice_string = continue_game_title;
     
     buttons[pause_to_menu].pos = Point();
-    buttons[pause_to_menu].texture_default.loadFromFile("menu_buttons" + path_separator + "pause_to_menu.png");
-    buttons[pause_to_menu].texture_selected.loadFromFile("menu_buttons" + path_separator + "pause_to_menu_selected.png");
+    buttons[pause_to_menu].texture_default.loadFromFile(resourcePath() + "Menu_buttons" + path_separator + "pause_to_menu.png");
+    buttons[pause_to_menu].texture_selected.loadFromFile(resourcePath() + "Menu_buttons" + path_separator + "pause_to_menu_selected.png");
     buttons[pause_to_menu].sprite.setTexture(buttons[pause_to_menu].texture_default);
     buttons[pause_to_menu].advice_string = go_to_menu_title;
     
     buttons[pause_to_desktop].pos = Point(0, 250);
-    buttons[pause_to_desktop].texture_default.loadFromFile("menu_buttons" + path_separator + "pause_to_desktop.png");
-    buttons[pause_to_desktop].texture_selected.loadFromFile("menu_buttons" + path_separator + "pause_to_desktop_selected.png");
+    buttons[pause_to_desktop].texture_default.loadFromFile(resourcePath() + "Menu_buttons" + path_separator + "pause_to_desktop.png");
+    buttons[pause_to_desktop].texture_selected.loadFromFile(resourcePath() + "Menu_buttons" + path_separator + "pause_to_desktop_selected.png");
     buttons[pause_to_desktop].sprite.setTexture(buttons[pause_to_desktop].texture_default);
     buttons[pause_to_desktop].advice_string = go_to_desktop_title;
     
     buttons[pause_volume_up].pos = Point(200, -125);
-    buttons[pause_volume_up].texture_default.loadFromFile("menu_buttons" + path_separator + "pause_volume_up.png");
-    buttons[pause_volume_up].texture_selected.loadFromFile("menu_buttons" + path_separator + "pause_volume_up_selected.png");
+    buttons[pause_volume_up].texture_default.loadFromFile(resourcePath() + "Menu_buttons" + path_separator + "pause_volume_up.png");
+    buttons[pause_volume_up].texture_selected.loadFromFile(resourcePath() + "Menu_buttons" + path_separator + "pause_volume_up_selected.png");
     buttons[pause_volume_up].sprite.setTexture(buttons[pause_volume_up].texture_default);
     buttons[pause_volume_up].advice_string = volume_up_title;
     
     buttons[pause_volume_down].pos = Point(200, 125);
-    buttons[pause_volume_down].texture_default.loadFromFile("menu_buttons" + path_separator + "pause_volume_down.png");
-    buttons[pause_volume_down].texture_selected.loadFromFile("menu_buttons" + path_separator + "pause_volume_down_selected.png");
+    buttons[pause_volume_down].texture_default.loadFromFile(resourcePath() + "Menu_buttons" + path_separator + "pause_volume_down.png");
+    buttons[pause_volume_down].texture_selected.loadFromFile(resourcePath() + "Menu_buttons" + path_separator + "pause_volume_down_selected.png");
     buttons[pause_volume_down].sprite.setTexture(buttons[pause_volume_down].texture_default);
     buttons[pause_volume_down].advice_string = volume_down_title;
     
@@ -614,6 +611,8 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
                         gui_manager.forceSetTopSign(message_sign + L": " + *static_cast<std::wstring *>(global_event_buffer[i].getData(0)), 5);
                     }
                     global_event_buffer.erase(global_event_buffer.begin() + i);
+                    break;
+                default:
                     break;
             }
         }
@@ -968,6 +967,8 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
                                 break;
                             case asteroid_ancient_giant_gold_mine_sprite:
                                 gui_manager.setTopSign(aster_anc_mine_sign, 0.01);
+                                break;
+                            default:
                                 break;
                         }
                     }
@@ -1333,7 +1334,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
                     }
                 }
                 
-                if ((abs(sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z)) > 80) || sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) && (frame_num - last_mode_change) > fps.getFPS()) {
+                if ((abs(sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z)) > 80) || (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) && (frame_num - last_mode_change) > fps.getFPS())) {
                     if (cinematic_mode) {
                         cinematic_mode = false;
                     }
@@ -1794,7 +1795,7 @@ int main() {
 #else
 #endif
     
-    phrase_container.parseFromFolder("text_config" + path_separator + settings.getLocalisationFile());
+    phrase_container.parseFromFolder(resourcePath() + "Config/text_config" + path_separator + settings.getLocalisationFile());
     
     sf::ContextSettings context_settings;
     context_settings.antialiasingLevel = 8;
@@ -1845,7 +1846,7 @@ int main() {
     ResearchVisualController res_visual_ctrl(&window);
     
     sf::Texture menu_background_texture;
-    menu_background_texture.loadFromFile("background/menu_background.png");
+    menu_background_texture.loadFromFile(resourcePath() + "Background/menu_background.png");
     sf::Sprite menu_background_sprite;
     menu_background_sprite.setTexture(menu_background_texture);
     menu_background_sprite.setPosition(0, 0);
@@ -1892,12 +1893,12 @@ int main() {
     buttons.resize(BUTTONS_NAME_LIST_SIZE);
     
     buttons[infinity_mode_button].pos = Point(window.getView().getSize().x / 2 - 250 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
-    buttons[infinity_mode_button].texture_default.loadFromFile("menu_buttons" + path_separator + "inf_mode.png");
-    buttons[infinity_mode_button].texture_selected.loadFromFile("menu_buttons" + path_separator + "inf_mode_selected.png");
+    buttons[infinity_mode_button].texture_default.loadFromFile(resourcePath() + "Menu_buttons" + path_separator + "inf_mode.png");
+    buttons[infinity_mode_button].texture_selected.loadFromFile(resourcePath() + "Menu_buttons" + path_separator + "inf_mode_selected.png");
     buttons[infinity_mode_button].sprite.setTexture(buttons[infinity_mode_button].texture_default);
     buttons[infinity_mode_button].radius = 75 * window.getView().getSize().y / 1080;
     std::vector<std::wstring> buffer = phrase_container.getPhraseBuffer(L"start_inf_mode_GUI", 0);
-    buttons[infinity_mode_button].advice_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+    buttons[infinity_mode_button].advice_string = buffer[rand() * buffer.size() / (RAND_MAX)];
     
     /*buttons[adventure_mode_button].pos = Point(window.getView().getSize().x / 2 - 100 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
      buttons[adventure_mode_button].texture_default.loadFromFile("menu_buttons" + path_separator + "adv_mode.png");
@@ -1908,20 +1909,20 @@ int main() {
      buttons[adventure_mode_button].advice_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];*/
     
     buttons[settings_button].pos = Point(window.getView().getSize().x / 2 + 0 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
-    buttons[settings_button].texture_default.loadFromFile("menu_buttons" + path_separator + "settings.png");
-    buttons[settings_button].texture_selected.loadFromFile("menu_buttons" + path_separator + "settings_selected.png");
+    buttons[settings_button].texture_default.loadFromFile(resourcePath() + "Menu_buttons" + path_separator + "settings.png");
+    buttons[settings_button].texture_selected.loadFromFile(resourcePath() + "Menu_buttons" + path_separator + "settings_selected.png");
     buttons[settings_button].sprite.setTexture(buttons[settings_button].texture_default);
     buttons[settings_button].radius = 75 * window.getView().getSize().y / 1080;
     buffer = phrase_container.getPhraseBuffer(L"settings_menu_GUI", 0);
-    buttons[settings_button].advice_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+    buttons[settings_button].advice_string = buffer[rand() * buffer.size() / (RAND_MAX)];
     
     buttons[shutdown_button].pos = Point(window.getView().getSize().x / 2 + 250 * window.getView().getSize().x / 1920, 400 * window.getView().getSize().y / 1080);
-    buttons[shutdown_button].texture_default.loadFromFile("menu_buttons" + path_separator + "shutdown.png");
-    buttons[shutdown_button].texture_selected.loadFromFile("menu_buttons" + path_separator + "shutdown_selected.png");
+    buttons[shutdown_button].texture_default.loadFromFile(resourcePath() + "Menu_buttons" + path_separator + "shutdown.png");
+    buttons[shutdown_button].texture_selected.loadFromFile(resourcePath() + "Menu_buttons" + path_separator + "shutdown_selected.png");
     buttons[shutdown_button].sprite.setTexture(buttons[shutdown_button].texture_default);
     buttons[shutdown_button].radius = 75 * window.getView().getSize().y / 1080;
     buffer = phrase_container.getPhraseBuffer(L"shutdown_GUI", 0);
-    buttons[shutdown_button].advice_string = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+    buttons[shutdown_button].advice_string = buffer[rand() * buffer.size() / (RAND_MAX)];
     
     int chosen_button = infinity_mode_button;
     
@@ -1979,43 +1980,43 @@ int main() {
     
     auto resetStrings = [&]() {
         buffer = phrase_container.getPhraseBuffer(L"setting_nickname_title_GUI", 0);
-        setting_nickname_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        setting_nickname_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         
         buffer = phrase_container.getPhraseBuffer(L"setting_ranking_title_GUI", 0);
-        setting_ranking_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        setting_ranking_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         
         buffer = phrase_container.getPhraseBuffer(L"setting_win_width_title_GUI", 0);
-        setting_win_width_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        setting_win_width_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         
         buffer = phrase_container.getPhraseBuffer(L"setting_win_height_title_GUI", 0);
-        setting_win_height_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        setting_win_height_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         
         buffer = phrase_container.getPhraseBuffer(L"setting_volume_title_GUI", 0);
-        setting_volume_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        setting_volume_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         
         buffer = phrase_container.getPhraseBuffer(L"setting_local_file_title_GUI", 0);
-        setting_local_file_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        setting_local_file_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         
         buffer = phrase_container.getPhraseBuffer(L"setting_discard_title_GUI", 0);
-        setting_discard_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        setting_discard_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         
         buffer = phrase_container.getPhraseBuffer(L"setting_exit_title_GUI", 0);
-        setting_exit_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        setting_exit_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         
         buffer = phrase_container.getPhraseBuffer(L"keyboard_press_title_GUI", 0);
-        keyboard_press_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        keyboard_press_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         
         buffer = phrase_container.getPhraseBuffer(L"gamepad_press_title_GUI", 0);
-        gamepad_press_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        gamepad_press_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         
         buffer = phrase_container.getPhraseBuffer(L"keyboard_nickname_title_GUI", 0);
-        keyboard_nickname_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        keyboard_nickname_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         
         buffer = phrase_container.getPhraseBuffer(L"gamepad_nickname_title_GUI", 0);
-        gamepad_nickname_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        gamepad_nickname_title = buffer[rand() * buffer.size() / (RAND_MAX)];
         
         buffer = phrase_container.getPhraseBuffer(L"nickname_enter_title_GUI", 0);
-        nickname_enter_title = buffer[rand() * buffer.size() / (RAND_MAX + 1)];
+        nickname_enter_title = buffer[rand() * buffer.size() / (RAND_MAX)];
     };
     
     resetStrings();
@@ -2296,4 +2297,4 @@ int main() {
 }
 
 
-#endif
+
