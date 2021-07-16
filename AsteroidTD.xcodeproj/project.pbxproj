@@ -61,6 +61,8 @@
 		4745D7BD26A17FD500789C4C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		4745D93226A182AF00789C4C /* shot.ogg */ = {isa = PBXFileReference; lastKnownFileType = file; path = shot.ogg; sourceTree = "<group>"; };
 		4745D93526A182AF00789C4C /* 18888.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 18888.ttf; sourceTree = "<group>"; };
+		47BB33B926A19963004EC739 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		47BB33BA26A1996E004EC739 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,8 @@
 		4745D7A226A17FD500789C4C = {
 			isa = PBXGroup;
 			children = (
+				47BB33BA26A1996E004EC739 /* .gitignore */,
+				47BB33B926A19963004EC739 /* README.md */,
 				4745D7AE26A17FD500789C4C /* AsteroidTD */,
 				4745D7AD26A17FD500789C4C /* Products */,
 				4745D7C426A1802C00789C4C /* Frameworks */,
