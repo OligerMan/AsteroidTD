@@ -56,7 +56,9 @@ class ResearchVisualController {
 	void initSprites() {
 		sprite_buffer.resize(texture_buffer.size());
 		for (int res_cnt = 0; res_cnt < texture_buffer.size(); res_cnt++) {
-			sprite_buffer[res_cnt].setTexture(texture_buffer[res_cnt][0]);
+            if (texture_buffer[res_cnt].size()) {
+                sprite_buffer[res_cnt].setTexture(texture_buffer[res_cnt][0]);
+            }
 		}
 	}
 
