@@ -199,7 +199,9 @@ public:
 
                     if (!cinematic_mode) {
                         window->draw(hp_sign);
-                        window->draw(hp_circle);
+                        if (abs(hp - max_hp) > 0.1) {
+                            window->draw(hp_circle);
+                        }
                     }
 				}
 				if (object->getObjectType() == asteroid && object->getUnitInfo() && object->getUnitInfo()->getFaction() == hero_faction) {

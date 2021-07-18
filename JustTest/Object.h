@@ -488,7 +488,7 @@ public:
     }
 
     void droneCooldownDecrement() {
-        drone_factory_cooldown -= fps.getFPS() / consts.getFPSLock();
+        drone_factory_cooldown -= consts.getFPSLock() / fps.getFPS();
     }
 };
 

@@ -92,7 +92,7 @@ private:
 		Setting("ranking_server", "oliger.ddns.net"),
 		Setting("start_gold", 2500),
 		Setting("nickname", ""),
-        Setting("localisation_file", "dialog.cfg"),
+        Setting("localisation_file", "ru-test"),
 	};
 
 	bool is_settings_loaded;

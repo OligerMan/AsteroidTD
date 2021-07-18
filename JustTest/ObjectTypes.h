@@ -140,7 +140,7 @@ std::vector<int> lifetime{
 	-1, // dome
 	-1, // science
 	-1, // gold
-    1200, // bullet
+    2000, // bullet
     3000, // bombard_bullet
 	-1, // alien_fighter
 	-1, // alien_turret1

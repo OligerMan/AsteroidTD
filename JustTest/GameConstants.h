@@ -13,8 +13,8 @@ class Constants {
 	const float fps_lock = 240;
 	const double interaction_distance = 600;
 
-	const float base_gold_income = 0.0045;
-	const float base_research_income = 0.0005;
+	const float base_gold_income = 0.004;
+	const float base_research_income = 0.0004;
 	const float base_turret_price = 150;
 	const float base_science_price = 100;
 	const float base_gold_price = 125;
@@ -32,7 +32,7 @@ class Constants {
 	const float infinity_mode_enemy_spawn_range = 10000;
     const float defence_mission_enemy_spawn_range = 2500;
 	const float minimal_flight_range = 450;
-    const float drone_flight_add_range = 100;
+    const float drone_flight_add_range = 80;
 
 	const float dome_heal = 0.1;
 	const float hero_heal = 1;
@@ -40,7 +40,7 @@ class Constants {
 	const float fire_damage = 0.25;
 	const float regen_buff = 0.06;
 	const float const_heal = 250;
-	const float move_speed_buff_mult = 4;
+	const float move_speed_buff_mult = 3.5;
 
 	const float skills_icon_size = 120;
 	const float skills_icon_shift_radius = 100;
@@ -54,7 +54,7 @@ class Constants {
 	const float hero_view_scale = 2;
 	const float strategic_view_scale = 5;
 
-	const float tier_range = 3000;
+	const float tier_range = 1500;
 	const float discovery_range = 10000;
 
 	const float minimal_mission_price = 100;
