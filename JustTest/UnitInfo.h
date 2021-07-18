@@ -439,10 +439,10 @@ public:
 				continue;
 			}
 			if (effects[i].effect == fire_debuff) {
-				dealDamage(consts.getFireDamage());
+				dealDamage(consts.getFireDamage() * consts.getFPSLock() / fps.getFPS());
 			}
 			if (effects[i].effect == regen_buff) {
-				grantHeal(consts.getRegenBuff());
+				grantHeal(consts.getRegenBuff() * consts.getFPSLock() / fps.getFPS());
 			}
 			if (effects[i].effect == const_heal) {
 				grantHeal(consts.getConstHeal());

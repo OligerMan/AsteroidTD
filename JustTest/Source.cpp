@@ -514,7 +514,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				break;
 			case EventType::message:
 
-                if (!cinematic_mode) {
+                if (!cinematic_mode || extra_info) {
                     gui_manager.forceSetTopSign(message_sign + L": " + *static_cast<std::wstring *>(global_event_buffer[i].getData(0)), 5);
                 }
 				global_event_buffer.erase(global_event_buffer.begin() + i);
@@ -574,7 +574,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			}
 			hero_hp = hero_object->getUnitInfo()->getHealth();
 			// game cycle
-            if (!cinematic_mode) {
+            if (!cinematic_mode || extra_info) {
                 Point gold_pos = Point(-(int)window.getView().getSize().x / 2 / 1.2, -(int)window.getView().getSize().y / 2 / 1.2);
                 gui_manager.setText(gold_sign_wstring + std::to_wstring((int)resource_manager.getGold()), 0.01, gold_sign, gold_pos, 30);
                 Point res_pos = Point(-(int)window.getView().getSize().x / 2 / 1.2, -(int)window.getView().getSize().y / 2 / 1.2 + 55 * window.getView().getSize().y / 1080);
@@ -599,7 +599,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				(int)window.getView().getSize().y / 2 / 1.2 + 10 * window.getView().getSize().x / 1920);
 
 
-            if (!cinematic_mode) {
+            if (!cinematic_mode || extra_info) {
                 if (skills_mode == set1) {
 
                     gui_manager.setText(skills_ability_sign, 0.01, skill_status_sign, skill_pos, 30);
@@ -623,7 +623,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 						game_map1.spawnEnemy(wave_count, Point(view2.getCenter().x, view2.getCenter().y));
 					}
 
-                    if (!cinematic_mode) {
+                    if (!cinematic_mode || extra_info) {
                         gui_manager.forceSetTopSign(new_wave_sign + L"(" + std::to_wstring(wave_count) + L")", 5);
                     }
 					last_wave = std::chrono::steady_clock::now();
@@ -817,7 +817,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 			if (!(game_status == game_strategic_mode)) {
 				Object * closest_asteroid = game_map1.getClosestAsteroid();
 				if (closest_asteroid != nullptr && game_frame_num > 1500) {
-                    if (!cinematic_mode) {
+                    if (!cinematic_mode || extra_info) {
                         switch (closest_asteroid->getObjectSpriteType()) {
                         case asteroid:
                             gui_manager.setTopSign(aster_basic_sign, 0.01);
@@ -904,30 +904,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					}
 				}
 				// keyboard input
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-					new_speed += Point(0, -1);
-					if (!(game_status == game_strategic_mode)) {
-                        move_activity = true;
-					}
-				}
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-					new_speed += Point(-1, 0);
-					if (!(game_status == game_strategic_mode)) {
-                        move_activity = true;
-					}
-				}
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-					new_speed += Point(0, 1);
-					if (!(game_status == game_strategic_mode)) {
-                        move_activity = true;
-					}
-				}
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-					new_speed += Point(1, 0);
-					if (!(game_status == game_strategic_mode)) {
-                        move_activity = true;
-					}
-				}
+				
 
 				if (game_status != game_pause) {
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
@@ -1220,7 +1197,30 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 						pause_game();
 					}
 				}
-				
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+                    new_speed += Point(0, -1);
+                    if (!(game_status == game_strategic_mode)) {
+                        move_activity = true;
+                    }
+                }
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+                    new_speed += Point(-1, 0);
+                    if (!(game_status == game_strategic_mode)) {
+                        move_activity = true;
+                    }
+                }
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+                    new_speed += Point(0, 1);
+                    if (!(game_status == game_strategic_mode)) {
+                        move_activity = true;
+                    }
+                }
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+                    new_speed += Point(1, 0);
+                    if (!(game_status == game_strategic_mode)) {
+                        move_activity = true;
+                    }
+                }
 
 				if (tutorial.getCurrentStep() != tutorial.no_tutorial) {
 					if (tutorial.isWorkingOnStep(tutorial.base_description) || tutorial.isWorkingOnStep(tutorial.build_mode_dome_description_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_turret_description_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_gold_description_tutorial) || tutorial.isWorkingOnStep(tutorial.build_mode_science_description_tutorial) || tutorial.isWorkingOnStep(tutorial.tutorial_end)) {
@@ -1237,7 +1237,11 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					}
 				}
 
-                if ((abs(sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z)) > 80) || sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) && (frame_num - last_mode_change) > fps.getFPS()) {
+                extra_info = false;
+                if ((abs(sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z)) > 80) || sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)) {
+                    extra_info = true;
+                }
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::RControl) && (frame_num - last_mode_change) > fps.getFPS()) {
                     if (cinematic_mode) {
                         cinematic_mode = false;
                     }
@@ -1276,7 +1280,9 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					if (speed.getLength() > consts.getMaxHeroSpeed()) {
 						hero_object->setSpeed(speed.getNormal() * consts.getMaxHeroSpeed());
 					}
-					hero_object->setAngle(atan2(speed.y, speed.x) / PI * 180);
+                    if (move_activity) {
+                        hero_object->setAngle(atan2(speed.y, speed.x) / PI * 180);
+                    }
 
                     if (hero_object->getSpeed().getLength() < 3 && !move_activity) {
                         hero_object->setAnimationType(hold_anim);
@@ -1340,11 +1346,11 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 					buttons[i].sprite.setPosition(sf::Vector2f(buttons[i].pos.x * window.getView().getSize().x / 1920 + viewport_pos.x, buttons[i].pos.y * window.getView().getSize().y / 1080 + viewport_pos.y));
 				}
 
-                if (!cinematic_mode) {
+                if (!cinematic_mode || extra_info) {
                     gui_manager.forceSetTopSign(keyboard_press_title + buttons[chosen_button].advice_string, 0.01);
                 }
 				if (sf::Joystick::isConnected(0)) {
-                    if (!cinematic_mode) {
+                    if (!cinematic_mode || extra_info) {
                         gui_manager.forceSetTopSign(gamepad_press_title + buttons[chosen_button].advice_string, 0.01);
                     }
 				}

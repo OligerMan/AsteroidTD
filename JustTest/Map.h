@@ -216,6 +216,7 @@ private:
 
 	void processCollisionFrame(){
 		for (int cnt = 0; cnt < objects.size(); cnt++) {
+#pragma omp parallel for
 			for (int i = 0; i < objects[cnt].size(); i++) {
 				if (
                     objects[cnt][i]->getCollisionModel()->isStatic() || 
@@ -304,6 +305,7 @@ private:
 	void processUnitAI() {
 		for (int layer1 = 0; layer1 < objects.size(); layer1++) {
 
+#pragma omp parallel for
 			for (int i = 0; i < objects[layer1].size(); i++) {
 				Object * object1 = objects[layer1][i];
 				if (object1->getUnitInfo() == nullptr) {
@@ -312,7 +314,14 @@ private:
 
 				if (object1->getUnitInfo() != nullptr) {
 					object1->getUnitInfo()->processCooldown();
+                    bool damage_buff_state = object1->getUnitInfo()->isAffected(EffectList::damage_buff);
 					object1->getUnitInfo()->processEffects();
+                    if (object1->getUnitInfo()->isAffected(EffectList::damage_buff)) {
+                        object1->setAnimationType(AnimationType::selected_anim);
+                    }
+                    else if (damage_buff_state) {
+                        object1->setAnimationType(AnimationType::hold_anim);
+                    }
 				}
 
 				int faction1 = object1->getUnitInfo()->getFaction();
@@ -498,6 +507,7 @@ private:
 		while (try_count > 0) {
 			bool smth_cleaned = false;
 			for (int layer = 0; layer < objects.size(); layer++) {
+#pragma omp parallel for
 				for (int i = 0; i < objects[layer].size(); i++) {
 					if (objects[layer][i]->garbageCollector()) {
 						smth_cleaned = true;
@@ -532,6 +542,7 @@ private:
 		while (try_count > 0) {
 			bool smth_cleaned = false;
 			for (int layer = 0; layer < objects.size(); layer++) {
+#pragma omp parallel for
 				for (int i = 0; i < objects[layer].size(); i++) {
 					if (deleted(objects[layer][i])) {
 						if (objects[layer][i] == hero_object) {
@@ -716,6 +727,7 @@ private:
 
 	void processObjectSpeed() {
 		for (int layer = 0; layer < objects.size(); layer++) {
+#pragma omp parallel for
 			for (int i = 0; i < objects[layer].size(); i++) {
 				objects[layer][i]->forceChangePosition(objects[layer][i]->getSpeed() * consts.getFPSLock() / fps.getFPS());
 			}
@@ -724,6 +736,7 @@ private:
 
 	void rebuildMap(Point gen_basis, float gen_radius, float cam_radius, bool save_out_range, bool fixed_asteroids, int asteroid_amount, float min_range, float max_range) {   // map is rebuilding around point gen_basis 
 		int obj_count = 0, total_obj_count = 0;
+#pragma omp parallel for
 		for (int i = 0; i < objects[landscape_layer].size(); i++) {
 			if ((gen_basis - objects[landscape_layer][i]->getPosition()).getLength() > gen_radius) {
 				if (!save_out_range) {
@@ -747,6 +760,7 @@ private:
 		}
 		
 		std::vector<std::pair<Point, std::reference_wrapper<AsteroidGenerator::NPC_Metadata>>> new_asteroid_list = asteroid_gen.processFrame(gen_basis, gen_radius);
+#pragma omp parallel for
 		for (auto iter = new_asteroid_list.begin(); iter != new_asteroid_list.end(); iter++) {
 			Point new_pos = iter->first;
 			FactionList faction = iter->second.get().faction;

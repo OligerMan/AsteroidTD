@@ -197,8 +197,10 @@ public:
                     object->getObjectType() != drone &&
                     object->getObjectType() != drone_turret) {
 
-                    if (!cinematic_mode) {
-                        window->draw(hp_sign);
+                    if (!cinematic_mode || extra_info) {
+                        if (extra_info) {
+                            window->draw(hp_sign);
+                        }
                         if (abs(hp - max_hp) > 0.1) {
                             window->draw(hp_circle);
                         }
@@ -224,7 +226,7 @@ public:
 						gold_circle[k].color = sf::Color(0, 255, 255);
 					}
 
-                    if (!cinematic_mode) {
+                    if (!cinematic_mode || extra_info) {
                         window->draw(gold_circle);
                     }
 				}
@@ -255,7 +257,7 @@ public:
                     arrow[i].color = sf::Color::Red;
                 }
 
-                if (!cinematic_mode) {
+                if (!cinematic_mode || extra_info) {
                     window->draw(arrow, 8, sf::Lines);
                 }
 			}
@@ -287,7 +289,7 @@ public:
                     arrow[i].color = sf::Color(120, 100, 255);
                 }
 
-                if (!cinematic_mode) {
+                if (!cinematic_mode || extra_info) {
                     window->draw(arrow, 8, sf::Lines);
                 }
 			}

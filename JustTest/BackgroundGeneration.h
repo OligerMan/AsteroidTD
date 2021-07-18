@@ -43,7 +43,7 @@ private:
     std::vector<std::string> background_elem_names;
 
 	std::vector<Layer> layers;
-	float generation_range = 5200, delete_range = 5500, max_angle = PI;
+	float generation_range = 6500, delete_range = 7000, max_angle = PI;
 
 	// drawable info
 
@@ -310,10 +310,10 @@ public:
 		for (int layer = 0; layer < layers.size(); layer++) {
             for (int i = 0; i < layers[layer].list.size(); i++) {
                 Point pos = layers[layer].list[i].pos + center;
-                sprite_buffer[layer].setTexture(texture_buffer[layer][(layers[layer].list[i].frame_shift / 24) % texture_buffer[layer].size()]);
+                sprite_buffer[layer].setTexture(texture_buffer[layer][(layers[layer].list[i].frame_shift / 240) % texture_buffer[layer].size()]);
                 sprite_buffer[layer].setPosition(pos.x * window.getSize().x / 1920, pos.y * window.getSize().y / 1080);
 
-                layers[layer].list[i].frame_shift++;
+                layers[layer].list[i].frame_shift += consts.getFPSLock() / fps.getFPS();
                 window.draw(sprite_buffer[layer]);
             }
 		}

@@ -51,8 +51,8 @@ class Constants {
 
 	const std::string balance_version = "0.1";
 
-	const float hero_view_scale = 2;
-	const float strategic_view_scale = 5;
+	const float hero_view_scale = 2.5;
+	const float strategic_view_scale = 6;
 
 	const float tier_range = 1500;
 	const float discovery_range = 10000;
