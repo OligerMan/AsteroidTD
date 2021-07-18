@@ -382,7 +382,8 @@ private:
 											}
 											if ((object1->getPosition() - prev_enemy->getPosition()).getLength() > object1->getUnitInfo()->getAngerRange() * 
 												((object1->getObjectType() == turret && object1->getUnitInfo()->getFaction() == hero_faction) ? research_manager.getTurretAttackRangeCoef() : 1)) {
-												
+
+                                                object1->setAnimationType(AnimationType::hold_anim);
 												object1->getUnitInfo()->setEnemy(nullptr);
 											}
 											else {
@@ -395,6 +396,10 @@ private:
 														angle_diff -= 360.0;
 													}
 													object1->changeAngle(angle_diff / 10.0 * consts.getFPSLock() / fps.getFPS());
+                                                    if (object1->getObjectAnimationType() != AnimationType::attack_anim) {
+                                                        object1->setAnimationType(AnimationType::attack_anim);
+                                                        object1->resetAnimation();
+                                                    }
 												}
 												if (!object1->getCollisionModel()->isStatic() && (((Object *)object1->getUnitInfo()->getEnemy())->getPosition() - object1->getPosition()).getLength() > object1->getUnitInfo()->getMinimalFlightRange()) {
 													Point speed(-cos(object1->getAngle() / 180 * PI + PI / 2), -sin(object1->getAngle() / 180 * PI + PI / 2));
@@ -413,7 +418,6 @@ private:
 										}
 										else if((object1->getPosition() - object2->getPosition()).getLength() <= object1->getUnitInfo()->getAngerRange() * 
 											((object1->getObjectType() == turret && object1->getUnitInfo()->getFaction() == hero_faction) ? research_manager.getTurretAttackRangeCoef() : 1)){
-											
 											object1->getUnitInfo()->setEnemy((void *)object2);
 										}
 									}
@@ -514,6 +518,7 @@ private:
 					}
 					Object * enemy = (Object *)objects[layer][i]->getUnitInfo()->getEnemy();
 					if (deleted(enemy)) {
+                        objects[layer][i]->setAnimationType(AnimationType::hold_anim);
 						objects[layer][i]->getUnitInfo()->setEnemy(nullptr);
 						smth_cleaned = true;
 					}

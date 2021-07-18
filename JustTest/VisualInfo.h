@@ -112,6 +112,7 @@ enum AnimationType {
 	hold_anim,
 	move_anim,
 	selected_anim,
+    attack_anim,
 
 	COUNT_ANIMATION
 };
@@ -124,7 +125,8 @@ void animation_type_init() {
 	animation_type[null_anim] = "null";
 	animation_type[hold_anim] = "hold";
 	animation_type[move_anim] = "move";
-	animation_type[selected_anim] = "selected";
+    animation_type[selected_anim] = "selected";
+    animation_type[attack_anim] = "attack";
 }
 
 int is_animation_type_exists(std::string example) {

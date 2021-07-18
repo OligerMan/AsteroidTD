@@ -289,6 +289,10 @@ public:
 		vis_info.animation_type = animation_type;
 	}
 
+    void resetAnimation() {
+        vis_info.frame_num = 0;
+    }
+
 	void deleteObject() {
 		deleted = true;
 		for (int i = 0; i < attached_objects.size(); i++) {

@@ -59,7 +59,7 @@ private:
                 (
                     SpriteType::turret_sprite,
                     AnimationType::hold_anim,
-                    1000000000
+                    24
                 )
             );
         case dome:
