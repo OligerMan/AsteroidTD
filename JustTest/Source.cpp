@@ -1301,7 +1301,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
                     view2.setCenter(view2.getCenter() + sf::Vector2f(diff.x, diff.y));
                     strategic_back_pos = strategic_back_pos + sf::Vector2f(diff.x * 0.95, diff.y * 0.95);
 
-                    background_manager.processFrame(diff, view2.getCenter());
+                    background_manager.processFrame(Point(diff.x * 1920 / window.getSize().x, diff.y * 1080 / window.getSize().y), view2.getCenter());
                 }
                 else {
                     hero_object->setSpeed(Point());
@@ -1310,7 +1310,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
                     view2.setCenter(view2.getCenter() + sf::Vector2f(new_speed.x, new_speed.y));
                     strategic_back_pos = strategic_back_pos + sf::Vector2f(new_speed.x * 0.95, new_speed.y * 0.95);
 
-                    background_manager.processFrame(new_speed, view2.getCenter());
+                    background_manager.processFrame(Point(new_speed.x * 1920 / window.getSize().x, new_speed.y * 1080 / window.getSize().y), view2.getCenter());
                 }
 			}
 
@@ -1322,7 +1322,7 @@ void gameCycle(std::string map_name, sf::RenderWindow & window, VisualController
 				view1.setCenter(view1.getCenter() + sf::Vector2f(diff.x, diff.y));
 				main_back_pos = main_back_pos + sf::Vector2f(diff.x * 0.95, diff.y * 0.95);
 
-				background_manager.processFrame(diff, view1.getCenter());
+				background_manager.processFrame(Point(diff.x * 1920 / window.getSize().x, diff.y * 1080 / window.getSize().y), view1.getCenter());
 			}
 
 			if (!(game_status == game_strategic_mode || game_status == game_pause)) {
@@ -1715,6 +1715,7 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(settings.getWindowWidth(), settings.getWindowHeight()), "AsteroidTD", sf::Style::None, context_settings);
 #else
 #endif
+    window.requestFocus();
 
 	sf::View main_view(sf::Vector2f((int)window.getSize().x / 2, (int)window.getSize().y / 2), sf::Vector2f(window.getSize().x, window.getSize().y));      // main menu view
 	window.setView(main_view);
